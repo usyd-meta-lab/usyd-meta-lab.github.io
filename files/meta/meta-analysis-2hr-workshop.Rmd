@@ -1,0 +1,375 @@
+---
+title: "Meta-analysis in R"
+author: Dr Kit Double
+output: 
+  bookdown::gitbook:
+    config:
+      numbering: false
+      sharing: null
+documentclass: book
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T)
+```
+
+# Overview
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/ka1MlsS-eHE/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+Before we begin, a warning - this workshop assumes you are 'comfortable' using R. If you aren't there are many simpler ways of doing a meta-analysis (and free). These include Meta-essentials and JASP.
+
+**You can downalod the data** [**here**](https://osf.io/twz8n/download) 
+
+# Getting Started
+
+To run a meta-analysis in R there are various packaages you could use. This workshop is going to work with the 'metafor' package but you could equally use others (e.g. 'Robumeta').
+
+To get started let's install and load the 'metafor' package.
+
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/peR6MEfSkwU/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+```{r, echo = F, warning = F, message=F}
+
+# load metafor package
+library(metafor)
+```
+
+```{r, eval=F}
+# install metafor package
+install.packages("metafor")
+
+# load metafor package
+library(metafor)
+```
+
+# Loading Data
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/XWSNhE2OqVg/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+```{r}
+
+dat <- read.csv("Data/Meta_Analysis.csv")
+
+
+
+dat
+
+```
+
+## Computing Effect Sizes
+
+
+
+```{r}
+# compute log risk ratios and corresponding sampling variances
+dat <- escalc(measure = "COR", ri = rho, ni = N, data = dat)
+
+dat
+
+```
+
+
+Here's the formula for varince (FYI):
+
+$vi = (1 - yi^2)^2/(ni - 1)$
+
+
+# Random-effects Model
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/NaqIOHXkINw/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+```{r, echo = F}
+write.csv(dat, "~/Desktop/ma_dat.csv", row.names = F, na = "")
+```
+
+```{r}
+# fit a random-effects model
+res <- rma(yi, vi, data=dat)
+res
+```
+
+# Forest Plot
+
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/l8qWModGh2I/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+
+```{r, out.width = "100%", out.height="80%"}
+# draw a very basic forest plot of the results
+forest(res, header=TRUE, addpred=TRUE, slab = dat$Author)
+```
+
+
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/eyed7f7XKQQ/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+```{r, out.width = "100%", out.height="80%"}
+# Slightly more complex forest plot
+forest(res, header=TRUE, slab=dat$Author,
+       addpred=TRUE,xlim=c(-1.5,1.3),
+       ilab=cbind(dat$Branch,dat$Sample), ilab.xpos=c(-.8,-.6))
+text(-.8, 53, "Branch", cex=.5, font = 2)
+text(-.6, 53, "Sample",cex=.5, font = 2)
+```
+
+# Publication Bias (Funnel Plot)
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/ERInXwCTG_Y/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+Based on Sterne and Egger (2001), the recommended choice for the y-axis is the standard error (in decreasing order) and this is also the default for the funnel() function in the metafor package. In the absence of publication bias and heterogeneity, one would then expect to see the points forming a funnel shape, with the majority of the points falling inside of the pseudo-confidence region with bounds is the estimated effect or outcome based on an equal-effects model and  is the standard error value from the y-axis.
+ 
+```{r}
+
+### draw funnel plots
+funnel(res, main="Standard Error")
+
+```
+
+
+
+
+## Egger Test
+
+
+The Egger test is a test of the relationship between the standard error and the outcome (effect size). While it isn't a direct test of publication bias, one would hope that the standard error (i.e. the inverse of the sample size) is unrelated to the size of the outcome. If such a relationship is present, then this usually implies asymmetry in the funnel plot, which in turn may be an indication of publication bias
+
+```{r}
+
+### random/mixed-effects version of the Egger test
+regtest(res)
+
+```
+
+# Subgroups Analysis
+
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/eZTneXBGukk/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+```{r}
+
+# subgrouping
+res.tot <- rma(yi, vi, data=dat, subset=Branch=="Total")
+res.per <- rma(yi, vi, data=dat, subset=Branch=="Perception")
+res.fac <- rma(yi, vi, data=dat, subset=Branch=="Facilitation")
+res.und <- rma(yi, vi, data=dat, subset=Branch=="Understanding")
+res.man <- rma(yi, vi, data=dat, subset=Branch=="Management")
+
+# in the subgrouping approach, we let tau^2 to differ across subgroups 
+sav <- sapply(list(res.tot,res.per,res.fac, res.und, res.man), function(x) c(estimate=x$beta, tau2=x$tau2, k=x$k))
+colnames(sav) <- c("res.tot", "res.per", "res.fac", "res.und", "res.man")
+round(sav, digits=4)
+
+```
+
+```{r}
+res.man
+```
+
+```{r}
+res.per
+forest(res.per, header=TRUE, addpred=TRUE, slab = dat$Author)
+```
+
+
+```{r}
+rma(yi, vi, data=dat, method= "FE", subset=Branch=="Perception")
+```
+
+# Meta-regression
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/BQJbpEadjvk/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+```{r}
+# fit mixed-effects meta-regression model with percent female as predictor
+res <- rma(yi, vi, mods = ~ Perc_Female, data=dat)
+res
+```
+
+```{r}
+# use percentage of females and year as predictors
+res <- rma(yi, vi, mods = ~ Perc_Female, data=dat)
+res
+```
+
+```{r}
+# fit model with branch as moderator
+res <- rma(yi, vi, mods = ~ Sample, data=dat)
+res
+
+
+# intercept       = estimated average corrected correlation for studies using a community sample
+# SampleHigh School     = estimated difference in the average corrected correlation between studies using
+#                   a high school sample compared to studies using a community sample
+# SampleWorkplace = estimated difference in the average corrected correlation between studies using
+#                   a workplace sample compared to studies using a community sample
+
+```
+
+
+```{r}
+# fit model with Sample as moderator removing the intercept
+res <- rma(yi, vi, mods = ~ Sample - 1, data=dat)
+res
+
+# SampleCommunity  = estimated average corrected correlation for studies using a community sample
+# SampleHigh School     = estimated average corrected correlation for studies using a high school sample
+# SampleWorkplace = estimated average corrected correlation for studies using a workplace sample
+
+```
+
+## Comparing meta-regression and sub groups
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/qmtZ-KUidl0/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+```{r}
+rma(yi, vi, data=dat, subset=Sample=="Community")
+rma(yi, vi, data=dat, subset=Sample=="Workplace")
+rma(yi, vi, data=dat, subset=Sample=="High School")
+```
+
+Note, the results of the subgroups analysis are different to the meta-regression approach. Note that the two estimates of because they are based on different amounts of (residual) heterogeneity. 
+
+
+A discussion/comparison of these two approaches (i.e., assuming a single tau square value or allowing tau sqaure to differ across subsets) can be found in the following article:
+
+Rubio-Aparicio, M., López-López, J. A., Viechtbauer, W., Marín-Martínez, F., Botella, J., & Sánchez-Meca, J. (2020). Testing categorical moderators in mixed-effects meta-analysis in the presence of heteroscedasticity. Journal of Experimental Education, 88(2), 288-310. https://doi.org/10.1080/00220973.2018.1561404
+
+The results suggest that using a pooled estimate of tau sqare (through meta-regression) across categories is the best option in most conditions, although using separate estimates of tau square (subgroups analysis) is preferable if the residual heterogeneity variances are heteroscedastic i.e. the levels of heterogeneity vary a lot between groups (this kind of makes sense, averaging things that are very different is, in general, a bad idea ) 
+
+## Changing Reference Category
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/GgwaKFj4ye0/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+
+```{r}
+# change the reference level for Sample
+res <- rma(yi, vi, mods = ~ relevel(factor(Sample), ref="High School"), data=dat)
+res
+
+```
+
+
+
+## Pseudo R-square
+
+Just an FYI, here's how you can calculate a pseudo R-sqaure
+
+```{r}
+# show how the pseudo R^2 value is computed
+res0 <- rma(yi, vi, data=dat)
+res1 <- rma(yi, vi, mods = ~ Perc_Female, data=dat)
+round(100 * (res0$tau2 - res1$tau2) / res0$tau2, digits=2)
+```
+
+# Multilevel Meta-analysis (Robust Variance Estimation)
+
+
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/VLdwnrfbyzs/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+</div>
+
+<hr>
+
+**Should I use Robust Variance Estimation?**
+
+Robust Variance Estimation (RVE) is an additonal step you can take to adjust for dependency in effect sizes. Here's the reccomended usage:
+
+"MLM and RVE result in different types of variance estimates: RVE estimates the between-study variance, MLM splits this variance in two parts: variance between studies and variance between outcomes within studies.
+
+When 25 or less studies are included, MLM results in slightly underestimated variances. MLM is recommended if there are 50 studies included and if the researcher is interested in the variance estimate at both the case and the study level. If only a limited number of studies is included (i.e. 25 studies) and/or if the research interest does not lie in the study and case-level variance estimate, RVE is the preferred method" ( Moeyaert,  Ugille, Beretvas,  Ferron,  Bunuan, and Noortgatep. 570).
+
+https://doi.org/10.1080/13645579.2016.1252189
+
+<hr>
+
+
+
+```{r, eval=F}
+install.packages("clubSandwich")
+library(clubSandwich)
+```
+
+Install the `clubSandwich` package to apply RVE
+
+```{r, echo=F}
+library(clubSandwich)
+```
+
+Let's just recall what the original result (way back when) that we got was
+
+```{r}
+res <- rma(yi, vi, data=dat)
+res
+```
+
+Now let's re-run the analysis as a multilevel meta-analysis
+
+```{r}
+res_rve <- rma.mv(yi,vi, random = ~ 1 | Study_ID, data = dat)
+res_rve
+```
+
+
+We can apply RVE using the `coef_test` function
+
+```{r}
+coef_test(res_rve, vcov = "CR2")
+
+```
+
+While it didn't make much of a differences let's try it with a moderator. 
+
+
+Multilvel model
+
+```{r}
+res_rve <- rma.mv(yi, vi, mods = ~ relevel(factor(Branch), ref="Management"), random =~ 1 | Study_ID, data=dat)
+res_rve
+```
+
+
+Apply RVE
+```{r}
+coef_test(res_rve, vcov = "CR2")
+```
+
+So we can see that RVE can signficantly change our findings

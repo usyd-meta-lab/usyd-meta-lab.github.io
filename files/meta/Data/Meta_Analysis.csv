@@ -1,0 +1,52 @@
+"Study_ID","Author","rho","N","Branch","Sample","Perc_Female"
+1,"DiFabio Kenny (2016)",0.0128708549952128,157,"Total","High School",87
+2,"Dong et al. (2014) aggregate",-0.12206002068101,214,"Total","Community",58
+3,"Elfenbein et al. (2008)",0.143504331043507,149,"Total","High School",20
+4,"Elfenbein et al. (2015) Study 2",-0.0471520931658353,135,"Total","Community",53
+5,"Extremera, Rey (2016)",0.127829224361823,721,"Total","High School",62
+6,"Karim and Weisz  (2010) Pakistan",0.136432960727471,81,"Total","Community",33
+6,"Karim and Weisz (2010) France",-0.0123372201699601,111,"Total","High School",78
+7,"Kirk et al. (2008)",0.162200240306739,92,"Total","High School",70
+8,"Lopes et al. (2006)",0.374540950309808,41,"Total","High School",52
+9,"Minbashian et al. (2018)",0.106223810345629,129,"Total","Community",40
+10,"Webb et al. (2013)",-0.229557356641495,65,"Total","Community",81
+4,"Elfenbein et al. (2015) Study 2",-0.070994732287689,135,"Perception","High School",61
+6,"Karim and Weisz  (2010) Pakistan",-0.0246444501248387,81,"Perception","Community",73
+6,"Karim and Weisz (2010) France",0.0121032207021933,111,"Perception","Workplace",65
+8,"Lopes et al. (2006)",0.291115663617016,41,"Perception","High School",29
+11,"Mueller & Curhan (2006) Study 1",0,66,"Perception","Community",26
+11,"Mueller & Curhan (2006) Study 2",0.194077109078011,83,"Perception","High School",28
+12,"Rode et al. (2008) Study 1",0.0572308836173965,412,"Perception","High School",34
+12,"Rode et al. (2008) Study 2",0.0912195478894725,655,"Perception","Community",80
+4,"Elfenbein et al. (2015) Study 2",-0.0656286385807878,135,"Facilitation","High School",56
+6,"Karim and Weisz  (2010) Pakistan",0.0897141027739278,81,"Facilitation","Community",60
+6,"Karim and Weisz (2010) France",0.117825563187977,111,"Facilitation","High School",44
+8,"Lopes et al. (2006)",0.175958040223013,41,"Facilitation","High School",77
+11,"Mueller & Curhan (2006) Study 1",-0.0133151837921975,66,"Facilitation","High School",71
+11,"Mueller & Curhan (2006) Study 2",-0.121817104769778,83,"Facilitation","High School",67
+13,"Parke, Seo, and Sherf (2015)",0.0144601404303357,177,"Facilitation","High School",90
+12,"Rode et al. (2008) Study 1",0.0893338931843117,412,"Facilitation","High School",79
+12,"Rode et al. (2008) Study 2",0.150323586612387,655,"Facilitation","Community",69
+4,"Elfenbein et al. (2015) Study 2",-0.207410899849425,135,"Understanding","Community",84
+4,"Elfenbein et al. (2015) Study 3",0.0382080359950435,292,"Understanding","Community",82
+6,"Karim and Weisz  (2010) Pakistan",0.22664652120454,81,"Understanding","High School",39
+6,"Karim and Weisz (2010) France",-0.244307347683562,111,"Understanding","High School",54
+8,"Lopes et al. (2006)",0.200358041191587,41,"Understanding","Community",25
+11,"Mueller & Curhan (2006) Study 1",-0.170892642550492,66,"Understanding","High School",76
+11,"Mueller & Curhan (2006) Study 2",0.0133572027461058,83,"Understanding","High School",83
+12,"Rode et al. (2008) Study 1",-0.040677732389454,412,"Understanding","High School",47
+12,"Rode et al. (2008) Study 2",0.149829979959314,655,"Understanding","High School",66
+14,"Brackett et al. (2010)",0.514967644025646,123,"Management","Workplace",42
+15,"Burrus et al. (2012)",0.265173930687573,112,"Management","High School",89
+4,"Elfenbein et al. (2015) Study 2",0.290283005318249,135,"Management","High School",63
+4,"Elfenbein et al. (2015) Study 3",0.162779693470014,292,"Management","High School",27
+6,"Karim and Weisz  (2010) Pakistan",0.0768978023776524,81,"Management","High School",31
+6,"Karim and Weisz (2010) France",0.303500969070657,111,"Management","Workplace",51
+8,"Lopes et al. (2006)",0.506366864451346,41,"Management","High School",68
+11,"Mueller & Curhan (2006) Study 1",0.0383674633327235,66,"Management","Workplace",43
+11,"Mueller & Curhan (2006) Study 2",0.259675315103254,83,"Management","Community",64
+13,"Parke, Seo, and Sherf (2015)",0.315680185058794,177,"Management","High School",75
+12,"Rode et al. (2008) Study 1",0.107380132000296,412,"Management","High School",38
+12,"Rode et al. (2008) Study 2",0.212164913698109,655,"Management","High School",57
+16,"Zeidner et al. (2014)",0.141878031954541,182,"Management","High School",45
+17,"Zhao et al. (2019)",0.171358643393262,343,"Management","Community",85

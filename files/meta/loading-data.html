@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Loading Data | Meta-analysis in R</title>
+  <meta name="description" content="3 Loading Data | Meta-analysis in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Loading Data | Meta-analysis in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Loading Data | Meta-analysis in R" />
+  
+  
+  
+
+<meta name="author" content="Dr Kit Double" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="getting-started.html"/>
+<link rel="next" href="random-effects-model.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>1</b> Overview</a></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting Started</a></li>
+<li class="chapter" data-level="3" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>3</b> Loading Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="loading-data.html"><a href="loading-data.html#computing-effect-sizes"><i class="fa fa-check"></i><b>3.1</b> Computing Effect Sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="random-effects-model.html"><a href="random-effects-model.html"><i class="fa fa-check"></i><b>4</b> Random-effects Model</a></li>
+<li class="chapter" data-level="5" data-path="forest-plot.html"><a href="forest-plot.html"><i class="fa fa-check"></i><b>5</b> Forest Plot</a></li>
+<li class="chapter" data-level="6" data-path="publication-bias-funnel-plot.html"><a href="publication-bias-funnel-plot.html"><i class="fa fa-check"></i><b>6</b> Publication Bias (Funnel Plot)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="publication-bias-funnel-plot.html"><a href="publication-bias-funnel-plot.html#egger-test"><i class="fa fa-check"></i><b>6.1</b> Egger Test</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="subgroups-analysis.html"><a href="subgroups-analysis.html"><i class="fa fa-check"></i><b>7</b> Subgroups Analysis</a></li>
+<li class="chapter" data-level="8" data-path="meta-regression.html"><a href="meta-regression.html"><i class="fa fa-check"></i><b>8</b> Meta-regression</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="meta-regression.html"><a href="meta-regression.html#comparing-meta-regression-and-sub-groups"><i class="fa fa-check"></i><b>8.1</b> Comparing meta-regression and sub groups</a></li>
+<li class="chapter" data-level="8.2" data-path="meta-regression.html"><a href="meta-regression.html#changing-reference-category"><i class="fa fa-check"></i><b>8.2</b> Changing Reference Category</a></li>
+<li class="chapter" data-level="8.3" data-path="meta-regression.html"><a href="meta-regression.html#pseudo-r-square"><i class="fa fa-check"></i><b>8.3</b> Pseudo R-square</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="multilevel-meta-analysis-robust-variance-estimation.html"><a href="multilevel-meta-analysis-robust-variance-estimation.html"><i class="fa fa-check"></i><b>9</b> Multilevel Meta-analysis (Robust Variance Estimation)</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Meta-analysis in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="loading-data" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Loading Data</h1>
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/XWSNhE2OqVg/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="loading-data.html#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data/Meta_Analysis.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="loading-data.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="loading-data.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="loading-data.html#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="loading-data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div>
+<pre><code>##    Study_ID                           Author         rho   N        Branch
+## 1         1             DiFabio Kenny (2016)  0.01287085 157         Total
+## 2         2     Dong et al. (2014) aggregate -0.12206002 214         Total
+## 3         3          Elfenbein et al. (2008)  0.14350433 149         Total
+## 4         4  Elfenbein et al. (2015) Study 2 -0.04715209 135         Total
+## 5         5            Extremera, Rey (2016)  0.12782922 721         Total
+## 6         6 Karim and Weisz  (2010) Pakistan  0.13643296  81         Total
+## 7         6    Karim and Weisz (2010) France -0.01233722 111         Total
+## 8         7               Kirk et al. (2008)  0.16220024  92         Total
+## 9         8              Lopes et al. (2006)  0.37454095  41         Total
+## 10        9         Minbashian et al. (2018)  0.10622381 129         Total
+## 11       10               Webb et al. (2013) -0.22955736  65         Total
+## 12        4  Elfenbein et al. (2015) Study 2 -0.07099473 135    Perception
+## 13        6 Karim and Weisz  (2010) Pakistan -0.02464445  81    Perception
+## 14        6    Karim and Weisz (2010) France  0.01210322 111    Perception
+## 15        8              Lopes et al. (2006)  0.29111566  41    Perception
+## 16       11  Mueller &amp; Curhan (2006) Study 1  0.00000000  66    Perception
+## 17       11  Mueller &amp; Curhan (2006) Study 2  0.19407711  83    Perception
+## 18       12       Rode et al. (2008) Study 1  0.05723088 412    Perception
+## 19       12       Rode et al. (2008) Study 2  0.09121955 655    Perception
+## 20        4  Elfenbein et al. (2015) Study 2 -0.06562864 135  Facilitation
+## 21        6 Karim and Weisz  (2010) Pakistan  0.08971410  81  Facilitation
+## 22        6    Karim and Weisz (2010) France  0.11782556 111  Facilitation
+## 23        8              Lopes et al. (2006)  0.17595804  41  Facilitation
+## 24       11  Mueller &amp; Curhan (2006) Study 1 -0.01331518  66  Facilitation
+## 25       11  Mueller &amp; Curhan (2006) Study 2 -0.12181710  83  Facilitation
+## 26       13     Parke, Seo, and Sherf (2015)  0.01446014 177  Facilitation
+## 27       12       Rode et al. (2008) Study 1  0.08933389 412  Facilitation
+## 28       12       Rode et al. (2008) Study 2  0.15032359 655  Facilitation
+## 29        4  Elfenbein et al. (2015) Study 2 -0.20741090 135 Understanding
+## 30        4  Elfenbein et al. (2015) Study 3  0.03820804 292 Understanding
+## 31        6 Karim and Weisz  (2010) Pakistan  0.22664652  81 Understanding
+## 32        6    Karim and Weisz (2010) France -0.24430735 111 Understanding
+## 33        8              Lopes et al. (2006)  0.20035804  41 Understanding
+## 34       11  Mueller &amp; Curhan (2006) Study 1 -0.17089264  66 Understanding
+## 35       11  Mueller &amp; Curhan (2006) Study 2  0.01335720  83 Understanding
+## 36       12       Rode et al. (2008) Study 1 -0.04067773 412 Understanding
+## 37       12       Rode et al. (2008) Study 2  0.14982998 655 Understanding
+## 38       14           Brackett et al. (2010)  0.51496764 123    Management
+## 39       15             Burrus et al. (2012)  0.26517393 112    Management
+## 40        4  Elfenbein et al. (2015) Study 2  0.29028301 135    Management
+## 41        4  Elfenbein et al. (2015) Study 3  0.16277969 292    Management
+## 42        6 Karim and Weisz  (2010) Pakistan  0.07689780  81    Management
+## 43        6    Karim and Weisz (2010) France  0.30350097 111    Management
+## 44        8              Lopes et al. (2006)  0.50636686  41    Management
+## 45       11  Mueller &amp; Curhan (2006) Study 1  0.03836746  66    Management
+## 46       11  Mueller &amp; Curhan (2006) Study 2  0.25967532  83    Management
+## 47       13     Parke, Seo, and Sherf (2015)  0.31568019 177    Management
+## 48       12       Rode et al. (2008) Study 1  0.10738013 412    Management
+## 49       12       Rode et al. (2008) Study 2  0.21216491 655    Management
+## 50       16            Zeidner et al. (2014)  0.14187803 182    Management
+## 51       17               Zhao et al. (2019)  0.17135864 343    Management
+##         Sample Perc_Female
+## 1  High School          87
+## 2    Community          58
+## 3  High School          20
+## 4    Community          53
+## 5  High School          62
+## 6    Community          33
+## 7  High School          78
+## 8  High School          70
+## 9  High School          52
+## 10   Community          40
+## 11   Community          81
+## 12 High School          61
+## 13   Community          73
+## 14   Workplace          65
+## 15 High School          29
+## 16   Community          26
+## 17 High School          28
+## 18 High School          34
+## 19   Community          80
+## 20 High School          56
+## 21   Community          60
+## 22 High School          44
+## 23 High School          77
+## 24 High School          71
+## 25 High School          67
+## 26 High School          90
+## 27 High School          79
+## 28   Community          69
+## 29   Community          84
+## 30   Community          82
+## 31 High School          39
+## 32 High School          54
+## 33   Community          25
+## 34 High School          76
+## 35 High School          83
+## 36 High School          47
+## 37 High School          66
+## 38   Workplace          42
+## 39 High School          89
+## 40 High School          63
+## 41 High School          27
+## 42 High School          31
+## 43   Workplace          51
+## 44 High School          68
+## 45   Workplace          43
+## 46   Community          64
+## 47 High School          75
+## 48 High School          38
+## 49 High School          57
+## 50 High School          45
+## 51   Community          85</code></pre>
+<div id="computing-effect-sizes" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Computing Effect Sizes</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="loading-data.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute log risk ratios and corresponding sampling variances</span></span>
+<span id="cb4-2"><a href="loading-data.html#cb4-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">escalc</span>(<span class="at">measure =</span> <span class="st">&quot;COR&quot;</span>, <span class="at">ri =</span> rho, <span class="at">ni =</span> N, <span class="at">data =</span> dat)</span>
+<span id="cb4-3"><a href="loading-data.html#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="loading-data.html#cb4-4" aria-hidden="true" tabindex="-1"></a>dat</span></code></pre></div>
+<pre><code>##    Study_ID                           Author         rho   N        Branch 
+## 1         1             DiFabio Kenny (2016)  0.01287085 157         Total 
+## 2         2     Dong et al. (2014) aggregate -0.12206002 214         Total 
+## 3         3          Elfenbein et al. (2008)  0.14350433 149         Total 
+## 4         4  Elfenbein et al. (2015) Study 2 -0.04715209 135         Total 
+## 5         5            Extremera, Rey (2016)  0.12782922 721         Total 
+## 6         6 Karim and Weisz  (2010) Pakistan  0.13643296  81         Total 
+## 7         6    Karim and Weisz (2010) France -0.01233722 111         Total 
+## 8         7               Kirk et al. (2008)  0.16220024  92         Total 
+## 9         8              Lopes et al. (2006)  0.37454095  41         Total 
+## 10        9         Minbashian et al. (2018)  0.10622381 129         Total 
+## 11       10               Webb et al. (2013) -0.22955736  65         Total 
+## 12        4  Elfenbein et al. (2015) Study 2 -0.07099473 135    Perception 
+## 13        6 Karim and Weisz  (2010) Pakistan -0.02464445  81    Perception 
+## 14        6    Karim and Weisz (2010) France  0.01210322 111    Perception 
+## 15        8              Lopes et al. (2006)  0.29111566  41    Perception 
+## 16       11  Mueller &amp; Curhan (2006) Study 1  0.00000000  66    Perception 
+## 17       11  Mueller &amp; Curhan (2006) Study 2  0.19407711  83    Perception 
+## 18       12       Rode et al. (2008) Study 1  0.05723088 412    Perception 
+## 19       12       Rode et al. (2008) Study 2  0.09121955 655    Perception 
+## 20        4  Elfenbein et al. (2015) Study 2 -0.06562864 135  Facilitation 
+## 21        6 Karim and Weisz  (2010) Pakistan  0.08971410  81  Facilitation 
+## 22        6    Karim and Weisz (2010) France  0.11782556 111  Facilitation 
+## 23        8              Lopes et al. (2006)  0.17595804  41  Facilitation 
+## 24       11  Mueller &amp; Curhan (2006) Study 1 -0.01331518  66  Facilitation 
+## 25       11  Mueller &amp; Curhan (2006) Study 2 -0.12181710  83  Facilitation 
+## 26       13     Parke, Seo, and Sherf (2015)  0.01446014 177  Facilitation 
+## 27       12       Rode et al. (2008) Study 1  0.08933389 412  Facilitation 
+## 28       12       Rode et al. (2008) Study 2  0.15032359 655  Facilitation 
+## 29        4  Elfenbein et al. (2015) Study 2 -0.20741090 135 Understanding 
+## 30        4  Elfenbein et al. (2015) Study 3  0.03820804 292 Understanding 
+## 31        6 Karim and Weisz  (2010) Pakistan  0.22664652  81 Understanding 
+## 32        6    Karim and Weisz (2010) France -0.24430735 111 Understanding 
+## 33        8              Lopes et al. (2006)  0.20035804  41 Understanding 
+## 34       11  Mueller &amp; Curhan (2006) Study 1 -0.17089264  66 Understanding 
+## 35       11  Mueller &amp; Curhan (2006) Study 2  0.01335720  83 Understanding 
+## 36       12       Rode et al. (2008) Study 1 -0.04067773 412 Understanding 
+## 37       12       Rode et al. (2008) Study 2  0.14982998 655 Understanding 
+## 38       14           Brackett et al. (2010)  0.51496764 123    Management 
+## 39       15             Burrus et al. (2012)  0.26517393 112    Management 
+## 40        4  Elfenbein et al. (2015) Study 2  0.29028301 135    Management 
+## 41        4  Elfenbein et al. (2015) Study 3  0.16277969 292    Management 
+## 42        6 Karim and Weisz  (2010) Pakistan  0.07689780  81    Management 
+## 43        6    Karim and Weisz (2010) France  0.30350097 111    Management 
+## 44        8              Lopes et al. (2006)  0.50636686  41    Management 
+## 45       11  Mueller &amp; Curhan (2006) Study 1  0.03836746  66    Management 
+## 46       11  Mueller &amp; Curhan (2006) Study 2  0.25967532  83    Management 
+## 47       13     Parke, Seo, and Sherf (2015)  0.31568019 177    Management 
+## 48       12       Rode et al. (2008) Study 1  0.10738013 412    Management 
+## 49       12       Rode et al. (2008) Study 2  0.21216491 655    Management 
+## 50       16            Zeidner et al. (2014)  0.14187803 182    Management 
+## 51       17               Zhao et al. (2019)  0.17135864 343    Management 
+##         Sample Perc_Female      yi     vi 
+## 1  High School          87  0.0129 0.0064 
+## 2    Community          58 -0.1221 0.0046 
+## 3  High School          20  0.1435 0.0065 
+## 4    Community          53 -0.0472 0.0074 
+## 5  High School          62  0.1278 0.0013 
+## 6    Community          33  0.1364 0.0120 
+## 7  High School          78 -0.0123 0.0091 
+## 8  High School          70  0.1622 0.0104 
+## 9  High School          52  0.3745 0.0185 
+## 10   Community          40  0.1062 0.0076 
+## 11   Community          81 -0.2296 0.0140 
+## 12 High School          61 -0.0710 0.0074 
+## 13   Community          73 -0.0246 0.0125 
+## 14   Workplace          65  0.0121 0.0091 
+## 15 High School          29  0.2911 0.0209 
+## 16   Community          26  0.0000 0.0154 
+## 17 High School          28  0.1941 0.0113 
+## 18 High School          34  0.0572 0.0024 
+## 19   Community          80  0.0912 0.0015 
+## 20 High School          56 -0.0656 0.0074 
+## 21   Community          60  0.0897 0.0123 
+## 22 High School          44  0.1178 0.0088 
+## 23 High School          77  0.1760 0.0235 
+## 24 High School          71 -0.0133 0.0154 
+## 25 High School          67 -0.1218 0.0118 
+## 26 High School          90  0.0145 0.0057 
+## 27 High School          79  0.0893 0.0024 
+## 28   Community          69  0.1503 0.0015 
+## 29   Community          84 -0.2074 0.0068 
+## 30   Community          82  0.0382 0.0034 
+## 31 High School          39  0.2266 0.0112 
+## 32 High School          54 -0.2443 0.0080 
+## 33   Community          25  0.2004 0.0230 
+## 34 High School          76 -0.1709 0.0145 
+## 35 High School          83  0.0134 0.0122 
+## 36 High School          47 -0.0407 0.0024 
+## 37 High School          66  0.1498 0.0015 
+## 38   Workplace          42  0.5150 0.0044 
+## 39 High School          89  0.2652 0.0078 
+## 40 High School          63  0.2903 0.0063 
+## 41 High School          27  0.1628 0.0033 
+## 42 High School          31  0.0769 0.0124 
+## 43   Workplace          51  0.3035 0.0075 
+## 44 High School          68  0.5064 0.0138 
+## 45   Workplace          43  0.0384 0.0153 
+## 46   Community          64  0.2597 0.0106 
+## 47 High School          75  0.3157 0.0046 
+## 48 High School          38  0.1074 0.0024 
+## 49 High School          57  0.2122 0.0014 
+## 50 High School          45  0.1419 0.0053 
+## 51   Community          85  0.1714 0.0028</code></pre>
+<p>Here’s the formula for varince (FYI):</p>
+<p><span class="math inline">\(vi = (1 - yi^2)^2/(ni - 1)\)</span></p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="getting-started.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="random-effects-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": false,
+"toc": {
+"collapse": "subsection"
+},
+"numbering": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

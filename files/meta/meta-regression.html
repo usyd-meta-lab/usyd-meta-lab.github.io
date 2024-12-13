@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>8 Meta-regression | Meta-analysis in R</title>
+  <meta name="description" content="8 Meta-regression | Meta-analysis in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="8 Meta-regression | Meta-analysis in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8 Meta-regression | Meta-analysis in R" />
+  
+  
+  
+
+<meta name="author" content="Dr Kit Double" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="subgroups-analysis.html"/>
+<link rel="next" href="multilevel-meta-analysis-robust-variance-estimation.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>1</b> Overview</a></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting Started</a></li>
+<li class="chapter" data-level="3" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>3</b> Loading Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="loading-data.html"><a href="loading-data.html#computing-effect-sizes"><i class="fa fa-check"></i><b>3.1</b> Computing Effect Sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="random-effects-model.html"><a href="random-effects-model.html"><i class="fa fa-check"></i><b>4</b> Random-effects Model</a></li>
+<li class="chapter" data-level="5" data-path="forest-plot.html"><a href="forest-plot.html"><i class="fa fa-check"></i><b>5</b> Forest Plot</a></li>
+<li class="chapter" data-level="6" data-path="publication-bias-funnel-plot.html"><a href="publication-bias-funnel-plot.html"><i class="fa fa-check"></i><b>6</b> Publication Bias (Funnel Plot)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="publication-bias-funnel-plot.html"><a href="publication-bias-funnel-plot.html#egger-test"><i class="fa fa-check"></i><b>6.1</b> Egger Test</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="subgroups-analysis.html"><a href="subgroups-analysis.html"><i class="fa fa-check"></i><b>7</b> Subgroups Analysis</a></li>
+<li class="chapter" data-level="8" data-path="meta-regression.html"><a href="meta-regression.html"><i class="fa fa-check"></i><b>8</b> Meta-regression</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="meta-regression.html"><a href="meta-regression.html#comparing-meta-regression-and-sub-groups"><i class="fa fa-check"></i><b>8.1</b> Comparing meta-regression and sub groups</a></li>
+<li class="chapter" data-level="8.2" data-path="meta-regression.html"><a href="meta-regression.html#changing-reference-category"><i class="fa fa-check"></i><b>8.2</b> Changing Reference Category</a></li>
+<li class="chapter" data-level="8.3" data-path="meta-regression.html"><a href="meta-regression.html#pseudo-r-square"><i class="fa fa-check"></i><b>8.3</b> Pseudo R-square</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="multilevel-meta-analysis-robust-variance-estimation.html"><a href="multilevel-meta-analysis-robust-variance-estimation.html"><i class="fa fa-check"></i><b>9</b> Multilevel Meta-analysis (Robust Variance Estimation)</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Meta-analysis in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="meta-regression" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Meta-regression</h1>
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/BQJbpEadjvk/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="meta-regression.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit mixed-effects meta-regression model with percent female as predictor</span></span>
+<span id="cb22-2"><a href="meta-regression.html#cb22-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> Perc_Female, <span class="at">data=</span>dat)</span>
+<span id="cb22-3"><a href="meta-regression.html#cb22-3" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>## 
+## Mixed-Effects Model (k = 51; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0175 (SE = 0.0050)
+## tau (square root of estimated tau^2 value):             0.1325
+## I^2 (residual heterogeneity / unaccounted variability): 77.84%
+## H^2 (unaccounted variability / sampling variability):   4.51
+## R^2 (amount of heterogeneity accounted for):            2.04%
+## 
+## Test for Residual Heterogeneity:
+## QE(df = 49) = 185.0467, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient 2):
+## QM(df = 1) = 2.2554, p-val = 0.1331
+## 
+## Model Results:
+## 
+##              estimate      se     zval    pval    ci.lb   ci.ub 
+## intrcpt        0.1995  0.0713   2.7997  0.0051   0.0598  0.3391  ** 
+## Perc_Female   -0.0017  0.0011  -1.5018  0.1331  -0.0040  0.0005     
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="meta-regression.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use percentage of females and year as predictors</span></span>
+<span id="cb24-2"><a href="meta-regression.html#cb24-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> Perc_Female, <span class="at">data=</span>dat)</span>
+<span id="cb24-3"><a href="meta-regression.html#cb24-3" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>## 
+## Mixed-Effects Model (k = 51; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0175 (SE = 0.0050)
+## tau (square root of estimated tau^2 value):             0.1325
+## I^2 (residual heterogeneity / unaccounted variability): 77.84%
+## H^2 (unaccounted variability / sampling variability):   4.51
+## R^2 (amount of heterogeneity accounted for):            2.04%
+## 
+## Test for Residual Heterogeneity:
+## QE(df = 49) = 185.0467, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient 2):
+## QM(df = 1) = 2.2554, p-val = 0.1331
+## 
+## Model Results:
+## 
+##              estimate      se     zval    pval    ci.lb   ci.ub 
+## intrcpt        0.1995  0.0713   2.7997  0.0051   0.0598  0.3391  ** 
+## Perc_Female   -0.0017  0.0011  -1.5018  0.1331  -0.0040  0.0005     
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="meta-regression.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model with branch as moderator</span></span>
+<span id="cb26-2"><a href="meta-regression.html#cb26-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> Sample, <span class="at">data=</span>dat)</span>
+<span id="cb26-3"><a href="meta-regression.html#cb26-3" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>## 
+## Mixed-Effects Model (k = 51; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0157 (SE = 0.0047)
+## tau (square root of estimated tau^2 value):             0.1253
+## I^2 (residual heterogeneity / unaccounted variability): 75.69%
+## H^2 (unaccounted variability / sampling variability):   4.11
+## R^2 (amount of heterogeneity accounted for):            12.33%
+## 
+## Test for Residual Heterogeneity:
+## QE(df = 48) = 163.9977, p-val &lt; .0001
+## 
+## Test of Moderators (coefficients 2:3):
+## QM(df = 2) = 5.5984, p-val = 0.0609
+## 
+## Model Results:
+## 
+##                    estimate      se    zval    pval    ci.lb   ci.ub 
+## intrcpt              0.0425  0.0395  1.0753  0.2822  -0.0350  0.1200    
+## SampleHigh School    0.0636  0.0478  1.3300  0.1835  -0.0301  0.1573    
+## SampleWorkplace      0.2018  0.0872  2.3127  0.0207   0.0308  0.3728  * 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="meta-regression.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intercept       = estimated average corrected correlation for studies using a community sample</span></span>
+<span id="cb28-2"><a href="meta-regression.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># SampleHigh School     = estimated difference in the average corrected correlation between studies using</span></span>
+<span id="cb28-3"><a href="meta-regression.html#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                   a high school sample compared to studies using a community sample</span></span>
+<span id="cb28-4"><a href="meta-regression.html#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># SampleWorkplace = estimated difference in the average corrected correlation between studies using</span></span>
+<span id="cb28-5"><a href="meta-regression.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                   a workplace sample compared to studies using a community sample</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="meta-regression.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model with Sample as moderator removing the intercept</span></span>
+<span id="cb29-2"><a href="meta-regression.html#cb29-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> Sample <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data=</span>dat)</span>
+<span id="cb29-3"><a href="meta-regression.html#cb29-3" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>## 
+## Mixed-Effects Model (k = 51; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0157 (SE = 0.0047)
+## tau (square root of estimated tau^2 value):             0.1253
+## I^2 (residual heterogeneity / unaccounted variability): 75.69%
+## H^2 (unaccounted variability / sampling variability):   4.11
+## 
+## Test for Residual Heterogeneity:
+## QE(df = 48) = 163.9977, p-val &lt; .0001
+## 
+## Test of Moderators (coefficients 1:3):
+## QM(df = 3) = 26.5936, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                    estimate      se    zval    pval    ci.lb   ci.ub 
+## SampleCommunity      0.0425  0.0395  1.0753  0.2822  -0.0350  0.1200      
+## SampleHigh School    0.1061  0.0269  3.9458  &lt;.0001   0.0534  0.1588  *** 
+## SampleWorkplace      0.2443  0.0778  3.1413  0.0017   0.0919  0.3967   ** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="meta-regression.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SampleCommunity  = estimated average corrected correlation for studies using a community sample</span></span>
+<span id="cb31-2"><a href="meta-regression.html#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># SampleHigh School     = estimated average corrected correlation for studies using a high school sample</span></span>
+<span id="cb31-3"><a href="meta-regression.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># SampleWorkplace = estimated average corrected correlation for studies using a workplace sample</span></span></code></pre></div>
+<div id="comparing-meta-regression-and-sub-groups" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Comparing meta-regression and sub groups</h2>
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/qmtZ-KUidl0/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="meta-regression.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rma</span>(yi, vi, <span class="at">data=</span>dat, <span class="at">subset=</span>Sample<span class="sc">==</span><span class="st">&quot;Community&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Random-Effects Model (k = 15; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of total heterogeneity): 0.0119 (SE = 0.0072)
+## tau (square root of estimated tau^2 value):      0.1092
+## I^2 (total heterogeneity / total variability):   70.09%
+## H^2 (total variability / sampling variability):  3.34
+## 
+## Test for Heterogeneity:
+## Q(df = 14) = 42.0802, p-val = 0.0001
+## 
+## Model Results:
+## 
+## estimate      se    zval    pval    ci.lb   ci.ub 
+##   0.0434  0.0360  1.2065  0.2276  -0.0271  0.1140    
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="meta-regression.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rma</span>(yi, vi, <span class="at">data=</span>dat, <span class="at">subset=</span>Sample<span class="sc">==</span><span class="st">&quot;Workplace&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Random-Effects Model (k = 4; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of total heterogeneity): 0.0504 (SE = 0.0484)
+## tau (square root of estimated tau^2 value):      0.2245
+## I^2 (total heterogeneity / total variability):   86.31%
+## H^2 (total variability / sampling variability):  7.30
+## 
+## Test for Heterogeneity:
+## Q(df = 3) = 24.0253, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se    zval    pval    ci.lb   ci.ub 
+##   0.2284  0.1217  1.8767  0.0606  -0.0101  0.4669  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="meta-regression.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rma</span>(yi, vi, <span class="at">data=</span>dat, <span class="at">subset=</span>Sample<span class="sc">==</span><span class="st">&quot;High School&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Random-Effects Model (k = 32; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of total heterogeneity): 0.0137 (SE = 0.0052)
+## tau (square root of estimated tau^2 value):      0.1171
+## I^2 (total heterogeneity / total variability):   73.88%
+## H^2 (total variability / sampling variability):  3.83
+## 
+## Test for Heterogeneity:
+## Q(df = 31) = 97.8922, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se    zval    pval   ci.lb   ci.ub 
+##   0.1061  0.0257  4.1345  &lt;.0001  0.0558  0.1563  *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Note, the results of the subgroups analysis are different to the meta-regression approach. Note that the two estimates of because they are based on different amounts of (residual) heterogeneity.</p>
+<p>A discussion/comparison of these two approaches (i.e., assuming a single tau square value or allowing tau sqaure to differ across subsets) can be found in the following article:</p>
+<p>Rubio-Aparicio, M., López-López, J. A., Viechtbauer, W., Marín-Martínez, F., Botella, J., &amp; Sánchez-Meca, J. (2020). Testing categorical moderators in mixed-effects meta-analysis in the presence of heteroscedasticity. Journal of Experimental Education, 88(2), 288-310. <a href="https://doi.org/10.1080/00220973.2018.1561404" class="uri">https://doi.org/10.1080/00220973.2018.1561404</a></p>
+<p>The results suggest that using a pooled estimate of tau sqare (through meta-regression) across categories is the best option in most conditions, although using separate estimates of tau square (subgroups analysis) is preferable if the residual heterogeneity variances are heteroscedastic i.e. the levels of heterogeneity vary a lot between groups (this kind of makes sense, averaging things that are very different is, in general, a bad idea )</p>
+</div>
+<div id="changing-reference-category" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Changing Reference Category</h2>
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/GgwaKFj4ye0/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="meta-regression.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change the reference level for Sample</span></span>
+<span id="cb38-2"><a href="meta-regression.html#cb38-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> <span class="fu">relevel</span>(<span class="fu">factor</span>(Sample), <span class="at">ref=</span><span class="st">&quot;High School&quot;</span>), <span class="at">data=</span>dat)</span>
+<span id="cb38-3"><a href="meta-regression.html#cb38-3" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>## 
+## Mixed-Effects Model (k = 51; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of residual heterogeneity):     0.0157 (SE = 0.0047)
+## tau (square root of estimated tau^2 value):             0.1253
+## I^2 (residual heterogeneity / unaccounted variability): 75.69%
+## H^2 (unaccounted variability / sampling variability):   4.11
+## R^2 (amount of heterogeneity accounted for):            12.33%
+## 
+## Test for Residual Heterogeneity:
+## QE(df = 48) = 163.9977, p-val &lt; .0001
+## 
+## Test of Moderators (coefficients 2:3):
+## QM(df = 2) = 5.5984, p-val = 0.0609
+## 
+## Model Results:
+## 
+##                                                        estimate      se 
+## intrcpt                                                  0.1061  0.0269 
+## relevel(factor(Sample), ref = &quot;High School&quot;)Community   -0.0636  0.0478 
+## relevel(factor(Sample), ref = &quot;High School&quot;)Workplace    0.1382  0.0823 
+##                                                           zval    pval    ci.lb 
+## intrcpt                                                 3.9458  &lt;.0001   0.0534 
+## relevel(factor(Sample), ref = &quot;High School&quot;)Community  -1.3300  0.1835  -0.1573 
+## relevel(factor(Sample), ref = &quot;High School&quot;)Workplace   1.6791  0.0931  -0.0231 
+##                                                         ci.ub 
+## intrcpt                                                0.1588  *** 
+## relevel(factor(Sample), ref = &quot;High School&quot;)Community  0.0301      
+## relevel(factor(Sample), ref = &quot;High School&quot;)Workplace  0.2995    . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="pseudo-r-square" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Pseudo R-square</h2>
+<p>Just an FYI, here’s how you can calculate a pseudo R-sqaure</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="meta-regression.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># show how the pseudo R^2 value is computed</span></span>
+<span id="cb40-2"><a href="meta-regression.html#cb40-2" aria-hidden="true" tabindex="-1"></a>res0 <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">data=</span>dat)</span>
+<span id="cb40-3"><a href="meta-regression.html#cb40-3" aria-hidden="true" tabindex="-1"></a>res1 <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> Perc_Female, <span class="at">data=</span>dat)</span>
+<span id="cb40-4"><a href="meta-regression.html#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> (res0<span class="sc">$</span>tau2 <span class="sc">-</span> res1<span class="sc">$</span>tau2) <span class="sc">/</span> res0<span class="sc">$</span>tau2, <span class="at">digits=</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 2.04</code></pre>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="subgroups-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multilevel-meta-analysis-robust-variance-estimation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": false,
+"toc": {
+"collapse": "subsection"
+},
+"numbering": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

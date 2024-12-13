@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Multilevel Meta-analysis (Robust Variance Estimation) | Meta-analysis in R</title>
+  <meta name="description" content="9 Multilevel Meta-analysis (Robust Variance Estimation) | Meta-analysis in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Multilevel Meta-analysis (Robust Variance Estimation) | Meta-analysis in R" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Multilevel Meta-analysis (Robust Variance Estimation) | Meta-analysis in R" />
+  
+  
+  
+
+<meta name="author" content="Dr Kit Double" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="meta-regression.html"/>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="overview.html"><a href="overview.html"><i class="fa fa-check"></i><b>1</b> Overview</a></li>
+<li class="chapter" data-level="2" data-path="getting-started.html"><a href="getting-started.html"><i class="fa fa-check"></i><b>2</b> Getting Started</a></li>
+<li class="chapter" data-level="3" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>3</b> Loading Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="loading-data.html"><a href="loading-data.html#computing-effect-sizes"><i class="fa fa-check"></i><b>3.1</b> Computing Effect Sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="random-effects-model.html"><a href="random-effects-model.html"><i class="fa fa-check"></i><b>4</b> Random-effects Model</a></li>
+<li class="chapter" data-level="5" data-path="forest-plot.html"><a href="forest-plot.html"><i class="fa fa-check"></i><b>5</b> Forest Plot</a></li>
+<li class="chapter" data-level="6" data-path="publication-bias-funnel-plot.html"><a href="publication-bias-funnel-plot.html"><i class="fa fa-check"></i><b>6</b> Publication Bias (Funnel Plot)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="publication-bias-funnel-plot.html"><a href="publication-bias-funnel-plot.html#egger-test"><i class="fa fa-check"></i><b>6.1</b> Egger Test</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="subgroups-analysis.html"><a href="subgroups-analysis.html"><i class="fa fa-check"></i><b>7</b> Subgroups Analysis</a></li>
+<li class="chapter" data-level="8" data-path="meta-regression.html"><a href="meta-regression.html"><i class="fa fa-check"></i><b>8</b> Meta-regression</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="meta-regression.html"><a href="meta-regression.html#comparing-meta-regression-and-sub-groups"><i class="fa fa-check"></i><b>8.1</b> Comparing meta-regression and sub groups</a></li>
+<li class="chapter" data-level="8.2" data-path="meta-regression.html"><a href="meta-regression.html#changing-reference-category"><i class="fa fa-check"></i><b>8.2</b> Changing Reference Category</a></li>
+<li class="chapter" data-level="8.3" data-path="meta-regression.html"><a href="meta-regression.html#pseudo-r-square"><i class="fa fa-check"></i><b>8.3</b> Pseudo R-square</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="multilevel-meta-analysis-robust-variance-estimation.html"><a href="multilevel-meta-analysis-robust-variance-estimation.html"><i class="fa fa-check"></i><b>9</b> Multilevel Meta-analysis (Robust Variance Estimation)</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Meta-analysis in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multilevel-meta-analysis-robust-variance-estimation" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Multilevel Meta-analysis (Robust Variance Estimation)</h1>
+<div align="center">
+<iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/VLdwnrfbyzs/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</div>
+<hr>
+<p><strong>Should I use Robust Variance Estimation?</strong></p>
+<p>Robust Variance Estimation (RVE) is an additonal step you can take to adjust for dependency in effect sizes. Here’s the reccomended usage:</p>
+<p>“MLM and RVE result in different types of variance estimates: RVE estimates the between-study variance, MLM splits this variance in two parts: variance between studies and variance between outcomes within studies.</p>
+<p>When 25 or less studies are included, MLM results in slightly underestimated variances. MLM is recommended if there are 50 studies included and if the researcher is interested in the variance estimate at both the case and the study level. If only a limited number of studies is included (i.e. 25 studies) and/or if the research interest does not lie in the study and case-level variance estimate, RVE is the preferred method” ( Moeyaert, Ugille, Beretvas, Ferron, Bunuan, and Noortgatep. 570).</p>
+<p><a href="https://doi.org/10.1080/13645579.2016.1252189" class="uri">https://doi.org/10.1080/13645579.2016.1252189</a></p>
+<hr>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;clubSandwich&quot;</span>)</span>
+<span id="cb42-2"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clubSandwich)</span></code></pre></div>
+<p>Install the <code>clubSandwich</code> package to apply RVE</p>
+<pre><code>## Registered S3 method overwritten by &#39;clubSandwich&#39;:
+##   method    from    
+##   bread.mlm sandwich</code></pre>
+<p>Let’s just recall what the original result (way back when) that we got was</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb44-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">rma</span>(yi, vi, <span class="at">data=</span>dat)</span>
+<span id="cb44-2"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb44-2" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>## 
+## Random-Effects Model (k = 51; tau^2 estimator: REML)
+## 
+## tau^2 (estimated amount of total heterogeneity): 0.0179 (SE = 0.0050)
+## tau (square root of estimated tau^2 value):      0.1338
+## I^2 (total heterogeneity / total variability):   78.33%
+## H^2 (total variability / sampling variability):  4.61
+## 
+## Test for Heterogeneity:
+## Q(df = 50) = 188.5421, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se    zval    pval   ci.lb   ci.ub 
+##   0.0978  0.0224  4.3635  &lt;.0001  0.0539  0.1417  *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Now let’s re-run the analysis as a multilevel meta-analysis</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb46-1" aria-hidden="true" tabindex="-1"></a>res_rve <span class="ot">&lt;-</span> <span class="fu">rma.mv</span>(yi,vi, <span class="at">random =</span> <span class="sc">~</span> <span class="dv">1</span> <span class="sc">|</span> Study_ID, <span class="at">data =</span> dat)</span>
+<span id="cb46-2"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb46-2" aria-hidden="true" tabindex="-1"></a>res_rve</span></code></pre></div>
+<pre><code>## 
+## Multivariate Meta-Analysis Model (k = 51; method: REML)
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed    factor 
+## sigma^2    0.0193  0.1388     17     no  Study_ID 
+## 
+## Test for Heterogeneity:
+## Q(df = 50) = 188.5421, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se    zval    pval   ci.lb   ci.ub 
+##   0.1252  0.0372  3.3651  0.0008  0.0523  0.1982  *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>We can apply RVE using the <code>coef_test</code> function</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef_test</span>(res_rve, <span class="at">vcov =</span> <span class="st">&quot;CR2&quot;</span>)</span></code></pre></div>
+<pre><code>##    Coef. Estimate     SE t-stat d.f. (Satt) p-val (Satt) Sig.
+##  intrcpt    0.125 0.0371   3.37        15.7      0.00397   **</code></pre>
+<p>While it didn’t make much of a differences let’s try it with a moderator.</p>
+<p>Multilvel model</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb50-1" aria-hidden="true" tabindex="-1"></a>res_rve <span class="ot">&lt;-</span> <span class="fu">rma.mv</span>(yi, vi, <span class="at">mods =</span> <span class="sc">~</span> <span class="fu">relevel</span>(<span class="fu">factor</span>(Branch), <span class="at">ref=</span><span class="st">&quot;Management&quot;</span>), <span class="at">random =</span><span class="sc">~</span> <span class="dv">1</span> <span class="sc">|</span> Study_ID, <span class="at">data=</span>dat)</span>
+<span id="cb50-2"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb50-2" aria-hidden="true" tabindex="-1"></a>res_rve</span></code></pre></div>
+<pre><code>## 
+## Multivariate Meta-Analysis Model (k = 51; method: REML)
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed    factor 
+## sigma^2    0.0117  0.1080     17     no  Study_ID 
+## 
+## Test for Residual Heterogeneity:
+## QE(df = 46) = 125.8465, p-val &lt; .0001
+## 
+## Test of Moderators (coefficients 2:5):
+## QM(df = 4) = 45.5350, p-val &lt; .0001
+## 
+## Model Results:
+## 
+##                                                           estimate      se 
+## intrcpt                                                     0.2313  0.0366 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Facilitation    -0.1365  0.0314 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Perception      -0.1530  0.0328 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Total           -0.1695  0.0449 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Understanding   -0.1797  0.0308 
+##                                                              zval    pval 
+## intrcpt                                                    6.3193  &lt;.0001 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Facilitation   -4.3539  &lt;.0001 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Perception     -4.6660  &lt;.0001 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Total          -3.7726  0.0002 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Understanding  -5.8385  &lt;.0001 
+##                                                             ci.lb    ci.ub 
+## intrcpt                                                    0.1596   0.3030  *** 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Facilitation   -0.1980  -0.0751  *** 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Perception     -0.2172  -0.0887  *** 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Total          -0.2575  -0.0814  *** 
+## relevel(factor(Branch), ref = &quot;Management&quot;)Understanding  -0.2401  -0.1194  *** 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Apply RVE</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multilevel-meta-analysis-robust-variance-estimation.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef_test</span>(res_rve, <span class="at">vcov =</span> <span class="st">&quot;CR2&quot;</span>)</span></code></pre></div>
+<pre><code>##                                                     Coef. Estimate     SE
+##                                                   intrcpt    0.231 0.0425
+##   relevel(factor(Branch), ref = &quot;Management&quot;)Facilitation   -0.137 0.0758
+##     relevel(factor(Branch), ref = &quot;Management&quot;)Perception   -0.153 0.0477
+##          relevel(factor(Branch), ref = &quot;Management&quot;)Total   -0.169 0.0460
+##  relevel(factor(Branch), ref = &quot;Management&quot;)Understanding   -0.180 0.0640
+##  t-stat d.f. (Satt) p-val (Satt) Sig.
+##    5.44        9.48      &lt; 0.001  ***
+##   -1.80        2.40      0.19167     
+##   -3.21        2.05      0.08195    .
+##   -3.68        6.40      0.00917   **
+##   -2.81        2.20      0.09598    .</code></pre>
+<p>So we can see that RVE can signficantly change our findings</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="meta-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": false,
+"toc": {
+"collapse": "subsection"
+},
+"numbering": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
