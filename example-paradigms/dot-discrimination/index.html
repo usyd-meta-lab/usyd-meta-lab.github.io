@@ -1038,7 +1038,7 @@ if(typeof SONA_PID != 'undefined'){
 
 // Create Experiment
 
-  condition_1_timeline = [  browser_check, enter_fullscreen, instructions, practice_block, practice_end, conf_instruc, test_start, test_block, new_block, test_block, new_block, test_block, preload, rpm_instructions, debug];
+  condition_1_timeline = [   instructions, practice_block, practice_end, conf_instruc, test_start, test_block, new_block, test_block, new_block, test_block, preload, rpm_instructions, debug];
 
   async function createExperiment(){
     const condition = await jsPsychPipe.getCondition(DataPipe_ID);
