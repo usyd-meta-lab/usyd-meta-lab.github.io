@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/jspsych.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-instructions.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-image-keyboard-response.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-survey-text.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-fullscreen.js"></script>
+    <script src="http://cogflex.com.au/jspsych/jspsych 7.1/dist/plugin-preload.js"></script>
+    <script src="custom-plugins/matching.js"></script>
+    <link href="http://cogflex.com.au/jspsych/jspsych 7.1/dist/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="custom-plugins/strat-selection-image.js"></script>
+    <script src="custom-plugins/strat-selection-text.js"></script>
+    <script src="custom-plugins/strat-selection-free.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych();
+
+
+
+// Experiment variables
+var no_trials = 50;
+
+var enter_fullscreen = {
+  type: jsPsychFullscreen,
+  fullscreen_mode: true
+}
+
+
+// Trials that give the appearance of matching the subject with their partner
+const cond_spin = {
+  type: matching,
+  stimulus: 'Assigning you to regulator or target...',
+  spinner: "warning",
+  choices: "NO_KEYS",
+  trial_duration: 1000
+}
+
+const match_spin = {
+      type: matching,
+      stimulus: 'Matching you with a partner....<br>Please wait this may take up to a minute',
+      spinner: "warning",
+      choices: "NO_KEYS",
+      trial_duration: 10000
+    }
+
+    const matched_trial = {
+      type: matching,
+      stimulus: 'Matched!',
+      spinner: "success",
+      choices: "NO_KEYS",
+      trial_duration: 1500
+    }
+
+
+// Preload
+
+var preload = {
+    type: jsPsychPreload,
+    images: ['img/1.png','img/2.png', 'img/3.png', 'img/4.png', 'img/5.png', 'img/6.png', 'img/7.png', 'img/8.png', 'img/9.png', 'img/10.png']
+}
+
+
+var instructions = {
+    type: jsPsychInstructions,
+    pages: [
+    '<h1>Welcome to the experiment!</h1> In this study we are interested in how people help each other deal with their negative emotions and which strategies typically work.',
+    'In the study, you will be matched with another participant on Prolific. One of you will be randomly assigned to be the <strong>regulator</strong> and the other will be assigned to be the <strong>target</strong>',
+    'The <strong>target</strong> will view a series of '+ no_trials + ' negative images (e.g. sad or scary images). The <strong>regulator</strong> will not view the images, but instead will be able to provide advice to the <strong>target</strong> to help them deal with any negative emotions that arise.',
+    ],
+    show_clickable_nav: true
+}
+
+var instructions2 = {
+    type: jsPsychInstructions,
+    pages: [
+    'You have been assigned to be the <span style="color: #FF0000;"><strong>REGULATOR</strong></span>.<br>You will provide advice to your partner to try and help them deal with viewing the negative images. Your partner will provide feedback about how they are feeling as they progress through the images.',
+    'You <strong>DO NOT</strong> need to provide advice to your partner for every image. You can provide advice as often or as little as you like. <strong>You will not be penalised for providing too little or too much advice.</strong>',
+    'So that you and your partner can progress through the study at a reasonable rate, you will only have 10 seconds to provide advice when you choose to do so.',
+    'When you are ready to begin, click "Next" and we will match you with a particpant of Prolific who has been assigned as a target.'
+    ],
+    show_clickable_nav: true
+}
+
+
+// Stategy Selection
+
+const selection_buttons = {
+  type: stratSelectionText,
+  stimulus: '<h2>Help your partner</h2><p>Your partner is about to see a negative image</p><p>Use any option below <strong>to provide advice</strong> to help your partner feel better:</p>',
+  spinner: "warning",
+  choices: ["Try to think about something else", "You're doing great!"],
+  trial_duration: 8000,
+  response_ends_trial: true
+}
+
+const selection = {
+  type: stratSelectionText,
+  stimulus: '<h2>Help your partner</h2><p>Your partner is about to see a negative image</p><p>Do you want to provide them any advice for this image</p>',
+  spinner: "warning",
+  choices: ["Provide advice", "Do not provide advice"],
+  trial_duration: 8000,
+  response_ends_trial: true
+}
+
+
+
+
+const freeText = {
+  type: stratFreeResponse,
+  questions: [
+    {required: true, rows: 2, prompt: "<h2>Help your partner?</h2><p>Your partner is about to see a negative image</p><p>Use the textbox below to provide advice:</p>"}
+  ],
+  button_label: "Continue",
+  maxCharacters: 100,
+  trial_duration: 10000
+
+}
+
+
+const viewing = {
+  type: matching,
+  stimulus: 'Your partner is viewing the image',
+  spinner: "muted",
+  choices: "NO_KEYS",
+  trial_duration: function(){
+    x = jsPsych.randomization.sampleWithReplacement([4000,5000, 6000, 7000, 8000, 9000, 10000], 1)
+    return(x)
+  }
+}
+
+
+const feedback = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: function(){
+
+ if(condition == "High"){
+
+        x = Math.round(jsPsych.randomization.sampleNormal(8,1.5))
+        if(x > 10){x = 10}
+        if(x < 1){x = 1}
+        console.log(x)
+        feeds = ['img/1.png','img/2.png', 'img/3.png', 'img/4.png', 'img/5.png', 'img/6.png', 'img/7.png', 'img/8.png', 'img/9.png', 'img/10.png']
+
+       return(feeds[x-1])
+     }
+ if(condition == "Low"){
+
+   x = Math.round(jsPsych.randomization.sampleNormal(3,1.5))
+   if(x > 10){x = 10}
+   if(x < 1){x = 1}
+   console.log(x)
+   feeds = ['img/1.png','img/2.png', 'img/3.png', 'img/4.png', 'img/5.png', 'img/6.png', 'img/7.png', 'img/8.png', 'img/9.png', 'img/10.png']
+
+  return(feeds[x-1])
+ }
+
+      x = jsPsych.randomization.sampleWithReplacement(['img/1.png','img/2.png', 'img/3.png', 'img/4.png', 'img/5.png', 'img/6.png', 'img/7.png', 'img/8.png', 'img/9.png', 'img/10.png'], 1)
+      return(x)
+    },
+    choices: "NO_KEYS",
+    prompt: "<p>This is how your partner indicated feeling</p>",
+    trial_duration: 2000,
+    stimulus_height: 150,
+    stimulus_width: 100
+
+};
+
+
+const select_node ={
+  timeline: [selection]
+}
+
+
+var condition = jsPsych.randomization.sampleWithReplacement(["High", "Low"], 1);
+
+
+const freeText_node ={
+  timeline: [freeText],
+   conditional_function: function(){
+     var data = jsPsych.data.get().last(1).values()[0];
+     if(data.response == 0){return true} else{
+       return false;
+     }
+   }
+}
+
+const complete_trial = {
+  timeline: [select_node, freeText_node, feedback],
+  repetitions: no_trials
+}
+
+
+//
+
+    jsPsych.run([preload, enter_fullscreen, instructions, cond_spin, instructions2, match_spin, matched_trial,complete_trial]);
+  </script>
+</html>
