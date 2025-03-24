@@ -41,6 +41,43 @@ conditional_function: function(){
 
 
 
+  // Legacy demographics
+
+    var demographics = {
+       timeline: [
+      {type: jsPsychSurveyHtmlForm,
+      preamble: "<font size = '15' color='#002080'>Basic Information</font>",
+      html: '<div style = "text-align: left"><br><p><b> Age: </b><br><input name="age" type="number" min ="17" max = "100" style = "width: 8em;"required></p>' +
+      '<p><b>Sex:</b></p><div><input type="radio" id="male" name="sex" value="male"unchecked><label for="male">Male</label></div><div><input type="radio" id="female" name="sex" value="female"><label for="female">Female</label></div><div><input type="radio" id="other" name="sex" value="other"><label for="other">Non binary/prefer not to say</label></div>' +
+      '<p><b>Do you speak english fluently?:</b></p><div><input type="radio" id="yes" name="english" value="yes"unchecked><label for="yes">Yes</label></div><div><input type="radio" id="no" name="english" value="no"><label for="no">No</label></p></div><div></div>',
+      on_finish: function(data){
+        jsPsych.data.addProperties({age: data.response.age, sex: data.response.sex, english_fluent: data.response.english});
+      },
+      on_load: function(){
+        document.querySelector('#jspsych-survey-html-form-next').disabled = true;
+
+
+        $('input[type="radio"]').on("click", function(e) {
+          if($("input[name=age]" ).val() == '' || $("input[type=radio][name=sex]:checked" ).val() === undefined || $( "input[type=radio][name=english]:checked" ).val() === undefined ){return} else {
+            document.querySelector('#jspsych-survey-html-form-next').disabled = false;
+          }
+        })
+
+        $('input[type="number"]').on("change", function(e) {
+          if($("input[name=age]" ).val() == '' || $("input[type=radio][name=sex]:checked" ).val() === undefined || $( "input[type=radio][name=english]:checked" ).val() === undefined ){return} else {
+            document.querySelector('#jspsych-survey-html-form-next').disabled = false;
+          }
+        })
+
+
+
+      }
+    }
+    ],
+    conditional_function: function(){
+      if(typeof SONAID != 'undefined') {return true} else {return false}
+    }}
+
 
 
 var DEBRIEF_SONA = {
