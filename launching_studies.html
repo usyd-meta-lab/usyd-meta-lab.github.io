@@ -136,6 +136,8 @@
     <li>Study URL was generated in Step 4. You should automatically append the SONA ID to the URL by appending <code>?SONAID=%SURVEY_CODE%</code><p></p></li>
     <pre><code>https://yourusername.github.io/metacognition_study/?SONAID=%SURVEY_CODE%</code></pre>
     <li>Active Study? = Yes; Automatic Credit Granting  = Yes. Everything else can be left as it is.</li>
+    <li>You will need your SONA experiment ID and credit token for Step 9. You can find them both in the <i>Direct Study Link</i> listed under Study Information. See highlighted section below:</li>
+    <img src = "images/sona_url.png" height = 250;></img>
     <li>You need to <i>Request approval of a NEW SONA study</i> get your study approved by the School's research staff. Complete the form <a href="https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L">here</a>. </li>
     <li> For the question asking you to copy and paste the description from ethics concerning SONApsych participants, you should copy from the ethics documents (Teams > Ethics > Application Form). For example, 2022/796 ethics docs read:</li>
     <div class="box">1) Sydney University Psychology Research (SONA) participant system. First year psychology (PSYC1001 and PSYC1002) complete SONA studies for course credit. 1) SONA system: We intend to recruit participants through the Sydney University Psychology Research (SONA) participant system, where first- and second-year psychology students sign up and participate in experiments in exchange for course credit. SONA operates in accordance with the School of Psychology’s guidelines on research participation. In addition, SONA has a paid version which we will also utilise, where students can participate in studies in exchange for nominal financial compensation. The advertisements for both are in the attached documents </div>
@@ -194,7 +196,7 @@ const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
 
 <h3>🔹 Step 11: Go Live!</h3>
 <ul>
-    <li>Share the GitHub Pages link (with SONAID or PROLIFIC_PID in the URL) with your participant pool.</li>
+    <li>Launch the study on SONA by adding slots or on Prolific by launching the study (or both).</li>
     <li>Monitor incoming data on your OSF repository.</li>
     <li>Data can be manually downloaded from OSF or automatically downloaded using our R package: <code>MetaLab::combine_osf_csvs("YOUR_OSF_PROJECT_ID", folder = "../Data/")</code></li>
 </ul>
