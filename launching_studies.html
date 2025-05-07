@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+	<title>USYD Meta Lab</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+
+		
+				<!-- Five -->
+					<section class="wrapper style1 align-left">
+						<div class="inner">
+							<h1>Running a jsPsych Study on GitHub with DataPipe and Automatic Redirect to SONA or Prolific</h1>
+
+<hr>
+
+<h2>🔎 Purpose</h2>
+<p>To set up and run an online psychology experiment using jsPsych hosted on GitHub Pages, saving data with DataPipe, and automatically sending participants back to Prolific or SONA for credit.</p>
+
+<hr>
+
+<h2>📝 Step-by-Step Guide</h2>
+
+<h3>🔹 Step 1: Get Ready</h3>
+<p>You will need:</p>
+<ul>
+    <li>A <a href="https://github.com">Github</a> account.</li>
+	<li>An <a href="https://osf.io">OSF</a> account.</li>
+    <li>A <a href="https://pipe.jspsych.org">DataPipe</a> account.</li>
+    <li>A SONA account. Apply to be added as a new user <a href = "https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L">here.</a></li>
+	<li>Your jsPsych experiment files.</li>
+	<li>Study approved on <a href="http://sydneypsych.sona-systems.com/">SONA</a> (if using SONA).</li>
+    <li>A SONA experiment ID and credit token (if using SONA).</li>
+    <li>A <a href="https://prolific.com">Prolific</a> completion code (if using Prolific).</li>
+</ul>
+
+<hr>
+
+<h3>🔹 Step 2: Build Your jsPsych Experiment</h3>
+<p>Your folder should include:</p>
+<table>
+    <tr><th>File</th><th>Purpose</th></tr>
+    <tr><td>index.html</td><td>The webpage that runs the study</td></tr>
+    <tr><td>assets/js/experiment.js</td><td>All the jsPsych timeline code</td></tr>
+	<tr><td>assets/js/survey.js</td><td>Code for surveys trials</td></tr>
+    <tr><td>assets/img</td><td>Any stimuli images</td></tr>
+    <tr><td>assets/css</td><td>CSS</td></tr>
+</table>
+<p><strong>✔ Tip:</strong> Use the latest lab jsPsych template (Teams > jsPsych).</p>
+
+<hr>
+
+<h3>🔹 Step 3: Upload Files to GitHub</h3>
+<ol>
+    <li>Create a new repository → Name it (e.g., metacognition_study).</li>
+    <li>Upload your experiment files.</li>
+    <li>Commit changes.</li>
+</ol>
+
+<hr>
+
+<h3>🔹 Step 4: Turn On GitHub Pages</h3>
+<ol>
+    <li>Go to your repo Settings → Pages.</li>
+    <li>Under Branch, select <code>main</code> and <code>/root</code>.</li>
+    <li>Click Save.</li>
+    <li>Copy the study link (e.g., <code>https://yourusername.github.io/metacognition_study/</code>).</li>
+</ol>
+
+<hr>
+
+<h3>🔹 Step 5: Create OSF repository</h3>
+<p>Data is stored automatically in a repository on OSF. You will need the repository ID to set up the data piping</p>
+<ol>
+    <li>Go to OSF and create a new project.</li>
+	<li>Got to your new project, in the URL you can find the OSF Project</li>
+	<pre><code>https://osf.io/xyztnu/</code></pre>The OSF Project would be <code>xyztnu</code>. Copy it for the next step.
+</ol>
+
+
+<hr>
+
+<h3>🔹 Step 6: Connect to DataPipe</h3>
+<ol>
+    <li>Go to DataPipe and create a new project.</li>
+	<li>The <i>Title</i> can be whatever you like.</li>
+	<li>Under <i>Existing OSF Project</i> copy the OSF Project code.</li>
+	<li><i>New OSF Data Component Name</i> can be whatever you like (it will be the name of the folder where the data is stored)</li>
+	<li>Turn on <code>Enable data collection?</code> and <code>Enable condition assignment?</code> (even if only 1 condition)</li>
+    <li>Copy the Dataset ID.</li>
+    <li>In your <code>index.html</code> update:</li>
+</ol>
+<pre><code>const DataPipe_ID = "YOUR_DATAPIPE_ID";</code></pre>
+
+
+<hr>
+
+<h3>🔹 Step 7: Putting the study on Prolific</h3>
+<ol>
+ <li>Go to <a href = "https://prolific.com">Prolific.</a></li>
+ <li>To be added to the lab team (and use the lab funds), let Kit know your Prolific username.</li>
+ <li>Create a new study</li>
+ <li><i>Study name</i> and <i>Study description</i> come directly from the ethics documents.</li>
+ <li><i>Internal study name</i> should used the format LastName-TASK-experiment-name.</li>
+ <li>Typically, you want to limit the study to only desktop devices.</li>
+ <li>Study URL was generated in Step 4. You should automatically append the Prolific ID to the URL by clicking <i>Recroding Prolific IDs</i> = URL parameters</li>
+ <li> Completion paths can be set to automatic approve & pay. Copy the completion code (e.g. CGJ91R8S for use in Step 9). </li>
+ <li>Set the length of time and pay people &#163;6 per hour</li>
+ <li>Set the sample country and click <i>Quota Sample</i> to make sure you get a balanced sample between males and females.</li>
+</ol>
+
+
+
+<hr>
+
+<h3>🔹 Step 8: Putting the study on SONA</h3>
+<ol>
+    <li>You can read the SONA <a href="https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2025.pdf">handbook for detailed procedures.</a></li>
+    <li>Select <i>Add new Study</i> from the menu bar</li>
+    <li>Select <i>Online External Study</i>.
+    <li><i>Study name</i>, <i>Brief Abstract</i>, and <i>Detailed Description</i> come directly from the ethics documents (Teams > Ethics).</li>
+    <li>Duration and credits should match so 1 = 60 minutes</li>
+    <li>Human Res Ethics Com Approval Code should be set to the ethics protocol number (Teams > Ethics). For example, <i>2022/796</i>.</li>
+    <li>Study URL was generated in Step 4. You should automatically append the SONA ID to the URL by appending <code>?SONAID=%SURVEY_CODE%</code><p></p></li>
+    <pre><code>https://yourusername.github.io/metacognition_study/?SONAID=%SURVEY_CODE%</code></pre>
+    <li>Active Study? = Yes; Automatic Credit Granting  = Yes. Everything else can be left as it is.</li>
+    <li>You need to <i>Request approval of a NEW SONA study</i> get your study approved by the School's research staff. Complete the form <a href="https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L">here</a>. </li>
+    <li> For the question asking you to copy and paste the description from ethics concerning SONApsych participants, you should copy from the ethics documents (Teams > Ethics > Application Form). For example, 2022/796 ethics docs read:</li>
+    <div class="box">1) Sydney University Psychology Research (SONA) participant system. First year psychology (PSYC1001 and PSYC1002) complete SONA studies for course credit. 1) SONA system: We intend to recruit participants through the Sydney University Psychology Research (SONA) participant system, where first- and second-year psychology students sign up and participate in experiments in exchange for course credit. SONA operates in accordance with the School of Psychology’s guidelines on research participation. In addition, SONA has a paid version which we will also utilise, where students can participate in studies in exchange for nominal financial compensation. The advertisements for both are in the attached documents </div>
+
+    
+</ol>
+
+
+
+<hr>
+
+<h3>🔹 Step 9: Set Up Redirect Links</h3>
+<p>In your <code>index.html</code>, declare:</p>
+<pre><code>const sona_experiment_id = "YOUR_SONA_ID";        // SONA experiment ID
+const sona_credit_token = "YOUR_SONA_TOKEN";                // SONA credit token
+const Prolific_redirect = "YOUR_PROLIFIC_COMPLETION_CODE";  // Prolific credit redirect code
+const Prolific_failed_check = "YOUR_PROLIFIC_FAIL_CODE";   // Prolific attention check failure redirect code
+</code></pre>
+
+<p>If you are recruiting from both Prolific and SONA, fill in all 4 of the above tokens, or leave blank if not applicable.</p>
+<p>The code automatically checks the participant’s URL:</p>
+<pre><code>const PROLIFIC_PID = jsPsych.data.getURLVariable('PROLIFIC_PID');
+const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
+
+<p>The code will show the relevant PIS based on which of these IDs it detects, strore the source of the participant  and their ID. Note, it assumes the participant is from Prolific if no ID is provided.</p>
+
+<p>In your code you should also declare the task time (which should match Prolific or SONA)</p><pre>
+    <code>const task_time = 25;                      // Task duration in minutes</code>
+</pre>
+
+<p>So that the same version of the study can be used to recruit both from SONA and Prolific, a transformation is applied to the <code>task_time</code> variable to round it up to the nearest 15 minutes. For example, if you enter 42 minutes, the SONA PIS will show 45 minutes, while the Prolific PIS will show 42 minutes.</p>
+
+<p>✅ Your file should be ready to be uploaded to Github.</p>
+
+<hr>
+
+<h3>🔹 Step 10: Test the Study</h3>
+<ol>
+    <li>Visit your GitHub Pages study link.</li>
+    <li>Add parameters to the URL to simulate real participants:
+        <ul>
+            <li><code>https://yourusername.github.io/metacognition_study/?PROLIFIC_PID=123ABC</code></li>
+            <li><code>https://yourusername.github.io/metacognition_study/?SONAID=S1234567</code></li>
+        </ul>
+    </li>
+    <li>Run the study yourself.</li>
+    <li>Confirm:
+        <ul>
+            <li>Data saves to DataPipe.</li>
+            <li>Redirect works correctly.</li>
+        </ul>
+    </li>
+</ol>
+
+<hr>
+
+<h3>🔹 Step 11: Go Live!</h3>
+<ul>
+    <li>Share the GitHub Pages link (with SONAID or PROLIFIC_PID in the URL) with your participant pool.</li>
+    <li>Monitor incoming data on your OSF repository.</li>
+    <li>Data can be manually downloaded from OSF or automatically downloaded using our R package: <code>MetaLab::combine_osf_csvs("YOUR_OSF_PROJECT_ID", folder = "../Data/")</code></li>
+</ul>
+
+<hr>
+
+<h2>✅ Final Checklist</h2>
+<table class="checklist">
+    <tr><th>Task</th><th>Complete?</th></tr>
+    <tr><td>All jsPsych files ready and uploaded to GitHub</td><td>⬜</td></tr>
+    <tr><td>GitHub Pages enabled</td><td>⬜</td></tr>
+    <tr><td>DataPipe project and ID set up</td><td>⬜</td></tr>
+    <tr><td>SONA and Prolific redirect codes added</td><td>⬜</td></tr>
+    <tr><td>Study tested (DataPipe + redirects work)</td><td>⬜</td></tr>
+    <tr><td>Study link shared with participants</td><td>⬜</td></tr>
+</table>
+
+<hr>
+
+<h2>📝 Suggestions</h2>
+<div class="note">
+<ul>
+    <li>Always pilot test with a few people before full launch.</li>
+    <li>Use GitHub commits to version-control any changes.</li>
+    <li>Keep your OSF API key private.</li>
+    <li>If anything breaks, check the browser console (F12 → Console tab or Google `console Safari` to set up the console in Safari).</li>
+</ul>
+</div>
+
+<hr>
+
+<h2>🚨 Common Issues</h2>
+<table>
+    <tr><th>Issue</th><th>Solution</th></tr>
+    <tr><td>404 error</td><td>Check if GitHub Pages is published from the right branch.</td></tr>
+    <tr><td>Data not saving</td><td>Check DataPipe ID is correct and DataPipe account active.</td></tr>
+    <tr><td>No redirect</td><td>Check URL parameters (PROLIFIC_PID or SONAID) are passed.</td></tr>
+	<tr><td>No automatic credit granting</td><td>Check URL parameters (sona_credit_token and sona_experiment_id) are accurate.</td></tr>
+</table>
+
+<hr>
+
+
+					
+
+				<!-- Footer -->
+					<footer class="wrapper style1 align-center">
+						<div class="inner">
+							<ul class="icons">
+                                <li><a href="http://usyd-meta-lab.github.io/lab_wiki.html" class="icon style2 fa-solid fa-info"><span class="label">Wiki</span></a></li>
+                                <li><a href="https://github.com/usyd-meta-lab" class="icon brands style2 fa-github"><span class="label">Github</span></a></li>
+                                <li><a href="https://www.linkedin.com/in/kit-double-a963481a6" class="icon brands style2 fa-linkedin"><span class="label">LinkedIn</span></a></li>
+                                <li><a href="mailto:kit.double@sydney.edu.au" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
+  
+							</ul>
+							<p>&copy; Kit Double</a>.</p>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
