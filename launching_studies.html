@@ -26,14 +26,36 @@
 
 <hr>
 
-<h2>🔎 Purpose</h2>
+
+<h2>📑 Table of Contents</h2>
+<ul>
+  <li><a href="#purpose">Purpose</a></li>
+  <li><a href="#step1">Step 1: Get Ready</a></li>
+  <li><a href="#step2">Step 2: Build Your jsPsych Experiment</a></li>
+  <li><a href="#step3">Step 3: Upload Files to GitHub</a></li>
+  <li><a href="#step4">Step 4: Turn On GitHub Pages</a></li>
+  <li><a href="#step5">Step 5: Create OSF Repository</a></li>
+  <li><a href="#step6">Step 6: Connect to DataPipe</a></li>
+  <li><a href="#step7">Step 7: Put Study on Prolific</a></li>
+  <li><a href="#step8">Step 8: Put Study on SONA</a></li>
+  <li><a href="#step9">Step 9: Set Up Redirect Links</a></li>
+  <li><a href="#step10">Step 10: Test the Study</a></li>
+  <li><a href="#step11">Step 11: Go Live!</a></li>
+  <li><a href="#final-checklist">Final Checklist</a></li>
+  <li><a href="#suggestions">Suggestions</a></li>
+  <li><a href="#common-issues">Common Issues</a></li>
+</ul>
+<hr>
+
+
+<h2 id="purpose">🔎 Purpose</h2>
 <p>To set up and run an online psychology experiment using jsPsych hosted on GitHub Pages, saving data with DataPipe, and automatically sending participants back to Prolific or SONA for credit.</p>
 
 <hr>
 
 <h2>📝 Step-by-Step Guide</h2>
 
-<h3>🔹 Step 1: Get Ready</h3>
+<h3 id="step1">🔹 Step 1: Get Ready</h3>
 <p>You will need:</p>
 <ul>
     <li>A <a href="https://github.com">Github</a> account.</li>
@@ -47,7 +69,7 @@
 
 <hr>
 
-<h3>🔹 Step 2: Build Your jsPsych Experiment</h3>
+<h3 id="step2">🔹 Step 2: Build Your jsPsych Experiment</h3>
 <p>Your folder should include:</p>
 <table>
     <tr><th>File</th><th>Purpose</th></tr>
@@ -62,7 +84,7 @@
 
 <hr>
 
-<h3>🔹 Step 3: Upload Files to GitHub</h3>
+<h3 id="step3">🔹 Step 3: Upload Files to GitHub</h3>
 <ol>
     <li>Create a new repository → Name it (e.g., metacognition_study).</li>
     <li>Upload your experiment files.</li>
@@ -71,7 +93,7 @@
 
 <hr>
 
-<h3>🔹 Step 4: Turn On GitHub Pages</h3>
+<h3 id="step4">🔹 Step 4: Turn On GitHub Pages</h3>
 <ol>
     <li>Go to your repo Settings → Pages.</li>
     <li>Under Branch, select <code>main</code> and <code>/root</code>.</li>
@@ -81,7 +103,7 @@
 
 <hr>
 
-<h3>🔹 Step 5: Create OSF repository</h3>
+<h3 id="step5">🔹 Step 5: Create OSF repository</h3>
 <p>Data is stored automatically in a repository on OSF. You will need the repository ID to set up the data piping</p>
 <ol>
     <li>Go to OSF and create a new project.</li>
@@ -92,7 +114,7 @@
 
 <hr>
 
-<h3>🔹 Step 6: Connect to DataPipe</h3>
+<h3 id="step6">🔹 Step 6: Connect to DataPipe</h3>
 <ol>
     <li>The first time you use DataPipe you will need to link it to OSF. Follow the instructions <a href = "https://pipe.jspsych.org/getting-started">here</a> under <i>Link your OSF account to DataPipe</i></li>
     <li>Go to DataPipe and create a new project.</li>
@@ -108,7 +130,7 @@
 
 <hr>
 
-<h3>🔹 Step 7: Putting the study on Prolific</h3>
+<h3 id="step7">🔹 Step 7: Putting the study on Prolific</h3>
 <ol>
  <li>Go to <a href = "https://prolific.com">Prolific.</a></li>
  <li>To be added to the lab team (and use the lab funds), let Kit know your Prolific username.</li>
@@ -126,7 +148,7 @@
 
 <hr>
 
-<h3>🔹 Step 8: Putting the study on SONA</h3>
+<h3 id="step8">🔹 Step 8: Putting the study on SONA</h3>
 <ol>
     <li>You can read the SONA <a href="https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2025.pdf">handbook for detailed procedures.</a></li>
     <li>Go to <a href = "http://sydneypsych.sona-systems.com/">SONA.</a></li>
@@ -151,7 +173,7 @@
 
 <hr>
 
-<h3>🔹 Step 9: Set Up Redirect Links</h3>
+<h3 id="step9">🔹 Step 9: Set Up Redirect Links</h3>
 <p>In your <code>index.html</code>, declare:</p>
 <pre><code>const sona_experiment_id = "YOUR_SONA_ID";        // SONA experiment ID
 const sona_credit_token = "YOUR_SONA_TOKEN";                // SONA credit token
@@ -176,7 +198,7 @@ const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
 
 <hr>
 
-<h3>🔹 Step 10: Test the Study</h3>
+<h3 id="step10">🔹 Step 10: Test the Study</h3>
 <ol>
     <li>Visit your GitHub Pages study link.</li>
     <li>Add parameters to the URL to simulate real participants:
@@ -196,7 +218,7 @@ const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
 
 <hr>
 
-<h3>🔹 Step 11: Go Live!</h3>
+<h3 id="step11">🔹 Step 11: Go Live!</h3>
 <ul>
     <li>Launch the study on SONA by adding slots or on Prolific by launching the study (or both).</li>
     <li>Monitor incoming data on your OSF repository.</li>
@@ -205,7 +227,8 @@ const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
 
 <hr>
 
-<h2>✅ Final Checklist</h2>
+
+<h2 id="final-checklist">✅ Final Checklist</h2>
 <table class="checklist">
     <tr><th>Task</th><th>Complete?</th></tr>
     <tr><td>All jsPsych files ready and uploaded to GitHub</td><td>⬜</td></tr>
@@ -218,7 +241,7 @@ const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
 
 <hr>
 
-<h2>📝 Suggestions</h2>
+<h2 id="suggestions">📝 Suggestions</h2>
 <div class="note">
 <ul>
     <li>Always pilot test with a few people before full launch.</li>
@@ -230,7 +253,7 @@ const SONAID = jsPsych.data.getURLVariable('SONAID');</code></pre>
 
 <hr>
 
-<h2>🚨 Common Issues</h2>
+<h2 id="common-issues">🚨 Common Issues</h2>
 <table>
     <tr><th>Issue</th><th>Solution</th></tr>
     <tr><td>404 error</td><td>Check if GitHub Pages is published from the right branch.</td></tr>
