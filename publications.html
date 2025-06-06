@@ -41,139 +41,132 @@
 <script>
   const orcidId = '0000-0001-8120-1573';
 
-  /* ---------- Helper functions ---------- */
+  /* ---------- Helper API fetchers ---------- */
   async function fetchSummary() {
     const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/works`, {
       headers: { Accept: 'application/json' }
     });
-    const data = await res.json();
-    return data.group.map(g => g['work-summary'][0]);
+    return (await res.json()).group.map(g => g['work-summary'][0]);
   }
 
-  async function fetchFullRecord(putCode) {
-    const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/work/${putCode}`, {
+  async function fetchFullRecord(code) {
+    const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/work/${code}`, {
       headers: { Accept: 'application/json' }
     });
-    return await res.json();
+    return res.json();
   }
 
-  /* Strip “: Behaviour, Psychology and …”-type subsections that follow a colon */
-  function cleanTitle(raw) {
-    if (!raw) return raw;
-    return raw.replace(/: [A-Z][A-Za-z0-9 ,&--]{2,60}$/, '');
-  }
-
-  function formatAPAAuthors(contributors) {
-    if (!contributors || contributors.length === 0) return 'Unknown Author';
-
-    const names = contributors.map(c => {
-      const structured = c['contributor-name'];
-      const fallback   = c['credit-name']?.value;
-
-      // structured fields preferred
-      if (structured && structured['family-name'] && structured['given-names']) {
-        const last = structured['family-name'].value;
-        const initials = structured['given-names'].value
+  async function fetchCrossrefAuthors(doi) {
+    try {
+      const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(doi)}`);
+      if (!res.ok) return null;
+      const authors = (await res.json()).message.author || [];
+      return authors.map(a => {
+        const last = a.family || a.literal || 'Unknown';
+        const initials = (a.given || '')
           .split(/\s+/)
-          .map(n => n[0].toUpperCase() + '.')
+          .map(n => n[0]?.toUpperCase() + '.')
           .join(' ');
         return `${last}, ${initials}`;
-      }
+      });
+    } catch { return null; }
+  }
 
-      // fallback parsing
-      if (fallback) {
-        const cleaned = fallback.trim();
-        if (cleaned.includes(',')) {
-          const [last, rest] = cleaned.split(',');
-          const initials = rest.trim().split(/\s+/).map(n => n[0].toUpperCase() + '.').join(' ');
-          return `${last.trim()}, ${initials}`;
-        }
-        const parts = cleaned.split(/\s+/);
-        if (parts.length >= 2) {
-          const last = parts.pop();
-          const initials = parts.map(n => n[0].toUpperCase() + '.').join(' ');
-          return `${last}, ${initials}`;
-        }
-        return cleaned;
-      }
+  /* remove subtitle after colon */
+  const cleanTitle = t => t?.replace(/: [A-Z][A-Za-z0-9 ,&–-]{2,60}$/, '') || 'Untitled';
 
-      return 'Unknown';
-    });
-
+  /* APA author formatter (uses ORCID or Crossref list) */
+  function formatList(names) {
+    if (!names.length) return 'Unknown';
     if (names.length > 7) return `${names[0]} et al.`;
     if (names.length === 1) return names[0];
     if (names.length === 2) return `${names[0]} & ${names[1]}`;
     return names.slice(0, -1).join(', ') + ', & ' + names[names.length - 1];
   }
 
-  /* ---------- Main load function ---------- */
-  async function loadPublications() {
-    try {
-      // 1. summaries → full records
-      const summaries = await fetchSummary();
-      const detailed  = await Promise.all(
-        summaries.map(s => fetchFullRecord(s['put-code']))
-      );
-
-      // 2. keep only journal articles + clean titles
-      const parsed = detailed
-        .filter(pub => pub.type === 'journal-article' || pub.type === 'JOURNAL_ARTICLE')
-        .map(pub => {
-          const title   = cleanTitle(pub.title?.title?.value) || 'Untitled';
-          const year    = pub['publication-date']?.year?.value || 'No Year';
-          const authors = formatAPAAuthors(pub.contributors?.contributor || []);
-          const doiObj  = (pub['external-ids']?.['external-id'] || [])
-                           .find(id => id['external-id-type'] === 'doi');
-          const doi     = doiObj ? doiObj['external-id-value'] : null;
-          const journal = pub['journal-title']?.value || '';
-          return { title, year, authors, doi, journal };
-        });
-
-      // 3. group by year
-      const grouped = {};
-      parsed.forEach(p => {
-        if (!grouped[p.year]) grouped[p.year] = [];
-        grouped[p.year].push(p);
-      });
-
-      // 4. render with global descending numbers (oldest = 1)
-      const container = document.getElementById('pub-container');
-      container.innerHTML = '';
-      const years = Object.keys(grouped).sort((a, b) => b - a);
-
-      const totalCount = parsed.length;
-      let counter = totalCount;
-
-      years.forEach(year => {
-        const yearDiv = document.createElement('div');
-        yearDiv.innerHTML = `<h3>${year}</h3>`;
-
-        const ol = document.createElement('ol');
-        ol.setAttribute('start', counter);
-        ol.setAttribute('reversed', '');
-
-        grouped[year].forEach(pub => {
-          const li = document.createElement('li');
-          let ref  = `${pub.authors} (${pub.year}). <strong>${pub.title}</strong>`;
-          if (pub.journal) ref += `. <em>${pub.journal}</em>`;
-          if (pub.doi) ref += `. <a href="https://doi.org/${pub.doi}" target="_blank">https://doi.org/${pub.doi}</a>`;
-          ref += '.';
-          li.innerHTML = ref;
-          ol.appendChild(li);
-        });
-
-        counter -= grouped[year].length;
-        yearDiv.appendChild(ol);
-        container.appendChild(yearDiv);
-      });
-
-    } catch (err) {
-      document.getElementById('pub-container').textContent = 'Failed to load publications.';
-      console.error(err);
-    }
+  function parseOrcidContributors(contrib = []) {
+    return contrib.map(c => {
+      const st = c['contributor-name'];
+      const fb = c['credit-name']?.value;
+      if (st?.['family-name'] && st?.['given-names']) {
+        const last = st['family-name'].value;
+        const init = st['given-names'].value.split(/\s+/).map(n => n[0].toUpperCase() + '.').join(' ');
+        return `${last}, ${init}`;
+      }
+      if (fb) {
+        if (fb.includes(',')) {
+          const [last, rest] = fb.split(',');
+          const init = rest.trim().split(/\s+/).map(n => n[0].toUpperCase() + '.').join(' ');
+          return `${last.trim()}, ${init}`;
+        }
+        const p = fb.trim().split(/\s+/);
+        if (p.length >= 2) {
+          const last = p.pop();
+          const init = p.map(n => n[0].toUpperCase() + '.').join(' ');
+          return `${last}, ${init}`;
+        }
+        return fb;
+      }
+      return null;
+    }).filter(Boolean);
   }
 
-  loadPublications();
+  /* ---------- Main ---------- */
+  (async () => {
+    const summaries = await fetchSummary();
+    const detailed  = await Promise.all(summaries.map(s => fetchFullRecord(s['put-code'])));
+
+    /* Build records with possible Crossref fallback */
+    const records = [];
+    for (const pub of detailed) {
+      if (!(pub.type?.toLowerCase() === 'journal-article' || pub.type === 'JOURNAL_ARTICLE')) continue;
+
+      const title  = cleanTitle(pub.title?.title?.value);
+      const year   = pub['publication-date']?.year?.value || 'No Year';
+      const doiObj = (pub['external-ids']?.['external-id'] || []).find(id => id['external-id-type'] === 'doi');
+      const doi    = doiObj ? doiObj['external-id-value'] : null;
+      const journal= pub['journal-title']?.value || '';
+
+      let authors  = parseOrcidContributors(pub.contributors?.contributor || []);
+      if (authors.length <= 1 && doi) {
+        const cross = await fetchCrossrefAuthors(doi);
+        if (cross?.length) authors = cross;
+      }
+
+      records.push({ title, year, authors: formatList(authors), doi, journal });
+    }
+
+    /* --- Group, sort, render (unchanged) --- */
+    const grouped = {};
+    records.forEach(r => { if (!grouped[r.year]) grouped[r.year] = []; grouped[r.year].push(r); });
+
+    const container = document.getElementById('pub-container');
+    container.innerHTML = '';
+    const years = Object.keys(grouped).sort((a, b) => b - a);
+    let counter = records.length;
+
+    years.forEach(year => {
+      const yearDiv = document.createElement('div');
+      yearDiv.innerHTML = `<h3>${year}</h3>`;
+      const ol = document.createElement('ol');
+      ol.setAttribute('start', counter);
+      ol.setAttribute('reversed', '');
+
+      grouped[year].forEach(r => {
+        const li = document.createElement('li');
+        let ref = `${r.authors} (${r.year}). <strong>${r.title}</strong>`;
+        if (r.journal) ref += `. <em>${r.journal}</em>`;
+        if (r.doi) ref += `. <a href="https://doi.org/${r.doi}" target="_blank">https://doi.org/${r.doi}</a>`;
+        ref += '.';
+        li.innerHTML = ref;
+        ol.appendChild(li);
+      });
+
+      counter -= grouped[year].length;
+      yearDiv.appendChild(ol);
+      container.appendChild(yearDiv);
+    });
+  })();
 </script>
 
 </body>
