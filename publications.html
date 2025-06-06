@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <title>Kit Double | Publications</title>
   <style>
+    /* logo in the top-right corner, subtle styling */
     .logo-float {
       float: right;
       max-width: 100px;
       margin: 0 0 1rem 1rem;
-      filter: grayscale(30%) brightness(110%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+      filter: grayscale(30%) brightness(110%)
+              drop-shadow(0 2px 4px rgba(0,0,0,0.15));
     }
 
     body {
@@ -17,33 +19,18 @@
       margin: 2rem auto;
       padding: 0 1rem;
     }
-    h2 {
-      font-size: 2em;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 0.5rem;
-    }
-    h3 {
-      margin-top: 2rem;
-      color: #333;
-    }
-    ol {
-      padding-left: 1.5em;
-    }
-    li {
-      margin-bottom: 1.2em;
-      line-height: 1.5;
-    }
-    a {
-      color: #0077cc;
-      text-decoration: none;
-    }
+    h2 { font-size: 2em; border-bottom: 2px solid #ccc; padding-bottom: 0.5rem; }
+    h3 { margin-top: 2rem; color: #333; }
+    ol { padding-left: 1.5em; }
+    li { margin-bottom: 1.2em; line-height: 1.5; }
+    a  { color: #0077cc; text-decoration: none; }
     a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
 <a href="/" title="Back to main site">
-  <img src="images/logo.PNG" alt="USYD Meta Lab Logo" class="logo-float">
+  <img src="images/logo.png" alt="USYD Meta Lab Logo" class="logo-float">
 </a>
 
 <section id="publications">
@@ -70,6 +57,12 @@
     return await res.json();
   }
 
+  /* Strip “: Behaviour, Psychology and …”-type subsections that follow a colon */
+  function cleanTitle(raw) {
+    if (!raw) return raw;
+    return raw.replace(/: [A-Z][A-Za-z0-9 ,&--]{2,60}$/, '');
+  }
+
   function formatAPAAuthors(contributors) {
     if (!contributors || contributors.length === 0) return 'Unknown Author';
 
@@ -77,7 +70,7 @@
       const structured = c['contributor-name'];
       const fallback   = c['credit-name']?.value;
 
-      /* --- structured --- */
+      // structured fields preferred
       if (structured && structured['family-name'] && structured['given-names']) {
         const last = structured['family-name'].value;
         const initials = structured['given-names'].value
@@ -87,28 +80,21 @@
         return `${last}, ${initials}`;
       }
 
-      /* --- fallback parsing --- */
+      // fallback parsing
       if (fallback) {
         const cleaned = fallback.trim();
-
-        if (cleaned.includes(',')) {                     // “Last, First Middle”
+        if (cleaned.includes(',')) {
           const [last, rest] = cleaned.split(',');
-          const initials = rest.trim()
-            .split(/\s+/)
-            .map(n => n[0].toUpperCase() + '.')
-            .join(' ');
+          const initials = rest.trim().split(/\s+/).map(n => n[0].toUpperCase() + '.').join(' ');
           return `${last.trim()}, ${initials}`;
         }
-
-        const parts = cleaned.split(/\s+/);              // “First Middle Last”
+        const parts = cleaned.split(/\s+/);
         if (parts.length >= 2) {
           const last = parts.pop();
-          const initials = parts
-            .map(n => n[0].toUpperCase() + '.')
-            .join(' ');
+          const initials = parts.map(n => n[0].toUpperCase() + '.').join(' ');
           return `${last}, ${initials}`;
         }
-        return cleaned;                                  // couldn’t parse
+        return cleaned;
       }
 
       return 'Unknown';
@@ -123,50 +109,48 @@
   /* ---------- Main load function ---------- */
   async function loadPublications() {
     try {
-      /* 1. summaries → full records */
+      // 1. summaries → full records
       const summaries = await fetchSummary();
       const detailed  = await Promise.all(
         summaries.map(s => fetchFullRecord(s['put-code']))
       );
 
-      /* 2. keep only journal articles */
+      // 2. keep only journal articles + clean titles
       const parsed = detailed
-        .filter(pub =>
-          pub.type === 'journal-article' || pub.type === 'JOURNAL_ARTICLE')
+        .filter(pub => pub.type === 'journal-article' || pub.type === 'JOURNAL_ARTICLE')
         .map(pub => {
-          const title   = pub.title?.title?.value || 'Untitled';
+          const title   = cleanTitle(pub.title?.title?.value) || 'Untitled';
           const year    = pub['publication-date']?.year?.value || 'No Year';
           const authors = formatAPAAuthors(pub.contributors?.contributor || []);
           const doiObj  = (pub['external-ids']?.['external-id'] || [])
-                            .find(id => id['external-id-type'] === 'doi');
+                           .find(id => id['external-id-type'] === 'doi');
           const doi     = doiObj ? doiObj['external-id-value'] : null;
           const journal = pub['journal-title']?.value || '';
           return { title, year, authors, doi, journal };
         });
 
-      /* 3. group by year */
+      // 3. group by year
       const grouped = {};
       parsed.forEach(p => {
         if (!grouped[p.year]) grouped[p.year] = [];
         grouped[p.year].push(p);
       });
 
-      /* 4. render with global descending numbers (oldest = 1) */
+      // 4. render with global descending numbers (oldest = 1)
       const container = document.getElementById('pub-container');
       container.innerHTML = '';
-      const years = Object.keys(grouped).sort((a, b) => b - a); // newest year first
+      const years = Object.keys(grouped).sort((a, b) => b - a);
 
-      const totalCount = parsed.length;    // total number of journal articles
-      let counter = totalCount;            // start numbering from the total and count down
+      const totalCount = parsed.length;
+      let counter = totalCount;
 
       years.forEach(year => {
         const yearDiv = document.createElement('div');
         yearDiv.innerHTML = `<h3>${year}</h3>`;
 
-        // ordered list that counts down
         const ol = document.createElement('ol');
         ol.setAttribute('start', counter);
-        ol.setAttribute('reversed', '');   // HTML5 reversed attribute for descending numbers
+        ol.setAttribute('reversed', '');
 
         grouped[year].forEach(pub => {
           const li = document.createElement('li');
@@ -178,7 +162,7 @@
           ol.appendChild(li);
         });
 
-        counter -= grouped[year].length; // decrease counter for next year
+        counter -= grouped[year].length;
         yearDiv.appendChild(ol);
         container.appendChild(yearDiv);
       });
