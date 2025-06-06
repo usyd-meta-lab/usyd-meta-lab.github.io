@@ -1,0 +1,21 @@
+[
+  {
+    "year": 2024,
+    "type": "Journal Article",
+    "authors": "Double, K. S., & Birney, D. P.",
+    "title": "Metacognitive monitoring in emotional contexts",
+    "journal": "Journal of Experimental Psychology: General",
+    "volume": "153(1)",
+    "pages": "1–15",
+    "doi": "https://doi.org/10.1037/xge0001234"
+  },
+  {
+    "year": 2023,
+    "type": "Conference Paper",
+    "authors": "Double, K. S.",
+    "title": "Real-time confidence tracking in decision making",
+    "conference": "CogSci 2023",
+    "location": "Sydney, Australia",
+    "link": "https://cognitivesciencesociety.org"
+  }
+]

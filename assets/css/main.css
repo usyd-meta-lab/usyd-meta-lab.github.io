@@ -8601,3 +8601,40 @@ input, select, textarea {
 			#wrapper.divided > .invert:first-child {
 				box-shadow: none !important;
 			}
+			
+			<style>
+#publications {
+  font-family: Georgia, serif;
+  padding: 1rem;
+  max-width: 800px;
+  margin: auto;
+}
+#publications h2 {
+  font-size: 2em;
+  border-bottom: 2px solid #ccc;
+}
+#publications h3 {
+  margin-top: 1.5em;
+  color: #444;
+}
+#publications h4 {
+  margin-top: 1em;
+  color: #555;
+  font-style: italic;
+}
+#publications ul {
+  list-style-type: none;
+  padding-left: 1em;
+}
+#publications li {
+  margin-bottom: 0.8em;
+  line-height: 1.5;
+}
+#publications a {
+  color: #0077cc;
+  text-decoration: none;
+}
+#publications a:hover {
+  text-decoration: underline;
+}
+</style>
