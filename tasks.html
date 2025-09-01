@@ -34,6 +34,29 @@
     .card h3{margin:10px 12px 12px;font-size:16px;line-height:1.3}
     .count{color:var(--muted);font-size:13px;margin-top:6px}
     .empty{margin-top:20px;color:var(--muted);text-align:center;border:1px dashed var(--border);border-radius:var(--radius);padding:32px}
+    .ml-auto { margin-left: auto; }
+    .new-task {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--fg);
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 120ms ease, box-shadow 180ms ease, background 120ms ease, border-color 180ms ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .new-task:hover, .new-task:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      background: rgba(0,0,0,0.02);
+      border-color: rgba(0,0,0,0.12);
+      outline: none;
+    }
+    .new-task svg { width: 16px; height: 16px; display:block; }
   </style>
 </head>
 <body>
@@ -43,6 +66,12 @@
         <img src="https://usyd-meta-lab.github.io/images/logo.PNG" alt="USYD Meta Lab Logo">
         <h1>USYD Meta Lab — Task Library</h1>
         <small id="updated"></small>
+         <a class="new-task ml-auto" href="https://github.com/usyd-meta-lab/jsPsych-template" target="_blank" rel="noopener" aria-label="Suggest a new task" title="Suggest a new task">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+          <span>New Task</span>
+        </a>
       </div>
 
       <div class="controls" role="region" aria-label="Search">
