@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>USYD Meta Lab • Resources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --fg: #0f172a;
+      --muted: #475569;
+      --border: #e5e7eb;
+      --accent: #1e40af;
+      --radius: 14px;
+      --space: 16px;
+      --maxw: 800px;
+    }
+    body {
+      margin: 0;
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: #f9fafb;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px var(--space);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    header img {
+      height: 70px;
+      margin-bottom: 12px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .links {
+      max-width: var(--maxw);
+      width: 100%;
+      display: grid;
+      gap: 16px;
+    }
+    .card {
+      display: block;
+      padding: 20px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: white;
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 600;
+      font-size: 18px;
+      transition: transform 120ms ease, box-shadow 180ms ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .card:hover, .card:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      outline: none;
+    }
+    .card span {
+      display: block;
+      font-size: 14px;
+      font-weight: normal;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://usyd-meta-lab.github.io/images/logo.PNG" alt="USYD Meta Lab Logo">
+    <h1>USYD Meta Lab Resources</h1>
+  </header>
+
+  <main class="links">
+    <a class="card" href="lab_wiki.html" target="_blank" rel="noopener">
+      Lab Wiki <span>Documentation and onboarding</span>
+    </a>
+    <a class="card" href="launching_studies.html" target="_blank" rel="noopener">
+      Guide to Launching Studies <span>Step-by-step workflow</span>
+    </a>
+    <a class="card" href="https://github.com/usyd-meta-lab/jsPsych-template" target="_blank" rel="noopener">
+      jsPsych Template <span>Starter code for new tasks</span>
+    </a>
+    <a class="card" href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" rel="noopener">
+      R Package <span>Tools for analysis and reproducibility</span>
+    </a>
+    <a class="card" href="#" target="_blank" rel="noopener">
+      Task Library <span>Existing experiments and paradigms</span>
+    </a>
+    <a class="card" href="https://usyd-meta-lab.github.io/code/experiments/" target="_blank" rel="noopener">
+      Experiment Server <span>Run and host your studies</span>
+    </a>
+  </main>
+</body>
+</html>
