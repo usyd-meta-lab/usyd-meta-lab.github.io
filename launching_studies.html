@@ -11,6 +11,84 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
 	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+         .logo-float {
+      float: right;
+      max-width: 100px;
+      margin: 0 0 1rem 1rem;
+      filter: grayscale(30%) brightness(110%)
+              drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    }
+     h2 { font-size: 2em; border-bottom: 2px solid #ccc; padding-bottom: 0.5rem; }
+      /* Floating Table of Contents (page-scoped) */
+      .toc-container {
+        position: fixed;
+        top: 90px; /* keep clear of top heading */
+        right: 24px;
+        width: 280px;
+        max-height: calc(100vh - 120px);
+        padding: 14px 16px;
+        background: #ffffff;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 8px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+        z-index: 1000;
+      }
+
+      .toc-container h2 {
+        margin: 0 0 10px 0;
+        font-size: 1.05rem;
+      }
+
+      .toc-scroll {
+        overflow-y: auto;
+        max-height: calc(100vh - 160px);
+        padding-right: 6px; /* space for scrollbar */
+      }
+
+      .toc-scroll ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .toc-scroll li {
+        margin: 6px 0;
+        line-height: 1.3;
+      }
+
+      .toc-scroll a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      .toc-scroll a:hover {
+        text-decoration: underline;
+      }
+
+      /* Prevent content overlap on wide screens */
+      @media (min-width: 1024px) {
+        .inner.with-toc {
+          margin-right: 330px; /* width + gap */
+        }
+      }
+
+      /* On small screens, let the ToC flow inline */
+      @media (max-width: 1023.98px) {
+        .toc-container {
+          position: static;
+          width: auto;
+          max-height: none;
+          box-shadow: none;
+          border: none;
+          margin: 0 0 16px 0;
+        }
+        .toc-scroll {
+          max-height: none;
+        }
+      }
+    </style>
+    
 </head>
 <body class="is-preload">
 	<body class="is-preload">
@@ -21,31 +99,38 @@
 		
 				<!-- Five -->
 					<section class="wrapper style1 align-left">
-						<div class="inner">
-							<h1>Running a jsPsych Study on GitHub with DataPipe and Automatic Redirect to SONA or Prolific</h1>
+						<div class="inner with-toc">
+   
+<a href="/" title="Back to main site">
+  <img src="images/logo.PNG" alt="USYD Meta Lab Logo" class="logo-float">
+</a>
+							<h2>Running a jsPsych Study</h2>
+              <p> Using GitHub with DataPipe and Automatic Redirect to SONA or Prolific</p>
 
-<hr>
 
+<nav class="toc-container" aria-label="Table of Contents">
+  <h2>📑 Table of Contents</h2>
+  <div class="toc-scroll">
+    <ul>
+      <li><a href="#purpose">Purpose</a></li>
+      <li><a href="#step1">Step 1: Get Ready</a></li>
+      <li><a href="#step2">Step 2: Build Your jsPsych Experiment</a></li>
+      <li><a href="#step3">Step 3: Upload Files to GitHub</a></li>
+      <li><a href="#step4">Step 4: Turn On GitHub Pages</a></li>
+      <li><a href="#step5">Step 5: Create OSF Repository</a></li>
+      <li><a href="#step6">Step 6: Connect to DataPipe</a></li>
+      <li><a href="#step7">Step 7: Put Study on Prolific</a></li>
+      <li><a href="#step8">Step 8: Put Study on SONA</a></li>
+      <li><a href="#step9">Step 9: Set Up Redirect Links</a></li>
+      <li><a href="#step10">Step 10: Test the Study</a></li>
+      <li><a href="#step11">Step 11: Go Live!</a></li>
+      <li><a href="#final-checklist">Final Checklist</a></li>
+      <li><a href="#suggestions">Suggestions</a></li>
+      <li><a href="#common-issues">Common Issues</a></li>
+    </ul>
+  </div>
+  </nav>
 
-<h2>📑 Table of Contents</h2>
-<ul>
-  <li><a href="#purpose">Purpose</a></li>
-  <li><a href="#step1">Step 1: Get Ready</a></li>
-  <li><a href="#step2">Step 2: Build Your jsPsych Experiment</a></li>
-  <li><a href="#step3">Step 3: Upload Files to GitHub</a></li>
-  <li><a href="#step4">Step 4: Turn On GitHub Pages</a></li>
-  <li><a href="#step5">Step 5: Create OSF Repository</a></li>
-  <li><a href="#step6">Step 6: Connect to DataPipe</a></li>
-  <li><a href="#step7">Step 7: Put Study on Prolific</a></li>
-  <li><a href="#step8">Step 8: Put Study on SONA</a></li>
-  <li><a href="#step9">Step 9: Set Up Redirect Links</a></li>
-  <li><a href="#step10">Step 10: Test the Study</a></li>
-  <li><a href="#step11">Step 11: Go Live!</a></li>
-  <li><a href="#final-checklist">Final Checklist</a></li>
-  <li><a href="#suggestions">Suggestions</a></li>
-  <li><a href="#common-issues">Common Issues</a></li>
-</ul>
-<hr>
 
 
 <h2 id="purpose">🔎 Purpose</h2>
