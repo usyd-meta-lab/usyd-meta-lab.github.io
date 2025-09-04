@@ -207,7 +207,8 @@ conditional_function: function(){
 
 
 
-var DEBRIEF_SONA = {
+
+var debrief_statment = {
   timeline: [{
     type: jsPsychInstructions,
     pages: [
@@ -238,7 +239,7 @@ var DEBRIEF_SONA = {
     <div style="text-align: center;"></div>
   </div>
   `
-      ],
+    ],
     show_clickable_nav: true,
     button_label_next: "Continue",
     allow_backward: false
@@ -247,3 +248,25 @@ var DEBRIEF_SONA = {
     if(typeof SONAID === 'undefined'){return false} else{ return true}
   }
 }
+
+var study_complete_notification = {
+  timeline: [
+    {
+      type: jsPsychInstructions,
+      pages: [
+        `You have completed the study. Please notify the experimenter now.`
+      ]
+    }
+  ],
+  conditional_function: function(){
+    if(typeof in_lab !== "undefined" && in_lab === true){
+      return true
+    } else{ 
+      return false}
+      
+    }
+  }
+
+  var DEBRIEF_SONA = {
+    timeline: [debrief_statment, study_complete_notification]
+  }
