@@ -33,6 +33,7 @@ var participant_info_paid = {
       <li>Mr Riley Leckie, Research Assistant, School of Psychology, University of Sydney</li>
       <li>Ms Imann Mian, Research Assistant, School of Psychology, University of Sydney</li>
       <li>Mr Felix Pfeifer, Research Assistant, School of Psychology, University of Sydney</li>
+      <li>Mr Aditya Sridhar, Research Assistant, School of Psychology, University of Sydney</li>
       <br><br>
       Data from this study may form the basis of the PhD theses of Yueting Zhan and Cynthia Feng as well as the Honours theses of Mariya Bartosh and Anthony Mbonu.<br><br>
       This study is being funded by the Australian Research Council Discovery Program (DE230101223). </li>
@@ -118,6 +119,7 @@ var participant_info_SONA = {
       <li>Mr Riley Leckie, Research Assistant, School of Psychology, University of Sydney</li>
       <li>Ms Imann Mian, Research Assistant, School of Psychology, University of Sydney</li>
       <li>Mr Felix Pfeifer, Research Assistant, School of Psychology, University of Sydney</li>
+      <li>Mr Aditya Sridhar, Research Assistant, School of Psychology, University of Sydney</li>
       <br><br>
       Data from this study may form the basis of the PhD theses of Yueting Zhan and Cynthia Feng as well as the Honours theses of Mariya Bartosh and Anthony Mbonu.<br><br>
       This study is being funded by the Australian Research Council Discovery Program (DE230101223). </li>
