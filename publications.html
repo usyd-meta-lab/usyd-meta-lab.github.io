@@ -25,6 +25,23 @@
     li { margin-bottom: 1.2em; line-height: 1.5; }
     a  { color: #0077cc; text-decoration: none; }
     a:hover { text-decoration: underline; }
+    button.download-btn {
+      display: none;
+      margin-left: 1rem;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid #0077cc;
+      background: #f6f9fc;
+      color: #0077cc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button.download-btn.is-visible {
+      display: inline-block;
+    }
+    button.download-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -34,18 +51,39 @@
 </a>
 
 <section id="publications">
-  <h2>Publications</h2>
+  <h2>Publications
+    <button id="download-publications" class="download-btn" type="button" disabled>
+      Download ORCID snapshot
+    </button>
+  </h2>
   <div id="pub-container">Loading publications…</div>
 </section>
 
+<script src="files/publications-orcid-snapshot.js"></script>
+<script src="files/publications-local.js"></script>
 <script>
   const orcidId = '0000-0001-8120-1573';
+  const fallbackPaths = [
+    'files/publications-orcid-snapshot.json',
+    'files/publications-local.json'
+  ];
+  const container = document.getElementById('pub-container');
+  const downloadBtn = document.getElementById('download-publications');
+  const isLocalEnv = (() => {
+    const host = window.location.hostname;
+    if (window.location.protocol === 'file:') return true;
+    if (!host) return true;
+    if (host === 'localhost' || host === '127.0.0.1') return true;
+    if (host.endsWith('.local')) return true;
+    return false;
+  })();
 
   /* ---------- Helper API fetchers ---------- */
   async function fetchSummary() {
     const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/works`, {
       headers: { Accept: 'application/json' }
     });
+    if (!res.ok) throw new Error(`ORCID summary request failed: ${res.status}`);
     return (await res.json()).group.map(g => g['work-summary'][0]);
   }
 
@@ -53,6 +91,7 @@
     const res = await fetch(`https://pub.orcid.org/v3.0/${orcidId}/work/${code}`, {
       headers: { Accept: 'application/json' }
     });
+    if (!res.ok) throw new Error(`ORCID work request failed: ${res.status}`);
     return res.json();
   }
 
@@ -112,11 +151,10 @@
   }
 
   /* ---------- Main ---------- */
-  (async () => {
+  async function fetchOrcidRecords() {
     const summaries = await fetchSummary();
     const detailed  = await Promise.all(summaries.map(s => fetchFullRecord(s['put-code'])));
 
-    /* Build records with possible Crossref fallback */
     const records = [];
     for (const pub of detailed) {
       if (!(pub.type?.toLowerCase() === 'journal-article' || pub.type === 'JOURNAL_ARTICLE')) continue;
@@ -136,12 +174,72 @@
       records.push({ title, year, authors: formatList(authors), doi, journal });
     }
 
-    /* --- Group, sort, render (unchanged) --- */
-    const grouped = {};
-    records.forEach(r => { if (!grouped[r.year]) grouped[r.year] = []; grouped[r.year].push(r); });
+    return records;
+  }
 
-    const container = document.getElementById('pub-container');
+  async function fetchJsonSnapshot(path) {
+    if (window.location.protocol === 'file:') {
+      if (path.includes('publications-orcid-snapshot') && window.__ORCID_SNAPSHOT__) {
+        return window.__ORCID_SNAPSHOT__;
+      }
+      if (path.includes('publications-local') && window.__PUBLICATIONS_LOCAL__) {
+        return window.__PUBLICATIONS_LOCAL__;
+      }
+      throw new Error(`No inline snapshot available for ${path}`);
+    }
+
+    const res = await fetch(path, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`Fallback request failed: ${res.status}`);
+    return res.json();
+  }
+
+  let fallbackCache = null;
+  let fallbackSource = null;
+
+  async function fetchFallbackRecords() {
+    if (fallbackCache) return fallbackCache;
+
+    for (const path of fallbackPaths) {
+      if (!path) continue;
+      try {
+        const data = await fetchJsonSnapshot(path);
+        const records = Array.isArray(data) ? data : (data.records || []);
+        if (records.length) {
+          fallbackCache = records;
+          fallbackSource = path;
+          return fallbackCache;
+        }
+      } catch (err) {
+        console.warn(`Failed to read fallback at ${path}`, err);
+      }
+    }
+
+    throw new Error('Fallback request failed: no usable snapshot found');
+  }
+
+  async function safeFallbackRecords() {
+    try {
+      return await fetchFallbackRecords();
+    } catch (error) {
+      console.warn('Local fallback snapshot unavailable or invalid', error);
+      return [];
+    }
+  }
+
+  function renderRecords(records) {
     container.innerHTML = '';
+
+    if (!records.length) {
+      container.textContent = 'No publications available.';
+      return;
+    }
+
+    const grouped = {};
+    records.forEach(r => {
+      if (!grouped[r.year]) grouped[r.year] = [];
+      grouped[r.year].push(r);
+    });
+
     const years = Object.keys(grouped).sort((a, b) => b - a);
     let counter = records.length;
 
@@ -166,6 +264,72 @@
       yearDiv.appendChild(ol);
       container.appendChild(yearDiv);
     });
+  }
+
+  function enableDownload(records) {
+    if (!downloadBtn) return;
+    downloadBtn.disabled = false;
+    downloadBtn.textContent = 'Download ORCID snapshot';
+    downloadBtn.classList.add('is-visible');
+    downloadBtn.onclick = () => {
+      const snapshot = { fetched: new Date().toISOString(), records };
+
+      const download = (filename, content, mime) => {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const temp = document.createElement('a');
+        temp.href = url;
+        temp.download = filename;
+        document.body.appendChild(temp);
+        temp.click();
+        document.body.removeChild(temp);
+        URL.revokeObjectURL(url);
+      };
+
+      download('publications-orcid-snapshot.json', JSON.stringify(snapshot, null, 2), 'application/json');
+      download('publications-orcid-snapshot.js', `window.__ORCID_SNAPSHOT__ = ${JSON.stringify(snapshot, null, 2)};\n`, 'application/javascript');
+    };
+  }
+
+  function hideDownload(message) {
+    if (!downloadBtn) return;
+    if (message) downloadBtn.textContent = message;
+    downloadBtn.disabled = true;
+    if (isLocalEnv) {
+      downloadBtn.classList.add('is-visible');
+    } else {
+      downloadBtn.classList.remove('is-visible');
+    }
+    downloadBtn.onclick = null;
+  }
+
+  (async () => {
+    let records = [];
+    try {
+      records = await fetchOrcidRecords();
+      const fallbackRecords = await safeFallbackRecords();
+      if (isLocalEnv || records.length > fallbackRecords.length) {
+        enableDownload(records);
+      } else {
+        const message = fallbackSource === fallbackPaths[0]
+          ? 'Download ORCID snapshot (current)'
+          : 'Download ORCID snapshot (local copy matched)';
+        hideDownload(message);
+      }
+    } catch (error) {
+      console.error('Failed to load ORCID publications', error);
+      hideDownload('Download ORCID snapshot (unavailable)');
+      container.textContent = 'Loading local publication list…';
+      try {
+        records = await fetchFallbackRecords();
+      } catch (fallbackError) {
+        console.error('Failed to load fallback publications', fallbackError);
+        container.textContent = 'Unable to load publications at this time.';
+        return;
+      }
+    }
+
+    renderRecords(records);
   })();
 </script>
 
