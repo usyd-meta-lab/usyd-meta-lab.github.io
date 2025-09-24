@@ -1,6 +1,13 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2025-09-24T01:28:13.809Z",
+  "fetched": "2025-09-24T02:05:29.210Z",
   "records": [
+    {
+      "title": "The Impact of Test Preparation on Performance of Large-Scale Educational Tests",
+      "year": "2025",
+      "authors": "Hao, Z., Baird, J., Masri, Y. E., & Double, K.",
+      "doi": "10.3102/00346543251360775",
+      "journal": "Review of Educational Research"
+    },
     {
       "title": "Metacognitive sensitivity moderates reactivity to confidence ratings",
       "year": "2025",
@@ -30,7 +37,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "International Journal of Obesity"
     },
     {
-      "title": "It\u2019s what I think you do that matters: Comparing self, partner, and shared perspectives of what a romantic partner does to regulate your emotions",
+      "title": "It’s what I think you do that matters: Comparing self, partner, and shared perspectives of what a romantic partner does to regulate your emotions",
       "year": "2025",
       "authors": "Walker, S., Pinkus, R., Double, K., Xiao, H., & MacCann, C.",
       "doi": "10.1177/08902070241272162",
@@ -51,7 +58,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Behavior Research Methods"
     },
     {
-      "title": "What Do We Do to Help Others Feel Better? The Eight Strategies of the Regulating Others\u2019 Emotions Scale (ROES)",
+      "title": "What Do We Do to Help Others Feel Better? The Eight Strategies of the Regulating Others’ Emotions Scale (ROES)",
       "year": "2025",
       "authors": "MacCann, C. et al.",
       "doi": "10.1037/emo0001459",
@@ -86,7 +93,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Personality and Individual Differences"
     },
     {
-      "title": "Reconsidering reappraisal: in emotionally intense contexts, people choose distraction or minimizing over reconstrual to regulate others\u2019 emotions",
+      "title": "Reconsidering reappraisal: in emotionally intense contexts, people choose distraction or minimizing over reconstrual to regulate others’ emotions",
       "year": "2024",
       "authors": "Xu, V., Double, K., & MacCann, C.",
       "doi": "10.1007/s44202-023-00111-4",
@@ -121,7 +128,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Journal of Intelligence"
     },
     {
-      "title": "Emotionally Intelligent People Use More High-Engagement and Less Low-Engagement Processes to Regulate Others\u2019 Emotions",
+      "title": "Emotionally Intelligent People Use More High-Engagement and Less Low-Engagement Processes to Regulate Others’ Emotions",
       "year": "2022",
       "authors": "Xiao, H., Double, K. S., Walker, S. A., Kunst, H., & MacCann, C.",
       "doi": "10.3390/jintelligence10040076",
@@ -275,4 +282,4 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Personality and Individual Differences"
     }
   ]
-} ;
+};
