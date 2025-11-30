@@ -1,6 +1,13 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2025-09-24T02:05:29.210Z",
+  "fetched": "2025-11-30T23:19:59.618Z",
   "records": [
+    {
+      "title": "Valuing your partner more",
+      "year": "2025",
+      "authors": "Xiao, H. H., Double, K. S., Pinkus, R. T., & MacCann, C.",
+      "doi": "10.1177/02654075251399696",
+      "journal": "Journal of Social and Personal Relationships"
+    },
     {
       "title": "The Impact of Test Preparation on Performance of Large-Scale Educational Tests",
       "year": "2025",
