@@ -2,7 +2,7 @@ window.__ORCID_SNAPSHOT__ = {
   "fetched": "2025-11-30T23:19:59.618Z",
   "records": [
     {
-      "title": "Valuing your partner more",
+      "title": "Valuing your partner more: Linking emotional intelligence to better relationship quality",
       "year": "2025",
       "authors": "Xiao, H. H., Double, K. S., Pinkus, R. T., & MacCann, C.",
       "doi": "10.1177/02654075251399696",
