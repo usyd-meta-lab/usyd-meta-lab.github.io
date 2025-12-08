@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>USYD Meta Lab • Wiki</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --fg: #0f172a;
+      --muted: #475569;
+      --border: #e5e7eb;
+      --accent: #1e40af;
+      --radius: 14px;
+      --space: 16px;
+      --maxw: 1200px;
+      --sidebar-width: 240px;
+    }
+    body {
+      margin: 0;
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: #f9fafb;
+      color: var(--fg);
+    }
+    .container {
+      display: flex;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 40px var(--space);
+    }
+    .sidebar {
+      width: var(--sidebar-width);
+      position: sticky;
+      top: 40px;
+      align-self: flex-start;
+      height: calc(100vh - 80px);
+      overflow-y: auto;
+      padding-right: 20px;
+    }
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar nav a {
+      text-decoration: none;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .sidebar nav a:hover {
+      background: #eef2ff;
+      color: var(--accent);
+    }
+    .sidebar nav a.active {
+      background: #e0e7ff;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+    section {
+      margin-bottom: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    section:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+    h2 {
+      font-size: 28px;
+      margin: 0 0 24px 0;
+    }
+    h3 {
+      font-size: 22px;
+      margin: 32px 0 16px 0;
+    }
+    h4 {
+      font-size: 18px;
+      margin: 24px 0 12px 0;
+    }
+    p, ul, ol, table {
+      margin-bottom: 1em;
+    }
+    ul, ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 0.5em;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    code {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #f1f5f9;
+      padding: var(--space);
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9em;
+    }
+    pre code {
+      padding: 0;
+      background: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+    .box {
+      background: #f1f5f9;
+      padding: var(--space);
+      border-radius: 8px;
+      margin: 1em 0;
+      font-size: 0.9em;
+      color: var(--muted);
+    }
+    .tip {
+      background-color: #eef2ff;
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .note {
+        background-color: #f8fafc;
+        border: 1px solid var(--border);
+        padding: 16px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+    .note strong {
+        display: block;
+        margin-bottom: 8px;
+    }
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        overflow-y: visible;
+        margin-bottom: 40px;
+        padding-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <nav>
+        <a href="#onboarding">Onboarding</a>
+        <a href="#folders">Folder Structure</a>
+        <a href="#launching-a-study">Launching a Study</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section id="onboarding" aria-labelledby="onboarding-heading">
+        <h2 id="onboarding-heading">Onboarding</h2>
+        
+        <h3>Software to install</h3>
+        <ul>
+          <li><strong>Visual Studio Code</strong>: Code editor for HTML/JS/CSS and Markdown. <a href="https://code.visualstudio.com/Download" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>R</strong>: Statistical computing for data cleaning and analysis. <a href="https://cran.r-project.org/" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>R Studio</strong>: Provides a basic interface to R. <a href="https://posit.co/download/rstudio-desktop/" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>Microsoft Teams</strong>: Lab communication and meetings. <a href="https://www.microsoft.com/microsoft-teams/download-app" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>OneDrive (desktop app)</strong>: Local sync of your lab folders with version history. <a href="https://www.microsoft.com/microsoft-365/onedrive/download" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>EndNote</strong>: Reference manager with shared lab library. <a href="https://endnote.com/downloads/" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>GitHub Desktop</strong>: Simple Git client for version control. <a href="https://desktop.github.com/" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>JASP</strong>: Point-and-click stats (Bayesian and frequentist). <a href="https://jasp-stats.org/download/" target="_blank" rel="noopener">Download</a></li>
+          <li><strong>Zoom</strong>: Online meetings and participant calls. <a href="https://zoom.us/download" target="_blank" rel="noopener">Download</a></li>
+        </ul>
+
+        <h3>Accounts to set up</h3>
+        <ul>
+          <li>A <a href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a> account. You can join the MetaLab team using code <strong>38PJLD</strong></li>
+          <li>A <a href="https://github.com" target="_blank" rel="noopener">GitHub</a> account. You also need a GitHub Enterprise <a href="https://github.sydney.edu.au" target="_blank" rel="noopener">account</a>.</li>
+          <li>An <a href="https://osf.io" target="_blank" rel="noopener">OSF</a> account.</li>
+          <li>A <a href="https://pipe.jspsych.org" target="_blank" rel="noopener">DataPipe</a> account.</li>
+          <li>A SONA account (if using SONA). Apply to be added as a new user <a href="https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L" target="_blank" rel="noopener">here</a>.</li>
+          <li>A <a href="https://prolific.com" target="_blank" rel="noopener">Prolific</a> account (if using Prolific).</li>
+          <li>A <a href="https://scheduler.labarchives.com/dashboard.php" target="_blank" rel="noopener">LabArchives Scheduler</a> account to book the lab testing space. See the <a href="https://intranet.sydney.edu.au/science/psychology/buildings-facilities/room-bookings.html" target="_blank" rel="noopener">School intranet</a>.</li>
+          <li>You need to have been added to one of the lab ethics protocols. Honours students will need to manually apply to be added as a user on <a href="https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e" target="_blank" rel="noopener">myResearch Ethics</a> before being added.</li>
+        </ul>
+
+        <h3>Communication</h3>
+        <p>Face-to-face communication is preferred whenever possible, either during our weekly one-on-one meetings or in the group lab meeting. For quick questions, please feel free to drop by if my door is open. Email should be reserved for more formal communication or for tasks that require detailed input, for example, requesting feedback on a draft manuscript or thesis section.</p>
+        <p>Larger multi-lab meetings focused on either cognition (SLAC) or emotion (REAL) also occur regularly and students are encouraged to attend.</p>
+      </section>
+
+      <section id="folders" aria-labelledby="setting-up-heading">
+        <h2 id="setting-up-heading">Folders</h2>
+        
+        <h3>Project folder structure</h3>
+        <p>Projects follow a standard structure to keep code, analyses, and outputs tidy.</p>
+        <pre><code>Project_Name/
+├── README.md                # Project overview and folder structure
+├── LICENSE                  # Licensing information
+├── .gitignore               # Files to ignore in version control
+├── experiments/
+│   └── example-experiment/
+│       ├── design/          # Task design files, protocols
+│       ├── stimuli/         # Images, sounds, or other stimuli
+│       ├── scripts/         # Code for running the experiment (e.g., jsPsych, MATLAB)
+│       ├── data/
+│       │   ├── metadata/    # Data dictionary and metadata files
+│       │   ├── processed/   # Cleaned data ready for analysis
+│       │   └── raw/         # Untouched raw data
+│       ├── analysis/
+│       │   ├── scripts/     # R, Python, MATLAB analysis scripts
+│       │   ├── results/     # Figures, stats outputs, tables
+│       │   ├── notebooks/   # RMarkdown or Jupyter notebooks
+│       │   └── analysis_plan.Rmd # Pre-planned analysis description
+│       ├── code/            # Shared functions or custom packages for this experiment
+│       └── notes.md         # Lab notes or changelog for the experiment
+├── manuscripts/
+│   └── draft_manuscript.md  # Draft manuscript for the project
+├── reports/                 # Internal reports or summaries
+├── preregistration/         # Preregistration documents
+└── presentations/           # Conference slides, posters, etc.
+</code></pre>
+        
+        <div class="tip" role="note" aria-label="Project setup tip">
+          <strong>Tip:</strong> Use the lab R package function to produce a project structure quickly:
+          <code>MetaLab::create_MetaLab_project("MyProject", "MyExperiment", "Directory")</code>
+        </div>
+      </section>
+
+      <section id="launching-a-study" aria-labelledby="launching-a-study-heading">
+        <h2 id="launching-a-study-heading">Launching a study</h2>
+        
+        <h3>Running a jsPsych Study</h3>
+        <p>Using MetaForge with Automatic Redirect to SONA or Prolific.</p>
+
+        <nav class="note" aria-label="Table of Contents (inline)">
+          <strong>📑 Table of Contents</strong>
+          <ul style="margin:.5rem 0 0 1rem; columns: 2;">
+            <li><a href="#purpose">Purpose</a></li>
+            <li><a href="#step1">Step 1: Build Experiment</a></li>
+            <li><a href="#step6">Step 2: Put Study on Prolific</a></li>
+            <li><a href="#step7">Step 3: Put Study on SONA</a></li>
+            <li><a href="#step9">Step 4: Test the Study</a></li>
+            <li><a href="#step10">Step 5: Preregistration</a></li>
+            <li><a href="#step11">Step 6: Go Live!</a></li>
+          </ul>
+        </nav>
+
+   
+
+        <h3>📝 Step-by-Step Guide</h3>
+
+        <h4 id="step1">🔹 Step 1: Build Your Experiment</h4>
+        <p>Build your experiment on <a href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a></p>
+        <p>Enable MetaForge hosting under Experiment Options > Deploy. Then click Publish to Web</p>
+
+        
+
+        <h4 id="step6">🔹 Step 2: Putting the study on Prolific</h4>
+        <ol>
+          <li>In MetaForge, under Expeiemnt options > Deploy, click Prolific Credit.</li>
+          <li>Go to <a href="https://prolific.com">Prolific</a>.</li>
+          <li>To be added to the lab team (and use the lab funds), let Kit know your Prolific username.</li>
+          <li>Create a new study.</li>
+          <li><i>Study name</i> and <i>Study description</i> come directly from the ethics documents.</li>
+          <li><i>Internal study name</i> should used the format LastName-TASK-experiment-name.</li>
+          <li>Typically, you want to limit the study to only desktop devices.</li>
+          <li>Study URL was generated in Step 1. You should automatically append the Prolific ID to the URL by clicking <i>Recording Prolific IDs</i> = URL parameters. Make sure that it is appended with a '&' rather than a '?' if you already have a id paramater in the URL</li>
+          <li>Completion paths can be set to automatic approve & pay. Copy the completion code (e.g. CGJ91R8S) into the Expeiemnt Options > Deploy menu under Prolific Credit.</li>
+          <li>Set the length of time and pay people &#163;6 per hour.</li>
+          <li>Set the sample country and click <i>Quota Sample</i> to make sure you get a balanced sample between males and females.</li>
+        </ol>
+
+        <h4 id="step7">🔹 Step 3: Putting the study on SONA</h4>
+        <ol>
+          <li>In MetaForge, under Expeiemnt options > Deploy, click SONA Credit.</li>
+            <li>You can read the SONA <a href="https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2025.pdf">handbook for detailed procedures</a>.</li>
+            <li>Go to <a href="http://sydneypsych.sona-systems.com/">SONA</a>.</li>
+            <li>Select <i>Add new Study</i> from the menu bar.</li>
+            <li>Select <i>Online External Study</i>.</li>
+            <li><i>Study name</i>, <i>Brief Abstract</i>, and <i>Detailed Description</i> come directly from the ethics documents (Teams > Ethics).</li>
+            <li>Duration and credits should match so 1 = 60 minutes.</li>
+            <li>Human Res Ethics Com Approval Code should be set to the ethics protocol number (Teams > Ethics). For example, <i>2022/796</i>.</li>
+            <li>Study URL was generated in Step 1. You should automatically append the SONA ID to the URL by appending <code>&SONAID=%SURVEY_CODE%</code>.</li>
+            <pre><code>https://metaforge.live/host.html?id=EIGahsILLqfUZJBdE0qIgS0hVwi2_1765157335741&SONAID=%SURVEY_CODE%</code></pre>
+            <li>Active Study? = Yes; Automatic Credit Granting = Yes. Everything else can be left as it is.</li>
+            <li>Copy your SONA experiment ID and credit token into the Expeiemnt Options > Deploy menu under SONA Credit. See highlighted section below:</li>
+            <img src="images/sona_url.png" height="250" alt="SONA completion URL example">
+            <li>You need to <i>Request approval of a NEW SONA study</i> get your study approved by the School's research staff. Complete the form <a href="https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L">here</a>.</li>
+            <li>For the question asking you to copy and paste the description from ethics concerning SONApsych participants, you should copy from the ethics documents (Teams > Ethics > Application Form). For example, 2022/796 ethics docs read:</li>
+            <div class="box">1) Sydney University Psychology Research (SONA) participant system. First year psychology (PSYC1001 and PSYC1002) complete SONA studies for course credit. 1) SONA system: We intend to recruit participants through the Sydney University Psychology Research (SONA) participant system, where first- and second-year psychology students sign up and participate in experiments in exchange for course credit. SONA operates in accordance with the School of Psychology’s guidelines on research participation.</div>
+        </ol>
+
+
+        <h4 id="step9">🔹 Step 4: Test the Study</h4>
+        <ol>
+            <li>Visit your GitHub Pages study link.</li>
+            <li>Add parameters to the URL to simulate real participants:
+                <ul>
+                    <li><code>https://metaforge.live/host.html?id=EIGahsILLqfUZJBdE0qIgS0hVwi2_1765157335741&PROLIFIC_PID=123ABC</code></li>
+                    <li><code>https://metaforge.live/host.html?id=EIGahsILLqfUZJBdE0qIgS0hVwi2_1765157335741&SONAID=S1234567</code></li>
+                </ul>
+            </li>
+            <li>Run the study yourself.</li>
+            <li>Confirm:
+                <ul>
+                    <li>Data saves to MetaForge.</li>
+                    <li>Redirect works correctly.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h4 id="step10">🔹 Step 5: Preregistration</h4>
+        <ul>
+            <li>If you are planning on preregistering your study, you need to do so <strong>before</strong> you start collecting data.</li>
+            <li>The easiest place to preregister your study is probably <a href="https://aspredicted.org" target="_blank" rel="noopener">AsPredicted</a>.</li>
+        </ul>
+        
+        <h4 id="step11">🔹 Step 6: Go Live!</h4>
+        <ul>
+            <li>Launch the study on SONA by adding slots or on Prolific by launching the study (or both).</li>
+            <li>Monitor incoming data on your MetaForge project.</li>
+            <li>If you are using OSF data storage, data can be manually downloaded from OSF or automatically downloaded using our R package: <code>MetaLab::combine_osf_csvs("YOUR_OSF_PROJECT_ID", folder = "../Data/")</code></li>
+        </ul>
+
+    
+    </main>
+  </div>
+
+  <script>
+    // Simple scrollspy for sidebar navigation
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.sidebar nav a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: "-50% 0px -50% 0px" });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
