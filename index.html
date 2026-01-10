@@ -290,96 +290,256 @@
 <section class="wrapper style1 align-center" aria-labelledby="papers-heading">
 	<div class="inner">
 		<h2 id="papers-heading">Recent Papers</h2>
-		<p>A full list of papers can be accessed <a href="publications.html">here</a></p>
-		<div class="items style1 medium onload-fade-in">
+		<p style="margin-bottom: 2em;">A full list of papers can be accessed <a href="publications.html">here</a></p>
 
+		<style>
+			.papers-carousel-container {
+				max-width: 1400px;
+				margin: 0 auto;
+				position: relative;
+				padding: 0 80px;
+			}
+			.papers-carousel {
+				display: flex;
+				overflow-x: auto;
+				scroll-behavior: smooth;
+				gap: 2em;
+				padding: 1em 0 2em 0;
+				scroll-snap-type: x mandatory;
+				-webkit-overflow-scrolling: touch;
+				scrollbar-width: thin;
+				scrollbar-color: #5e42a6 #f0f0f0;
+			}
+			.papers-carousel::-webkit-scrollbar {
+				height: 8px;
+			}
+			.papers-carousel::-webkit-scrollbar-track {
+				background: #f0f0f0;
+				border-radius: 4px;
+			}
+			.papers-carousel::-webkit-scrollbar-thumb {
+				background: #5e42a6;
+				border-radius: 4px;
+			}
+			.papers-carousel::-webkit-scrollbar-thumb:hover {
+				background: #7952b3;
+			}
+			.paper-card {
+				min-width: 320px;
+				max-width: 320px;
+				background: #fff;
+				border-radius: 8px;
+				box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+				transition: all 0.3s ease;
+				text-align: left;
+				scroll-snap-align: start;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+			}
+			.paper-card:hover {
+				box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+				transform: translateY(-4px);
+			}
+			.paper-image {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				border-bottom: 3px solid #5e42a6;
+			}
+			.paper-content {
+				padding: 1.5em;
+				flex-grow: 1;
+				display: flex;
+				flex-direction: column;
+			}
+			.paper-year {
+				display: inline-block;
+				background: #5e42a6;
+				color: white;
+				padding: 0.3em 0.8em;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 0.85em;
+				margin-bottom: 0.8em;
+			}
+			.paper-card h3 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.1em;
+				color: #333;
+			}
+			.paper-journal {
+				color: #5e42a6;
+				font-weight: 600;
+				font-size: 0.9em;
+				margin-bottom: 0.8em;
+				display: block;
+				text-decoration: none;
+			}
+			.paper-journal:hover {
+				color: #7952b3;
+				text-decoration: underline;
+			}
+			.paper-title {
+				color: #666;
+				line-height: 1.5;
+				font-size: 0.9em;
+				margin: 0;
+				flex-grow: 1;
+			}
+			.carousel-button {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				background: #5e42a6;
+				color: white;
+				border: none;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				cursor: pointer;
+				z-index: 10;
+				transition: all 0.3s ease;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.5em;
+				box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+			}
+			.carousel-button:hover {
+				background: #7952b3;
+				transform: translateY(-50%) scale(1.1);
+				box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+			}
+			.carousel-button.prev {
+				left: 10px;
+			}
+			.carousel-button.next {
+				right: 20px;
+			}
+			@media screen and (min-width: 1200px) {
+				.carousel-button.prev {
+					left: -60px;
+				}
+				.carousel-button.next {
+					right: -60px;
+				}
+			}
+			@media screen and (max-width: 736px) {
+				.papers-carousel-container {
+					padding: 0 20px;
+				}
+				.carousel-button {
+					width: 40px;
+					height: 40px;
+					font-size: 1.2em;
+				}
+				.carousel-button.prev {
+					left: 5px;
+				}
+				.carousel-button.next {
+					right: 5px;
+				}
+				.paper-card {
+					min-width: 280px;
+					max-width: 280px;
+				}
+			}
+		</style>
 
+		<div class="papers-carousel-container">
+			<button class="carousel-button prev" onclick="scrollCarousel(-1)" aria-label="Previous papers">‹</button>
+			<div class="papers-carousel" id="papersCarousel">
 
-				<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p20.jpg" alt="" /></span></div>
-				<h3>Xiao et al.</h3>
-				<p><a href = "https://doi.org/10.1177/02654075251399696">  Journal of Social and Personal Relationships </a> </p>
-				<p>Valuing your partner more: Linking emotional intelligence to better relationship quality</p>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p20.jpg" alt="Xiao et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Xiao et al.</h3>
+						<a href="https://doi.org/10.1177/02654075251399696" class="paper-journal">Journal of Social and Personal Relationships</a>
+						<p class="paper-title">Valuing your partner more: Linking emotional intelligence to better relationship quality</p>
+					</div>
+				</article>
 
-			</section>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p19.jpg" alt="Hao et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Hao et al.</h3>
+						<a href="https://doi.org/10.3102/00346543251360775" class="paper-journal">Review of Educational Research</a>
+						<p class="paper-title">The Impact of Test Preparation on Performance of Large-Scale Educational Tests</p>
+					</div>
+				</article>
 
-				<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p19.jpg" alt="" /></span></div>
-				<h3>Hao et al.</h3>
-				<p><a href = "https://doi.org/10.3102/00346543251360775">  Review of Educational Research </a> </p>
-				<p>The Impact of Test Preparation on Performance of Large-Scale Educational Tests</p>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p18.JPG" alt="Choo et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Choo et al.</h3>
+						<a href="https://doi.org/10.1080/13546783.2025.2542252" class="paper-journal">Thinking & Reasoning</a>
+						<p class="paper-title">Metacognitive sensitivity moderates reactivity to confidence ratings</p>
+					</div>
+				</article>
 
-			</section>
-			
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p17.JPG" alt="Don et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Don et al.</h3>
+						<a href="https://doi.org/10.1016/j.ijer.2025.102719" class="paper-journal">International Journal of Educational Research</a>
+						<p class="paper-title">When good results mislead: How positive student outcomes lead teachers to overestimate the effectiveness of their assistance</p>
+					</div>
+				</article>
 
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p15.png" alt="Double et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Double et al.</h3>
+						<a href="https://doi.org/10.1007/s10902-025-00914-3" class="paper-journal">Journal of Happiness Studies</a>
+						<p class="paper-title">You Feel Better When Your Partner is Emotionally Intelligent: Self-Rated Emotional Intelligence Shows Partner Effects on Subjective Wellbeing</p>
+					</div>
+				</article>
 
-	<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p18.JPG" alt="" /></span></div>
-				<h3>Choo et al.</h3>
-				<p><a href = "https://doi.org/10.1080/13546783.2025.2542252">  Thinking & Reasoning </a> </p>
-				<p>Metacognitive sensitivity moderates reactivity to confidence ratings</p>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p14.png" alt="Double et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Double et al.</h3>
+						<a href="https://doi.org/10.3758/s13421-025-01737-6" class="paper-journal">Memory & Cognition</a>
+						<p class="paper-title">Judgments of learning impair rule-based discovery</p>
+					</div>
+				</article>
 
-			</section>
-			
-			
-			<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p17.JPG" alt="" /></span></div>
-				<h3>Don et al.</h3>
-				<p><a href = "https://doi.org/10.1016/j.ijer.2025.102719">  International Journal of Educational Research </a> </p>
-				<p>When good results mislead: How positive student outcomes lead teachers to overestimate the effectiveness of their assistance</p>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p13.png" alt="Tran et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Tran et al.</h3>
+						<a href="https://www.nature.com/articles/s41366-025-01776-8" class="paper-journal">International Journal of Obesity</a>
+						<p class="paper-title">Consumption of a diet high in fat and sugar is associated with worse spatial navigation ability in a virtual environment</p>
+					</div>
+				</article>
 
-			</section>
-			
-<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p15.png" alt="" /></span></div>
-				<h3>Double et al.</h3>
-				<p><a href = "https://doi.org/10.1007/s10902-025-00914-3">  Journal of Happiness Studies </a> </p>
-				<p>You Feel Better When Your Partner is Emotionally Intelligent: Self-Rated Emotional Intelligence Shows Partner Effects on Subjective Wellbeing</p>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p12.png" alt="Double paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>Double</h3>
+						<a href="https://link.springer.com/article/10.3758/s13428-025-02621-6" class="paper-journal">Behavior Research Methods</a>
+						<p class="paper-title">Survey measures of metacognitive monitoring are often false</p>
+					</div>
+				</article>
 
-			</section>
-
-<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p14.png" alt="" /></span></div>
-				<h3>Double et al.</h3>
-				<p><a href = "https://doi.org/10.3758/s13421-025-01737-6">  Memory & Cognition </a> </p>
-				<p>Judgments of learning impair rule-based discovery</p>
-
-			</section>
-
-	<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p13.png" alt="" /></span></div>
-				<h3>Tran et al.</h3>
-				<p><a href = "https://www.nature.com/articles/s41366-025-01776-8">  International Journal of Obesity </a> </p>
-				<p>Consumption of a diet high in fat and sugar is associated with worse spatial navigation ability in a virtual environment</p>
-
-			</section>
-
-
-			<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p12.png" alt="" /></span></div>
-				<h3>Double</h3>
-				<p><a href = "https://link.springer.com/article/10.3758/s13428-025-02621-6">  Behavior Research Methods </a> </p>
-				<p>Survey measures of metacognitive monitoring are often false</p>
-
-			</section>
-
-
-			<section>
-				<h4>2025</h4>
-				<div class='hidden' style = "height: 300px"><span class="image fit"><img height= "250" src="images/gallery/thumbs/papers/p11.png" alt="" /></span></div>
-				<h3>MacCann et al.</h3>
-				<p><a href = "https://doi.org/10.1037/emo0001459"> Emotion </a> </p>
-				<p>What Do We Do to Help Others Feel Better? The Eight Strategies of the Regulating Others’ Emotions Scale (ROES)</p>
-
-			</section>
+				<article class="paper-card">
+					<img src="images/gallery/thumbs/papers/p11.png" alt="MacCann et al. paper" class="paper-image" loading="lazy" />
+					<div class="paper-content">
+						<span class="paper-year">2025</span>
+						<h3>MacCann et al.</h3>
+						<a href="https://doi.org/10.1037/emo0001459" class="paper-journal">Emotion</a>
+						<p class="paper-title">What Do We Do to Help Others Feel Better? The Eight Strategies of the Regulating Others' Emotions Scale (ROES)</p>
+					</div>
+				</article>
 
 
 
@@ -392,6 +552,19 @@
 
 
 		</div>
+			<button class="carousel-button next" onclick="scrollCarousel(1)" aria-label="Next papers">›</button>
+		</div>
+
+		<script>
+			function scrollCarousel(direction) {
+				const carousel = document.getElementById('papersCarousel');
+				const cardWidth = 320 + 32; // card width + gap
+				carousel.scrollBy({
+					left: direction * cardWidth * 2, // scroll 2 cards at a time
+					behavior: 'smooth'
+				});
+			}
+		</script>
 	</div>
 </section>
 <hr>
