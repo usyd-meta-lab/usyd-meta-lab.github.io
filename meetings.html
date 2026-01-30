@@ -350,7 +350,7 @@
   <div class="container">
 
     <header class="header">
-      <img src="https://usyd-meta-lab.github.io/images/logo.PNG" alt="USYD Meta Lab" class="logo" />
+     <img src="https://usyd-meta-lab.github.io/images/logo.PNG" alt="USYD Meta Lab" class="logo" />
       <h1>Lab Meeting Schedule</h1>
       <p>USYD Meta Lab and CogFlex research meetings</p>
     </header>
@@ -486,10 +486,8 @@ const firebaseConfig = {
       const date = parseDate(dateStr);
       if (!date || isNaN(date.getTime())) return escapeHtml(String(dateStr));
       return date.toLocaleDateString('en-AU', {
-        weekday: 'short',
         day: 'numeric',
-        month: 'short',
-        year: 'numeric'
+        month: 'short'
       });
     }
 
