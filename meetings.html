@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lab Meetings - USYD Meta Lab</title>
+  <meta name="color-scheme" content="light" />
+  <link rel="icon" href="./favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --text: #0f172a;
+      --muted: #475569;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --accent: #1e40af;
+      --radius: 14px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+            "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .logo {
+      height: 70px;
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+    .header p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 15px;
+    }
+    .back-link {
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .info-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .info-card h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--muted);
+    }
+    .info-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .info-value {
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .schedule-card {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .schedule-card h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+    .schedule-card > p {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 20px;
+    }
+
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .schedule-table th,
+    .schedule-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .schedule-table th {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--bg);
+    }
+    .schedule-table tbody tr:hover {
+      background: var(--bg);
+    }
+    .schedule-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .presenter {
+      font-weight: 500;
+    }
+    .topic {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .date {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      .schedule-table th,
+      .schedule-table td {
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="header">
+      <img src="images/logo.png" alt="USYD Meta Lab" class="logo" />
+      <h1>Lab Meeting Schedule</h1>
+      <p>USYD Meta Lab weekly research meetings</p>
+    </header>
+
+    <div class="info-card">
+      <h2>Meeting Details</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+          </div>
+          <div>
+            <div class="info-label">Location</div>
+            <div class="info-value">Griffith Taylor Building, Room 462</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </div>
+          <div>
+            <div class="info-label">Time</div>
+            <div class="info-value">10:00 AM</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+            </svg>
+          </div>
+          <div>
+            <div class="info-label">Frequency</div>
+            <div class="info-value">Fortnightly Fridays (during semester)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="schedule-card">
+      <h2>Upcoming Meetings</h2>
+      <p>Schedule for the current semester</p>
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Presenter</th>
+            <th>Topic</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body">
+          <tr>
+            <td colspan="3" style="text-align: center; color: var(--muted);">
+              Loading schedule...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Papa Parse for CSV parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script>
+    // ============================================================
+    // CONFIGURATION - Google Sheets published CSV URL
+    // ============================================================
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlSTRsxd58bay_TDpunnru5qZD1VMpzU04sAczz-13DTv_6LVJyK5-7SdKXO9RblKrj3oJS37vOODT/pub?output=csv';
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function parseDate(dateStr) {
+      if (!dateStr) return null;
+      // Handle DD/MM/YYYY format (Australian)
+      const parts = dateStr.split('/');
+      if (parts.length === 3) {
+        const [day, month, year] = parts;
+        return new Date(year, month - 1, day);
+      }
+      return new Date(dateStr);
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const date = parseDate(dateStr);
+      if (!date || isNaN(date.getTime())) return escapeHtml(String(dateStr));
+      return date.toLocaleDateString('en-AU', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+
+    function renderSchedule(data) {
+      const tbody = document.getElementById('schedule-body');
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align: center; color: var(--muted);">
+              No meetings scheduled
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Sort by date (ascending)
+      data.sort((a, b) => {
+        const dateA = parseDate(a.Date || a.date);
+        const dateB = parseDate(b.Date || b.date);
+        return (dateA || 0) - (dateB || 0);
+      });
+
+      // Filter to show only future meetings
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const futureMeetings = data.filter(row => {
+        const meetingDate = parseDate(row.Date || row.date);
+        return meetingDate && meetingDate >= today;
+      });
+
+      const meetingsToShow = futureMeetings.length > 0 ? futureMeetings : data;
+
+      tbody.innerHTML = meetingsToShow.map(row => {
+        const date = row.Date || row.date || '';
+        const presenter = row.Presenter || row.presenter || row.Name || row.name || '';
+        const topic = row.Topic || row.topic || row.Title || row.title || '';
+
+        return `
+          <tr>
+            <td class="date">${formatDate(date)}</td>
+            <td class="presenter">${escapeHtml(presenter)}</td>
+            <td class="topic">${escapeHtml(topic)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function loadSchedule() {
+      Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          if (results.errors.length > 0) {
+            console.error('CSV parsing errors:', results.errors);
+          }
+          renderSchedule(results.data);
+        },
+        error: function(error) {
+          console.error('Failed to load schedule:', error);
+          document.getElementById('schedule-body').innerHTML = `
+            <tr>
+              <td colspan="3" style="text-align: center; color: var(--muted);">
+                Failed to load schedule. Please try again later.
+              </td>
+            </tr>
+          `;
+        }
+      });
+    }
+
+    // Load schedule when page is ready
+    document.addEventListener('DOMContentLoaded', loadSchedule);
+  </script>
+</body>
+</html>
