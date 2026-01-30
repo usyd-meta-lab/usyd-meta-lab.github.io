@@ -1,8 +1,15 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2025-11-30T23:19:59.618Z",
+  "fetched": "2026-01-30T03:46:27.331Z",
   "records": [
     {
-      "title": "Valuing your partner more: Linking emotional intelligence to better relationship quality",
+      "title": "Metacognitive ability is associated with reduced emotion suppression",
+      "year": "2026",
+      "authors": "Double, K. S.",
+      "doi": "10.1038/s41598-026-37054-4",
+      "journal": "Scientific Reports"
+    },
+    {
+      "title": "Valuing your partner more",
       "year": "2025",
       "authors": "Xiao, H. H., Double, K. S., Pinkus, R. T., & MacCann, C.",
       "doi": "10.1177/02654075251399696",
