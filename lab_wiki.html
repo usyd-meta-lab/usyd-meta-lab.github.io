@@ -264,9 +264,8 @@
       <section id="launching-a-study" aria-labelledby="launching-a-study-heading">
         <h2 id="launching-a-study-heading">Launching a study</h2>
         
-        <h3>Running a jsPsych Study</h3>
-        <p>Using MetaForge with Automatic Redirect to SONA or Prolific.</p>
-
+        <h3>Running a Study</h3>
+    
         <nav class="note" aria-label="Table of Contents (inline)">
           <strong>📑 Table of Contents</strong>
           <ul style="margin:.5rem 0 0 1rem; columns: 2;">
@@ -281,81 +280,129 @@
         </nav>
 
    
+<h2 id="guide">Step-by-Step Guide to Launching a Study</h2>
 
-        <h3>📝 Step-by-Step Guide</h3>
+<h4 id="step1">🔹 Step 1: Build Your Experiment</h4>
+<ol>
+  <li>Build your experiment on MetaForge</li>
+  <li>Click the <strong>Publish</strong> button (in the top toolbar) to copy the experiment link to your clipboard
+    <ul>
+      <li>The URL format is: <code>https://metaforge.live/?run={your-project-id}</code></li>
+    </ul>
+  </li>
+</ol>
 
-        <h4 id="step1">🔹 Step 1: Build Your Experiment</h4>
-        <p>Build your experiment on <a href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a></p>
-        <p>Enable MetaForge hosting under Experiment Options > Deploy. Then click Publish to Web</p>
+<h4 id="step2">🔹 Step 2: Putting the study on Prolific</h4>
 
-        
+<p><strong>Option A: Use MetaForge's Prolific Integration</strong></p>
+<ol>
+  <li>Open <strong>Project Settings</strong> (gear icon) → <strong>Prolific</strong> tab</li>
+  <li>Enter your Prolific API Key (from <a href="https://app.prolific.co/researcher/settings/preferences" target="_blank">Prolific > Settings > API Tokens</a>)</li>
+  <li>Fill in the study details (name, description, duration, reward, etc.)</li>
+  <li>Click <strong>Create Draft Study</strong> — this will create a draft directly on Prolific</li>
+</ol>
 
-        <h4 id="step6">🔹 Step 2: Putting the study on Prolific</h4>
-        <ol>
-          <li>In MetaForge, under Expeiemnt options > Deploy, click Prolific Credit.</li>
-          <li>Go to <a href="https://prolific.com">Prolific</a>.</li>
-          <li>To be added to the lab team (and use the lab funds), let Kit know your Prolific username.</li>
-          <li>Create a new study.</li>
-          <li><i>Study name</i> and <i>Study description</i> come directly from the ethics documents.</li>
-          <li><i>Internal study name</i> should used the format LastName-TASK-experiment-name.</li>
-          <li>Typically, you want to limit the study to only desktop devices.</li>
-          <li>Study URL was generated in Step 1. You should automatically append the Prolific ID to the URL by clicking <i>Recording Prolific IDs</i> = URL parameters. Make sure that it is appended with a '&' rather than a '?' if you already have a id paramater in the URL</li>
-          <li>Completion paths can be set to automatic approve & pay. Copy the completion code (e.g. CGJ91R8S) into the Expeiemnt Options > Deploy menu under Prolific Credit.</li>
-          <li>Set the length of time and pay people &#163;6 per hour.</li>
-          <li>Set the sample country and click <i>Quota Sample</i> to make sure you get a balanced sample between males and females.</li>
-        </ol>
-
-        <h4 id="step7">🔹 Step 3: Putting the study on SONA</h4>
-        <ol>
-          <li>In MetaForge, under Expeiemnt options > Deploy, click SONA Credit.</li>
-            <li>You can read the SONA <a href="https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2025.pdf">handbook for detailed procedures</a>.</li>
-            <li>Go to <a href="http://sydneypsych.sona-systems.com/">SONA</a>.</li>
-            <li>Select <i>Add new Study</i> from the menu bar.</li>
-            <li>Select <i>Online External Study</i>.</li>
-            <li><i>Study name</i>, <i>Brief Abstract</i>, and <i>Detailed Description</i> come directly from the ethics documents (Teams > Ethics).</li>
-            <li>Duration and credits should match so 1 = 60 minutes.</li>
-            <li>Human Res Ethics Com Approval Code should be set to the ethics protocol number (Teams > Ethics). For example, <i>2022/796</i>.</li>
-            <li>Study URL was generated in Step 1. You should automatically append the SONA ID to the URL by appending <code>&SONAID=%SURVEY_CODE%</code>.</li>
-            <pre><code>https://metaforge.live/host.html?id=EIGahsILLqfUZJBdE0qIgS0hVwi2_1765157335741&SONAID=%SURVEY_CODE%</code></pre>
-            <li>Active Study? = Yes; Automatic Credit Granting = Yes. Everything else can be left as it is.</li>
-            <li>Copy your SONA experiment ID and credit token into the Expeiemnt Options > Deploy menu under SONA Credit. See highlighted section below:</li>
-            <img src="images/sona_url.png" height="250" alt="SONA completion URL example">
-            <li>You need to <i>Request approval of a NEW SONA study</i> get your study approved by the School's research staff. Complete the form <a href="https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L">here</a>.</li>
-            <li>For the question asking you to copy and paste the description from ethics concerning SONApsych participants, you should copy from the ethics documents (Teams > Ethics > Application Form). For example, 2022/796 ethics docs read:</li>
-            <div class="box">1) Sydney University Psychology Research (SONA) participant system. First year psychology (PSYC1001 and PSYC1002) complete SONA studies for course credit. 1) SONA system: We intend to recruit participants through the Sydney University Psychology Research (SONA) participant system, where first- and second-year psychology students sign up and participate in experiments in exchange for course credit. SONA operates in accordance with the School of Psychology’s guidelines on research participation.</div>
-        </ol>
-
-
-        <h4 id="step9">🔹 Step 4: Test the Study</h4>
-        <ol>
-            <li>Visit your GitHub Pages study link.</li>
-            <li>Add parameters to the URL to simulate real participants:
-                <ul>
-                    <li><code>https://metaforge.live/host.html?id=EIGahsILLqfUZJBdE0qIgS0hVwi2_1765157335741&PROLIFIC_PID=123ABC</code></li>
-                    <li><code>https://metaforge.live/host.html?id=EIGahsILLqfUZJBdE0qIgS0hVwi2_1765157335741&SONAID=S1234567</code></li>
-                </ul>
-            </li>
-            <li>Run the study yourself.</li>
-            <li>Confirm:
-                <ul>
-                    <li>Data saves to MetaForge.</li>
-                    <li>Redirect works correctly.</li>
-                </ul>
-            </li>
-        </ol>
-
-        <h4 id="step10">🔹 Step 5: Preregistration</h4>
+<p><strong>Option B: Manual Setup on Prolific</strong></p>
+<ol>
+  <li>Go to <a href="https://app.prolific.com" target="_blank">Prolific</a></li>
+  <li>To be added to the lab team (and use lab funds), let Kit know your Prolific username</li>
+  <li>Create a new study:
+    <ul>
+      <li><strong>Study name</strong> and <strong>Study description</strong>: from ethics documents</li>
+      <li><strong>Internal study name</strong>: use format <code>LastName-TASK-experiment-name</code></li>
+      <li><strong>Device compatibility</strong>: typically limit to desktop only</li>
+      <li><strong>Study URL</strong>: use the URL from Step 1. Append the Prolific ID using URL parameters:
         <ul>
-            <li>If you are planning on preregistering your study, you need to do so <strong>before</strong> you start collecting data.</li>
-            <li>The easiest place to preregister your study is probably <a href="https://aspredicted.org" target="_blank" rel="noopener">AsPredicted</a>.</li>
+          <li>Select <strong>Recording Prolific IDs = URL parameters</strong></li>
+          <li>Final URL should look like: <code>https://metaforge.live/?run=YOUR_PROJECT_ID&PROLIFIC_PID={{%PROLIFIC_PID%}}</code></li>
+          <li>Use <code>&</code> (not <code>?</code>) if you already have parameters in the URL</li>
         </ul>
-        
-        <h4 id="step11">🔹 Step 6: Go Live!</h4>
-        <ul>
-            <li>Launch the study on SONA by adding slots or on Prolific by launching the study (or both).</li>
-            <li>Monitor incoming data on your MetaForge project.</li>
-            <li>If you are using OSF data storage, data can be manually downloaded from OSF or automatically downloaded using our R package: <code>MetaLab::combine_osf_csvs("YOUR_OSF_PROJECT_ID", folder = "../Data/")</code></li>
-        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Set completion paths and copy the completion code (e.g., <code>CGJ91R8S</code>)</li>
+  <li>In MetaForge, go to <strong>Project Settings</strong> → <strong>Redirects</strong> and set the <strong>Default Redirect URL</strong> to:<br>
+    <code>https://app.prolific.com/submissions/complete?cc=YOUR_COMPLETION_CODE</code>
+  </li>
+  <li>Set duration and pay participants £6/hour</li>
+  <li>Set sample country and use <strong>Quota Sample</strong> for balanced gender distribution</li>
+</ol>
+
+<h4 id="step3">🔹 Step 3: Putting the study on SONA</h4>
+<ol>
+  <li>Read the <a href="https://psychology.sydney.edu.au/research/sonapsych/SONA_Handbook.pdf" target="_blank">SONA handbook</a> for detailed procedures</li>
+  <li>Go to <a href="https://sydney-psych.sona-systems.com/" target="_blank">SONA</a></li>
+  <li>Select <strong>Add new Study</strong> → <strong>Online External Study</strong></li>
+  <li>Fill in details from ethics <a href = "https://github.sydney.edu.au/usyd-meta-lab/Ethics">documents</a>
+    <ul>
+      <li>Study name, Brief Abstract, Detailed Description</li>
+      <li>Duration and credits (1 credit = 60 minutes)</li>
+      <li>Human Res Ethics Com Approval Code (e.g., <code>2022/796</code>)</li>
+    </ul>
+  </li>
+  <li><strong>Study URL</strong>: append the SONA ID:<br>
+    <code>https://pmetaforge.live/?run=YOUR_PROJECT_ID&SONAID=%SURVEY_CODE%</code>
+  </li>
+  <li>Set <strong>Active Study? = Yes</strong> and <strong>Automatic Credit Granting = Yes</strong></li>
+  <li>In MetaForge, go to <strong>Project Settings</strong> → <strong>Redirects</strong> and set the <strong>Default Redirect URL</strong> to your SONA completion URL. To find this:
+    <ul>
+      <li>Go to SONA → Study Information → Change Study Information</li>
+      <li>Find the completion URL format (includes your experiment ID and credit token)</li>
+    </ul>
+  </li>
+  <li><a href="https://forms.office.com/r/Rtr9G4hAhf" target="_blank">Request approval</a> for your SONA study from School research staff
+    <ul>
+      <li>For the ethics description question, copy from the ethics <a href = "https://github.sydney.edu.au/usyd-meta-lab/Ethics">documents</a></li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="step4">🔹 Step 4: Test the Study</h4>
+<ol>
+  <li>Visit your experiment link</li>
+  <li>Add test parameters to simulate real participants:
+    <ul>
+      <li>Prolific: <code>https://metaforge.live/?run=YOUR_PROJECT_ID&PROLIFIC_PID=123ABC</code></li>
+      <li>SONA: <code>https://metaforge.live/?run=YOUR_PROJECT_ID&SONAID=S1234567</code></li>
+    </ul>
+  </li>
+  <li>Run through the study yourself</li>
+  <li>Confirm:
+    <ul>
+      <li>Data saves to MetaForge (check participant count)</li>
+      <li>Redirect works correctly at the end</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="step5">🔹 Step 5: Preregistration</h4>
+<ol>
+  <li>If preregistering, do so <strong>before</strong> collecting data</li>
+  <li>Recommended platform: <a href="https://aspredicted.org/" target="_blank">AsPredicted</a></li>
+</ol>
+
+<h4 id="step6">🔹 Step 6: Go Live!</h4>
+<ol>
+  <li>Launch on SONA (add slots) or Prolific (publish study), or both</li>
+  <li>Monitor incoming data on your MetaForge project dashboard</li>
+  <li>Download data directly from MetaForge, or use the R API:
+    <pre><code># First, source the MetaForge R functions by loading the lab <a href="https://github.com/usyd-meta-lab/MetaLab">R package</a>
+library(MetaLab)
+
+# Set your API token (get this from your Profile in MetaForge)
+metaforge_set_token("your-api-token-here")
+
+# List all your projects
+projects <- metaforge_list_projects()
+print(projects)
+
+# Download data from a specific project
+data <- metaforge_get_data("your-project-id")
+
+# Or download all project data at once
+all_data <- metaforge_get_all_data(combine = TRUE)</code></pre>
+  </li>
+</ol>
 
     
     </main>
