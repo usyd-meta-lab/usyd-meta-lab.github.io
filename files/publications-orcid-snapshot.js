@@ -2,6 +2,20 @@ window.__ORCID_SNAPSHOT__ = {
   "fetched": "2026-01-30T03:46:27.331Z",
   "records": [
     {
+      "title": "Flow cytometry immunophenotyping and cytogenetic analysis on disaggregated bone marrow trephine biopsies",
+      "year": "2026",
+      "authors": "Jeffrey, A., Choy, M., Singh, N., Double, K. S., & Kumar, P.",
+      "doi": "10.1016/j.pathol.2025.11.009",
+      "journal": "Pathology"
+    },
+    {
+      "title": "Rating our certainty: how confidence judgments amplify belief polarization",
+      "year": "2026",
+      "authors": "Double, K. S., Pinkus, R. T., Landfear, R., Carnegie, P., Dowell, S., & Goldwater, M. B.",
+      "doi": "10.1007/s00426-026-02239-z",
+      "journal": "Psychological Research"
+    },
+    {
       "title": "Metacognitive ability is associated with reduced emotion suppression",
       "year": "2026",
       "authors": "Double, K. S.",
