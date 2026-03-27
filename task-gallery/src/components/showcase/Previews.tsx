@@ -184,6 +184,8 @@ export function MetaEmotionPreview() {
         <line x1="28" y1="0" x2="28" y2="56" stroke="#E8E6E020" />
         <line x1="0" y1="28" x2="56" y2="28" stroke="#E8E6E020" />
         <motion.circle
+          cx={dotPos.x * 0.56}
+          cy={dotPos.y * 0.56}
           animate={{ cx: dotPos.x * 0.56, cy: dotPos.y * 0.56 }}
           transition={{ duration: 1 }}
           r="3"
@@ -250,11 +252,13 @@ export function CategoryLearningPreview() {
         <circle cx="30" cy="22" r="8" fill="#5A8C6A" opacity={0.8} />
         {/* Antennae */}
         <motion.line
-          x1="26" y1="15" animate={{ x2: 26 - antLen * 0.6, y2: 15 - antLen }}
+          x1="26" y1="15" x2={26 - antLen * 0.6} y2={15 - antLen}
+          animate={{ x2: 26 - antLen * 0.6, y2: 15 - antLen }}
           stroke="#5A8C6A" strokeWidth="1.5" transition={{ duration: 0.5 }}
         />
         <motion.line
-          x1="34" y1="15" animate={{ x2: 34 + antLen * 0.6, y2: 15 - antLen }}
+          x1="34" y1="15" x2={34 + antLen * 0.6} y2={15 - antLen}
+          animate={{ x2: 34 + antLen * 0.6, y2: 15 - antLen }}
           stroke="#5A8C6A" strokeWidth="1.5" transition={{ duration: 0.5 }}
         />
         {/* Legs */}
