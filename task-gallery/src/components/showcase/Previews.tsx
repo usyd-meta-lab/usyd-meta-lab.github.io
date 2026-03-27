@@ -436,8 +436,6 @@ export function TowerOfHanoiPreview() {
           return (
             <motion.rect
               key={`${disc}`}
-              x={x}
-              y={y}
               animate={{ x, y }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
               width={w}
