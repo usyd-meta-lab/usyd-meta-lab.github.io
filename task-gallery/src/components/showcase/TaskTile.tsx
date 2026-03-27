@@ -19,7 +19,7 @@ export default function TaskTile({ task, index, isFiltered, onClick }: TaskTileP
   return (
     <motion.div
       layout
-      initial={{ scaleY: 0.05, rotateX: -60, opacity: 0 }}
+      initial={false}
       animate={{
         scaleY: isFiltered ? 0.95 : 1,
         rotateX: 0,
@@ -37,9 +37,8 @@ export default function TaskTile({ task, index, isFiltered, onClick }: TaskTileP
           : { y: -4, boxShadow: "0 12px 32px rgba(0,0,0,0.1)" }
       }
       onClick={isFiltered ? undefined : onClick}
-      className={`relative bg-surface rounded-lg overflow-hidden border border-border cursor-pointer group ${
-        isFiltered ? "pointer-events-none" : ""
-      }`}
+      className={`relative bg-surface rounded-lg overflow-hidden border border-border cursor-pointer group ${isFiltered ? "pointer-events-none" : ""
+        }`}
       style={{
         borderLeft: `4px solid ${domainColour}`,
         transformOrigin: "top center",
