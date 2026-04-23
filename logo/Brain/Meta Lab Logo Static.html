@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meta Lab Logo</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=DM+Sans:wght@400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  background: #1a1208;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 48px;
+  padding: 48px;
+}
+.label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b5a4a;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.card {
+  background: #fcf6ef;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 36px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+.card-icon {
+  background: #fcf6ef;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+.wordmark { line-height: 1; padding-bottom: 4px; }
+.wm-name { font-family:'Caveat',cursive; font-size:46px; font-weight:700; color:#2b180a; line-height:0.92; }
+.wm-sub  { font-family:'DM Sans',sans-serif; font-size:10px; color:#2b180a; opacity:0.45; letter-spacing:0.18em; text-transform:uppercase; margin-top:7px; }
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <filter id="hd">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="5" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- Full logo -->
+<div>
+  <div class="label">Full logo</div>
+  <div class="card">
+    <svg width="110" height="110" viewBox="0 0 100 100" fill="none" style="filter:url(#hd);overflow:visible">
+      <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z"
+        stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+      <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+      <circle cx="50" cy="44" r="18" stroke="#2b180a" stroke-width="3" fill="#fcf6ef" fill-opacity="0.45"/>
+      <line x1="63" y1="57" x2="76" y2="72" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+      <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+    </svg>
+    <div class="wordmark">
+      <div class="wm-name">Meta Lab</div>
+      <div class="wm-sub">University of Sydney</div>
+    </div>
+  </div>
+</div>
+
+<!-- Icon only -->
+<div>
+  <div class="label">Icon only</div>
+  <div class="card-icon">
+    <svg width="140" height="140" viewBox="0 0 100 100" fill="none" style="filter:url(#hd);overflow:visible">
+      <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z"
+        stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+      <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+      <circle cx="50" cy="44" r="18" stroke="#2b180a" stroke-width="3" fill="#fcf6ef" fill-opacity="0.45"/>
+      <line x1="63" y1="57" x2="76" y2="72" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+      <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+    </svg>
+  </div>
+</div>
+
+<template id="__bundler_thumbnail" data-bg-color="#fcf6ef">
+  <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="200" fill="#fcf6ef"/>
+    <ellipse cx="90" cy="95" rx="42" ry="35" stroke="#2b180a" stroke-width="3" fill="none"/>
+    <circle cx="90" cy="95" r="20" stroke="#2b180a" stroke-width="2.5" fill="none"/>
+    <line x1="104" y1="109" x2="118" y2="126" stroke="#2b180a" stroke-width="5" stroke-linecap="round"/>
+    <text x="145" y="88" font-family="Georgia,serif" font-size="38" font-weight="bold" fill="#2b180a">Meta Lab</text>
+    <text x="145" y="112" font-family="Arial,sans-serif" font-size="11" fill="#2b180a" opacity="0.4" letter-spacing="3">UNIVERSITY OF SYDNEY</text>
+  </svg>
+</template>
+</body>
+</html>

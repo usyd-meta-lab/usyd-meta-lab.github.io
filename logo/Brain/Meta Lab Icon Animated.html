@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meta Lab — Animated Icon</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  background: #1a1208;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 32px;
+}
+
+.card {
+  background: #fcf6ef;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.3);
+}
+
+/* ── Brain draws in ───────────────────────────────────── */
+.brain-outline {
+  stroke-dasharray: 290;
+  stroke-dashoffset: 290;
+  animation: drawPath 0.9s ease-out 0.1s forwards;
+}
+.fold-l { stroke-dasharray: 36; stroke-dashoffset: 36; animation: drawPath 0.35s ease-out 0.7s forwards; }
+.fold-r { stroke-dasharray: 36; stroke-dashoffset: 36; animation: drawPath 0.35s ease-out 0.8s forwards; }
+.fold-c { stroke-dasharray: 30; stroke-dashoffset: 30; animation: drawPath 0.35s ease-out 0.85s forwards; }
+@keyframes drawPath { to { stroke-dashoffset: 0; } }
+
+/* ── Glass swings in ──────────────────────────────────── */
+.glass-group {
+  transform-origin: 50px 44px;
+  transform: rotate(65deg) scale(0.4);
+  opacity: 0;
+  animation: swingIn 0.75s cubic-bezier(0.34,1.56,0.64,1) 0.9s forwards;
+}
+@keyframes swingIn {
+  0%   { transform: rotate(65deg) scale(0.4); opacity: 0; }
+  100% { transform: rotate(0deg)  scale(1);   opacity: 1; }
+}
+
+/* ── Lens details draw after glass lands ──────────────── */
+.lens-fold-top  { stroke-dasharray: 30; stroke-dashoffset: 30; animation: drawPath 0.3s ease-out 1.55s forwards; }
+.lens-fold-vert { stroke-dasharray: 20; stroke-dashoffset: 20; animation: drawPath 0.25s ease-out 1.7s forwards; }
+
+/* ── Smile appears, grows, returns ───────────────────── */
+.smile-group {
+  transform-origin: 50px 52px;
+  opacity: 0;
+  transform: scale(0.4);
+  animation:
+    smileAppear 0.35s cubic-bezier(0.34,1.56,0.64,1) 1.85s forwards,
+    smileGrow   0.4s  cubic-bezier(0.34,1.56,0.64,1) 2.2s  forwards,
+    smileShrink 0.45s cubic-bezier(0.25,1,0.5,1)     2.6s  forwards;
+}
+@keyframes smileAppear {
+  0%   { opacity:0; transform: scale(0.4); }
+  100% { opacity:1; transform: scale(1);   }
+}
+@keyframes smileGrow   { to { transform: scale(1.55); } }
+@keyframes smileShrink { to { transform: scale(1); opacity:1; } }
+
+/* ── Replay ───────────────────────────────────────────── */
+.replay {
+  padding: 8px 24px;
+  background: transparent;
+  border: 1.5px solid rgba(242,232,206,0.25);
+  color: rgba(242,232,206,0.45);
+  border-radius: 20px;
+  font-family: sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.replay:hover { border-color: rgba(242,232,206,0.7); color: rgba(242,232,206,0.85); }
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <filter id="hd">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="5" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="card">
+  <svg width="160" height="160" viewBox="0 0 100 100" fill="none" style="filter:url(#hd);overflow:visible">
+
+    <path class="brain-outline"
+      d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z"
+      stroke="#2b180a" stroke-width="2.6" stroke-linejoin="round"/>
+
+    <path class="fold-l" d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" stroke-linecap="round" opacity="0.45"/>
+    <path class="fold-r" d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" stroke-linecap="round" opacity="0.45"/>
+    <path class="fold-c" d="M50 16 Q50 28 50 42"               stroke="#6b5a4a" stroke-width="1.2" stroke-linecap="round" opacity="0.28"/>
+
+    <g class="glass-group">
+      <circle cx="50" cy="44" r="18" stroke="#2b180a" stroke-width="3" fill="#fcf6ef" fill-opacity="0.55"/>
+      <line x1="63" y1="57" x2="76" y2="72" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round"/>
+      <path class="lens-fold-top"  d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" stroke-linecap="round" opacity="0.65"/>
+      <path class="lens-fold-vert" d="M50 34 Q50 40 50 50"               stroke="#6b5a4a" stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
+      <g class="smile-group">
+        <path d="M40 50 Q50 60 60 50" stroke="#2b180a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </g>
+    </g>
+
+  </svg>
+</div>
+
+<button class="replay" onclick="location.reload()">↺ Replay</button>
+
+<template id="__bundler_thumbnail" data-bg-color="#1a1208">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#1a1208"/>
+    <rect x="40" y="40" width="120" height="120" rx="16" fill="#fcf6ef"/>
+    <ellipse cx="100" cy="95" rx="34" ry="28" stroke="#2b180a" stroke-width="3" fill="none"/>
+    <circle cx="100" cy="95" r="16" stroke="#2b180a" stroke-width="2.5" fill="none"/>
+    <line x1="111" y1="106" x2="122" y2="120" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M92 99 Q100 107 108 99" stroke="#2b180a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>
+</template>
+
+</body>
+</html>

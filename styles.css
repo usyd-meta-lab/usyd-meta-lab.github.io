@@ -19,6 +19,7 @@
 
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-logo: 'Caveat', cursive;
 
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -65,6 +66,258 @@ a {
 img {
     max-width: 100%;
     display: block;
+}
+
+/* --- Animated Logo --- */
+.logo-filter-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.animated-logo {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 18px;
+    padding: 48px 56px 48px 48px;
+    border-radius: 16px;
+    background-color: #f2e8ce;
+    color: #1a1208;
+}
+
+.animated-logo-icon {
+    width: 68px;
+    height: 68px;
+    overflow: visible;
+    flex-shrink: 0;
+    filter: url(#logoWobble);
+}
+
+.brain-outline {
+    stroke: #2b180a;
+    stroke-width: 2.6;
+    stroke-linejoin: round;
+    stroke-dasharray: 290;
+    stroke-dashoffset: 290;
+    animation: logoDrawLine 0.9s ease-out 0.1s forwards;
+}
+
+.brain-fold-l,
+.brain-fold-r,
+.brain-fold-c,
+.brain-lens-fold-top,
+.brain-lens-fold-vert,
+.brain-smile {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.brain-fold-l,
+.brain-fold-r {
+    stroke: #6b5a4a;
+    stroke-width: 1.4;
+    opacity: 0.45;
+    stroke-dasharray: 36;
+    stroke-dashoffset: 36;
+}
+
+.brain-fold-l {
+    animation: logoDrawLine 0.35s ease-out 0.7s forwards;
+}
+
+.brain-fold-r {
+    animation: logoDrawLine 0.35s ease-out 0.8s forwards;
+}
+
+.brain-fold-c {
+    stroke: #6b5a4a;
+    stroke-width: 1.2;
+    opacity: 0.28;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: logoDrawLine 0.35s ease-out 0.85s forwards;
+}
+
+.brain-glass-group {
+    transform-origin: 50px 44px;
+    transform: rotate(65deg) scale(0.4);
+    opacity: 0;
+    animation: logoSwingIn 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s forwards;
+}
+
+.brain-lens {
+    stroke: #2b180a;
+    stroke-width: 3;
+    fill: #fcf6ef;
+    fill-opacity: 0.55;
+}
+
+.brain-handle {
+    stroke: #2b180a;
+    stroke-width: 4.5;
+    stroke-linecap: round;
+}
+
+.brain-lens-fold-top {
+    stroke: #2b180a;
+    stroke-width: 1.8;
+    opacity: 0.65;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: logoDrawLine 0.3s ease-out 1.55s forwards;
+}
+
+.brain-lens-fold-vert {
+    stroke: #6b5a4a;
+    stroke-width: 1.2;
+    opacity: 0.35;
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: logoDrawLine 0.25s ease-out 1.7s forwards;
+}
+
+.brain-smile-group {
+    transform-origin: 50px 52px;
+    opacity: 0;
+    transform: scale(0.4);
+    animation:
+        logoSmileAppear 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 1.85s forwards,
+        logoSmileGrow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 2.2s forwards,
+        logoSmileShrink 0.45s cubic-bezier(0.25, 1, 0.5, 1) 2.6s forwards;
+}
+
+.brain-smile {
+    stroke: #2b180a;
+    stroke-width: 2.2;
+}
+
+.animated-logo-wordmark {
+    padding-bottom: 6px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.animated-logo-name {
+    font-family: var(--font-logo);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 0;
+    opacity: 0;
+    transform: translateX(10px);
+    animation: logoFadeSlide 0.6s ease-out 1.6s forwards;
+}
+
+.animated-logo-sub {
+    margin-top: 8px;
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateX(10px);
+    animation: logoFadeSlideSub 0.5s ease-out 1.9s forwards;
+}
+
+.animated-logo-hero {
+    width: 100%;
+    justify-content: center;
+    box-shadow: 0 24px 72px rgba(43, 24, 10, 0.14);
+}
+
+.animated-logo-card {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.animated-logo-card .animated-logo-icon {
+    width: 96px;
+    height: 96px;
+}
+
+.animated-logo-card .animated-logo-wordmark {
+    display: none;
+}
+
+.animated-logo-mini {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    border-radius: 8px;
+    background-color: #f2e8ce;
+    color: #1a1208;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.animated-logo-mini .animated-logo-icon {
+    width: 25px;
+    height: 25px;
+}
+
+@keyframes logoDrawLine {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes logoSwingIn {
+    0% {
+        transform: rotate(65deg) scale(0.4);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes logoSmileAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.4);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes logoSmileGrow {
+    to {
+        transform: scale(1.55);
+    }
+}
+
+@keyframes logoSmileShrink {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes logoFadeSlide {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes logoFadeSlideSub {
+    to {
+        opacity: 0.45;
+        transform: translateX(0);
+    }
 }
 
 /* --- Container --- */
@@ -178,15 +431,9 @@ img {
     gap: 10px;
 }
 
-.nav-logo-img {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    object-fit: cover;
-}
-
 .nav-links {
     display: flex;
+    align-items: center;
     gap: 40px;
     background-color: rgba(252, 246, 239, 0.4);
     padding: 12px 32px;
@@ -222,6 +469,31 @@ img {
 
 .nav-links a:hover::after {
     width: 100%;
+}
+
+.nav-links .nav-pill,
+.mobile-menu-links .nav-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg-dark);
+    color: var(--color-bg);
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.04em;
+}
+
+.nav-links .nav-pill::after {
+    display: none;
+}
+
+.nav-links .nav-pill:hover,
+.mobile-menu-links .nav-pill:hover {
+    color: var(--color-bg);
+    background-color: #3d2a18;
 }
 
 .nav-toggle {
@@ -336,6 +608,10 @@ img {
     transition-delay: 0.4s;
 }
 
+.mobile-menu.active .mobile-menu-links a:nth-child(8) {
+    transition-delay: 0.45s;
+}
+
 /* --- Hero Section --- */
 .hero {
     min-height: 100vh;
@@ -381,13 +657,6 @@ img {
     max-width: 500px;
     z-index: 1;
     animation: floatAnim 6s ease-in-out infinite;
-}
-
-.hero-visual-img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 24px 48px rgba(43, 24, 10, 0.15));
 }
 
 @keyframes floatAnim {
@@ -599,6 +868,24 @@ img {
         width: 80%;
         max-width: 320px;
     }
+
+    .animated-logo-hero {
+        gap: 12px;
+        padding: 32px 36px 32px 30px;
+    }
+
+    .animated-logo-hero .animated-logo-icon {
+        width: 54px;
+        height: 54px;
+    }
+
+    .animated-logo-hero .animated-logo-name {
+        font-size: 38px;
+    }
+
+    .animated-logo-hero .animated-logo-sub {
+        font-size: 8px;
+    }
 }
 
 /* --- Sections --- */
@@ -732,88 +1019,6 @@ img {
 .research-card:hover .research-card-arrow {
     opacity: 1;
     transform: translate(0, 0);
-}
-
-/* --- Paradigm Section --- */
-.paradigm-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-}
-
-.paradigm-card {
-    display: block;
-    border-radius: 24px;
-    border: 1px solid var(--color-border);
-    transition: all 0.5s var(--ease-out-expo);
-    overflow: hidden;
-}
-
-.paradigm-card:hover {
-    border-color: var(--color-accent);
-    transform: translateY(-4px);
-    box-shadow: 0 24px 64px rgba(43, 24, 10, 0.08);
-}
-
-.paradigm-card-image {
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background-color: var(--color-bg-warm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.paradigm-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 16px;
-    transition: transform 0.5s var(--ease-out-expo);
-}
-
-.paradigm-card:hover .paradigm-card-image img {
-    transform: scale(1.05);
-}
-
-.paradigm-card-inner {
-    padding: 28px 32px 32px;
-}
-
-.paradigm-icon {
-    color: var(--color-accent);
-    margin-bottom: 24px;
-}
-
-.paradigm-card h3 {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.paradigm-card p {
-    font-size: 0.9375rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    margin-bottom: 24px;
-}
-
-.paradigm-link {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-accent);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.paradigm-link span {
-    transition: transform 0.3s var(--ease-out-expo);
-}
-
-.paradigm-card:hover .paradigm-link span {
-    transform: translateX(4px);
 }
 
 /* --- Task Gallery Carousel --- */
@@ -1880,6 +2085,54 @@ img {
     margin-bottom: 12px;
 }
 
+.footer-static-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 100%;
+    padding: 16px 20px 16px 18px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-radius: 14px;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
+}
+
+.footer-static-logo-mark {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+    display: inline-flex;
+}
+
+.footer-static-logo-mark svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.footer-static-logo-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    padding-bottom: 2px;
+}
+
+.footer-static-logo-name {
+    font-family: var(--font-logo);
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 0.92;
+}
+
+.footer-static-logo-sub {
+    margin-top: 7px;
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    white-space: nowrap;
+}
+
 .footer-left p {
     font-size: 0.875rem;
     color: rgba(252, 246, 239, 0.5);
@@ -2027,18 +2280,6 @@ img {
     transition-delay: 0.4s;
 }
 
-.paradigm-grid .reveal:nth-child(1) {
-    transition-delay: 0s;
-}
-
-.paradigm-grid .reveal:nth-child(2) {
-    transition-delay: 0.1s;
-}
-
-.paradigm-grid .reveal:nth-child(3) {
-    transition-delay: 0.2s;
-}
-
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
     :root {
@@ -2052,10 +2293,6 @@ img {
 
     .research-grid {
         grid-template-columns: 1fr;
-    }
-
-    .paradigm-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
 
     .task-carousel {
@@ -2133,10 +2370,6 @@ img {
     .about-stats {
         flex-direction: column;
         gap: 32px;
-    }
-
-    .paradigm-grid {
-        grid-template-columns: 1fr;
     }
 
     .task-gallery-header {
@@ -2298,6 +2531,17 @@ img {
         justify-content: center;
     }
 
+    .animated-logo-hero {
+        flex-direction: column;
+        align-items: center;
+        padding: 28px;
+    }
+
+    .animated-logo-wordmark {
+        text-align: center;
+        padding-bottom: 0;
+    }
+
     .team-portrait-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -2336,5 +2580,136 @@ img {
 
     .contact-links {
         flex-direction: column;
+    }
+}
+
+/* --- Research Card Illustrations --- */
+.research-card-illustration {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    pointer-events: none;
+    opacity: 0.55;
+    transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+}
+
+.research-card:hover .research-card-illustration {
+    opacity: 0.3;
+    transform: scale(1.04) translateY(-2px);
+}
+
+.research-card-arrow {
+    z-index: 2;
+}
+
+
+/* =========================================
+   HERO — Option C: Centred, Caveat title
+   ========================================= */
+
+/* Centred column layout */
+.hero {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0;
+    padding-top: 140px;
+    padding-bottom: 100px;
+}
+
+/* Glow — centred */
+.hero-glow {
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: 700px;
+    height: 700px;
+    opacity: 0.8;
+}
+
+/* Visual block: just the icon, centred, no cream box */
+.hero-visual {
+    width: auto;
+    max-width: none;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+/* Strip the cream box from the hero logo */
+.animated-logo-hero {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+    justify-content: center;
+    gap: 0;
+}
+
+/* Make icon larger and standalone */
+.animated-logo-hero .animated-logo-icon {
+    width: 220px;
+    height: 220px;
+}
+
+/* Hide wordmark — title h1 carries the name */
+.animated-logo-hero .animated-logo-wordmark {
+    display: none;
+}
+
+/* Content: centred */
+.hero-content {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+/* Title: Caveat cursive, matching logo style */
+.hero-title {
+    font-family: var(--font-logo);
+    font-size: clamp(4rem, 7vw, 6.5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+}
+
+/* Keep reveal animation working */
+.hero-title .reveal-line {
+    display: block;
+    overflow: visible;
+    padding-bottom: 12px;
+    margin-bottom: 0;
+}
+
+/* Description: centred */
+.hero-description {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* CTAs: centred */
+.hero-cta {
+    justify-content: center;
+}
+
+/* Scroll indicator: keep centred */
+.hero-scroll-indicator {
+    bottom: 32px;
+}
+
+/* Mobile: already column so mostly fine, tighten padding */
+@media (max-width: 992px) {
+    .hero {
+        padding-top: 160px;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .hero-visual {
+        margin-bottom: 32px;
+    }
+    .hero-title {
+        font-size: clamp(3.5rem, 10vw, 5rem);
     }
 }

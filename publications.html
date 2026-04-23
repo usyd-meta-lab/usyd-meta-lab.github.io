@@ -3,36 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <title>Kit Double | Publications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* logo in the top-right corner, subtle styling */
-    .logo-float {
-      float: right;
-      max-width: 100px;
-      margin: 0 0 1rem 1rem;
-      filter: grayscale(30%) brightness(110%)
-              drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-    }
-
     body {
-      font-family: Georgia, serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #fcf6ef;
+      color: #2b180a;
       max-width: 900px;
       margin: 2rem auto;
-      padding: 0 1rem;
+      padding: 0 1rem 2rem;
     }
-    h2 { font-size: 2em; border-bottom: 2px solid #ccc; padding-bottom: 0.5rem; }
-    h3 { margin-top: 2rem; color: #333; }
+    h2 { font-size: 2em; border-bottom: 2px solid #e0d4c6; padding-bottom: 0.5rem; }
+    h3 { margin-top: 2rem; color: #2b180a; }
     ol { padding-left: 1.5em; }
     li { margin-bottom: 1.2em; line-height: 1.5; }
-    a  { color: #0077cc; text-decoration: none; }
+    a  { color: #b07a52; text-decoration: none; }
     a:hover { text-decoration: underline; }
+    .logo-float {
+      float: right;
+      margin: 0 0 1rem 1rem;
+      padding: 14px 16px 12px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: #fcf6ef;
+      border: 1px solid #e0d4c6;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(43, 24, 10, 0.08);
+      color: #2b180a;
+    }
+    .logo-float-mark {
+      width: 64px;
+      height: 64px;
+      flex: 0 0 64px;
+      display: inline-flex;
+    }
+    .logo-float-mark svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .logo-float-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.9rem;
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
     button.download-btn {
       display: none;
       margin-left: 1rem;
       padding: 0.4rem 0.9rem;
-      border: 1px solid #0077cc;
-      background: #f6f9fc;
-      color: #0077cc;
-      border-radius: 4px;
+      border: 1px solid #c8956c;
+      background: rgba(200, 149, 108, 0.08);
+      color: #b07a52;
+      border-radius: 100px;
       cursor: pointer;
     }
     button.download-btn.is-visible {
@@ -47,7 +75,26 @@
 <body>
 
 <a href="/" title="Back to main site">
-  <img src="images/logo.PNG" alt="USYD Meta Lab Logo" class="logo-float">
+  <span class="logo-float">
+    <span class="logo-float-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" stroke-linejoin="round" />
+        <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" stroke-linecap="round" opacity="0.45" />
+        <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" stroke-linecap="round" opacity="0.45" />
+        <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" stroke-linecap="round" opacity="0.28" />
+        <g class="brain-glass-group">
+          <circle cx="50" cy="44" r="18" stroke="#2b180a" stroke-width="3" fill="#fcf6ef" fill-opacity="0.45" />
+          <line x1="63" y1="57" x2="76" y2="72" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round" />
+          <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" stroke-linecap="round" opacity="0.65" />
+          <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" stroke-linecap="round" opacity="0.35" />
+          <g>
+            <path d="M40 50 Q50 60 60 50" stroke="#2b180a" stroke-width="1.5" stroke-linecap="round" opacity="0.5" />
+          </g>
+        </g>
+      </svg>
+    </span>
+    <span class="logo-float-name">Meta Lab</span>
+  </span>
 </a>
 
 <section id="publications">

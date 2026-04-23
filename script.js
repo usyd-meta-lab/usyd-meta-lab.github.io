@@ -479,8 +479,12 @@ async function loadPublications() {
 
 async function fetchRecentPublications() {
     const snapshotPaths = [
+        'files/publications-orcid-snapshot.json',
+        'files/publications-local.json',
         '../files/publications-orcid-snapshot.json',
-        '../files/publications-local.json'
+        '../files/publications-local.json',
+        'archived/files/publications-orcid-snapshot.json',
+        'archived/files/publications-local.json'
     ];
 
     for (const path of snapshotPaths) {

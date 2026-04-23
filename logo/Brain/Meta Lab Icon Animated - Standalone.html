@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Meta Lab — Animated Icon</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1208; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
+    #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #1a1208; z-index: 9999; }
+    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
+    #__bundler_placeholder { color: #999; font-size: 14px; }
+  </style>
+  <noscript>
+    <style>#__bundler_loading { display: none; }</style>
+    <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
+      This page requires JavaScript to display.
+    </div>
+  </noscript>
+</head>
+<body>
+  <div id="__bundler_thumbnail">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#1a1208"></rect>
+    <rect x="40" y="40" width="120" height="120" rx="16" fill="#fcf6ef"></rect>
+    <ellipse cx="100" cy="95" rx="34" ry="28" stroke="#2b180a" stroke-width="3" fill="none"></ellipse>
+    <circle cx="100" cy="95" r="16" stroke="#2b180a" stroke-width="2.5" fill="none"></circle>
+    <line x1="111" y1="106" x2="122" y2="120" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round"></line>
+    <path d="M92 99 Q100 107 108 99" stroke="#2b180a" stroke-width="2" fill="none" stroke-linecap="round"></path>
+  </svg>
+</div>
+  <div id="__bundler_loading">Unpacking...</div>
+
+  <script>
+    
+document.addEventListener('DOMContentLoaded', async function() {
+  const loading = document.getElementById('__bundler_loading');
+  function setStatus(msg) { if (loading) loading.textContent = msg; }
+
+  // Error sink persists across replaceWith since it's on window, not the DOM.
+  window.addEventListener('error', function(e) {
+    var p = document.body || document.documentElement;
+    var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
+    d.id = '__bundler_err';
+    d.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;font:12px/1.4 ui-monospace,monospace;background:#2a1215;color:#ff8a80;padding:10px 14px;border-radius:8px;border:1px solid #5c2b2e;z-index:99999;white-space:pre-wrap;max-height:40vh;overflow:auto';
+    d.textContent = (d.textContent ? d.textContent + String.fromCharCode(10) : '') +
+      '[bundle] ' + (e.message || e.type) +
+      (e.filename ? ' (' + e.filename.slice(0, 60) + ':' + e.lineno + ')' : '');
+  }, true);
+
+  try {
+    const manifestEl = document.querySelector('script[type="__bundler/manifest"]');
+    const templateEl = document.querySelector('script[type="__bundler/template"]');
+    if (!manifestEl || !templateEl) {
+      setStatus('Error: missing bundle data');
+      console.error('[bundler] Missing script tags — manifestEl:', !!manifestEl, 'templateEl:', !!templateEl);
+      return;
+    }
+
+    const manifest = JSON.parse(manifestEl.textContent);
+    let template = JSON.parse(templateEl.textContent);
+
+    const uuids = Object.keys(manifest);
+    setStatus('Unpacking ' + uuids.length + ' assets...');
+
+    const blobUrls = {};
+    await Promise.all(uuids.map(async (uuid) => {
+      const entry = manifest[uuid];
+      try {
+        const binaryStr = atob(entry.data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+        let finalBytes = bytes;
+        if (entry.compressed) {
+          if (typeof DecompressionStream !== 'undefined') {
+            const ds = new DecompressionStream('gzip');
+            const writer = ds.writable.getWriter();
+            const reader = ds.readable.getReader();
+            writer.write(bytes);
+            writer.close();
+            const chunks = [];
+            let totalLen = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              totalLen += value.length;
+            }
+            finalBytes = new Uint8Array(totalLen);
+            let offset = 0;
+            for (const chunk of chunks) { finalBytes.set(chunk, offset); offset += chunk.length; }
+          } else {
+            console.warn('DecompressionStream not available, asset ' + uuid + ' may not render');
+          }
+        }
+
+        blobUrls[uuid] = URL.createObjectURL(new Blob([finalBytes], { type: entry.mime }));
+      } catch (err) {
+        console.error('Failed to decode asset ' + uuid + ':', err);
+        blobUrls[uuid] = URL.createObjectURL(new Blob([], { type: entry.mime }));
+      }
+    }));
+
+    const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
+    const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
+    const resourceMap = {};
+    for (const entry of extResources) {
+      if (blobUrls[entry.uuid]) resourceMap[entry.id] = blobUrls[entry.uuid];
+    }
+
+    setStatus('Rendering...');
+    for (const uuid of uuids) template = template.split(uuid).join(blobUrls[uuid]);
+
+    // Strip integrity + crossorigin — blob URLs from a file:// document inherit
+    // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
+    // The manifest bytes are ours; SRI protects against CDN compromise, not this.
+    template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+
+    const resourceScript = '<script>window.__resources = ' +
+      JSON.stringify(resourceMap).split('</' + 'script>').join('<\\/' + 'script>') +
+      ';</' + 'script>';
+    // Inject after <head> so the DOCTYPE stays first; prepending the script
+    // would push the parser into quirks mode. DOMParser always emits a <head>
+    // (synthesizing one if the source HTML omitted it) but may carry
+    // attributes through, so match the full opening tag. slice() rather than
+    // replace() keeps us clear of $-pattern substitution in resourceScript.
+    const headOpen = template.match(/<head[^>]*>/i);
+    if (headOpen) {
+      const i = headOpen.index + headOpen[0].length;
+      template = template.slice(0, i) + resourceScript + template.slice(i);
+    }
+
+    // Parse the template and swap the root element. Scripts inserted via
+    // DOMParser/replaceWith are inert per spec — re-create each with
+    // createElement so they execute, awaiting onload for src scripts to
+    // preserve ordering (React before ReactDOM before Babel before text/babel).
+    const doc = new DOMParser().parseFromString(template, 'text/html');
+    document.documentElement.replaceWith(doc.documentElement);
+    const dead = Array.from(document.scripts);
+    for (const old of dead) {
+      const s = document.createElement('script');
+      for (const a of old.attributes) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      // text/babel scripts with a src: fetch and inline. transformScriptTags
+      // does XHR against the src, but blob:null/ from a file:// origin is
+      // silently dropped. Inlining makes it a plain inline babel script,
+      // which transformScriptTags handles unconditionally.
+      if ((s.type === 'text/babel' || s.type === 'text/jsx') && s.src) {
+        const r = await fetch(s.src);
+        s.textContent = await r.text();
+        s.removeAttribute('src');
+      }
+      const p = s.src ? new Promise(function(r) { s.onload = s.onerror = r; }) : null;
+      old.replaceWith(s);
+      if (p) await p;
+    }
+    // Babel standalone auto-transforms type=text/babel on DOMContentLoaded,
+    // which fired before we swapped the document. Trigger manually if present.
+    if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
+      window.Babel.transformScriptTags();
+    }
+  } catch (err) {
+    setStatus('Error unpacking: ' + err.message);
+    console.error('Bundle unpack error:', err);
+  }
+});
+
+  </script>
+
+  <script type="__bundler/manifest">
+{}
+  </script>
+
+  <script type="__bundler/ext_resources">
+[]
+  </script>
+
+  <script type="__bundler/template">
+"<!DOCTYPE html>\n<html lang=\"en\"><head>\n<meta charset=\"UTF-8\">\n<title>Meta Lab — Animated Icon<\u002Ftitle>\n<style>\n* { box-sizing:border-box; margin:0; padding:0; }\nbody {\n  background: #1a1208;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  min-height: 100vh;\n  gap: 32px;\n}\n\n.card {\n  background: #fcf6ef;\n  border-radius: 20px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  padding: 36px;\n  box-shadow: 0 8px 48px rgba(0,0,0,0.3);\n}\n\n/* ── Brain draws in ───────────────────────────────────── */\n.brain-outline {\n  stroke-dasharray: 290;\n  stroke-dashoffset: 290;\n  animation: drawPath 0.9s ease-out 0.1s forwards;\n}\n.fold-l { stroke-dasharray: 36; stroke-dashoffset: 36; animation: drawPath 0.35s ease-out 0.7s forwards; }\n.fold-r { stroke-dasharray: 36; stroke-dashoffset: 36; animation: drawPath 0.35s ease-out 0.8s forwards; }\n.fold-c { stroke-dasharray: 30; stroke-dashoffset: 30; animation: drawPath 0.35s ease-out 0.85s forwards; }\n@keyframes drawPath { to { stroke-dashoffset: 0; } }\n\n/* ── Glass swings in ──────────────────────────────────── */\n.glass-group {\n  transform-origin: 50px 44px;\n  transform: rotate(65deg) scale(0.4);\n  opacity: 0;\n  animation: swingIn 0.75s cubic-bezier(0.34,1.56,0.64,1) 0.9s forwards;\n}\n@keyframes swingIn {\n  0%   { transform: rotate(65deg) scale(0.4); opacity: 0; }\n  100% { transform: rotate(0deg)  scale(1);   opacity: 1; }\n}\n\n/* ── Lens details draw after glass lands ──────────────── */\n.lens-fold-top  { stroke-dasharray: 30; stroke-dashoffset: 30; animation: drawPath 0.3s ease-out 1.55s forwards; }\n.lens-fold-vert { stroke-dasharray: 20; stroke-dashoffset: 20; animation: drawPath 0.25s ease-out 1.7s forwards; }\n\n/* ── Smile appears, grows, returns ───────────────────── */\n.smile-group {\n  transform-origin: 50px 52px;\n  opacity: 0;\n  transform: scale(0.4);\n  animation:\n    smileAppear 0.35s cubic-bezier(0.34,1.56,0.64,1) 1.85s forwards,\n    smileGrow   0.4s  cubic-bezier(0.34,1.56,0.64,1) 2.2s  forwards,\n    smileShrink 0.45s cubic-bezier(0.25,1,0.5,1)     2.6s  forwards;\n}\n@keyframes smileAppear {\n  0%   { opacity:0; transform: scale(0.4); }\n  100% { opacity:1; transform: scale(1);   }\n}\n@keyframes smileGrow   { to { transform: scale(1.55); } }\n@keyframes smileShrink { to { transform: scale(1); opacity:1; } }\n\n/* ── Replay ───────────────────────────────────────────── */\n.replay {\n  padding: 8px 24px;\n  background: transparent;\n  border: 1.5px solid rgba(242,232,206,0.25);\n  color: rgba(242,232,206,0.45);\n  border-radius: 20px;\n  font-family: sans-serif;\n  font-size: 11px;\n  letter-spacing: 0.14em;\n  text-transform: uppercase;\n  cursor: pointer;\n  transition: all 0.2s;\n}\n.replay:hover { border-color: rgba(242,232,206,0.7); color: rgba(242,232,206,0.85); }\n<\u002Fstyle>\n<\u002Fhead>\n<body>\n\n<svg style=\"position:absolute;width:0;height:0\">\n  <defs>\n    <filter id=\"hd\">\n      <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.04\" numOctaves=\"4\" seed=\"5\" result=\"n\"><\u002FfeTurbulence>\n      <feDisplacementMap in=\"SourceGraphic\" in2=\"n\" scale=\"1.5\" xChannelSelector=\"R\" yChannelSelector=\"G\"><\u002FfeDisplacementMap>\n    <\u002Ffilter>\n  <\u002Fdefs>\n<\u002Fsvg>\n\n<div class=\"card\">\n  <svg width=\"160\" height=\"160\" viewBox=\"0 0 100 100\" fill=\"none\" style=\"filter:url(#hd);overflow:visible\">\n\n    <path class=\"brain-outline\" d=\"M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z\" stroke=\"#2b180a\" stroke-width=\"2.6\" stroke-linejoin=\"round\"><\u002Fpath>\n\n    <path class=\"fold-l\" d=\"M30 44 Q36 38 36 48 Q36 54 30 56\" stroke=\"#6b5a4a\" stroke-width=\"1.4\" stroke-linecap=\"round\" opacity=\"0.45\"><\u002Fpath>\n    <path class=\"fold-r\" d=\"M70 44 Q64 38 64 48 Q64 54 70 56\" stroke=\"#6b5a4a\" stroke-width=\"1.4\" stroke-linecap=\"round\" opacity=\"0.45\"><\u002Fpath>\n    <path class=\"fold-c\" d=\"M50 16 Q50 28 50 42\" stroke=\"#6b5a4a\" stroke-width=\"1.2\" stroke-linecap=\"round\" opacity=\"0.28\"><\u002Fpath>\n\n    <g class=\"glass-group\">\n      <circle cx=\"50\" cy=\"44\" r=\"18\" stroke=\"#2b180a\" stroke-width=\"3\" fill=\"#fcf6ef\" fill-opacity=\"0.55\"><\u002Fcircle>\n      <line x1=\"63\" y1=\"57\" x2=\"76\" y2=\"72\" stroke=\"#2b180a\" stroke-width=\"4.5\" stroke-linecap=\"round\"><\u002Fline>\n      <path class=\"lens-fold-top\" d=\"M40 40 Q45 34 50 40 Q55 34 60 40\" stroke=\"#2b180a\" stroke-width=\"1.8\" stroke-linecap=\"round\" opacity=\"0.65\"><\u002Fpath>\n      <path class=\"lens-fold-vert\" d=\"M50 34 Q50 40 50 50\" stroke=\"#6b5a4a\" stroke-width=\"1.2\" stroke-linecap=\"round\" opacity=\"0.35\"><\u002Fpath>\n      <g class=\"smile-group\">\n        <path d=\"M40 50 Q50 60 60 50\" stroke=\"#2b180a\" stroke-width=\"2.2\" fill=\"none\" stroke-linecap=\"round\"><\u002Fpath>\n      <\u002Fg>\n    <\u002Fg>\n\n  <\u002Fsvg>\n<\u002Fdiv>\n\n<button class=\"replay\" onclick=\"location.reload()\">↺ Replay<\u002Fbutton>\n\n\n\n\n\n<\u002Fbody><\u002Fhtml>"
+  </script>
+</body>
+</html>
