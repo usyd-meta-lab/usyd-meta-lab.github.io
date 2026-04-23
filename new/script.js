@@ -454,91 +454,107 @@ function initNewsCarousel() {
     setActive(0);
 }
 
-// --- Publications from ORCID ---
+// --- Publications from the same snapshot used by publications.html ---
 async function loadPublications() {
     const container = document.getElementById('publicationsList');
-
-    // Known publications from the MetaLab site (2025)
-    const publications = [
-        {
-            year: 2025,
-            title: "Emotional intelligence and interpersonal relationship quality",
-            authors: "Xiao, Y., Double, K. S., & MacCann, C.",
-            journal: "Personal Relationships",
-            doi: "https://doi.org/10.1177/02654075251399696"
-        },
-        {
-            year: 2025,
-            title: "Test preparation and metacognitive sensitivity in educational assessment",
-            authors: "Hao, J., Double, K. S., & Birney, D.",
-            journal: "Review of Educational Research",
-            doi: "https://doi.org/10.3102/00346543251360775"
-        },
-        {
-            year: 2025,
-            title: "Rule-based learning and confidence calibration",
-            authors: "Choo, H., Double, K. S., & Don, H.",
-            journal: "Thinking & Reasoning",
-            doi: "https://doi.org/10.1080/13546783.2025.2542252"
-        },
-        {
-            year: 2025,
-            title: "Teacher effectiveness assessment and metacognitive beliefs",
-            authors: "Don, H., Double, K. S., & Walker, S.",
-            journal: "International Journal of Educational Research",
-            doi: "https://doi.org/10.1016/j.ijer.2025.102719"
-        },
-        {
-            year: 2025,
-            title: "Happiness, well-being, and metacognitive emotion regulation",
-            authors: "Double, K. S., Birney, D., & MacCann, C.",
-            journal: "Journal of Happiness Studies",
-            doi: "https://doi.org/10.1007/s10902-025-00914-3"
-        },
-        {
-            year: 2025,
-            title: "Metacognitive sensitivity in memory and cognition",
-            authors: "Double, K. S., & Don, H.",
-            journal: "Memory & Cognition",
-            doi: "https://doi.org/10.3758/s13421-025-01737-6"
-        },
-        {
-            year: 2025,
-            title: "Spatial navigation and individual differences in metacognition",
-            authors: "Tran, D., Double, K. S., et al.",
-            journal: "International Journal of Obesity",
-            doi: "https://www.nature.com/articles/s41366-025-01776-8"
-        },
-        {
-            year: 2025,
-            title: "Confidence rating methods in behavioral research",
-            authors: "Double, K. S.",
-            journal: "Behavior Research Methods",
-            doi: "https://link.springer.com/article/10.3758/s13428-025-02621-6"
-        },
-        {
-            year: 2025,
-            title: "Emotional intelligence and emotion regulation strategies",
-            authors: "MacCann, C., Double, K. S., et al.",
-            journal: "Emotion",
-            doi: "https://doi.org/10.1037/emo0001459"
-        }
-    ];
+    if (!container) return;
 
     container.innerHTML = '';
 
-    publications.forEach((pub, index) => {
-        const item = document.createElement('div');
-        item.className = 'publication-item';
-        item.style.animationDelay = `${index * 0.08}s`;
-        item.innerHTML = `
-            <span class="publication-year">${pub.year}</span>
-            <div class="publication-info">
-                <h4>${pub.title}</h4>
-                <p>${pub.authors} &mdash; <em>${pub.journal}</em></p>
-            </div>
-            <a href="${pub.doi}" target="_blank" rel="noopener" class="publication-link">View &rarr;</a>
-        `;
-        container.appendChild(item);
-    });
+    try {
+        const publications = await fetchRecentPublications();
+        if (!publications.length) {
+            container.innerHTML = '<div class="publication-loading">No publications available.</div>';
+            return;
+        }
+
+        publications.forEach((pub, index) => {
+            container.appendChild(createPublicationItem(pub, index));
+        });
+    } catch (error) {
+        console.error('Failed to load homepage publications', error);
+        container.innerHTML = '<div class="publication-loading">Unable to load publications at this time.</div>';
+    }
+}
+
+async function fetchRecentPublications() {
+    const snapshotPaths = [
+        '../files/publications-orcid-snapshot.json',
+        '../files/publications-local.json'
+    ];
+
+    for (const path of snapshotPaths) {
+        try {
+            const response = await fetch(path, { cache: 'no-cache' });
+            if (!response.ok) continue;
+
+            const data = await response.json();
+            const records = Array.isArray(data) ? data : (data.records || []);
+            if (!records.length) continue;
+
+            return records
+                .map((record, index) => ({ ...record, sourceIndex: index }))
+                .sort((a, b) => {
+                    const yearDiff = parsePublicationYear(b.year) - parsePublicationYear(a.year);
+                    return yearDiff || a.sourceIndex - b.sourceIndex;
+                })
+                .slice(0, 10);
+        } catch (error) {
+            console.warn(`Failed to load publication snapshot at ${path}`, error);
+        }
+    }
+
+    return [];
+}
+
+function createPublicationItem(pub, index) {
+    const item = document.createElement('div');
+    item.className = 'publication-item';
+    item.style.animationDelay = `${index * 0.08}s`;
+
+    const year = document.createElement('span');
+    year.className = 'publication-year';
+    year.textContent = pub.year || 'No Year';
+
+    const info = document.createElement('div');
+    info.className = 'publication-info';
+
+    const title = document.createElement('h4');
+    title.textContent = pub.title || 'Untitled';
+
+    const meta = document.createElement('p');
+    meta.append(document.createTextNode(pub.authors || 'Unknown authors'));
+    if (pub.journal) {
+        meta.append(document.createTextNode(' — '));
+        const journal = document.createElement('em');
+        journal.innerHTML = pub.journal;
+        meta.append(journal);
+    }
+
+    info.append(title, meta);
+    item.append(year, info);
+
+    const doiUrl = getPublicationUrl(pub);
+    if (doiUrl) {
+        const link = document.createElement('a');
+        link.href = doiUrl;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.className = 'publication-link';
+        link.textContent = 'View →';
+        item.appendChild(link);
+    }
+
+    return item;
+}
+
+function parsePublicationYear(year) {
+    const parsed = parseInt(year, 10);
+    return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function getPublicationUrl(pub) {
+    if (!pub.doi) return '';
+    if (/^https?:\/\//i.test(pub.doi)) return pub.doi;
+    return `https://doi.org/${pub.doi}`;
 }
