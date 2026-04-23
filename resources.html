@@ -2,113 +2,386 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>USYD Meta Lab • Resources</title>
+  <title>USYD Meta Lab - Resources</title>
   	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --fg: #0f172a;
-      --muted: #475569;
-      --border: #e5e7eb;
-      --accent: #1e40af;
-      --radius: 14px;
-      --space: 16px;
-      --maxw: 800px;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d9dee8;
+      --paper: #ffffff;
+      --field: #f5f7fb;
+      --blue: #1d4ed8;
+      --green: #0f766e;
+      --gold: #b45309;
+      --shadow: 0 18px 45px rgba(17, 24, 39, 0.08);
+      --radius: 8px;
+      --maxw: 1040px;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      min-height: 100%;
     }
     body {
       margin: 0;
       font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: #f9fafb;
-      color: var(--fg);
-      display: flex;
-      flex-direction: column;
+      background: var(--field);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: 260px;
+      background:
+        linear-gradient(135deg, rgba(29, 78, 216, 0.12), rgba(15, 118, 110, 0.08)),
+        linear-gradient(180deg, #ffffff, rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+    a {
+      color: inherit;
+    }
+    .page {
+      position: relative;
+      width: min(100%, var(--maxw));
+      margin: 0 auto;
+      padding: 42px 20px 56px;
+    }
+    .masthead {
+      display: grid;
+      grid-template-columns: auto 1fr;
       align-items: center;
-      padding: 40px var(--space);
+      gap: 18px;
+      margin-bottom: 34px;
     }
-    header {
-      text-align: center;
-      margin-bottom: 40px;
+    .masthead img {
+      width: 74px;
+      height: 74px;
+      object-fit: contain;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
     }
-    header img {
-      height: 70px;
-      margin-bottom: 12px;
-    }
-    header h1 {
+    .eyebrow {
       margin: 0;
-      font-size: 24px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
-    .links {
-      max-width: var(--maxw);
-      width: 100%;
+    h1 {
+      margin: 2px 0 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+    .intro {
+      max-width: 680px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    main {
+      display: grid;
+      gap: 36px;
+    }
+    .section {
       display: grid;
       gap: 16px;
     }
-    .card {
-      display: block;
-      padding: 20px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: white;
-      text-decoration: none;
-      color: var(--fg);
-      font-weight: 600;
-      font-size: 18px;
-      transition: transform 120ms ease, box-shadow 180ms ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
     }
-    .card:hover, .card:focus {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+    .section-title span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .app-card,
+    .resource-card {
+      position: relative;
+      color: var(--ink);
+      text-decoration: none;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+    .app-card {
+      min-height: 208px;
+      padding: 24px;
+      overflow: hidden;
+    }
+    .app-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 5px solid var(--app-color, var(--blue));
+      opacity: 0.95;
+      pointer-events: none;
+    }
+    .app-card::after,
+    .resource-card::after {
+      content: "->";
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      color: var(--app-color, var(--blue));
+      font-weight: 900;
+      opacity: 0.42;
+      transition: transform 160ms ease, opacity 160ms ease;
+    }
+    .app-card:hover,
+    .app-card:focus-visible,
+    .resource-card:hover,
+    .resource-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--app-color, var(--blue));
+      border-color: color-mix(in srgb, var(--app-color, var(--blue)) 42%, var(--line));
+      box-shadow: var(--shadow);
       outline: none;
     }
-    .card span {
+    .app-card:hover::after,
+    .app-card:focus-visible::after,
+    .resource-card:hover::after,
+    .resource-card:focus-visible::after {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+    .app-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      margin-bottom: 36px;
+      border-radius: var(--radius);
+      background: #edf4ff;
+      background: color-mix(in srgb, var(--app-color, var(--blue)) 11%, white);
+      color: var(--app-color, var(--blue));
+      font-size: 18px;
+      font-weight: 900;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+    .app-card:hover .app-icon,
+    .app-card:focus-visible .app-icon {
+      transform: translateY(-2px) scale(1.04);
+      background: #e4edff;
+      background: color-mix(in srgb, var(--app-color, var(--blue)) 17%, white);
+    }
+    .app-card strong,
+    .resource-card strong {
       display: block;
-      font-size: 14px;
-      font-weight: normal;
+      padding-right: 42px;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .app-card span,
+    .resource-card span {
+      display: block;
+      margin-top: 8px;
       color: var(--muted);
-      margin-top: 4px;
+      font-size: 14px;
+    }
+    .app-url {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: #596579;
+      font-size: 13px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+    .resource-card {
+      min-height: 132px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+    .resource-card::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      width: 28px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--app-color, var(--blue));
+      transition: width 160ms ease;
+    }
+    .resource-card:hover::before,
+    .resource-card:focus-visible::before {
+      width: 44px;
+    }
+    .tone-green {
+      --app-color: var(--green);
+    }
+    .tone-gold {
+      --app-color: var(--gold);
+    }
+    @media (max-width: 860px) {
+      .resource-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 680px) {
+      .page {
+        padding: 28px 16px 44px;
+      }
+      .masthead {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .app-card {
+        min-height: 190px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .app-card,
+      .app-card::after,
+      .resource-card,
+      .resource-card::before,
+      .resource-card::after,
+      .app-icon {
+        transition: none;
+      }
+      .app-card:hover,
+      .app-card:focus-visible,
+      .resource-card:hover,
+      .resource-card:focus-visible,
+      .app-card:hover .app-icon,
+      .app-card:focus-visible .app-icon {
+        transform: none;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://usyd-meta-lab.github.io/images/logo.PNG" alt="USYD Meta Lab Logo">
-    <h1>USYD Meta Lab Resources</h1>
-  </header>
+  <div class="page">
+    <header class="masthead">
+      <img src="https://usyd-meta-lab.github.io/images/logo.PNG" alt="USYD Meta Lab Logo">
+      <div>
+        <p class="eyebrow">USYD Meta Lab</p>
+        <h1>Resources</h1>
+        <p class="intro">Shared links for lab workflows, documentation, research tools, and public-facing materials.</p>
+      </div>
+    </header>
 
-  <main class="links">
-       <a class="card" href="lab_wiki.html" target="_blank" rel="noopener">
-      Lab Wiki <span>Documentation and onboarding</span>
-    </a>
-      <a class="card" href="meetings.html" target="_blank" rel="noopener">
-      Lab Meetings <span>Schedule for Meta Lab meetings</span>
-    </a>
+    <main>
+      <section class="section" aria-labelledby="web-apps">
+        <div class="section-title">
+          <h2 id="web-apps">Web Apps</h2>
+          <span>Interactive research tools</span>
+        </div>
+        <div class="app-grid">
+          <a class="app-card" href="https://meta-measures-905740620170.us-central1.run.app" target="_blank" rel="noopener">
+            <span class="app-icon" aria-hidden="true">M</span>
+            <strong>Meta Measures</strong>
+            <span>Launch the hosted measures app for lab workflows.</span>
+            <span class="app-url">meta-measures-905740620170.us-central1.run.app</span>
+          </a>
+          <a class="app-card tone-green" href="https://psych-norms.streamlit.app" target="_blank" rel="noopener">
+            <span class="app-icon" aria-hidden="true">P</span>
+            <strong>Psych Norms</strong>
+            <span>Open the Streamlit app for psychological norms.</span>
+            <span class="app-url">psych-norms.streamlit.app</span>
+          </a>
+        </div>
+      </section>
 
-       <a class="card" href="https://metaforge.live" target="_blank" rel="noopener">
-      MetaForge <span>Code and host experiments</span>
-    </a>
-  
-    <a class="card" href="https://www.organisr.live/" target="_blank" rel="noopener">
-       Organisr<span>Research Planner</span>
-    </a>
-  
-    <a class="card" href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" rel="noopener">
-      R Package <span>Tools for analysis and reproducibility</span>
-    </a>
-        <a class="card" href="https://github.sydney.edu.au/usyd-meta-lab/Ethics" target="_blank" rel="noopener">
-      Ethics <span>Umbrella Ethics</span>
-    </a>
-      <a class="card" href="https://pages.github.sydney.edu.au/usyd-meta-lab/members/tasks.html" target="_blank" rel="noopener">
-      Task Library <span>Archive of experiments and paradigms</span>
-    </a>
-        <a class="card" href="http://usyd-meta-lab.github.io" target="_blank" rel="noopener">
-      Website<span>The public facing USYD Meta Lab website</span>
-    </a>
-        <a class="card" href="http://usyd-meta-lab.github.io/publications.html" target="_blank" rel="noopener">
-      Publications<span>A list of publications loaded from ORCID</span>
-    </a>
-  </main>
+      <section class="section" aria-labelledby="core-resources">
+        <div class="section-title">
+          <h2 id="core-resources">Core Resources</h2>
+          <span>Documentation, packages, sites, and archives</span>
+        </div>
+        <div class="resource-grid">
+          <a class="resource-card" href="lab_wiki.html" target="_blank" rel="noopener">
+            <strong>Lab Wiki</strong>
+            <span>Documentation and onboarding</span>
+          </a>
+          <a class="resource-card tone-green" href="meetings.html" target="_blank" rel="noopener">
+            <strong>Lab Meetings</strong>
+            <span>Schedule for Meta Lab meetings</span>
+          </a>
+
+          <a class="resource-card tone-gold" href="https://metaforge.live" target="_blank" rel="noopener">
+            <strong>MetaForge</strong>
+            <span>Code and host experiments</span>
+          </a>
+
+          <a class="resource-card" href="https://www.organisr.live/" target="_blank" rel="noopener">
+            <strong>Organisr</strong>
+            <span>Research planner</span>
+          </a>
+
+          <a class="resource-card tone-green" href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" rel="noopener">
+            <strong>R Package</strong>
+            <span>Tools for analysis and reproducibility</span>
+          </a>
+          <a class="resource-card tone-gold" href="https://github.sydney.edu.au/usyd-meta-lab/Ethics" target="_blank" rel="noopener">
+            <strong>Ethics</strong>
+            <span>Umbrella ethics</span>
+          </a>
+          <a class="resource-card" href="https://pages.github.sydney.edu.au/usyd-meta-lab/members/tasks.html" target="_blank" rel="noopener">
+            <strong>Task Library</strong>
+            <span>Archive of experiments and paradigms</span>
+          </a>
+          <a class="resource-card tone-green" href="http://usyd-meta-lab.github.io" target="_blank" rel="noopener">
+            <strong>Website</strong>
+            <span>The public facing USYD Meta Lab website</span>
+          </a>
+          <a class="resource-card tone-gold" href="http://usyd-meta-lab.github.io/publications.html" target="_blank" rel="noopener">
+            <strong>Publications</strong>
+            <span>A list of publications loaded from ORCID</span>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

@@ -19,8 +19,10 @@
         <div class="nav-inner">
             <div class="nav-links">
                 <a href="#research">Research</a>
+                <a href="#demos">Demos</a>
                 <a href="#team">Team</a>
                 <a href="#publications">Publications</a>
+                <a href="#news">News</a>
                 <a href="#resources">Resources</a>
                 <a href="#contact">Contact</a>
             </div>
@@ -36,8 +38,10 @@
     <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-links">
             <a href="#research">Research</a>
+            <a href="#demos">Demos</a>
             <a href="#team">Team</a>
             <a href="#publications">Publications</a>
+            <a href="#news">News</a>
             <a href="#resources">Resources</a>
             <a href="#contact">Contact</a>
         </div>
@@ -175,7 +179,7 @@
     </section>
 
     <!-- Paradigms Section -->
-    <section class="section section-paradigms">
+    <section class="section section-paradigms" id="demos">
         <div class="container">
             <div class="section-header reveal">
                 <span class="label">Interactive Demos</span>
@@ -212,6 +216,301 @@
                         <span class="paradigm-link">Try it <span>&rarr;</span></span>
                     </div>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Task Gallery Carousel -->
+    <section class="section section-task-gallery" aria-labelledby="taskGalleryTitle">
+        <div class="container">
+            <div class="task-gallery-header reveal">
+                <div>
+                    <span class="label">Task Gallery</span>
+                    <h2 class="section-title" id="taskGalleryTitle">Live previews of our research apps</h2>
+                </div>
+                <a href="/task-gallery/" class="btn btn-secondary task-gallery-all">
+                    <span>Open Gallery</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" aria-hidden="true">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="task-carousel reveal" data-task-carousel tabindex="0">
+                <button class="task-carousel-btn task-carousel-btn-prev" type="button" data-carousel-prev
+                    aria-label="Previous task">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="task-carousel-window">
+                    <div class="task-carousel-track">
+                        <article class="task-slide is-active" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Meta-d' Perceptual Task live preview"
+                                    data-src="/task-gallery/tasks/meta-dprime/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/meta-dprime/" class="task-preview-link"
+                                    aria-label="Open Meta-d' Perceptual Task">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-blue">Metacognition</span>
+                                <h3>Meta-d' Perceptual Task</h3>
+                                <p>Compare dot intervals and rate confidence to estimate metacognitive efficiency.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Matrix Reasoning live preview"
+                                    data-src="/task-gallery/tasks/matrix-reasoning/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/matrix-reasoning/" class="task-preview-link"
+                                    aria-label="Open Matrix Reasoning">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-purple">Reasoning</span>
+                                <h3>Matrix Reasoning</h3>
+                                <p>Complete abstract pattern matrices that measure fluid intelligence.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Beetle Classification live preview"
+                                    data-src="/task-gallery/tasks/category-learning/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/category-learning/" class="task-preview-link"
+                                    aria-label="Open Beetle Classification">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-green">Memory &amp; Learning</span>
+                                <h3>Beetle Classification</h3>
+                                <p>Discover category rules through feedback and confidence ratings.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Meta-Emotion Task live preview"
+                                    data-src="/task-gallery/tasks/meta-emotion/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/meta-emotion/" class="task-preview-link"
+                                    aria-label="Open Meta-Emotion Task">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-red">Emotion</span>
+                                <h3>Meta-Emotion Task</h3>
+                                <p>Label affective states and monitor confidence in emotional clarity.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Beer Distribution Game live preview"
+                                    data-src="/task-gallery/tasks/beer-game/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/beer-game/" class="task-preview-link"
+                                    aria-label="Open Beer Distribution Game">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-purple">Reasoning</span>
+                                <h3>Beer Distribution Game</h3>
+                                <p>Manage a supply chain and observe feedback delays in systems thinking.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Latin Square Task live preview"
+                                    data-src="/task-gallery/tasks/latin-square/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/latin-square/" class="task-preview-link"
+                                    aria-label="Open Latin Square Task">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-gold">Executive Function</span>
+                                <h3>Latin Square Task</h3>
+                                <p>Solve mini-Sudoku style rule problems with shapes and colours.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Emotional Intelligence live preview"
+                                    data-src="/task-gallery/tasks/emotional-intelligence/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/emotional-intelligence/" class="task-preview-link"
+                                    aria-label="Open Emotional Intelligence">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-red">Emotion</span>
+                                <h3>Emotional Intelligence</h3>
+                                <p>Identify emotions and reason about how emotional states unfold.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Complex Problem Solving live preview"
+                                    data-src="/task-gallery/tasks/complex-problem-solving/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/complex-problem-solving/" class="task-preview-link"
+                                    aria-label="Open Complex Problem Solving">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-purple">Reasoning</span>
+                                <h3>Complex Problem Solving</h3>
+                                <p>Control a dynamic system while learning how its variables interact.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Tower of Hanoi live preview"
+                                    data-src="/task-gallery/tasks/tower-of-hanoi/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/tower-of-hanoi/" class="task-preview-link"
+                                    aria-label="Open Tower of Hanoi">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-gold">Executive Function</span>
+                                <h3>Tower of Hanoi</h3>
+                                <p>Plan moves under constraints in a classic problem-solving task.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Relational Monitoring live preview"
+                                    data-src="/task-gallery/tasks/relational-monitoring/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/relational-monitoring/" class="task-preview-link"
+                                    aria-label="Open Relational Monitoring">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-blue">Metacognition</span>
+                                <h3>Relational Monitoring</h3>
+                                <p>Solve reasoning problems and calibrate confidence against performance.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Analogical Reasoning live preview"
+                                    data-src="/task-gallery/tasks/analogical-reasoning/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/analogical-reasoning/" class="task-preview-link"
+                                    aria-label="Open Analogical Reasoning">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-purple">Reasoning</span>
+                                <h3>Analogical Reasoning</h3>
+                                <p>Map relationships between examples and transfer them to new items.</p>
+                            </div>
+                        </article>
+
+                        <article class="task-slide" data-slide>
+                            <div class="task-preview-shell">
+                                <div class="task-preview-browser">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <iframe title="Task Switching live preview"
+                                    data-src="/task-gallery/tasks/task-switching/" loading="lazy"></iframe>
+                                <a href="/task-gallery/tasks/task-switching/" class="task-preview-link"
+                                    aria-label="Open Task Switching">
+                                    <span>Open task</span>
+                                </a>
+                            </div>
+                            <div class="task-slide-info">
+                                <span class="task-domain task-domain-gold">Executive Function</span>
+                                <h3>Task Switching</h3>
+                                <p>Switch between decision rules to measure cognitive flexibility.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <button class="task-carousel-btn task-carousel-btn-next" type="button" data-carousel-next
+                    aria-label="Next task">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" aria-hidden="true">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+
+                <div class="task-carousel-dots" data-carousel-dots aria-label="Task carousel pagination"></div>
             </div>
         </div>
     </section>
@@ -308,23 +607,88 @@
         </div>
     </section>
 
-    <!-- News Highlight -->
-    <section class="section section-highlight">
+    <!-- News Highlights -->
+    <section class="section section-highlight" id="news" aria-labelledby="newsTitle">
         <div class="container">
-            <div class="highlight-card reveal">
-                <div class="highlight-content">
-                    <span class="label">In the News</span>
-                    <h2>Australia's most-cited psychology researcher</h2>
-                    <p>Dr Kit Double was recognised in The Australian's 2025 Research Magazine as Australia's most-cited
-                        psychology researcher, and has appeared on ABC Drive discussing metacognition research.</p>
-                    <div class="highlight-links">
-                        <a href="https://www.abc.net.au/listen/programs/sydney-drive/drive/105130426" target="_blank"
-                            rel="noopener" class="btn btn-primary">Listen on ABC</a>
+            <div class="news-header reveal">
+                <span class="label">In the News</span>
+                <h2 class="section-title" id="newsTitle">Latest from the lab</h2>
+            </div>
+
+            <div class="news-carousel reveal" data-news-carousel tabindex="0">
+                <button class="news-carousel-btn news-carousel-btn-prev" type="button" data-news-prev
+                    aria-label="Previous news story">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" aria-hidden="true">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="news-carousel-window">
+                    <div class="news-carousel-track">
+                        <article class="highlight-card news-slide" data-news-slide>
+                            <div class="highlight-content">
+                                <span class="label">Media</span>
+                                <h3>ABC Drive</h3>
+                                <p>Kit discussed his research on self-awareness and metacognition on ABC Drive. The
+                                    segment starts at 13:25, and links to the related confidence-rating methods paper.
+                                </p>
+                                <div class="highlight-links">
+                                    <a href="https://www.abc.net.au/listen/programs/sydney-drive/drive/105130426"
+                                        target="_blank" rel="noopener" class="btn btn-primary">Listen on ABC</a>
+                                    <a href="https://link.springer.com/article/10.3758/s13428-025-02621-6"
+                                        target="_blank" rel="noopener" class="btn btn-secondary">Read Paper</a>
+                                </div>
+                            </div>
+                            <div class="highlight-image">
+                                <img src="img/abc-logo.png" alt="ABC Drive logo">
+                            </div>
+                        </article>
+
+                        <article class="highlight-card news-slide" data-news-slide>
+                            <div class="highlight-content">
+                                <span class="label">Conference</span>
+                                <h3>Psychonomics in NYC</h3>
+                                <p>Kit presented work on reactivity in a category learning task, and Yueting presented
+                                    her work examining reactivity in the Tower of Hanoi task.</p>
+                                <div class="highlight-links">
+                                    <a href="http://kitdouble.github.io/psychonom/24psychonomics_DOUBLE.pdf"
+                                        target="_blank" rel="noopener" class="btn btn-primary">View Slides</a>
+                                </div>
+                            </div>
+                            <div class="highlight-image highlight-image-wide">
+                                <img src="img/IMG_2327.jpeg" alt="Psychonomics conference in NYC">
+                            </div>
+                        </article>
+
+                        <article class="highlight-card news-slide" data-news-slide>
+                            <div class="highlight-content">
+                                <span class="label">Recognition</span>
+                                <h3>Kit named Australia's most-cited psychology researcher</h3>
+                                <p>According to an analysis published by The Australian Research Magazine, Kit received
+                                    the most citations in top-20 psychology journals among Australian researchers over
+                                    the past five years.</p>
+                                <div class="highlight-links">
+                                    <a href="https://www.theaustralian.com.au/special-reports/research-magazine/the-2025-research-magazine-showcases-australias-best/news-story/558038b72166c02a020a8df7c506fdc3"
+                                        target="_blank" rel="noopener" class="btn btn-primary">Read Article</a>
+                                </div>
+                            </div>
+                            <div class="highlight-image highlight-image-mark">
+                                <img src="img/logo.png" alt="USYD Meta Lab logo">
+                            </div>
+                        </article>
                     </div>
                 </div>
-                <div class="highlight-image">
-                    <img src="img/abc-logo.png" alt="ABC Listen">
-                </div>
+
+                <button class="news-carousel-btn news-carousel-btn-next" type="button" data-news-next
+                    aria-label="Next news story">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" aria-hidden="true">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+
+                <div class="news-carousel-dots" data-news-dots aria-label="News carousel pagination"></div>
             </div>
         </div>
     </section>
@@ -461,8 +825,10 @@
                 <div class="footer-right">
                     <div class="footer-links">
                         <a href="#research">Research</a>
+                        <a href="#demos">Demos</a>
                         <a href="#team">Team</a>
                         <a href="#publications">Publications</a>
+                        <a href="#news">News</a>
                         <a href="#resources">Resources</a>
                         <a href="#contact">Contact</a>
                     </div>

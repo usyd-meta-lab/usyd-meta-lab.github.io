@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meta Lab — Animated Icon</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1208;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    border-radius: 16px;
+  }
+
+  .on-paper { background: #f2e8ce; }
+  .on-dark  { background: #2d2a1e; border: 1.5px solid rgba(242,232,206,0.1); }
+  .on-green { background: #3a4f18; }
+
+  /* ── Shared animation keyframes ──────────────────── */
+  @keyframes draw-line   { to { stroke-dashoffset: 0; } }
+  @keyframes unfurl-l    { 0%{transform:scale(0) rotate(-15deg);opacity:0} 60%{opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+  @keyframes unfurl-r    { 0%{transform:scale(0) rotate(15deg);opacity:0}  60%{opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+
+  /* ── LARGE icon (paper) ────── delay set 1 ───────── */
+  #s1 { stroke-dasharray:60; stroke-dashoffset:60; animation: draw-line 0.4s ease-out 0.1s forwards; }
+  #st1{ stroke-dasharray:50; stroke-dashoffset:50; animation: draw-line 0.7s cubic-bezier(0.4,0,0.2,1) 0.4s forwards; }
+  #ll1{ transform-origin:50px 64px; transform:scale(0); opacity:0; animation: unfurl-l 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.95s forwards; }
+  #vl1{ stroke-dasharray:24; stroke-dashoffset:24; animation: draw-line 0.4s ease-out 1.3s forwards; }
+  #lr1{ transform-origin:50px 44px; transform:scale(0); opacity:0; animation: unfurl-r 0.55s cubic-bezier(0.34,1.56,0.64,1) 1.25s forwards; }
+  #vr1{ stroke-dasharray:24; stroke-dashoffset:24; animation: draw-line 0.4s ease-out 1.6s forwards; }
+
+  /* ── MEDIUM icon (dark) ────── delay set 2 ───────── */
+  #s2 { stroke-dasharray:60; stroke-dashoffset:60; animation: draw-line 0.4s ease-out 2.0s forwards; }
+  #st2{ stroke-dasharray:50; stroke-dashoffset:50; animation: draw-line 0.7s cubic-bezier(0.4,0,0.2,1) 2.3s forwards; }
+  #ll2{ transform-origin:50px 64px; transform:scale(0); opacity:0; animation: unfurl-l 0.55s cubic-bezier(0.34,1.56,0.64,1) 2.85s forwards; }
+  #vl2{ stroke-dasharray:24; stroke-dashoffset:24; animation: draw-line 0.4s ease-out 3.2s forwards; }
+  #lr2{ transform-origin:50px 44px; transform:scale(0); opacity:0; animation: unfurl-r 0.55s cubic-bezier(0.34,1.56,0.64,1) 3.1s forwards; }
+  #vr2{ stroke-dasharray:24; stroke-dashoffset:24; animation: draw-line 0.4s ease-out 3.45s forwards; }
+
+  /* ── SMALL icon (green) ────── delay set 3 ───────── */
+  #s3 { stroke-dasharray:60; stroke-dashoffset:60; animation: draw-line 0.4s ease-out 3.8s forwards; }
+  #st3{ stroke-dasharray:50; stroke-dashoffset:50; animation: draw-line 0.7s cubic-bezier(0.4,0,0.2,1) 4.1s forwards; }
+  #ll3{ transform-origin:50px 64px; transform:scale(0); opacity:0; animation: unfurl-l 0.55s cubic-bezier(0.34,1.56,0.64,1) 4.65s forwards; }
+  #vl3{ stroke-dasharray:24; stroke-dashoffset:24; animation: draw-line 0.4s ease-out 5.0s forwards; }
+  #lr3{ transform-origin:50px 44px; transform:scale(0); opacity:0; animation: unfurl-r 0.55s cubic-bezier(0.34,1.56,0.64,1) 4.95s forwards; }
+  #vr3{ stroke-dasharray:24; stroke-dashoffset:24; animation: draw-line 0.4s ease-out 5.25s forwards; }
+
+  .replay {
+    margin-top: 8px;
+    padding: 8px 20px;
+    background: transparent;
+    border: 1.5px solid rgba(242,232,206,0.25);
+    color: rgba(242,232,206,0.45);
+    border-radius: 20px;
+    font-family: sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .replay:hover { border-color: rgba(242,232,206,0.7); color: rgba(242,232,206,0.9); }
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <filter id="wobble">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="row">
+
+  <!-- Large — paper -->
+  <div class="icon-wrap on-paper">
+    <svg width="100" height="108" viewBox="0 0 100 108" fill="none" style="filter:url(#wobble);overflow:visible">
+      <path id="s1"  d="M28 104 Q50 96 72 104" stroke="#1a1208" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <path id="st1" d="M50 104 Q48 80 50 60 Q50 40 48 16" stroke="#1a1208" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+      <path id="ll1" d="M50 68 Q20 56 16 24 Q40 28 50 60" fill="#5a6b28" stroke="#1a1208" stroke-width="4" stroke-linejoin="round"/>
+      <path id="vl1" d="M50 64 Q32 48 24 28" stroke="#f2e8ce" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.7"/>
+      <path id="lr1" d="M50 48 Q80 32 84 4 Q60 8 50 40" fill="#7d9145" stroke="#1a1208" stroke-width="4" stroke-linejoin="round"/>
+      <path id="vr1" d="M50 44 Q68 30 78 8" stroke="#f2e8ce" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <!-- Medium — dark -->
+  <div class="icon-wrap on-dark">
+    <svg width="68" height="74" viewBox="0 0 100 108" fill="none" style="filter:url(#wobble);overflow:visible">
+      <path id="s2"  d="M28 104 Q50 96 72 104" stroke="#f2e8ce" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <path id="st2" d="M50 104 Q48 80 50 60 Q50 40 48 16" stroke="#f2e8ce" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+      <path id="ll2" d="M50 68 Q20 56 16 24 Q40 28 50 60" fill="#7d9145" stroke="#f2e8ce" stroke-width="4" stroke-linejoin="round"/>
+      <path id="vl2" d="M50 64 Q32 48 24 28" stroke="#2d2a1e" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.6"/>
+      <path id="lr2" d="M50 48 Q80 32 84 4 Q60 8 50 40" fill="#a3b85a" stroke="#f2e8ce" stroke-width="4" stroke-linejoin="round"/>
+      <path id="vr2" d="M50 44 Q68 30 78 8" stroke="#2d2a1e" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <!-- Small — deep green -->
+  <div class="icon-wrap on-green">
+    <svg width="44" height="48" viewBox="0 0 100 108" fill="none" style="filter:url(#wobble);overflow:visible">
+      <path id="s3"  d="M28 104 Q50 96 72 104" stroke="#f2e8ce" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path id="st3" d="M50 104 Q48 80 50 60 Q50 40 48 16" stroke="#f2e8ce" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+      <path id="ll3" d="M50 68 Q20 56 16 24 Q40 28 50 60" fill="#c8d870" stroke="#f2e8ce" stroke-width="4" stroke-linejoin="round" opacity="0.9"/>
+      <path id="vl3" d="M50 64 Q32 48 24 28" stroke="#3a4f18" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path id="lr3" d="M50 48 Q80 32 84 4 Q60 8 50 40" fill="#f2e8ce" stroke="#f2e8ce" stroke-width="4" stroke-linejoin="round" opacity="0.85"/>
+      <path id="vr3" d="M50 44 Q68 30 78 8" stroke="#3a4f18" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+    </svg>
+  </div>
+
+</div>
+
+<button class="replay" onclick="location.reload()">↺ Replay</button>
+
+<template id="__bundler_thumbnail" data-bg-color="#1a1208">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="200" fill="#1a1208"/>
+    <rect x="40" y="40" width="120" height="120" rx="14" fill="#f2e8ce"/>
+    <line x1="100" y1="148" x2="100" y2="56" stroke="#1a1208" stroke-width="6" stroke-linecap="round"/>
+    <path d="M100 108 Q72 96 70 72 Q90 74 100 100" fill="#5a6b28"/>
+    <path d="M100 88 Q128 74 130 52 Q110 54 100 82" fill="#7d9145"/>
+    <path d="M76 149 Q100 142 124 149" stroke="#1a1208" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </svg>
+</template>
+
+</body>
+</html>
