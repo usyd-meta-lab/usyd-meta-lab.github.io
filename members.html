@@ -209,16 +209,69 @@ img { max-width:100%; display:block; }
 /* ── Steps ──────────────────────────────────────────────────────────────── */
 .steps { display:flex; flex-direction:column; gap:0; }
 .step {
-  display:grid; grid-template-columns:80px 1fr; gap:32px;
-  padding:36px 0; border-bottom:1px solid var(--color-border);
+  border-bottom:1px solid var(--color-border);
 }
 .step:first-child { border-top:1px solid var(--color-border); }
+.step > summary {
+  display:grid; grid-template-columns:80px 1fr auto; gap:32px;
+  padding:36px 0; cursor:pointer; list-style:none;
+  align-items:center;
+}
+.step > summary::-webkit-details-marker { display:none; }
+.step > summary::after {
+  content:"∨";
+  justify-self:end;
+  align-self:center;
+  font-size:2.4rem;
+  line-height:1;
+  color:var(--color-text-light);
+  transform:translateY(-2px);
+  transition:transform 0.25s var(--ease), color 0.25s var(--ease);
+}
+.step[open] > summary::after {
+  content:"∧";
+  transform:translateY(-2px);
+}
+.step > summary:focus-visible {
+  outline:2px solid var(--color-accent);
+  outline-offset:4px;
+  border-radius:12px;
+}
+.step[open] > summary {
+  padding-bottom:18px;
+}
 .step-num {
   font-family:var(--font-display); font-size:2rem; font-weight:500;
   color:var(--color-text-light); line-height:1; padding-top:4px;
 }
 .step h3 { font-family:var(--font-display); font-size:1.25rem; font-weight:500; margin-bottom:10px; }
-.step p { font-size:0.9375rem; color:var(--color-text-muted); line-height:1.7; }
+.step-summary p { font-size:0.9375rem; color:var(--color-text-muted); line-height:1.7; margin:0; }
+.step-body {
+  padding: 0 0 36px calc(80px + 32px);
+}
+.step-body p {
+  font-size:0.9375rem; color:var(--color-text-muted); line-height:1.7;
+}
+.step-body ul {
+  margin: 16px 0 0;
+  padding-left: 1.2rem;
+  color:var(--color-text-muted);
+  line-height:1.7;
+}
+.step-body li { margin-bottom: 10px; }
+.step-body code {
+  font-size:0.8rem;
+  background:var(--color-bg-card);
+  padding:2px 6px;
+  border-radius:4px;
+}
+.step-note {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--color-bg-card);
+  border: 1px solid rgba(139, 111, 84, 0.18);
+}
 .step-links { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
 .step-tag {
   padding:6px 16px; border-radius:100px; font-size:0.8rem;
@@ -239,6 +292,20 @@ img { max-width:100%; display:block; }
   background:var(--color-bg-dark); color:var(--color-bg);
   display:flex; align-items:center; justify-content:center;
   font-family:var(--font-display); font-size:1.1rem; font-weight:600;
+}
+.resource-logo {
+  width:40px; height:40px; border-radius:10px;
+  background:var(--color-bg);
+  border:1px solid rgba(54,36,24,0.08);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.resource-logo img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 .resource-card h3 { font-family:var(--font-display); font-size:1.05rem; font-weight:500; }
 .resource-card p { font-size:0.875rem; color:var(--color-text-muted); line-height:1.6; flex:1; }
@@ -339,7 +406,8 @@ img { max-width:100%; display:block; }
 }
 @media(max-width:600px){
   .software-grid,.resources-grid,.meetings-grid { grid-template-columns:1fr; }
-  .step { grid-template-columns:48px 1fr; gap:16px; }
+  .step > summary { grid-template-columns:48px 1fr auto; gap:16px; }
+  .step-body { padding-left: calc(48px + 16px); }
 }
 </style>
 </head>
@@ -450,7 +518,8 @@ img { max-width:100%; display:block; }
         <div class="account-num">02</div>
         <div>
           <h3>SONA</h3>
-          <p>Apply to be added as a researcher at <a href="https://sydneypsych.sona-systems.com/" target="_blank">sydneypsych.sona-systems.com</a> via the school request form.</p>
+          <p>Apply to be added as a researcher at <a href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener">sydneypsych.sona-systems.com</a> via the school request form.</p>
+          <p style="margin-top:8px;"><a href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener" style="color:var(--color-accent);">Open SONA system →</a></p>
         </div>
       </div>
       <div class="account-card">
@@ -506,7 +575,9 @@ img { max-width:100%; display:block; }
     </div>
     <div class="resources-grid reveal">
       <a href="https://metaforge.live" target="_blank" class="resource-card">
-        <div class="resource-initial">M</div>
+        <div class="resource-logo" aria-hidden="true">
+          <img src="https://metaforge.live/logo.png" alt="" loading="lazy" />
+        </div>
         <h3>MetaForge</h3>
         <p>Our primary platform for coding and hosting online experiments. Build, publish and monitor studies.</p>
         <span class="resource-arrow">metaforge.live →</span>
@@ -574,56 +645,126 @@ all_data &lt;- <span class="code-fn">metaforge_get_all_data</span>(combine = <sp
       <p class="section-desc">The full pipeline from experiment build to live data collection. Follow these steps in order.</p>
     </div>
     <div class="steps reveal">
-      <div class="step">
-        <div class="step-num">01</div>
-        <div>
-          <h3>Build on MetaForge</h3>
-          <p>Build your experiment on MetaForge. Use the built-in Gemini AI for help, or a paid Claude account with the lab bot. When ready, click <strong>Publish</strong> to get your experiment URL:<br>
-          <code style="font-size:0.8rem;background:var(--color-bg-card);padding:2px 8px;border-radius:6px;margin-top:6px;display:inline-block;">https://metaforge.live/?run={your-project-id}</code></p>
+      <details class="step">
+        <summary>
+          <div class="step-num">01</div>
+          <div class="step-summary">
+            <h3>Build on MetaForge</h3>
+            <p>Build your experiment on MetaForge and publish it when the study is ready to test.</p>
+          </div>
+        </summary>
+        <div class="step-body">
+          <p>Use the built-in Gemini AI for help, or a paid Claude account with the lab bot. When ready, click <strong>Publish</strong> to get your experiment URL.</p>
+          <p><code>https://metaforge.live/?run={your-project-id}</code></p>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <div>
-          <h3>Set up on Prolific (if using)</h3>
+      </details>
+
+      <details class="step">
+        <summary>
+          <div class="step-num">02</div>
+          <div class="step-summary">
+            <h3>Set up on Prolific (if using)</h3>
+            <p>Use the Prolific integration or set it up manually, then prepare the URL and payment settings.</p>
+          </div>
+        </summary>
+        <div class="step-body">
           <p>Use MetaForge's built-in Prolific integration (Project Settings → Prolific tab) or set up manually. Append the Prolific ID to your URL and set pay to <strong>£6/hour</strong>. Use Quota Sample for balanced gender.</p>
           <div class="step-links">
             <a href="https://app.prolific.com" target="_blank" class="step-tag">Prolific →</a>
           </div>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <div>
-          <h3>Set up on SONA (if using)</h3>
-          <p>Read the SONA handbook, then add a new Online External Study. Append <code style="font-size:0.8rem;background:var(--color-bg-card);padding:2px 6px;border-radius:4px;">&SONAID=%SURVEY_CODE%</code> to your URL. Set Active = Yes and Automatic Credit Granting = Yes. Then request school approval.</p>
+      </details>
+
+      <details class="step">
+        <summary>
+          <div class="step-num">03</div>
+          <div class="step-summary">
+            <h3>Set up on SONA (if using)</h3>
+            <p>Add the study in SONA, keep the protocol text exact, and then handle the completion redirect and school approval.</p>
+          </div>
+        </summary>
+        <div class="step-body">
+          <div class="step-note">
+            <p>Add new study in SONA. Name, brief abstract, and detail abstract must be exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol.</p>
+            <p><a href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener" style="color:var(--color-accent);">Open SONA system →</a></p>
+            <ul>
+              <li><strong>Study Name:</strong> exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol. If it has already been used, you will get an error and you may make a slight modification, for example add a full stop at the end.</li>
+              <li><strong>Brief abstract:</strong> exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol.</li>
+              <li><strong>Detailed description:</strong> exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol.</li>
+              <li><strong>Credit:</strong> 1 = 60 minutes, so set accordingly.</li>
+              <li><strong>Duration:</strong> set to the study duration.</li>
+              <li><strong>Human Res Ethics Com Approval Code:</strong> enter your ethics code, for example <code>2022/796</code>.</li>
+              <li><strong>Active Study?</strong> set to <strong>Yes</strong>.</li>
+              <li>Keep scrolling down for advanced settings...</li>
+              <li><strong>Study URL (if online):</strong> use the MetaForge link with <code>&amp;survey_code=%SURVEY_CODE%</code> added, for example <code>https://metaforge.live?run=XXXXXX&amp;survey_code=%SURVEY_CODE%</code>.</li>
+              <li><strong>Automatic Credit Granting:</strong> set to <strong>NO</strong>.</li>
+              <li><strong>Everything else:</strong> leave at the default settings.</li>
+              <li><strong>Save study.</strong></li>
+              <li>When you open a study, you will see the study information. You need the <strong>Completion URL</strong>.</li>
+              <li>It will look like this:
+                <div style="margin-top:10px; padding:12px 14px; border-radius:14px; background:rgba(54,36,24,.06); border:1px solid rgba(54,36,24,.08); font-family:var(--font-mono); font-size:0.92rem; line-height:1.5; word-break:break-all;">
+                  https://sydneypsych.sona-systems.com/webstudy_credit.aspx?experiment_id=3681&amp;credit_token=4a679ef8e7234d5faab5a3e1d27ed843&amp;survey_code=XXXX
+                </div>
+              </li>
+              <li>In MetaForge, go to <strong>Settings → Distribute → Redirects</strong> and copy the completion link <strong>without the <code>survey_code</code> bit</strong>. For the example above, paste only:
+                <div style="margin-top:10px; padding:12px 14px; border-radius:14px; background:rgba(54,36,24,.06); border:1px solid rgba(54,36,24,.08); font-family:var(--font-mono); font-size:0.92rem; line-height:1.5; word-break:break-all;">
+                  https://sydneypsych.sona-systems.com/webstudy_credit.aspx?experiment_id=3681&amp;credit_token=4a679ef8e7234d5faab5a3e1d27ed843
+                </div>
+              </li>
+              <li>After that, get school approval by filling in the <a href="https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L" target="_blank" rel="noopener" style="color:var(--color-accent);">approval form</a>.</li>
+              <li>The form will ask you to copy the recruitment description from the umbrella ethics file named <code>SONApsych-description.txt</code>.</li>
+              <li>Approval usually takes a few days. Once approved, you can put up timeslots.</li>
+              <li>Use a timeslot date in the next few days when you create timeslots, so participants do not wait until the last minute.</li>
+              <li>If you are doing face-to-face testing, book the Brennan MacCallum 448 lab room before putting up slots using the <a href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" rel="noopener" style="color:var(--color-accent);">School of Psychology Resource Booker</a>. The room can hold up to 10 participants at a time.</li>
+            </ul>
+          </div>
           <div class="step-links">
             <a href="https://sydney-psych.sona-systems.com/" target="_blank" class="step-tag">SONA →</a>
             <a href="https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2026.pdf" target="_blank" class="step-tag">SONA Handbook →</a>
+            <a href="https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L" target="_blank" class="step-tag">Approval form →</a>
+            <a href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" class="step-tag">Book lab room →</a>
           </div>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
-        <div>
-          <h3>Test thoroughly</h3>
+      </details>
+
+      <details class="step">
+        <summary>
+          <div class="step-num">04</div>
+          <div class="step-summary">
+            <h3>Test thoroughly</h3>
+            <p>Run the study yourself before going live and make sure the redirects and data save correctly.</p>
+          </div>
+        </summary>
+        <div class="step-body">
           <p>Run through the study yourself using test parameters. Verify data saves in MetaForge and redirects work correctly at the end. Add test IDs to your URL to simulate real participants.</p>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">05</div>
-        <div>
-          <h3>Preregister</h3>
-          <p>Preregister <strong>before</strong> collecting any data. The lab recommends <a href="https://aspredicted.org/" target="_blank" style="color:var(--color-accent);">AsPredicted</a> for most studies.</p>
+      </details>
+
+      <details class="step">
+        <summary>
+          <div class="step-num">05</div>
+          <div class="step-summary">
+            <h3>Preregister</h3>
+            <p>Register the study before data collection starts.</p>
+          </div>
+        </summary>
+        <div class="step-body">
+          <p>Preregister <strong>before</strong> collecting any data. Use <a href="https://aspredicted.org/" target="_blank" style="color:var(--color-accent);">AsPredicted</a> for most studies.</p>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">06</div>
-        <div>
-          <h3>Go live & monitor</h3>
-          <p>Launch on SONA (add slots) or Prolific (publish). Monitor incoming data on your MetaForge dashboard and download via the R API when complete.</p>
+      </details>
+
+      <details class="step">
+        <summary>
+          <div class="step-num">06</div>
+          <div class="step-summary">
+            <h3>Go live & monitor</h3>
+            <p>Launch, watch incoming data, and keep the study open only as long as needed.</p>
+          </div>
+        </summary>
+        <div class="step-body">
+          <p>Launch on SONA (add slots) or Prolific (publish). Monitor incoming data on your MetaForge dashboard and download in MetaForge (or via the R API) when complete.</p>
         </div>
-      </div>
+      </details>
     </div>
   </div>
 </section>
