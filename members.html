@@ -65,7 +65,30 @@ img { max-width:100%; display:block; }
 /* ── Nav ────────────────────────────────────────────────────────────────── */
 .nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
-  height:72px; display:flex; align-items:center; justify-content:center;
+  height:72px; display:flex; align-items:center;
+  padding:0 40px;
+}
+.nav-inner {
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  display:inline-flex; align-items:center; gap:10px;
+  text-decoration:none; color:var(--color-text);
+  transition:opacity 0.3s;
+}
+.nav-logo:hover { opacity:0.7; }
+.nav-logo-mark {
+  width:36px; height:36px; flex-shrink:0;
+}
+.nav-logo-mark svg { width:100%; height:100%; }
+.nav-logo-wordmark { display:flex; flex-direction:column; line-height:1; }
+.nav-logo-name {
+  font-family:var(--font-logo); font-size:1.25rem; font-weight:700;
+  color:var(--color-text);
+}
+.nav-logo-sub {
+  font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--color-text-muted); margin-top:2px;
 }
 .nav-links {
   display:flex; gap:32px; align-items:center;
@@ -415,6 +438,23 @@ img { max-width:100%; display:block; }
 
 <!-- ── Password gate ──────────────────────────────────────────────────── -->
 <div id="gate">
+  <a href="index.html" class="nav-logo" style="position:absolute;top:28px;left:40px;" aria-label="USYD Meta Lab home">
+    <span class="nav-logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+        <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+        <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+        <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+      </svg>
+    </span>
+    <span class="nav-logo-wordmark">
+      <span class="nav-logo-name">Meta Lab</span>
+      <span class="nav-logo-sub">University of Sydney</span>
+    </span>
+  </a>
   <div class="gate-inner">
     <div class="gate-icon">🔒</div>
     <h2 class="gate-title">Members Area</h2>
@@ -429,14 +469,32 @@ img { max-width:100%; display:block; }
 
 <!-- ── Nav ───────────────────────────────────────────────────────────── -->
 <nav class="nav">
-  <div class="nav-links">
-    <a href="index.html">← Main site</a>
-    <a href="#onboarding">Onboarding</a>
-    <a href="#tools">Tools</a>
-    <a href="#launching">Launching a study</a>
-    <a href="#ethics">Ethics</a>
-    <a href="#meetings">Meetings</a>
-    <span class="nav-pill">Members</span>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="USYD Meta Lab home">
+      <span class="nav-logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+          <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+          <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+          <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+          <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+          <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+      </span>
+      <span class="nav-logo-wordmark">
+        <span class="nav-logo-name">Meta Lab</span>
+        <span class="nav-logo-sub">University of Sydney</span>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a href="#onboarding">Onboarding</a>
+      <a href="#tools">Tools</a>
+      <a href="#launching">Launching a study</a>
+      <a href="#ethics">Ethics</a>
+      <a href="#meetings">Meetings</a>
+      <span class="nav-pill">Members</span>
+    </div>
   </div>
 </nav>
 
