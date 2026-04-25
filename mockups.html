@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Mockups — Our Research Section</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Mockup scaffold ─── */
+        .mockup-wrapper {
+            background: #fcf6ef;
+            padding: 0;
+        }
+        .mockup-banner {
+            background: #2b180a;
+            color: #fcf6ef;
+            text-align: center;
+            padding: 18px 32px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .mockup-banner a {
+            color: #c8956c;
+            text-decoration: none;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 64px 64px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .option-label-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 500;
+            color: #e0d4c6;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .option-label-text h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #c8956c;
+            margin-bottom: 4px;
+        }
+        .option-label-text p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #6b5a4a;
+        }
+        .option-divider {
+            border: none;
+            border-top: 2px solid #e0d4c6;
+            max-width: calc(1200px - 128px);
+            margin: 32px auto 0;
+        }
+
+        /* ═══════════════════════════════════════
+           OPTION A — Editorial Stack
+           Title → Image banner → 3 columns
+        ═══════════════════════════════════════ */
+        .option-a {
+            padding: 72px 64px 96px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .option-a .oa-header {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 80px;
+            align-items: end;
+            margin-bottom: 48px;
+        }
+        .option-a .oa-label span.label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #6b5a4a;
+        }
+        .option-a .oa-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .option-a .oa-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: #2b180a;
+        }
+        .option-a .oa-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: #6b5a4a;
+            line-height: 1.7;
+            max-width: 640px;
+        }
+        .option-a .oa-image {
+            width: 100%;
+            height: 340px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 64px;
+            display: block;
+        }
+        .option-a .oa-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+        }
+        .option-a .oa-col-heading {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #c8956c;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0d4c6;
+        }
+        .option-a .oa-col-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #6b5a4a;
+        }
+
+        /* ═══════════════════════════════════════
+           OPTION B — Image Panel (split layout)
+           Content left | Sticky image right
+        ═══════════════════════════════════════ */
+        .option-b {
+            padding: 72px 64px 96px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .option-b .ob-label span {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #6b5a4a;
+            display: block;
+            margin-bottom: 32px;
+        }
+        .option-b .ob-grid {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 80px;
+            align-items: start;
+        }
+        .option-b .ob-content-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: #2b180a;
+            margin-bottom: 48px;
+        }
+        .option-b .ob-section {
+            padding: 32px 0;
+            border-top: 1px solid #e0d4c6;
+        }
+        .option-b .ob-section:last-child {
+            border-bottom: 1px solid #e0d4c6;
+        }
+        .option-b .ob-section-heading {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #c8956c;
+            margin-bottom: 12px;
+        }
+        .option-b .ob-section-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #6b5a4a;
+        }
+        .option-b .ob-image-wrap {
+            position: sticky;
+            top: 120px;
+        }
+        .option-b .ob-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 4px;
+            display: block;
+        }
+        .option-b .ob-image-caption {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: #9a8a7a;
+            margin-top: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        /* ═══════════════════════════════════════
+           OPTION C — Dark Feature Cards
+           Title + image → 3 dark accent cards
+        ═══════════════════════════════════════ */
+        .option-c {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 72px 64px 96px;
+        }
+        .option-c .oc-top {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 80px;
+            margin-bottom: 64px;
+            align-items: start;
+        }
+        .option-c .oc-label span {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #6b5a4a;
+        }
+        .option-c .oc-right {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 64px;
+            align-items: center;
+        }
+        .option-c .oc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: #2b180a;
+            margin-bottom: 20px;
+        }
+        .option-c .oc-intro {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #6b5a4a;
+        }
+        .option-c .oc-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 4px;
+            display: block;
+        }
+        .option-c .oc-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: #e0d4c6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .option-c .oc-card {
+            background: #2b180a;
+            padding: 40px 36px;
+            color: #fcf6ef;
+        }
+        .option-c .oc-card-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #c8956c;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .option-c .oc-card-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 1px;
+            background: #c8956c;
+            flex-shrink: 0;
+        }
+        .option-c .oc-card-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            line-height: 1.75;
+            color: #c8b5a0;
+        }
+    </style>
+</head>
+<body class="mockup-wrapper">
+
+<div class="mockup-banner">
+    Design Mockups — "Our Research" Section &nbsp;·&nbsp;
+    <a href="index.html">← Back to live site</a>
+</div>
+
+<!-- ──────────────────────────────────────────────────────
+     OPTION A — Editorial Stack
+────────────────────────────────────────────────────── -->
+<div class="option-label">
+    <div class="option-label-num">A</div>
+    <div class="option-label-text">
+        <h3>Option A — Editorial Stack</h3>
+        <p>Landscape image banner below the title; three equal columns for the sub-sections. Clean and wide.</p>
+    </div>
+</div>
+<hr class="option-divider">
+
+<div class="option-a">
+    <div class="oa-header">
+        <div class="oa-label"><span class="label">About the Lab</span></div>
+        <div class="oa-title-block">
+            <h2 class="oa-title">Our Research</h2>
+            <p class="oa-tagline">We study how people think about their own thinking — and how understanding this process can help people learn better, feel better, and make sharper decisions.</p>
+        </div>
+    </div>
+
+    <img src="img/campus.jpeg" alt="University of Sydney campus" class="oa-image">
+
+    <div class="oa-columns">
+        <div>
+            <div class="oa-col-heading">What We Study</div>
+            <p class="oa-col-text">We investigate how individuals monitor and regulate their thoughts and emotions — the mechanisms by which people understand, evaluate, and adaptively modify their internal cognitive and emotional experiences. This field, broadly known as metacognition, sits at the intersection of cognitive, affective, and educational psychology.</p>
+        </div>
+        <div>
+            <div class="oa-col-heading">Why It Matters</div>
+            <p class="oa-col-text">When people miscalibrate their confidence, misread their emotions, or fail to adapt their thinking strategies, the consequences are real: poor learning outcomes, flawed decisions, and impaired wellbeing. By understanding when and why metacognition breaks down — and when it works — we can develop evidence-based interventions that meaningfully improve people's lives.</p>
+        </div>
+        <div>
+            <div class="oa-col-heading">Our Approach</div>
+            <p class="oa-col-text">We combine rigorous experimental methods with individual differences research to build innovative theoretical frameworks and test practical interventions. Our work spans laboratory and applied settings, with a particular focus on educational contexts — translating basic cognitive science into strategies that help people learn more effectively.</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- ──────────────────────────────────────────────────────
+     OPTION B — Image Panel
+────────────────────────────────────────────────────── -->
+<div style="background: #f6f0e9; padding: 1px 0;">
+
+<div class="option-label" style="padding-top: 64px;">
+    <div class="option-label-num">B</div>
+    <div class="option-label-text">
+        <h3>Option B — Image Panel</h3>
+        <p>Content on the left with stacked sub-sections; portrait-orientation image pinned to the right. Feels editorial and dynamic.</p>
+    </div>
+</div>
+<hr class="option-divider">
+
+<div class="option-b">
+    <div class="ob-label"><span class="label">About the Lab</span></div>
+    <div class="ob-grid">
+        <div class="ob-content">
+            <h2 class="ob-content-title">Our Research</h2>
+            <div class="ob-section">
+                <div class="ob-section-heading">What We Study</div>
+                <p class="ob-section-text">We investigate how individuals monitor and regulate their thoughts and emotions — the mechanisms by which people understand, evaluate, and adaptively modify their internal cognitive and emotional experiences. This field, broadly known as metacognition, sits at the intersection of cognitive, affective, and educational psychology.</p>
+            </div>
+            <div class="ob-section">
+                <div class="ob-section-heading">Why It Matters</div>
+                <p class="ob-section-text">When people miscalibrate their confidence, misread their emotions, or fail to adapt their thinking strategies, the consequences are real: poor learning outcomes, flawed decisions, and impaired wellbeing. By understanding when and why metacognition breaks down — and when it works — we can develop evidence-based interventions that meaningfully improve people's lives.</p>
+            </div>
+            <div class="ob-section">
+                <div class="ob-section-heading">Our Approach</div>
+                <p class="ob-section-text">We combine rigorous experimental methods with individual differences research to build innovative theoretical frameworks and test practical interventions. Our work spans laboratory and applied settings, with a particular focus on educational contexts — translating basic cognitive science into strategies that help people learn more effectively.</p>
+            </div>
+        </div>
+        <div class="ob-image-wrap">
+            <img src="img/campus.jpeg" alt="University of Sydney campus" class="ob-image">
+            <p class="ob-image-caption">University of Sydney, Camperdown</p>
+        </div>
+    </div>
+</div>
+
+</div><!-- end option-b background -->
+
+
+<!-- ──────────────────────────────────────────────────────
+     OPTION C — Dark Feature Cards
+────────────────────────────────────────────────────── -->
+<div class="option-label">
+    <div class="option-label-num">C</div>
+    <div class="option-label-text">
+        <h3>Option C — Dark Feature Cards</h3>
+        <p>Title and image sit side-by-side at top; three dark accent cards below create strong visual contrast. Bold and distinctive.</p>
+    </div>
+</div>
+<hr class="option-divider">
+
+<div class="option-c">
+    <div class="oc-top">
+        <div class="oc-label"><span>About the Lab</span></div>
+        <div class="oc-right">
+            <div>
+                <h2 class="oc-title">Our Research</h2>
+                <p class="oc-intro">We study how people think about their own thinking — and how that process shapes learning, emotion, and decision-making. Our interdisciplinary work bridges cognitive, affective, and educational psychology to build both theoretical understanding and practical tools.</p>
+            </div>
+            <img src="img/campus.jpeg" alt="University of Sydney campus" class="oc-image">
+        </div>
+    </div>
+
+    <div class="oc-cards">
+        <div class="oc-card">
+            <div class="oc-card-label">What We Study</div>
+            <p class="oc-card-text">We investigate how individuals monitor and regulate their thoughts and emotions — the mechanisms by which people understand, evaluate, and adaptively modify their internal cognitive and emotional experiences.</p>
+        </div>
+        <div class="oc-card">
+            <div class="oc-card-label">Why It Matters</div>
+            <p class="oc-card-text">Miscalibrated confidence, unread emotions, and inflexible thinking strategies have real consequences for learning and wellbeing. Understanding when metacognition breaks down lets us build interventions that genuinely help.</p>
+        </div>
+        <div class="oc-card">
+            <div class="oc-card-label">Our Approach</div>
+            <p class="oc-card-text">We combine rigorous experiments with individual differences research, building frameworks and testing practical interventions — with a particular focus on translating cognitive science into educational practice.</p>
+        </div>
+    </div>
+</div>
+
+<div style="height: 80px;"></div>
+
+</body>
+</html>
