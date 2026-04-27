@@ -466,11 +466,6 @@ img { max-width:100%; display:block; }
   text-transform:uppercase; color:var(--color-accent); margin-bottom:6px;
   display:block;
 }
-.tl-card-date {
-  font-family:var(--font-display); font-size:0.9rem;
-  color:var(--color-text-light); margin-bottom:18px;
-  display:block;
-}
 .tl-card-title {
   font-family:var(--font-display);
   font-size:clamp(1.5rem,2.5vw,2.1rem);
@@ -482,38 +477,6 @@ img { max-width:100%; display:block; }
   font-size:0.9375rem; line-height:1.75;
   color:var(--color-text-muted); max-width:540px;
 }
-.tl-status {
-  display:inline-flex; align-items:center; gap:6px;
-  padding:5px 14px; border-radius:100px;
-  font-size:0.72rem; font-weight:600; letter-spacing:0.05em;
-  margin-top:22px;
-}
-.tl-status::before {
-  content:''; width:6px; height:6px; border-radius:50%; flex-shrink:0;
-}
-.tl-status--done {
-  background:rgba(200,149,108,0.1); color:var(--color-accent);
-  border:1px solid rgba(200,149,108,0.25);
-}
-.tl-status--done::before { background:var(--color-accent); }
-.tl-status--active {
-  background:rgba(43,24,10,0.06); color:var(--color-text);
-  border:1px solid var(--color-border);
-}
-.tl-status--active::before {
-  background:var(--color-text);
-  animation:tl-pulse 1.6s ease-in-out infinite;
-}
-.tl-status--upcoming {
-  background:transparent; color:var(--color-text-light);
-  border:1px solid var(--color-border);
-}
-.tl-status--upcoming::before { background:var(--color-border); }
-@keyframes tl-pulse {
-  0%,100% { opacity:1; }
-  50% { opacity:0.25; }
-}
-
 /* Decorative number */
 .tl-card-num {
   font-family:var(--font-display);
@@ -706,7 +669,7 @@ img { max-width:100%; display:block; }
     <div class="tl-header reveal">
       <span class="label">Research Pipeline</span>
       <h2 class="section-title">Project timeline</h2>
-      <p class="section-desc">A living snapshot of the lab's current research lifecycle — from conception through to publication.</p>
+      <p class="section-desc">The five stages of a research project in the Meta Lab — use the arrows or dots to step through each phase and find relevant tools and advice.</p>
     </div>
 
     <div class="tl-slider reveal">
@@ -724,11 +687,13 @@ img { max-width:100%; display:block; }
             <div class="tl-slide">
               <div class="tl-card">
                 <div class="tl-card-body">
-                  <span class="tl-card-phase">Phase 01</span>
-                  <span class="tl-card-date">Oct – Dec 2023</span>
+                  <span class="tl-card-phase">Stage 01</span>
                   <h3 class="tl-card-title">Conception &amp; Design</h3>
-                  <p class="tl-card-desc">Initial literature review, research question scoping, and paradigm selection. The experimental design and stimuli framework are finalised in preparation for ethics submission.</p>
-                  <span class="tl-status tl-status--done">Complete</span>
+                  <p class="tl-card-desc">Formulate your research question and choose a suitable paradigm. Review existing literature, map out your design, and prepare stimuli. This is the time to consult Kit and define your preregistration plan before moving to ethics.</p>
+                  <div class="step-links" style="margin-top:20px;">
+                    <a href="https://usyd-meta-lab.github.io/lab_wiki.html" target="_blank" class="step-tag">Lab wiki →</a>
+                    <a href="https://metaforge.live" target="_blank" class="step-tag">MetaForge →</a>
+                  </div>
                 </div>
                 <div class="tl-card-num" aria-hidden="true">01</div>
               </div>
@@ -738,11 +703,14 @@ img { max-width:100%; display:block; }
             <div class="tl-slide">
               <div class="tl-card">
                 <div class="tl-card-body">
-                  <span class="tl-card-phase">Phase 02</span>
-                  <span class="tl-card-date">Jan – Mar 2024</span>
+                  <span class="tl-card-phase">Stage 02</span>
                   <h3 class="tl-card-title">Ethics &amp; Preregistration</h3>
-                  <p class="tl-card-desc">Ethics application submitted under the lab's umbrella protocol. Study design preregistered on AsPredicted prior to any data collection. SONA advertisement texts prepared and approved.</p>
-                  <span class="tl-status tl-status--done">Complete</span>
+                  <p class="tl-card-desc">Submit your ethics application under the lab umbrella protocol and preregister your design on AsPredicted before any data collection. SONA advertisement text must match the ethics documents exactly — contact Kit early.</p>
+                  <div class="step-links" style="margin-top:20px;">
+                    <a href="https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e" target="_blank" class="step-tag">myResearch Ethics →</a>
+                    <a href="https://aspredicted.org/" target="_blank" class="step-tag">AsPredicted →</a>
+                    <a href="https://github.sydney.edu.au/usyd-meta-lab/Ethics" target="_blank" class="step-tag">Ethics repo →</a>
+                  </div>
                 </div>
                 <div class="tl-card-num" aria-hidden="true">02</div>
               </div>
@@ -752,11 +720,14 @@ img { max-width:100%; display:block; }
             <div class="tl-slide">
               <div class="tl-card">
                 <div class="tl-card-body">
-                  <span class="tl-card-phase">Phase 03</span>
-                  <span class="tl-card-date">Apr – Jun 2024</span>
+                  <span class="tl-card-phase">Stage 03</span>
                   <h3 class="tl-card-title">Piloting</h3>
-                  <p class="tl-card-desc">Small-scale pilot run (~20 participants) to test the experiment flow, timing, and data pipeline. Results used to refine stimuli and confirm power calculations before full data collection begins.</p>
-                  <span class="tl-status tl-status--done">Complete</span>
+                  <p class="tl-card-desc">Run a small pilot (~15–20 participants) to stress-test the experiment flow, timing, and data pipeline. Use results to confirm your power estimates and refine stimuli before committing to full data collection.</p>
+                  <div class="step-links" style="margin-top:20px;">
+                    <a href="https://metaforge.live" target="_blank" class="step-tag">MetaForge →</a>
+                    <a href="https://sydneypsych.sona-systems.com/" target="_blank" class="step-tag">SONA →</a>
+                    <a href="https://prolific.com" target="_blank" class="step-tag">Prolific →</a>
+                  </div>
                 </div>
                 <div class="tl-card-num" aria-hidden="true">03</div>
               </div>
@@ -766,11 +737,14 @@ img { max-width:100%; display:block; }
             <div class="tl-slide">
               <div class="tl-card">
                 <div class="tl-card-body">
-                  <span class="tl-card-phase">Phase 04</span>
-                  <span class="tl-card-date">Jul – Dec 2024</span>
+                  <span class="tl-card-phase">Stage 04</span>
                   <h3 class="tl-card-title">Data Collection</h3>
-                  <p class="tl-card-desc">Full data collection via SONA and Prolific. Participants recruited in batches across both platforms, with data quality and completeness monitored weekly against preregistered targets.</p>
-                  <span class="tl-status tl-status--active">In progress</span>
+                  <p class="tl-card-desc">Recruit via SONA or Prolific following the approved protocol. Monitor incoming data weekly for quality and completeness, and stay within your preregistered sample size and inclusion criteria — do not peek at effects.</p>
+                  <div class="step-links" style="margin-top:20px;">
+                    <a href="https://sydneypsych.sona-systems.com/" target="_blank" class="step-tag">SONA →</a>
+                    <a href="https://prolific.com" target="_blank" class="step-tag">Prolific →</a>
+                    <a href="https://metaforge.live" target="_blank" class="step-tag">MetaForge dashboard →</a>
+                  </div>
                 </div>
                 <div class="tl-card-num" aria-hidden="true">04</div>
               </div>
@@ -780,11 +754,14 @@ img { max-width:100%; display:block; }
             <div class="tl-slide">
               <div class="tl-card">
                 <div class="tl-card-body">
-                  <span class="tl-card-phase">Phase 05</span>
-                  <span class="tl-card-date">Jan – Jun 2025</span>
+                  <span class="tl-card-phase">Stage 05</span>
                   <h3 class="tl-card-title">Analysis &amp; Write-up</h3>
-                  <p class="tl-card-desc">Pre-planned analyses run in R and JASP. Manuscript drafted for target journal, with a companion OSF repository for open materials and data. Internal review before submission.</p>
-                  <span class="tl-status tl-status--upcoming">Upcoming</span>
+                  <p class="tl-card-desc">Run your pre-planned analyses in R and JASP. Document any deviations from the preregistration. Draft the manuscript for your target journal, and upload open materials and data to OSF before submission.</p>
+                  <div class="step-links" style="margin-top:20px;">
+                    <a href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" class="step-tag">MetaLab R package →</a>
+                    <a href="https://jasp-stats.org/" target="_blank" class="step-tag">JASP →</a>
+                    <a href="https://osf.io/" target="_blank" class="step-tag">OSF →</a>
+                  </div>
                 </div>
                 <div class="tl-card-num" aria-hidden="true">05</div>
               </div>
@@ -798,25 +775,25 @@ img { max-width:100%; display:block; }
       <div class="tl-bar">
         <div class="tl-line"><div class="tl-fill"></div></div>
         <div class="tl-dots">
-          <button class="tl-dot tl-dot--active" data-idx="0" aria-label="Phase 1: Oct 2023">
+          <button class="tl-dot tl-dot--active" data-idx="0" aria-label="Stage 1: Design">
             <span class="tl-dot-pip"></span>
-            <span class="tl-dot-label">Oct 2023</span>
+            <span class="tl-dot-label">Design</span>
           </button>
-          <button class="tl-dot" data-idx="1" aria-label="Phase 2: Jan 2024">
+          <button class="tl-dot" data-idx="1" aria-label="Stage 2: Ethics">
             <span class="tl-dot-pip"></span>
-            <span class="tl-dot-label">Jan 2024</span>
+            <span class="tl-dot-label">Ethics</span>
           </button>
-          <button class="tl-dot" data-idx="2" aria-label="Phase 3: Apr 2024">
+          <button class="tl-dot" data-idx="2" aria-label="Stage 3: Pilot">
             <span class="tl-dot-pip"></span>
-            <span class="tl-dot-label">Apr 2024</span>
+            <span class="tl-dot-label">Pilot</span>
           </button>
-          <button class="tl-dot" data-idx="3" aria-label="Phase 4: Jul 2024">
+          <button class="tl-dot" data-idx="3" aria-label="Stage 4: Collect">
             <span class="tl-dot-pip"></span>
-            <span class="tl-dot-label">Jul 2024</span>
+            <span class="tl-dot-label">Collect</span>
           </button>
-          <button class="tl-dot" data-idx="4" aria-label="Phase 5: Jan 2025">
+          <button class="tl-dot" data-idx="4" aria-label="Stage 5: Analyse">
             <span class="tl-dot-pip"></span>
-            <span class="tl-dot-label">Jan 2025</span>
+            <span class="tl-dot-label">Analyse</span>
           </button>
         </div>
       </div><!-- /.tl-bar -->
