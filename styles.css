@@ -2044,7 +2044,7 @@ img {
     flex-wrap: wrap;
 }
 
-.resource-card-links a {
+.resource-card-link-pill {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 5px 12px;
@@ -2052,9 +2052,10 @@ img {
     border: 1.5px solid var(--color-border);
     color: var(--color-text-muted);
     transition: all 0.3s var(--ease-out-expo);
+    cursor: pointer;
 }
 
-.resource-card-links a:hover {
+.resource-card:hover .resource-card-link-pill {
     border-color: var(--color-accent);
     color: var(--color-accent);
 }
