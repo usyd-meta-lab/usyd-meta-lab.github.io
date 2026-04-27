@@ -2355,6 +2355,10 @@ img {
     transition-delay: 0.4s;
 }
 
+.resources-grid .reveal:nth-child(7) {
+    transition-delay: 0.48s;
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
     :root {
