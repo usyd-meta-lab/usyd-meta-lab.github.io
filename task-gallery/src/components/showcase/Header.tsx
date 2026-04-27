@@ -14,14 +14,27 @@ export default function Header() {
             href="https://usyd-meta-lab.github.io/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2.5 text-text-primary no-underline transition-opacity hover:opacity-70"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://usyd-meta-lab.github.io/images/logo.PNG"
-              alt="USYD Meta Lab"
-              className="h-10"
-            />
+            <span className="w-9 h-9 flex-shrink-0" aria-hidden="true">
+              <svg viewBox="0 0 100 100" fill="none" width="100%" height="100%">
+                <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" strokeWidth="2.6" fill="none" strokeLinejoin="round"/>
+                <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.45"/>
+                <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.45"/>
+                <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.28"/>
+                <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.65"/>
+                <path d="M42 50 Q50 56 58 50" stroke="#2b180a" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.5"/>
+                <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.35"/>
+              </svg>
+            </span>
+            <span className="flex flex-col leading-none">
+              <span style={{ fontFamily: "'Caveat', cursive", fontSize: "1.25rem", fontWeight: 700, color: "#1A1A18" }}>
+                Meta Lab
+              </span>
+              <span style={{ fontSize: "0.58rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "#6B6B65", marginTop: "2px" }}>
+                University of Sydney
+              </span>
+            </span>
           </a>
           <h1 className="font-display text-2xl font-semibold text-text-primary tracking-wide">
             Research Demonstrations
