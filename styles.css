@@ -2037,6 +2037,28 @@ img {
     color: var(--color-text-muted);
 }
 
+.resource-card-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.resource-card-links a {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-muted);
+    transition: all 0.3s var(--ease-out-expo);
+}
+
+.resource-card-links a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
 /* --- Contact Section --- */
 .section-contact {
     padding: 0 0 160px;
