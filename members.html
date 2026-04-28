@@ -1265,16 +1265,22 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
                     'Set duration to the study duration.',
                     'Enter the Human Research Ethics Committee approval code, for example <code>2022/796</code>.',
                     'Set Active Study to <strong>Yes</strong>.',
+                    'Keep scrolling down for advanced settings.',
                     'If the study is online, use the MetaForge link with <code>&amp;survey_code=%SURVEY_CODE%</code> added.',
-                    'Keep Automatic Credit Granting set to <strong>No</strong>.'
+                    'Keep Automatic Credit Granting set to <strong>No</strong>.',
+                    'Leave everything else at the default settings.',
+                    'Save the study before checking the Completion URL.'
                   ]
                 },
                 {
                   title: 'Completion and approval',
                   items: [
                     'Open the study in SONA to get the Completion URL.',
+                    'It will look like <code>https://sydneypsych.sona-systems.com/webstudy_credit.aspx?experiment_id=3681&amp;credit_token=4a679ef8e7234d5faab5a3e1d27ed843&amp;survey_code=XXXX</code>.',
                     'Copy the completion link into MetaForge under <strong>Settings → Distribute → Redirects</strong>, but remove the <code>survey_code</code> part.',
+                    'For the example above, paste only <code>https://sydneypsych.sona-systems.com/webstudy_credit.aspx?experiment_id=3681&amp;credit_token=4a679ef8e7234d5faab5a3e1d27ed843</code>.',
                     'Submit the school approval form before you go live.',
+                    'The form will ask you to copy the recruitment description from the umbrella ethics file named <code>SONApsych-description.txt</code>.',
                     'Approval usually takes a few days, then you can put up timeslots.',
                     'Use timeslot dates in the next few days so participants are not waiting until the last minute.'
                   ]
