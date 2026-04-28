@@ -375,20 +375,24 @@ img { max-width:100%; display:block; }
 .reveal.visible { opacity:1; transform:translateY(0); }
 
 /* ── Research Timeline ──────────────────────────────────────────────────── */
-.tl-section { padding:88px 0; background:var(--color-bg); }
-.tl-header { margin-bottom:52px; }
+.tl-section { padding:0 0 88px; background:var(--color-bg); }
 .tl-section .container { max-width:1460px; }
 
-.tl-layout {
-  display:flex;
-  flex-direction:column;
-  gap:28px;
+.tl-topbar {
+  position:relative;
+  padding-top:0;
+  margin-top:0;
+  margin-bottom:14px;
 }
 .tl-slider {
   position:relative;
-  width:min(100%, 980px);
-  margin:0 auto;
-  padding:0 60px;
+  width:100%;
+  margin-top:86px;
+  padding:0 52px;
+}
+.tl-toggle {
+  display:inline-flex;
+  align-self:center;
 }
 
 /* Nav buttons */
@@ -413,7 +417,7 @@ img { max-width:100%; display:block; }
 .tl-nav--next { right:4px; }
 
 /* Timeline bar */
-.tl-bar { margin-top:36px; position:relative; padding:0 60px; }
+.tl-bar { margin-top:72px; position:relative; padding:0 60px; }
 .tl-line {
   position:absolute;
   top:9px; left:60px; right:60px;
@@ -806,7 +810,6 @@ img { max-width:100%; display:block; }
   border:1px solid var(--color-border);
   border-radius:100px;
   padding:4px;
-  margin-top:28px;
   gap:2px;
 }
 .tl-toggle-btn {
@@ -824,18 +827,20 @@ img { max-width:100%; display:block; }
   :root { --pad:32px; }
   .software-grid,.resources-grid,.meetings-grid { grid-template-columns:1fr 1fr; }
   .accounts-grid,.ethics-grid,.comms-box { grid-template-columns:1fr; }
+  .tl-topbar { padding-top:0; margin-top:0; }
+  .tl-slider { margin-top:42px; }
   .tl-slider { width:100%; }
 }
 @media(max-width:600px){
   .software-grid,.resources-grid,.meetings-grid { grid-template-columns:1fr; }
   .step > summary { grid-template-columns:48px 1fr auto; gap:16px; }
   .step-body { padding-left: calc(48px + 16px); }
-  .tl-slider { padding:0 44px; }
+  .tl-slider { padding:0 40px; }
   .tl-nav { width:40px; height:40px; }
   .tl-nav--prev { left:0; }
   .tl-nav--next { right:0; }
-  .tl-bar { padding:0 44px; }
-  .tl-line { left:44px; right:44px; }
+  .tl-bar { margin-top:72px; padding:0 40px; }
+  .tl-line { left:40px; right:40px; }
   .tl-dot-label { font-size:0.62rem; }
   .tl-panel-card { padding:22px; }
   .tl-panel-body { grid-template-columns:1fr; }
@@ -846,23 +851,6 @@ img { max-width:100%; display:block; }
 
 <!-- ── Password gate ──────────────────────────────────────────────────── -->
 <div id="gate">
-  <a href="index.html" class="nav-logo" style="position:absolute;top:28px;left:40px;" aria-label="USYD Meta Lab home">
-    <span class="nav-logo-mark" aria-hidden="true">
-      <svg viewBox="0 0 100 100" fill="none">
-        <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
-        <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
-        <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
-        <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
-        <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
-        <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
-        <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
-      </svg>
-    </span>
-    <span class="nav-logo-wordmark">
-      <span class="nav-logo-name">Meta Lab</span>
-      <span class="nav-logo-sub">University of Sydney</span>
-    </span>
-  </a>
   <div class="gate-inner">
     <div class="gate-icon">🔒</div>
     <h2 class="gate-title">Members Area</h2>
@@ -878,24 +866,12 @@ img { max-width:100%; display:block; }
 <!-- ── Nav ───────────────────────────────────────────────────────────── -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo" aria-label="USYD Meta Lab home">
-      <span class="nav-logo-mark" aria-hidden="true">
-        <svg viewBox="0 0 100 100" fill="none">
-          <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
-          <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
-          <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
-          <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
-          <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
-          <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
-          <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
-        </svg>
-      </span>
-      <span class="nav-logo-wordmark">
-        <span class="nav-logo-name">Meta Lab</span>
-        <span class="nav-logo-sub">University of Sydney</span>
-      </span>
-    </a>
+    <div class="tl-toggle" role="group" aria-label="Student type">
+      <button class="tl-toggle-btn tl-toggle-btn--active" data-type="honours">Honours</button>
+      <button class="tl-toggle-btn" data-type="phd">PhD</button>
+    </div>
     <div class="nav-links">
+      <a href="https://usyd-meta-lab.github.io/" target="_blank" rel="noopener">Website</a>
       <a href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a>
       <a href="meetings.html">Meetings</a>
       <a href="#ethics">Ethics</a>
@@ -906,44 +882,33 @@ img { max-width:100%; display:block; }
 <!-- ── Research Project Timeline ─────────────────────────────────────── -->
 <section class="tl-section" id="timeline">
   <div class="container">
-    <div class="tl-header reveal">
-      <span class="label">Research Pipeline</span>
-      <h2 class="section-title">Project timeline</h2>
-      <p class="section-desc">Step through each stage of a research project in the Meta Lab and find relevant tools and advice.</p>
-      <div class="tl-toggle" role="group" aria-label="Student type">
-        <button class="tl-toggle-btn tl-toggle-btn--active" data-type="honours">Honours</button>
-        <button class="tl-toggle-btn" data-type="phd">PhD</button>
-      </div>
-    </div>
-
-    <div class="tl-layout">
-    <div class="tl-slider reveal">
+    <div class="tl-topbar reveal">
       <button class="tl-nav tl-nav--prev" aria-label="Previous phase" disabled>
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 14L6 9l5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <button class="tl-nav tl-nav--next" aria-label="Next phase">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-        <!-- Timeline bar -->
+      <div class="tl-slider">
         <div class="tl-bar">
           <div class="tl-line"><div class="tl-fill"></div></div>
           <div class="tl-dots"></div><!-- populated by JS -->
-        </div><!-- /.tl-bar -->
-      </div><!-- /.tl-slider -->
-      <div class="tl-panel reveal" aria-live="polite">
-        <div class="tl-panel-card">
-          <div class="tl-panel-meta">
-            <div class="tl-panel-copy">
-              <span class="label" id="tl-panel-label">Getting started</span>
-              <h3 class="tl-panel-title" id="tl-panel-title">Onboarding checklist</h3>
-              <p class="tl-panel-intro" id="tl-panel-intro">Use this panel to see what matters at the selected stage.</p>
-            </div>
-            <div class="tl-panel-actions" id="tl-panel-links"></div>
-          </div>
-          <div id="tl-panel-body" class="tl-panel-body"></div>
         </div>
       </div>
-    </div><!-- /.tl-layout -->
+    </div>
+    <div class="tl-panel reveal" aria-live="polite">
+      <div class="tl-panel-card">
+        <div class="tl-panel-meta">
+          <div class="tl-panel-copy">
+            <span class="label" id="tl-panel-label">Getting started</span>
+            <h3 class="tl-panel-title" id="tl-panel-title">Onboarding checklist</h3>
+            <p class="tl-panel-intro" id="tl-panel-intro">Use this panel to see what matters at the selected stage.</p>
+          </div>
+          <div class="tl-panel-actions" id="tl-panel-links"></div>
+        </div>
+        <div id="tl-panel-body" class="tl-panel-body"></div>
+      </div>
+    </div>
   </div><!-- /.container -->
 </section>
 
