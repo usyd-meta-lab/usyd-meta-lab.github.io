@@ -137,53 +137,6 @@ img { max-width:100%; display:block; }
 .btn-secondary { background:transparent; color:var(--color-text); border:1px solid var(--color-border); }
 .btn-secondary:hover { background:var(--color-bg-warm); transform:translateY(-2px); }
 
-/* ── Hero ───────────────────────────────────────────────────────────────── */
-.hero-members {
-  padding:160px var(--pad) 100px;
-  position:relative; overflow:hidden;
-}
-.hero-glow {
-  position:absolute; top:50%; right:0;
-  width:600px; height:600px;
-  background:radial-gradient(circle,rgba(200,149,108,0.1) 0%,transparent 65%);
-  transform:translateY(-50%); border-radius:50%; pointer-events:none;
-}
-.hero-badge {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:6px 16px; border-radius:100px;
-  border:1px solid var(--color-border);
-  background:rgba(252,246,239,0.6);
-  font-size:0.72rem; font-weight:600; letter-spacing:0.1em;
-  text-transform:uppercase; color:var(--color-text-muted);
-  margin-bottom:28px;
-}
-.badge-dot { width:6px; height:6px; border-radius:50%; background:var(--color-accent); }
-.hero-members h1 {
-  font-family:var(--font-display);
-  font-size:clamp(3rem,5vw,4.5rem);
-  font-weight:500; line-height:1.05;
-  letter-spacing:-0.04em; margin-bottom:20px;
-  max-width:700px;
-}
-.hero-members p {
-  font-size:1.1rem; line-height:1.75;
-  color:var(--color-text-muted); max-width:560px; margin-bottom:40px;
-}
-
-/* ── Quick links bar ────────────────────────────────────────────────────── */
-.quick-links {
-  display:flex; flex-wrap:wrap; gap:12px; margin-top:0;
-}
-.quick-link {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:10px 20px; border-radius:100px;
-  border:1px solid var(--color-border);
-  background:var(--color-bg); font-size:0.8125rem;
-  color:var(--color-text-muted); transition:all 0.3s var(--ease);
-}
-.quick-link:hover { border-color:var(--color-accent); color:var(--color-text); transform:translateY(-2px); }
-.quick-link-icon { font-size:1rem; }
-
 /* ── Sections ───────────────────────────────────────────────────────────── */
 .section { padding:100px 0; }
 .section-warm { background:var(--color-bg-warm); }
@@ -424,69 +377,18 @@ img { max-width:100%; display:block; }
 /* ── Research Timeline ──────────────────────────────────────────────────── */
 .tl-section { padding:88px 0; background:var(--color-bg); }
 .tl-header { margin-bottom:52px; }
+.tl-section .container { max-width:1460px; }
 
-.tl-main {
-  position:relative;
-  padding:0 60px;
-}
-
-/* Window + track */
-.tl-window { overflow:hidden; border-radius:20px; }
-.tl-track {
+.tl-layout {
   display:flex;
-  transition:transform 0.65s var(--ease);
-  will-change:transform;
+  flex-direction:column;
+  gap:28px;
 }
-.tl-slide { flex:0 0 100%; }
-
-/* Card */
-.tl-card {
-  background:var(--color-bg-warm);
-  border:1px solid var(--color-border);
-  border-radius:20px;
-  padding:52px 60px;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:32px;
-  align-items:center;
-  min-height:270px;
+.tl-slider {
   position:relative;
-  overflow:hidden;
-}
-.tl-card::after {
-  content:'';
-  position:absolute;
-  inset:0;
-  background:radial-gradient(ellipse at 85% 50%, rgba(200,149,108,0.07) 0%, transparent 60%);
-  pointer-events:none;
-}
-.tl-card-body { position:relative; z-index:1; }
-.tl-card-phase {
-  font-size:0.72rem; font-weight:600; letter-spacing:0.12em;
-  text-transform:uppercase; color:var(--color-accent); margin-bottom:6px;
-  display:block;
-}
-.tl-card-title {
-  font-family:var(--font-display);
-  font-size:clamp(1.5rem,2.5vw,2.1rem);
-  font-weight:500; line-height:1.18;
-  letter-spacing:-0.02em; margin-bottom:14px;
-  color:var(--color-text);
-}
-.tl-card-desc {
-  font-size:0.9375rem; line-height:1.75;
-  color:var(--color-text-muted); max-width:540px;
-}
-/* Decorative number */
-.tl-card-num {
-  font-family:var(--font-display);
-  font-size:clamp(5.5rem,9vw,9rem);
-  font-weight:500; line-height:1;
-  color:var(--color-border);
-  letter-spacing:-0.04em;
-  user-select:none; flex-shrink:0;
-  position:relative; z-index:1;
-  transition:color 0.4s var(--ease);
+  width:min(100%, 980px);
+  margin:0 auto;
+  padding:0 60px;
 }
 
 /* Nav buttons */
@@ -559,6 +461,344 @@ img { max-width:100%; display:block; }
 }
 .tl-dot--active .tl-dot-label { color:var(--color-text); font-weight:600; }
 
+/* Detail panel */
+.tl-panel {
+  width:100%;
+}
+.tl-panel-card {
+  background:var(--color-bg-warm);
+  border:1px solid var(--color-border);
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 18px 48px rgba(43,24,10,0.05);
+}
+.tl-panel-meta {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.tl-panel-copy { max-width:640px; }
+.tl-panel-title {
+  font-family:var(--font-display);
+  font-size:clamp(1.5rem,2.6vw,2.2rem);
+  font-weight:500;
+  line-height:1.15;
+  letter-spacing:-0.03em;
+  margin:12px 0 12px;
+}
+.tl-panel-intro {
+  font-size:0.95rem;
+  line-height:1.75;
+  color:var(--color-text-muted);
+}
+.tl-panel-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-self:flex-start;
+  margin-top:2px;
+}
+.tl-panel-body {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:16px;
+}
+.tl-panel-section {
+  padding:18px 18px 16px;
+  border:1px solid rgba(224,212,198,0.85);
+  border-radius:18px;
+  background:rgba(252,246,239,0.55);
+}
+.tl-panel-section h4 {
+  font-size:0.82rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--color-accent);
+  margin-bottom:10px;
+}
+.tl-panel-list {
+  padding-left:1.15rem;
+  color:var(--color-text-muted);
+}
+.tl-panel-list li {
+  margin-bottom:10px;
+  font-size:0.9rem;
+  line-height:1.65;
+}
+.tl-theme-header {
+  margin:22px 0 12px;
+  padding-top:20px;
+  border-top:1px solid rgba(224,212,198,0.85);
+  grid-column:1 / -1;
+}
+.tl-theme-header h4 {
+  font-size:0.82rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--color-accent);
+}
+.tl-theme-grid {
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:16px;
+  grid-column:1 / -1;
+}
+.tl-theme-card {
+  width:100%;
+  border:1px solid rgba(224,212,198,0.88);
+  border-radius:20px;
+  padding:20px;
+  text-align:left;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  box-shadow:0 8px 24px rgba(43,24,10,0.04);
+}
+.tl-theme-card h5 {
+  font-family:var(--font-display);
+  font-size:1.15rem;
+  font-weight:500;
+  line-height:1.2;
+  letter-spacing:-0.02em;
+  margin-bottom:10px;
+}
+.tl-theme-card p {
+  font-size:0.92rem;
+  line-height:1.7;
+  color:var(--color-text-muted);
+}
+.tl-theme-card--active {
+  border-color:var(--color-accent);
+  box-shadow:0 12px 28px rgba(43,24,10,0.08);
+  transform:translateY(-1px);
+}
+.tl-theme-card--warm { background:linear-gradient(180deg, rgba(255,244,233,0.95), rgba(252,246,239,0.92)); }
+.tl-theme-card--gold { background:linear-gradient(180deg, rgba(250,241,224,0.98), rgba(252,246,239,0.92)); }
+.tl-theme-card--rose { background:linear-gradient(180deg, rgba(250,236,232,0.95), rgba(252,246,239,0.92)); }
+.tl-theme-card--sage { background:linear-gradient(180deg, rgba(238,244,236,0.96), rgba(252,246,239,0.92)); }
+.tl-ethics-grid {
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+  max-width:420px;
+}
+.tl-ethics-layout {
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:minmax(320px, 420px) minmax(0, 1fr);
+  gap:18px;
+  align-items:start;
+}
+.tl-ethics-left {
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.tl-ethics-card {
+  width:100%;
+  border:1px solid rgba(224,212,198,0.88);
+  border-radius:20px;
+  padding:20px;
+  text-align:left;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  background:rgba(252,246,239,0.92);
+  box-shadow:0 8px 24px rgba(43,24,10,0.04);
+}
+.tl-ethics-card h5 {
+  font-family:var(--font-display);
+  font-size:1.15rem;
+  font-weight:500;
+  line-height:1.2;
+  letter-spacing:-0.02em;
+  margin-bottom:8px;
+}
+.tl-ethics-card p {
+  font-size:0.92rem;
+  line-height:1.7;
+  color:var(--color-text-muted);
+}
+.tl-ethics-code {
+  display:inline-block;
+  margin-bottom:10px;
+  font-size:0.76rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--color-accent);
+}
+.tl-ethics-card--active {
+  border-color:var(--color-accent);
+  box-shadow:0 10px 24px rgba(43,24,10,0.06);
+  transform:translateY(-1px);
+}
+.tl-ethics-card--warm { background:linear-gradient(180deg, rgba(255,244,233,0.98), rgba(252,246,239,0.96)); }
+.tl-ethics-card--sage { background:linear-gradient(180deg, rgba(238,244,236,0.98), rgba(252,246,239,0.96)); }
+.tl-ethics-card--rose { background:linear-gradient(180deg, rgba(250,236,232,0.98), rgba(252,246,239,0.96)); }
+.tl-ethics-directory {
+  padding:22px;
+  border:1px solid rgba(224,212,198,0.9);
+  border-radius:20px;
+  background:rgba(252,246,239,0.72);
+  box-shadow:0 10px 28px rgba(43,24,10,0.05);
+}
+.tl-ethics-directory-header {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.tl-ethics-directory-title {
+  font-family:var(--font-display);
+  font-size:1.25rem;
+  font-weight:500;
+  letter-spacing:-0.02em;
+}
+.tl-ethics-directory-meta {
+  font-size:0.86rem;
+  color:var(--color-text-muted);
+  margin-top:6px;
+}
+.tl-ethics-directory-list {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+  gap:10px;
+}
+.tl-ethics-file {
+  padding:14px 16px;
+  border:1px solid rgba(224,212,198,0.88);
+  border-radius:16px;
+  background:rgba(252,246,239,0.9);
+}
+.tl-ethics-file a {
+  color:var(--color-accent);
+  font-weight:500;
+}
+.tl-theme-modal {
+  position:fixed;
+  inset:0;
+  z-index:220;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.tl-theme-modal.is-open { display:flex; }
+.tl-theme-modal#tl-launch-modal {
+  align-items:stretch;
+  justify-content:stretch;
+  padding:0;
+}
+.tl-theme-modal-backdrop {
+  position:absolute;
+  inset:0;
+  background:rgba(43,24,10,0.28);
+  backdrop-filter:blur(6px);
+}
+.tl-theme-modal-dialog {
+  position:relative;
+  z-index:1;
+  width:min(860px, 100%);
+  max-height:min(80vh, 920px);
+  overflow:auto;
+  background:var(--color-bg-warm);
+  border:1px solid rgba(224,212,198,0.9);
+  border-radius:24px;
+  box-shadow:0 30px 80px rgba(43,24,10,0.18);
+  padding:28px;
+}
+.tl-theme-modal#tl-launch-modal .tl-theme-modal-dialog {
+  width:100%;
+  height:100vh;
+  max-height:none;
+  display:flex;
+  flex-direction:column;
+  border-radius:0;
+  border-left:none;
+  border-right:none;
+  border-top:none;
+  border-bottom:none;
+  box-shadow:none;
+  overflow:hidden;
+}
+.tl-launch-modal-body {
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  padding-top:8px;
+}
+.tl-theme-modal-close {
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid rgba(224,212,198,0.9);
+  background:rgba(252,246,239,0.92);
+  color:var(--color-text);
+  font-size:1.2rem;
+  cursor:pointer;
+}
+.tl-theme-modal-close:hover { border-color:var(--color-accent); }
+.tl-theme-modal-label {
+  font-size:0.78rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--color-accent);
+  margin-bottom:8px;
+}
+.tl-theme-modal-title {
+  font-family:var(--font-display);
+  font-size:clamp(1.6rem, 2.8vw, 2.35rem);
+  font-weight:500;
+  line-height:1.15;
+  letter-spacing:-0.03em;
+  margin-bottom:12px;
+  max-width:640px;
+}
+.tl-theme-modal-detail {
+  font-size:0.98rem;
+  line-height:1.8;
+  color:var(--color-text-muted);
+  margin-bottom:18px;
+  max-width:720px;
+}
+.tl-theme-modal-readings {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:14px;
+  margin-top:16px;
+}
+.tl-theme-reading {
+  padding:18px;
+  border-radius:18px;
+  border:1px solid rgba(224,212,198,0.88);
+  background:rgba(252,246,239,0.68);
+  font-size:0.9rem;
+  line-height:1.7;
+  color:var(--color-text-muted);
+}
+.onboarding-link {
+  color:var(--color-accent);
+  font-weight:500;
+  transition:color 0.3s var(--ease);
+}
+.onboarding-link:hover {
+  color:var(--color-accent-h);
+}
+
 /* Toggle */
 .tl-toggle {
   display:inline-flex;
@@ -584,22 +824,21 @@ img { max-width:100%; display:block; }
   :root { --pad:32px; }
   .software-grid,.resources-grid,.meetings-grid { grid-template-columns:1fr 1fr; }
   .accounts-grid,.ethics-grid,.comms-box { grid-template-columns:1fr; }
-  .tl-card { padding:40px 40px; }
-  .tl-card-num { font-size:5.5rem; }
+  .tl-slider { width:100%; }
 }
 @media(max-width:600px){
   .software-grid,.resources-grid,.meetings-grid { grid-template-columns:1fr; }
   .step > summary { grid-template-columns:48px 1fr auto; gap:16px; }
   .step-body { padding-left: calc(48px + 16px); }
-  .tl-main { padding:0 44px; }
+  .tl-slider { padding:0 44px; }
   .tl-nav { width:40px; height:40px; }
   .tl-nav--prev { left:0; }
   .tl-nav--next { right:0; }
   .tl-bar { padding:0 44px; }
   .tl-line { left:44px; right:44px; }
-  .tl-card { grid-template-columns:1fr; padding:32px 28px; gap:0; }
-  .tl-card-num { display:none; }
   .tl-dot-label { font-size:0.62rem; }
+  .tl-panel-card { padding:22px; }
+  .tl-panel-body { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -657,34 +896,15 @@ img { max-width:100%; display:block; }
       </span>
     </a>
     <div class="nav-links">
-      <a href="#onboarding">Onboarding</a>
-      <a href="#tools">Tools</a>
-      <a href="#launching">Launching a study</a>
+      <a href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a>
+      <a href="meetings.html">Meetings</a>
       <a href="#ethics">Ethics</a>
-      <a href="#meetings">Meetings</a>
-      <span class="nav-pill">Members</span>
     </div>
   </div>
 </nav>
 
-<!-- ── Hero ──────────────────────────────────────────────────────────── -->
-<section class="hero-members">
-  <div class="hero-glow"></div>
-  <div class="hero-badge"><span class="badge-dot"></span> Lab Members Portal</div>
-  <h1>Welcome to the<br><em>Meta Lab.</em></h1>
-  <p>Everything you need to hit the ground running — tools, protocols, ethics, and lab norms. If something's missing or out of date, let Kit know.</p>
-  <div class="quick-links">
-    <a href="#onboarding" class="quick-link"><span class="quick-link-icon">🌱</span> Onboarding</a>
-    <a href="#tools" class="quick-link"><span class="quick-link-icon">🛠</span> Software & Tools</a>
-    <a href="#launching" class="quick-link"><span class="quick-link-icon">🚀</span> Launch a Study</a>
-    <a href="#ethics" class="quick-link"><span class="quick-link-icon">📋</span> Ethics</a>
-    <a href="#meetings" class="quick-link"><span class="quick-link-icon">📅</span> Meetings</a>
-    <a href="https://usyd-meta-lab.github.io/lab_wiki.html" target="_blank" class="quick-link"><span class="quick-link-icon">📖</span> Full Wiki</a>
-  </div>
-</section>
-
 <!-- ── Research Project Timeline ─────────────────────────────────────── -->
-<section class="tl-section">
+<section class="tl-section" id="timeline">
   <div class="container">
     <div class="tl-header reveal">
       <span class="label">Research Pipeline</span>
@@ -696,500 +916,36 @@ img { max-width:100%; display:block; }
       </div>
     </div>
 
+    <div class="tl-layout">
     <div class="tl-slider reveal">
-      <div class="tl-main">
-        <button class="tl-nav tl-nav--prev" aria-label="Previous phase" disabled>
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 14L6 9l5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="tl-nav tl-nav--next" aria-label="Next phase">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="tl-window">
-          <div class="tl-track"></div><!-- populated by JS -->
-        </div><!-- /.tl-window -->
-      </div><!-- /.tl-main -->
-
-      <!-- Timeline bar -->
-      <div class="tl-bar">
-        <div class="tl-line"><div class="tl-fill"></div></div>
-        <div class="tl-dots"></div><!-- populated by JS -->
-      </div><!-- /.tl-bar -->
-
-    </div><!-- /.tl-slider -->
+      <button class="tl-nav tl-nav--prev" aria-label="Previous phase" disabled>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 14L6 9l5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="tl-nav tl-nav--next" aria-label="Next phase">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+        <!-- Timeline bar -->
+        <div class="tl-bar">
+          <div class="tl-line"><div class="tl-fill"></div></div>
+          <div class="tl-dots"></div><!-- populated by JS -->
+        </div><!-- /.tl-bar -->
+      </div><!-- /.tl-slider -->
+      <div class="tl-panel reveal" aria-live="polite">
+        <div class="tl-panel-card">
+          <div class="tl-panel-meta">
+            <div class="tl-panel-copy">
+              <span class="label" id="tl-panel-label">Getting started</span>
+              <h3 class="tl-panel-title" id="tl-panel-title">Onboarding checklist</h3>
+              <p class="tl-panel-intro" id="tl-panel-intro">Use this panel to see what matters at the selected stage.</p>
+            </div>
+            <div class="tl-panel-actions" id="tl-panel-links"></div>
+          </div>
+          <div id="tl-panel-body" class="tl-panel-body"></div>
+        </div>
+      </div>
+    </div><!-- /.tl-layout -->
   </div><!-- /.container -->
 </section>
-
-<!-- ── Onboarding ─────────────────────────────────────────────────────── -->
-<section class="section section-warm" id="onboarding">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="label">Getting started</span>
-      <h2 class="section-title">Onboarding checklist</h2>
-      <p class="section-desc">New to the lab? Work through these steps in order. Most can be done before your first week.</p>
-    </div>
-
-    <h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:500;margin-bottom:24px;" class="reveal">Software to install</h3>
-    <div class="software-grid reveal">
-      <a href="https://code.visualstudio.com/Download" target="_blank" class="software-card">
-        <div class="software-card-icon">💻</div>
-        <h3>VS Code</h3>
-        <p>Code editor for HTML, JS, CSS and Markdown — the main tool for building experiments.</p>
-        <span class="software-card-link">Download →</span>
-      </a>
-      <a href="https://cran.r-project.org/" target="_blank" class="software-card">
-        <div class="software-card-icon">📊</div>
-        <h3>R + RStudio</h3>
-        <p>Statistical computing for data cleaning and analysis. Install R first, then RStudio.</p>
-        <span class="software-card-link">Download →</span>
-      </a>
-      <a href="https://jasp-stats.org/download/" target="_blank" class="software-card">
-        <div class="software-card-icon">📐</div>
-        <h3>JASP</h3>
-        <p>Point-and-click stats with Bayesian and frequentist analyses. Great for quick checks.</p>
-        <span class="software-card-link">Download →</span>
-      </a>
-      <a href="https://desktop.github.com/" target="_blank" class="software-card">
-        <div class="software-card-icon">🐙</div>
-        <h3>GitHub Desktop</h3>
-        <p>Simple Git client for version control. All lab projects live on GitHub.</p>
-        <span class="software-card-link">Download →</span>
-      </a>
-      <a href="https://endnote.com/downloads/" target="_blank" class="software-card">
-        <div class="software-card-icon">📚</div>
-        <h3>EndNote</h3>
-        <p>Reference manager with a shared lab library — ask Kit for access to the library.</p>
-        <span class="software-card-link">Download →</span>
-      </a>
-      <a href="https://www.microsoft.com/microsoft-365/onedrive/download" target="_blank" class="software-card">
-        <div class="software-card-icon">☁️</div>
-        <h3>OneDrive</h3>
-        <p>Desktop app for local sync of lab folders with version history. Install the desktop client.</p>
-        <span class="software-card-link">Download →</span>
-      </a>
-    </div>
-
-    <h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:500;margin:56px 0 24px;" class="reveal">Accounts to set up</h3>
-    <div class="accounts-grid reveal">
-      <div class="account-card">
-        <div class="account-num">01</div>
-        <div>
-          <h3>MetaForge</h3>
-          <p>Create an account at <a href="https://metaforge.live" target="_blank">metaforge.live</a>, then join the Meta Lab team using code <strong>MTVJ6K</strong>.</p>
-        </div>
-      </div>
-      <div class="account-card">
-        <div class="account-num">02</div>
-        <div>
-          <h3>SONA</h3>
-          <p>Apply to be added as a researcher at <a href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener">sydneypsych.sona-systems.com</a> via the school request form.</p>
-          <p style="margin-top:8px;"><a href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener" style="color:var(--color-accent);">Open SONA system →</a></p>
-        </div>
-      </div>
-      <div class="account-card">
-        <div class="account-num">03</div>
-        <div>
-          <h3>GitHub Enterprise (USYD)</h3>
-          <p>Sign in at <a href="https://github.sydney.edu.au" target="_blank">github.sydney.edu.au</a> with your unikey. Contact Kit to be added to the Meta Lab team for access to private repos.</p>
-        </div>
-      </div>
-      <div class="account-card">
-        <div class="account-num">04</div>
-        <div>
-          <h3>Prolific</h3>
-          <p>Create a <a href="https://prolific.com" target="_blank">Prolific</a> account (if running online studies). Share your username with Kit to be added to the lab team and access lab funds.</p>
-        </div>
-      </div>
-      <div class="account-card">
-        <div class="account-num">05</div>
-        <div>
-          <h3>LabArchives Scheduler</h3>
-          <p>Create an account at <a href="https://scheduler.labarchives.com" target="_blank">scheduler.labarchives.com</a> to book the lab testing space in the School.</p>
-        </div>
-      </div>
-      <div class="account-card">
-        <div class="account-num">06</div>
-        <div>
-          <h3>Ethics (myResearch)</h3>
-          <p>You need to be added to a lab ethics protocol. Honours students: apply manually via <a href="https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e" target="_blank">myResearch Ethics</a>, then contact Kit.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="comms-box reveal">
-      <div>
-        <h3>Communication norms</h3>
-        <p>Face-to-face is preferred — drop by if Kit's door is open, or bring questions to weekly one-on-ones or group lab meetings. Email is for formal requests (e.g. feedback on a draft). Teams is for quick questions.</p>
-      </div>
-      <div>
-        <h3>Broader lab community</h3>
-        <p>Students are encouraged to attend larger multi-lab meetings. <strong>SLAC</strong> focuses on cognition; <strong>REAL</strong> focuses on emotion. Both run regularly and are a great way to get feedback early.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Tools ──────────────────────────────────────────────────────────── -->
-<section class="section" id="tools">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="label">Software & Tools</span>
-      <h2 class="section-title">Lab resources</h2>
-      <p class="section-desc">Core platforms and tools we use day-to-day for running studies, managing data, and collaborating.</p>
-    </div>
-    <div class="resources-grid reveal">
-      <a href="https://metaforge.live" target="_blank" class="resource-card">
-        <div class="resource-logo" aria-hidden="true">
-          <img src="https://metaforge.live/logo.png" alt="" loading="lazy" />
-        </div>
-        <h3>MetaForge</h3>
-        <p>Our primary platform for coding and hosting online experiments. Build, publish and monitor studies.</p>
-        <span class="resource-arrow">metaforge.live →</span>
-      </a>
-      <a href="https://meta-measures-905740620170.australia-southeast1.run.app" target="_blank" class="resource-card">
-        <div class="resource-initial">MM</div>
-        <h3>Meta Measures</h3>
-        <p>Hosted app for lab workflow measures. Use this for standard questionnaires and scales.</p>
-        <span class="resource-arrow">Open app →</span>
-      </a>
-      <a href="https://psych-norms.streamlit.app" target="_blank" class="resource-card">
-        <div class="resource-initial">PN</div>
-        <h3>Psych Norms</h3>
-        <p>Streamlit app for psychological norms — useful for stimulus selection and norming checks.</p>
-        <span class="resource-arrow">Open app →</span>
-      </a>
-      <a href="https://www.organisr.live/" target="_blank" class="resource-card">
-        <div class="resource-initial">O</div>
-        <h3>Organisr</h3>
-        <p>Research planner for keeping track of study progress, milestones, and timelines.</p>
-        <span class="resource-arrow">organisr.live →</span>
-      </a>
-      <a href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" class="resource-card">
-        <div class="resource-initial">R</div>
-        <h3>MetaLab R Package</h3>
-        <p>Lab R package with tools for analysis, reproducibility, and project scaffolding. Install via GitHub.</p>
-        <span class="resource-arrow">GitHub →</span>
-      </a>
-      <a href="https://pages.github.sydney.edu.au/usyd-meta-lab/members/tasks.html" target="_blank" class="resource-card">
-        <div class="resource-initial">TL</div>
-        <h3>Task Library</h3>
-        <p>Archive of all lab experiments and paradigms. Browse before building something new.</p>
-        <span class="resource-arrow">Browse library →</span>
-      </a>
-    </div>
-
-    <div style="margin-top:40px;" class="reveal">
-      <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:500;margin-bottom:20px;">Downloading data with R</h3>
-      <div class="code-block">
-        <code><span class="code-comment"># Load the lab package</span>
-<span class="code-fn">library</span>(MetaLab)
-
-<span class="code-comment"># Set your API token (Profile → API Tokens in MetaForge)</span>
-<span class="code-fn">metaforge_set_token</span>(<span class="code-str">"your-api-token-here"</span>)
-
-<span class="code-comment"># List all your projects</span>
-projects &lt;- <span class="code-fn">metaforge_list_projects</span>()
-
-<span class="code-comment"># Download data from a specific project</span>
-data &lt;- <span class="code-fn">metaforge_get_data</span>(<span class="code-str">"your-project-id"</span>)
-
-<span class="code-comment"># Or download everything at once</span>
-all_data &lt;- <span class="code-fn">metaforge_get_all_data</span>(combine = <span class="code-fn">TRUE</span>)</code>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Launching a Study ───────────────────────────────────────────────── -->
-<section class="section section-warm" id="launching">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="label">Study workflow</span>
-      <h2 class="section-title">Launching a study</h2>
-      <p class="section-desc">The full pipeline from experiment build to live data collection. Follow these steps in order.</p>
-    </div>
-    <div class="steps reveal">
-      <details class="step">
-        <summary>
-          <div class="step-num">01</div>
-          <div class="step-summary">
-            <h3>Build on MetaForge</h3>
-            <p>Build your experiment on MetaForge and publish it when the study is ready to test.</p>
-          </div>
-        </summary>
-        <div class="step-body">
-          <p>Use the built-in Gemini AI for help, or a paid Claude account with the lab bot. When ready, click <strong>Publish</strong> to get your experiment URL.</p>
-          <p><code>https://metaforge.live/?run={your-project-id}</code></p>
-        </div>
-      </details>
-
-      <details class="step">
-        <summary>
-          <div class="step-num">02</div>
-          <div class="step-summary">
-            <h3>Set up on Prolific (if using)</h3>
-            <p>Use the Prolific integration or set it up manually, then prepare the URL and payment settings.</p>
-          </div>
-        </summary>
-        <div class="step-body">
-          <p>Use MetaForge's built-in Prolific integration (Project Settings → Prolific tab) or set up manually. Append the Prolific ID to your URL and set pay to <strong>£6/hour</strong>. Use Quota Sample for balanced gender.</p>
-          <div class="step-links">
-            <a href="https://app.prolific.com" target="_blank" class="step-tag">Prolific →</a>
-          </div>
-        </div>
-      </details>
-
-      <details class="step">
-        <summary>
-          <div class="step-num">03</div>
-          <div class="step-summary">
-            <h3>Set up on SONA (if using)</h3>
-            <p>Add the study in SONA, keep the protocol text exact, and then handle the completion redirect and school approval.</p>
-          </div>
-        </summary>
-        <div class="step-body">
-          <div class="step-note">
-            <p>Add new study in SONA. Name, brief abstract, and detail abstract must be exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol.</p>
-            <p><a href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener" style="color:var(--color-accent);">Open SONA system →</a></p>
-            <ul>
-              <li><strong>Study Name:</strong> exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol. If it has already been used, you will get an error and you may make a slight modification, for example add a full stop at the end.</li>
-              <li><strong>Brief abstract:</strong> exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol.</li>
-              <li><strong>Detailed description:</strong> exactly what it says in the SONA advertisement in the relevant umbrella ethics protocol.</li>
-              <li><strong>Credit:</strong> 1 = 60 minutes, so set accordingly.</li>
-              <li><strong>Duration:</strong> set to the study duration.</li>
-              <li><strong>Human Res Ethics Com Approval Code:</strong> enter your ethics code, for example <code>2022/796</code>.</li>
-              <li><strong>Active Study?</strong> set to <strong>Yes</strong>.</li>
-              <li>Keep scrolling down for advanced settings...</li>
-              <li><strong>Study URL (if online):</strong> use the MetaForge link with <code>&amp;survey_code=%SURVEY_CODE%</code> added, for example <code>https://metaforge.live?run=XXXXXX&amp;survey_code=%SURVEY_CODE%</code>.</li>
-              <li><strong>Automatic Credit Granting:</strong> set to <strong>NO</strong>.</li>
-              <li><strong>Everything else:</strong> leave at the default settings.</li>
-              <li><strong>Save study.</strong></li>
-              <li>When you open a study, you will see the study information. You need the <strong>Completion URL</strong>.</li>
-              <li>It will look like this:
-                <div style="margin-top:10px; padding:12px 14px; border-radius:14px; background:rgba(54,36,24,.06); border:1px solid rgba(54,36,24,.08); font-family:var(--font-mono); font-size:0.92rem; line-height:1.5; word-break:break-all;">
-                  https://sydneypsych.sona-systems.com/webstudy_credit.aspx?experiment_id=3681&amp;credit_token=4a679ef8e7234d5faab5a3e1d27ed843&amp;survey_code=XXXX
-                </div>
-              </li>
-              <li>In MetaForge, go to <strong>Settings → Distribute → Redirects</strong> and copy the completion link <strong>without the <code>survey_code</code> bit</strong>. For the example above, paste only:
-                <div style="margin-top:10px; padding:12px 14px; border-radius:14px; background:rgba(54,36,24,.06); border:1px solid rgba(54,36,24,.08); font-family:var(--font-mono); font-size:0.92rem; line-height:1.5; word-break:break-all;">
-                  https://sydneypsych.sona-systems.com/webstudy_credit.aspx?experiment_id=3681&amp;credit_token=4a679ef8e7234d5faab5a3e1d27ed843
-                </div>
-              </li>
-              <li>After that, get school approval by filling in the <a href="https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L" target="_blank" rel="noopener" style="color:var(--color-accent);">approval form</a>.</li>
-              <li>The form will ask you to copy the recruitment description from the umbrella ethics file named <code>SONApsych-description.txt</code>.</li>
-              <li>Approval usually takes a few days. Once approved, you can put up timeslots.</li>
-              <li>Use a timeslot date in the next few days when you create timeslots, so participants do not wait until the last minute.</li>
-              <li>If you are doing face-to-face testing, book the Brennan MacCallum 448 lab room before putting up slots using the <a href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" rel="noopener" style="color:var(--color-accent);">School of Psychology Resource Booker</a>. The room can hold up to 10 participants at a time.</li>
-            </ul>
-          </div>
-          <div class="step-links">
-            <a href="https://sydney-psych.sona-systems.com/" target="_blank" class="step-tag">SONA →</a>
-            <a href="https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2026.pdf" target="_blank" class="step-tag">SONA Handbook →</a>
-            <a href="https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L" target="_blank" class="step-tag">Approval form →</a>
-            <a href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" class="step-tag">Book lab room →</a>
-          </div>
-        </div>
-      </details>
-
-      <details class="step">
-        <summary>
-          <div class="step-num">04</div>
-          <div class="step-summary">
-            <h3>Test thoroughly</h3>
-            <p>Run the study yourself before going live and make sure the redirects and data save correctly.</p>
-          </div>
-        </summary>
-        <div class="step-body">
-          <p>Run through the study yourself using test parameters. Verify data saves in MetaForge and redirects work correctly at the end. Add test IDs to your URL to simulate real participants.</p>
-        </div>
-      </details>
-
-      <details class="step">
-        <summary>
-          <div class="step-num">05</div>
-          <div class="step-summary">
-            <h3>Preregister</h3>
-            <p>Register the study before data collection starts.</p>
-          </div>
-        </summary>
-        <div class="step-body">
-          <p>Preregister <strong>before</strong> collecting any data. Use <a href="https://aspredicted.org/" target="_blank" style="color:var(--color-accent);">AsPredicted</a> for most studies.</p>
-        </div>
-      </details>
-
-      <details class="step">
-        <summary>
-          <div class="step-num">06</div>
-          <div class="step-summary">
-            <h3>Go live & monitor</h3>
-            <p>Launch, watch incoming data, and keep the study open only as long as needed.</p>
-          </div>
-        </summary>
-        <div class="step-body">
-          <p>Launch on SONA (add slots) or Prolific (publish). Monitor incoming data on your MetaForge dashboard and download in MetaForge (or via the R API) when complete.</p>
-        </div>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- ── Ethics ─────────────────────────────────────────────────────────── -->
-<section class="section section-dark" id="ethics">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="label">Ethics & Compliance</span>
-      <h2 class="section-title" style="color:var(--color-bg);">Ethics protocols</h2>
-      <p class="section-desc">All research must sit under an approved ethics protocol. Contact Kit early — don't start collecting until this is sorted.</p>
-    </div>
-    <div class="ethics-grid reveal">
-      <div class="ethics-card">
-        <h3>Umbrella ethics</h3>
-        <p>The lab runs under an umbrella ethics protocol covering most standard studies. Access the protocol documents via the lab's GitHub Enterprise repo.</p>
-        <a href="https://github.sydney.edu.au/usyd-meta-lab/Ethics" target="_blank" class="btn btn-secondary" style="color:var(--color-bg);border-color:rgba(252,246,239,0.25);">Ethics repo →</a>
-      </div>
-      <div class="ethics-card">
-        <h3>Getting added to a protocol</h3>
-        <p>Honours students must apply manually via myResearch Ethics before being added. Contact Kit with your unikey and he'll add you to the relevant protocol.</p>
-        <a href="https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e" target="_blank" class="btn btn-secondary" style="color:var(--color-bg);border-color:rgba(252,246,239,0.25);">myResearch Ethics →</a>
-      </div>
-      <div class="ethics-card">
-        <h3>SONA approval</h3>
-        <p>Every SONA study requires school approval. Submit the request form before going live — copy ethics descriptions directly from the ethics documents on GitHub.</p>
-        <a href="https://sydneypsy.qualtrics.com/jfe/form/SV_1TfHnO0FrAE9F3L" target="_blank" class="btn btn-secondary" style="color:var(--color-bg);border-color:rgba(252,246,239,0.25);">Request approval →</a>
-      </div>
-      <div class="ethics-card">
-        <h3>Preregistration</h3>
-        <p>Preregister all studies before data collection. Use AsPredicted for most work. Store preregistration documents in your project's <code style="font-size:0.8rem;opacity:0.7">experiments/design/preregistration/</code> folder.</p>
-        <a href="https://aspredicted.org/" target="_blank" class="btn btn-secondary" style="color:var(--color-bg);border-color:rgba(252,246,239,0.25);">AsPredicted →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Meetings ───────────────────────────────────────────────────────── -->
-<section class="section" id="meetings">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="label">Lab calendar</span>
-      <h2 class="section-title">Meetings & schedule</h2>
-      <p class="section-desc">Regular touchpoints to keep everyone aligned. Face-to-face is always preferred.</p>
-    </div>
-    <div class="meetings-grid reveal">
-      <div class="meeting-card">
-        <div class="meeting-type">Weekly</div>
-        <h3>One-on-one with Kit</h3>
-        <p>Weekly meetings with your supervisor. Bring updates, questions, and anything you're stuck on.</p>
-      </div>
-      <div class="meeting-card">
-        <div class="meeting-type">Regular</div>
-        <h3>Group lab meeting</h3>
-        <p>Whole-lab meeting for presentations, paper discussions, and general updates. Check the schedule for dates.</p>
-      </div>
-      <div class="meeting-card">
-        <div class="meeting-type">Multi-lab</div>
-        <h3>SLAC — Cognition</h3>
-        <p>Broader cognition meeting across labs. Great for getting feedback on work and seeing what others are doing.</p>
-      </div>
-      <div class="meeting-card">
-        <div class="meeting-type">Multi-lab</div>
-        <h3>REAL — Emotion</h3>
-        <p>Broader emotion research meeting. Especially relevant for affective metacognition work.</p>
-      </div>
-      <div class="meeting-card">
-        <div class="meeting-type">As needed</div>
-        <h3>Lab testing space</h3>
-        <p>Book the in-person testing space via LabArchives Scheduler. Check school intranet for room booking guidelines.</p>
-      </div>
-      <div class="meeting-card">
-        <div class="meeting-type">Ongoing</div>
-        <h3>Full schedule</h3>
-        <p>See the lab meetings page for specific dates, times, and Zoom links for all regular meetings.</p>
-        <a href="https://usyd-meta-lab.github.io/meetings.html" target="_blank" style="display:inline-block;margin-top:12px;font-size:0.8rem;color:var(--color-accent);font-weight:500;">View schedule →</a>
-      </div>
-    </div>
-
-    <!-- Project folder structure -->
-    <div style="margin-top:72px;" class="reveal">
-      <div class="section-header" style="margin-bottom:32px;">
-        <span class="label">Templates & structure</span>
-        <h2 class="section-title">Project folder structure</h2>
-        <p class="section-desc">All lab projects follow this structure. Use the R package to scaffold it automatically.</p>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;">
-        <div class="folder-tree">
-<span class="folder-dir">Project_Name/</span>
-├── README.md               <span class="folder-comment"># Overview</span>
-├── .gitignore
-├── <span class="folder-dir">experiments/</span>
-│   └── <span class="folder-dir">example-experiment/</span>
-│       ├── <span class="folder-dir">design/</span>           <span class="folder-comment"># Protocols</span>
-│       ├── <span class="folder-dir">stimuli/</span>          <span class="folder-comment"># Images, sounds</span>
-│       ├── <span class="folder-dir">preregistration/</span>
-│       ├── <span class="folder-dir">scripts/</span>          <span class="folder-comment"># jsPsych etc.</span>
-│       ├── <span class="folder-dir">data/</span>
-│       │   ├── <span class="folder-dir">raw/</span>           <span class="folder-comment"># Untouched</span>
-│       │   ├── <span class="folder-dir">processed/</span>     <span class="folder-comment"># Cleaned</span>
-│       │   └── <span class="folder-dir">metadata/</span>
-│       └── <span class="folder-dir">analysis/</span>
-│           ├── <span class="folder-dir">scripts/</span>       <span class="folder-comment"># R / Python</span>
-│           ├── <span class="folder-dir">results/</span>       <span class="folder-comment"># Figures, tables</span>
-│           └── analysis_plan.Rmd
-├── <span class="folder-dir">manuscripts/</span>
-└── <span class="folder-dir">presentations/</span>
-        </div>
-        <div>
-          <h3 style="font-family:var(--font-display);font-size:1.15rem;font-weight:500;margin-bottom:12px;">Scaffold with R</h3>
-          <p style="font-size:0.9rem;color:var(--color-text-muted);line-height:1.7;margin-bottom:20px;">Use the lab R package function to generate this entire structure automatically:</p>
-          <div class="code-block">
-            <code><span class="code-fn">MetaLab</span>::<span class="code-fn">create_MetaLab_project</span>(
-  <span class="code-str">"MyProject"</span>,
-  <span class="code-str">"MyExperiment"</span>,
-  <span class="code-str">"~/Documents"</span>
-)</code>
-          </div>
-          <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;">
-            <a href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" class="btn btn-secondary" style="width:fit-content;">MetaLab R Package →</a>
-            <a href="https://usyd-meta-lab.github.io/lab_wiki.html" target="_blank" class="btn btn-primary" style="width:fit-content;">Full lab wiki →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Footer ─────────────────────────────────────────────────────────── -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-left">
-        <a href="index.html" class="footer-static-logo" aria-label="USYD Meta Lab main site">
-          <span class="footer-static-logo-mark" aria-hidden="true">
-            <svg viewBox="0 0 100 100" fill="none">
-              <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round" />
-              <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45" />
-              <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45" />
-              <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28" />
-              <circle cx="50" cy="44" r="18" stroke="#2b180a" stroke-width="3" fill="#fcf6ef" fill-opacity="0.45" />
-              <line x1="63" y1="57" x2="76" y2="72" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round" />
-              <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65" />
-              <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5" />
-              <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35" />
-            </svg>
-          </span>
-          <span class="footer-static-logo-wordmark">
-            <span class="footer-static-logo-name">Meta Lab</span>
-            <span class="footer-static-logo-sub">University of Sydney</span>
-          </span>
-        </a>
-      </div>
-      <div style="display:flex;gap:28px;">
-        <a href="index.html" class="footer-link">Main site</a>
-        <a href="https://usyd-meta-lab.github.io/lab_wiki.html" class="footer-link" target="_blank">Wiki</a>
-        <a href="https://metaforge.live" class="footer-link" target="_blank">MetaForge</a>
-        <a href="/cdn-cgi/l/email-protection#1c777568327873697e70795c6f657872796532797869327d69" class="footer-link">Contact Kit</a>
-      </div>
-    </div>
-  </div>
-</footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Password gate ──────────────────────────────────────────────────────────
@@ -1222,13 +978,16 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
 
 // ── Research Timeline slider ───────────────────────────────────────────────
 (function () {
-  const track      = document.querySelector('.tl-track');
-  if (!track) return;
   const dotsWrap   = document.querySelector('.tl-dots');
   const fill       = document.querySelector('.tl-fill');
   const prevBtn    = document.querySelector('.tl-nav--prev');
   const nextBtn    = document.querySelector('.tl-nav--next');
   const toggleBtns = document.querySelectorAll('.tl-toggle-btn');
+  const panelLabel = document.getElementById('tl-panel-label');
+  const panelTitle = document.getElementById('tl-panel-title');
+  const panelIntro = document.getElementById('tl-panel-intro');
+  const panelBody  = document.getElementById('tl-panel-body');
+  const panelLinks = document.getElementById('tl-panel-links');
 
   let current = 0;
   let activeType = 'honours';
@@ -1237,48 +996,434 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
   const DATA = {
     honours: [
       {
+        dot: 'Onboard',
+        title: 'Onboarding & Setup',
+        desc: 'Get your tools, accounts, and lab habits in place before you start a project so the first weeks are productive instead of reactive.',
+        panel: {
+          label: 'Getting started',
+          title: 'Onboarding checklist',
+          intro: 'Start here. The goal is to remove friction before you begin the first study or meeting.',
+          sections: [
+            {
+              title: 'Install the core tools',
+              items: [
+                '<a class="onboarding-link" href="https://www.r-project.org/" target="_blank" rel="noopener">R</a> and <a class="onboarding-link" href="https://posit.co/downloads/" target="_blank" rel="noopener">RStudio</a> for analysis and reporting.',
+                '<a class="onboarding-link" href="https://sydneyuni.service-now.com/sm?id=kb_article_view&sysparm_article=KB0011573" target="_blank" rel="noopener">EndNote</a> for reference management and the shared lab library.',
+                '<a class="onboarding-link" href="https://www.microsoft.com/en-us/microsoft-365/onedrive/download" target="_blank" rel="noopener">OneDrive</a> for syncing lab folders and keeping local copies current.'
+              ]
+            },
+            {
+              title: 'Create the accounts you will use',
+              items: [
+                'Create a <a class="onboarding-link" href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a> account, then join the Meta Lab team using code <strong>MTVJ6K</strong>.',
+                '<a class="onboarding-link" href="https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L" target="_blank" rel="noopener">SONA</a> if you will recruit through the participant pool.',
+                '<a class="onboarding-link" href="https://prolific.com" target="_blank" rel="noopener">Prolific</a> if you are running paid online studies.',
+                '<a class="onboarding-link" href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" rel="noopener">School of Psychology Resource Booker</a> for booking lab space.',
+                '<a class="onboarding-link" href="https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e" target="_blank" rel="noopener">myResearch Ethics</a> so you can be added to a protocol when needed.'
+              ]
+            },
+            {
+              title: 'Work the way the lab works',
+              items: [
+                'Use face-to-face questions first when possible.',
+                'Bring issues to weekly one-on-ones or group lab meetings.',
+                'Share docs via <a class="onboarding-link" href="https://www.microsoft.com/en-us/microsoft-365/onedrive/download" target="_blank" rel="noopener">OneDrive</a> rather than email.',
+                'Keep your project folder in the local OneDrive sync folder so handoffs stay clean.',
+                '<strong>Expect a busy stretch until your (first) study is live around Easter;</strong> focus on the thesis as much as possible until then, because there will be much more breathing room after launch.',
+                'Check the <a class="onboarding-link" href="meetings.html">meetings schedule</a> for regular lab meetings.'
+              ]
+            }
+          ]
+        },
+        links: [
+          { label: 'MetaForge →', url: 'https://metaforge.live' },
+          { label: 'Meetings →', url: 'meetings.html' },
+        ]
+      },
+      {
         dot: 'Design',
         title: 'Conception &amp; Design',
         desc: 'Formulate your research question and choose a suitable paradigm. Review existing literature, map out your design, and prepare stimuli. Consult Kit and define your preregistration plan before moving to ethics.',
+        panel: {
+          label: 'Research design',
+          title: 'Conception and design',
+          intro: 'Use this stage to turn a rough idea into a defensible study plan.',
+          sections: [
+            {
+              title: 'Choose a feasible starting point',
+              items: [
+                'Think through what is practical and feasible before you commit.',
+                'Check out our <a class="onboarding-link" href="publications.html">publications page</a> and <a class="onboarding-link" href="/task-gallery/">task gallery page</a> for ideas on what to do.'
+              ]
+            },
+            {
+              title: 'Decide the study shape',
+              items: [
+                'Write the research question in one sentence.',
+                'Choose the experimental or survey paradigm.',
+                'List the main outcome measures and key manipulations.',
+                'Pitch the idea at lab meetings, and use AI to spitball and test your ideas, but remember it is usually overly positive unless you explicitly ask it to surface limitations.'
+              ]
+            },
+            {
+              title: 'Prepare the materials',
+              items: [
+                'Review the literature that directly constrains the design.',
+                'Prepare stimuli, instructions, and exclusion criteria.',
+                'Map the flow before you start building in MetaForge.'
+              ]
+            },
+            {
+              title: 'Code the study',
+              items: [
+                'Use MetaForge to code the study up, and expect to modify a pre-existing study that already uses the paradigm.',
+                'Use AI to help adapt the code and workflow, but keep an eye on assumptions and limitations rather than accepting the first suggestion.'
+              ]
+            }
+          ],
+          themeLabel: 'Honours project themes',
+          themeIntro: 'Each year, three areas of interest with ready-to-use paradigms are chosen. Choose from the three below and indicate your preferences to Kit in the first week or two of Honours.',
+          themeCards: [
+            {
+              tone: 'warm',
+              title: 'Reactivity to think-aloud protocols',
+              description: 'Test whether verbalising thoughts changes performance on rule-based discovery and complex reasoning tasks.',
+              detail: 'Reactivity is a core methodological challenge: the act of observing a cognitive process can change it. This project asks whether thinking aloud alters performance when tasks involve complex reasoning, and whether the effect extends beyond simple verification to more abstract rule discovery and relationship detection.',
+              readings: [
+                'Double, K. S., Tran, D., & Goldwater, M. B. (2025). Judgments of learning impair rule-based discovery. Memory & Cognition, 1-14.',
+                'Fox, M. C., & Charness, N. (2010). How to gain eleven IQ points in ten minutes: Thinking aloud improves Raven\'s Matrices performance in older adults. Aging, Neuropsychology, and Cognition, 17(2), 191-204.'
+              ]
+            },
+            {
+              tone: 'rose',
+              title: 'Variation in cognitive performance and metacognition',
+              description: 'Examine within-person fluctuations in performance and how they relate to metacognitive processes.',
+              detail: 'Fluctuations in cognitive performance are a near-universal experience, but they have often been treated as noise or error. This project treats those within-person shifts as systematic and asks how the architecture of variability is organised, and how changes in performance are tied to metacognitive processes.',
+              readings: [
+                'Vaughan, A. C., & Birney, D. P. (2023). Within-individual variation in cognitive performance is not noise: why and how cognitive assessments should examine within-person performance. Journal of Intelligence, 11(6), 110.',
+                'Birney, D. P., Beckmann, J. F., Beckmann, N., & Double, K. S. (2017). Beyond the intellect: Complexity and learning trajectories in Raven\'s Progressive Matrices depend on self-regulatory processes and conative dispositions. Intelligence, 61, 63-77.'
+              ]
+            },
+            {
+              tone: 'sage',
+              title: 'Biases in metacognitive beliefs and causal learning',
+              description: 'Study how people misjudge which strategies work and how causal instruction shapes those beliefs.',
+              detail: 'A major problem in education is that people often fail to recognise which study strategies actually produce better outcomes. This project treats metacognition as a form of causal learning, asking how students form beliefs about what works, why they sometimes prefer ineffective strategies, and how those biases can be corrected.',
+              readings: [
+                'Bjork, R. A., Dunlosky, J., & Kornell, N. (2013). Self-regulated learning: Beliefs, techniques, and illusions. Annual Review of Psychology, 64(1), 417-444.',
+                'Double, K. S., Chow, J. Y., Livesey, E. J., & Hopfenbeck, T. N. (2020). Causal illusions in the classroom: how the distribution of student outcomes can promote false instructional beliefs. Cognitive Research: Principles and Implications, 5(1), 34.'
+              ]
+            }
+          ]
+        },
         links: [
-          { label: 'Lab wiki →',   url: 'https://usyd-meta-lab.github.io/lab_wiki.html' },
           { label: 'MetaForge →',  url: 'https://metaforge.live' },
+          { label: 'Publications →', url: 'publications.html' },
+          { label: 'Task Gallery →', url: '/task-gallery/' },
+        ]
+      },
+      {
+        dot: 'Proposal',
+        title: 'Proposal',
+        desc: 'Write a concise proposal of about 1,000 words: roughly 500 words of background and 500 words of method. The background is there to explain why the method matters; the method should be the detailed, useful part that gets the feedback.',
+        panel: {
+          label: 'Proposal writing',
+          title: 'Proposal draft',
+          intro: 'Aim for a short proposal that makes the method easy to judge and improve.',
+          sections: [
+            {
+              title: 'Background',
+              items: [
+                'Keep this to about 500 words.',
+                'Use it to explain the problem and why the method is the key part of the proposal.',
+                'Use AI to help make it read smoothly, but treat that as polishing rather than the final word because it is not being marked.',
+                'The goal is to give enough context for good feedback, not to write a full literature review.'
+              ]
+            },
+            {
+              title: 'Method',
+              items: [
+                'Keep this to about 500 words.',
+                'Make it detailed and concrete so people can tell whether the study is actually workable.',
+                'Use figures where they help explain the procedure, sequence, or materials.',
+                'Use AI to help draft and tighten the method, but keep the focus on clarity and feasibility rather than sounding polished for its own sake.'
+              ]
+            },
+            {
+              title: 'Meeting logistics',
+              items: [
+                'When setting up the meeting, CC Kit and reply all so everyone knows when it is.',
+                'Send the proposal to Kit 7 days before the meeting.',
+                'Send it to the reviewer 3 days before the meeting.',
+                'You are asked to respond to reviewer comments, keep that reply to a few sentences because it is only a formality.',
+                'Use <a class="onboarding-link" href="https://outlook.office365.com/owa/calendar/f90118c2ad7f456490a9ad03973d46fe@sydney.edu.au/0a0dd74d4c7e481abaf029d52a02fba61543526614086510444/calendar.html" target="_blank" rel="noopener">Kit&apos;s calendar</a> when scheduling.'
+              ]
+            }
+          ]
+        },
+        links: [
+          { label: 'Kit&apos;s Calendar →', url: 'https://outlook.office365.com/owa/calendar/f90118c2ad7f456490a9ad03973d46fe@sydney.edu.au/0a0dd74d4c7e481abaf029d52a02fba61543526614086510444/calendar.html' },
         ]
       },
       {
         dot: 'Ethics',
         title: 'Ethics &amp; Preregistration',
         desc: 'Submit your ethics application under the lab umbrella protocol and preregister your design on AsPredicted before any data collection. SONA advertisement text must match the ethics documents exactly — contact Kit early.',
+        panel: {
+          label: 'Compliance',
+          title: 'Ethics',
+          intro: 'Umbrella ethics applications',
+          sections: [],
+          applicationCards: [
+            {
+              tone: 'gold',
+              code: '2025/HE001700',
+              title: 'Within-person Changes in Cognitive Performance',
+              summary: 'EMA/ESM studies on how cognitive and metacognitive performance fluctuate over time and which internal and external factors predict those changes.',
+              directory: 'ethics/EMA-Studies-2025_HE001700/',
+              files: [
+                { label: 'Project description', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - V2. project-description-template.docx' },
+                { label: 'Consent form', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - Consent_Form (clean).docx' },
+                { label: 'PIS SONA', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700 - PIS_SONA (CLEAN).docx' },
+                { label: 'PIS Prolific', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700 - PIS_Prolific (CLEAN).docx' },
+                { label: 'SONA recruitment', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - SONA_recruitment (clean).docx' },
+                { label: 'Prolific recruitment', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - Prolific_recruitment (clean).docx' },
+                { label: 'Appendix measures', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - Appendix_measures.docx' }
+              ]
+            },
+            {
+              tone: 'warm',
+              code: '2022/796',
+              title: 'Using metacognitive self-evaluation to improve cognitive performance',
+              summary: 'Studies on how self-evaluation changes cognitive performance and how self-assessment can be designed to work more effectively.',
+              directory: 'ethics/Lab-Online-Studies 2022_796/',
+              files: [
+                { label: 'Application form', path: 'ethics/Lab-Online-Studies 2022_796/Application Form.doc' },
+                { label: 'Application PDF', path: 'ethics/Lab-Online-Studies 2022_796/796 Application.pdf' },
+                { label: 'Advertisements', path: 'ethics/Lab-Online-Studies 2022_796/Advertisements.docx' },
+                { label: 'Appendix cognitive tasks', path: 'ethics/Lab-Online-Studies 2022_796/Appendix Cognitive Tasks.docx' },
+                { label: 'Participant information sheet - SONA paid', path: 'ethics/Lab-Online-Studies 2022_796/PIS SONA Paid.docx' },
+                { label: 'Participant information sheet - paid', path: 'ethics/Lab-Online-Studies 2022_796/V2 PIS PAID.docx' },
+                { label: 'Participant information sheet - SONA', path: 'ethics/Lab-Online-Studies 2022_796/V2 PIS SONA.docx' },
+                { label: 'Participant information sheet - unpaid', path: 'ethics/Lab-Online-Studies 2022_796/V2 PIS Unpaid.docx' },
+                { label: 'Debrief', path: 'ethics/Lab-Online-Studies 2022_796/V2 Debrief.docx' },
+                { label: 'Survey measures', path: 'ethics/Lab-Online-Studies 2022_796/V2 Survey Measures.docx' }
+              ]
+            },
+            {
+              tone: 'rose',
+              code: '2022/HE000239',
+              title: 'Extrinsic Emotion Regulation Strategies and Perceived Efficacy',
+              summary: 'Studies on how emotional intensity, feedback, and closeness shape emotion regulation strategy choice and perceived effectiveness.',
+              directory: 'ethics/Project 2022_HE000239/',
+              files: [
+                { label: 'Application form', path: 'ethics/Project 2022_HE000239/2022__239.docx' },
+                { label: 'Amendment request', path: 'ethics/Project 2022_HE000239/2022__239 (mod request).docx' },
+                { label: 'PIS paid', path: 'ethics/Project 2022_HE000239/2022_HE000239 - PIS Paid.docx' },
+                { label: 'PIS SONA', path: 'ethics/Project 2022_HE000239/2022_HE000239 - PIS SONA.docx' },
+                { label: 'Advertisements', path: 'ethics/Project 2022_HE000239/Advertisements_TMPHEC1XCziw3ahuap202296121922.docx' },
+                { label: 'Debrief statement', path: 'ethics/Project 2022_HE000239/DebriefStatement_TMPHEC4wdNqpMFN83a202296121922.docx' },
+                { label: 'Emotion regulation task', path: 'ethics/Project 2022_HE000239/EmotionRegulationTask_TMPHEC3h9HMwACzDB0202296121922.docx' },
+                { label: 'HREC form', path: 'ethics/Project 2022_HE000239/HREC Form.docx' },
+                { label: 'IAPS images', path: 'ethics/Project 2022_HE000239/IAPSimages_TMPHEC1pCTsh7OOYVX202296122135.docx' },
+                { label: 'Survey content', path: 'ethics/Project 2022_HE000239/SurveyContent_TMPHEC7dDPAJI5gNdn202296121922.docx' }
+              ]
+            }
+          ]
+        },
         links: [
-          { label: 'myResearch Ethics →', url: 'https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e' },
-          { label: 'AsPredicted →',       url: 'https://aspredicted.org/' },
-          { label: 'Ethics repo →',       url: 'https://github.sydney.edu.au/usyd-meta-lab/Ethics' },
-        ]
-      },
-      {
-        dot: 'Pilot',
-        title: 'Piloting',
-        desc: 'Run a small pilot (~15–20 participants) to stress-test the experiment flow, timing, and data pipeline. Use results to confirm your power estimates and refine stimuli before committing to full data collection.',
-        links: [
-          { label: 'MetaForge →', url: 'https://metaforge.live' },
-          { label: 'SONA →',      url: 'https://sydneypsych.sona-systems.com/' },
-          { label: 'Prolific →',  url: 'https://prolific.com' },
+          { label: 'myResearch Ethics →', url: 'https://ethics.myresearch.sydney.edu.au' }
         ]
       },
       {
         dot: 'Collect',
         title: 'Data Collection',
-        desc: 'Recruit via SONA or Prolific following the approved protocol. Monitor incoming data weekly for quality and completeness, and stay within your preregistered sample size and inclusion criteria — do not peek at effects.',
+        desc: 'Recruit via SONA or Prolific following the approved protocol. Pilot first, then use the cards below to see the full launch steps for each platform and monitor incoming data weekly for quality and completeness.',
+        panel: {
+          label: 'Running',
+          title: 'Data collection',
+          intro: 'Pilot first, then choose a launch channel below to see the full setup and go-live steps.',
+          sections: [],
+          launchLabel: 'Go live',
+          launchCards: [
+            {
+              tone: 'gold',
+              title: 'Launch on SONA',
+              summary: 'Add slots only after school approval, keep the wording exact, and connect the completion redirect back into MetaForge.',
+              detail: 'The SONA launch path has three parts: build the study in SONA, get school approval, and then wire the completion URL back into MetaForge so participants return with the correct credit token.',
+              sections: [
+                {
+                  title: 'Preregister',
+                  items: [
+                    'Preregister the study before any data collection starts.',
+                    'Use AsPredicted for the preregistration record.',
+                    'Keep the preregistration aligned with the final SONA wording and the analysis plan.'
+                  ]
+                },
+                {
+                  title: 'Pilot first',
+                  items: [
+                    'Run a small pilot before opening the study to the full sample.',
+                    'Treat it as a real test of the workflow, not a loose demo.',
+                    'Check for broken instructions, timing issues, and missing data writes.',
+                    'Use the pilot to see whether the exclusion plan and power assumptions still make sense.'
+                  ]
+                },
+                {
+                  title: 'Study setup',
+                  items: [
+                    'Add a new study in SONA.',
+                    'Make the study name, brief abstract, and detailed description exactly match the SONA advertisement text in the ethics documents.',
+                    'Set credit so that 1 credit = 60 minutes.',
+                    'Set duration to the study duration.',
+                    'Enter the Human Research Ethics Committee approval code, for example <code>2022/796</code>.',
+                    'Set Active Study to <strong>Yes</strong>.',
+                    'If the study is online, use the MetaForge link with <code>&amp;survey_code=%SURVEY_CODE%</code> added.',
+                    'Keep Automatic Credit Granting set to <strong>No</strong>.'
+                  ]
+                },
+                {
+                  title: 'Completion and approval',
+                  items: [
+                    'Open the study in SONA to get the Completion URL.',
+                    'Copy the completion link into MetaForge under <strong>Settings → Distribute → Redirects</strong>, but remove the <code>survey_code</code> part.',
+                    'Submit the school approval form before you go live.',
+                    'Approval usually takes a few days, then you can put up timeslots.',
+                    'Use timeslot dates in the next few days so participants are not waiting until the last minute.'
+                  ]
+                },
+                {
+                  title: 'Face-to-face setup',
+                  items: [
+                    'If you are testing in person, book Brennan MacCallum 448 before putting up slots.',
+                    'Use the School of Psychology Resource Booker for the room booking.',
+                    'The room can hold up to 10 participants at a time.'
+                  ]
+                }
+              ],
+              links: [
+                { label: 'SONA →', url: 'https://sydneypsych.sona-systems.com/' },
+                { label: 'SONA Handbook →', url: 'https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2026.pdf' },
+                { label: 'Approval form →', url: 'https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L' },
+                { label: 'Book lab room →', url: 'https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker' }
+              ]
+            },
+            {
+              tone: 'sage',
+              title: 'Launch on Prolific',
+              summary: 'Use the MetaForge integration or set it up manually, then publish with the right pay and quota settings.',
+              detail: 'The Prolific launch path is lighter than SONA: connect the study, set the participant and payment settings, then publish when the study is ready.',
+              sections: [
+                {
+                  title: 'Preregister',
+                  items: [
+                    'Preregister the study before any data collection starts.',
+                    'Use AsPredicted for the preregistration record.',
+                    'Keep the preregistration aligned with the final Prolific wording and the analysis plan.'
+                  ]
+                },
+                {
+                  title: 'Pilot first',
+                  items: [
+                    'Run a small pilot before publishing the study.',
+                    'Treat it as a full workflow test, including instructions, timing, and data capture.',
+                    'Use the pilot to confirm the task still works as expected and to refine any weak points before the live run.'
+                  ]
+                },
+                {
+                  title: 'Set up the study',
+                  items: [
+                    'Use MetaForge Project Settings → Prolific, or set it up manually if needed.',
+                    'Append the Prolific ID to the study URL.',
+                    'Set pay to £6/hour.',
+                    'Use Quota Sample for balanced gender when that matters for the design.'
+                  ]
+                },
+                {
+                  title: 'Go live and monitor',
+                  items: [
+                    'Publish the study when it is ready.',
+                    'Watch incoming data on MetaForge.',
+                    'Download the final data in MetaForge or via the R API when the run is complete.'
+                  ]
+                }
+              ],
+              links: [
+                { label: 'Prolific →', url: 'https://app.prolific.com' },
+                { label: 'MetaForge →', url: 'https://metaforge.live' }
+              ]
+            }
+          ]
+        },
         links: [
+          { label: 'AsPredicted →',      url: 'https://aspredicted.org/' },
           { label: 'SONA →',               url: 'https://sydneypsych.sona-systems.com/' },
           { label: 'Prolific →',           url: 'https://prolific.com' },
-          { label: 'MetaForge dashboard →', url: 'https://metaforge.live' },
+          { label: 'MetaForge →', url: 'https://metaforge.live' },
+        ]
+      },
+      {
+        dot: 'Data',
+        title: 'Data',
+        desc: 'Keep raw exports untouched, clean them into a working dataset, and run all analysis from a separate script that also writes figures and tables.',
+        panel: {
+          label: 'Data workflow',
+          title: 'Data pipeline',
+          intro: 'Keep the raw export, cleaned data, and analysis outputs separated so you can reproduce the whole thesis cleanly.',
+          sections: [
+            {
+              title: 'Project root',
+              items: [
+                'Keep the thesis file in the main root directory.',
+                'Store folders for <strong>Data</strong>, <strong>Analysis</strong>, and <strong>Tables and Figures</strong> at the same level.'
+              ]
+            },
+            {
+              title: 'Data cleaning',
+              items: [
+                'Use <code>01_clean-data.R</code> to clean the raw MetaForge export.',
+                'Do not edit the raw data file itself.',
+                'The cleaning script should keep only the rows and columns you actually need.',
+                'Write the cleaned output into the <strong>Data</strong> folder.'
+              ]
+            },
+            {
+              title: 'Analysis and outputs',
+              items: [
+                'Use <code>02_analysis.R</code> for the analysis.',
+                'Have the analysis script make figures and tables.',
+                'Auto-save figures and tables into the <strong>Tables and Figures</strong> folder.',
+                'Put the cleaned data and the analysis script on OSF so the workflow can be shared with the thesis or paper.',
+                'Use AI to help you write and refine the code, but keep the script logic clear enough that you can explain it later.'
+              ]
+            }
+          ]
+        },
+        links: [
+          { label: 'MetaLab R package →', url: 'https://github.com/usyd-meta-lab/MetaLab' },
+          { label: 'MetaForge →', url: 'https://metaforge.live' },
+          { label: 'OSF →', url: 'https://osf.io/' },
         ]
       },
       {
         dot: 'Thesis',
         title: 'Analysis &amp; Thesis',
         desc: 'Run your pre-planned analyses in R and JASP, documenting any deviations from the preregistration. Write up your findings as a thesis chapter and upload open materials and data to OSF.',
+        panel: {
+          label: 'Write-up',
+          title: 'Analysis and thesis',
+          intro: 'Keep the analysis tied to the preregistration and document any departures clearly.',
+          sections: [
+            {
+              title: 'Analysis and reporting',
+              items: [
+                'Run the pre-planned analyses in R and JASP.',
+                'Document any deviations from the preregistration.',
+                'Upload open materials and data to OSF before submission.'
+              ]
+            }
+          ]
+        },
         links: [
           { label: 'MetaLab R package →', url: 'https://github.com/usyd-meta-lab/MetaLab' },
           { label: 'JASP →',             url: 'https://jasp-stats.org/' },
@@ -1289,9 +1434,68 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
 
     phd: [
       {
+        dot: 'Onboard',
+        title: 'Onboarding & Setup',
+        desc: 'Get the core tools and lab accounts ready first, then use the first meetings to settle into the lab workflow.',
+        panel: {
+          label: 'Getting started',
+          title: 'Onboarding checklist',
+          intro: 'Start here. The goal is to remove friction before you begin the first study or meeting.',
+          sections: [
+            {
+              title: 'Install the core tools',
+              items: [
+                '<a class="onboarding-link" href="https://www.r-project.org/" target="_blank" rel="noopener">R</a> and <a class="onboarding-link" href="https://posit.co/downloads/" target="_blank" rel="noopener">RStudio</a> for analysis and reporting.',
+                '<a class="onboarding-link" href="https://sydneyuni.service-now.com/sm?id=kb_article_view&sysparm_article=KB0011573" target="_blank" rel="noopener">EndNote</a> for reference management and the shared lab library.',
+                '<a class="onboarding-link" href="https://www.microsoft.com/en-us/microsoft-365/onedrive/download" target="_blank" rel="noopener">OneDrive</a> for syncing lab folders and keeping local copies current.'
+              ]
+            },
+            {
+              title: 'Create the accounts you will use',
+              items: [
+                'Create a <a class="onboarding-link" href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a> account, then join the Meta Lab team using code <strong>MTVJ6K</strong>.',
+                '<a class="onboarding-link" href="https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L" target="_blank" rel="noopener">SONA</a> if you will recruit through the participant pool.',
+                '<a class="onboarding-link" href="https://prolific.com" target="_blank" rel="noopener">Prolific</a> if you are running paid online studies.',
+                '<a class="onboarding-link" href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" rel="noopener">School of Psychology Resource Booker</a> for booking lab space.',
+                '<a class="onboarding-link" href="https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e" target="_blank" rel="noopener">myResearch Ethics</a> so you can be added to a protocol when needed.'
+              ]
+            },
+            {
+              title: 'Work the way the lab works',
+              items: [
+                'Use face-to-face questions first when possible.',
+                'Bring issues to weekly one-on-ones or group lab meetings.',
+                'Share docs via <a class="onboarding-link" href="https://www.microsoft.com/en-us/microsoft-365/onedrive/download" target="_blank" rel="noopener">OneDrive</a> rather than email.',
+                'Keep your project folder in the local OneDrive sync folder so handoffs stay clean.',
+                'Check the <a class="onboarding-link" href="meetings.html">meetings schedule</a> for regular lab meetings.'
+              ]
+            }
+          ]
+        },
+        links: [
+          { label: 'MetaForge →', url: 'https://metaforge.live' },
+          { label: 'Meetings →', url: 'meetings.html' },
+        ]
+      },
+      {
         dot: 'Candidature',
         title: 'Confirmation of Candidature',
         desc: 'Prepare your research proposal, literature review, and project timeline for your confirmation panel, typically in your first year. This milestone defines the scope of your PhD — work with Kit to map out the full arc of studies before confirming.',
+        panel: {
+          label: 'Milestone',
+          title: 'Confirmation of candidature',
+          intro: 'Use this milestone to lock down scope, timeline, and the overall shape of the PhD.',
+          sections: [
+            {
+              title: 'What to prepare',
+              items: [
+                'Research proposal.',
+                'Literature review.',
+                'Project timeline and study arc.'
+              ]
+            }
+          ]
+        },
         links: [
           { label: 'Graduate Research School →', url: 'https://www.sydney.edu.au/research/graduate-research.html' },
           { label: 'Lab wiki →',                 url: 'https://usyd-meta-lab.github.io/lab_wiki.html' },
@@ -1301,45 +1505,310 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
         dot: 'Design',
         title: 'Conception &amp; Design',
         desc: 'PhD projects typically involve multiple interconnected studies — map out the full experimental arc, considering how each study builds on the last. Consult Kit about journal targeting early and plan your preregistration strategy across studies.',
+        panel: {
+          label: 'Research design',
+          title: 'Conception and design',
+          intro: 'Use this stage to turn a rough idea into a defensible study plan.',
+          sections: [
+            {
+              title: 'Choose a feasible starting point',
+              items: [
+                'Think through what is practical and feasible before you commit.',
+                'Shape the first version so it is compact enough to run and still gives a clear read on whether the idea is worth extending.',
+                'Check out our <a class="onboarding-link" href="publications.html">publications page</a> and <a class="onboarding-link" href="/task-gallery/">task gallery page</a> for ideas on what to do.'
+              ]
+            },
+            {
+              title: 'Decide the study shape',
+              items: [
+                'Write the research question in one sentence.',
+                'Choose the experimental or survey paradigm.',
+                'List the main outcome measures and key manipulations.',
+                'Pitch the idea at lab meetings, and use AI to spitball and test your ideas, but remember it is usually overly positive unless you explicitly ask it to surface limitations.'
+              ]
+            },
+            {
+              title: 'Prepare the materials',
+              items: [
+                'Review the literature that directly constrains the design.',
+                'Prepare stimuli, instructions, and exclusion criteria.',
+                'Map the flow before you start building in MetaForge.'
+              ]
+            },
+            {
+              title: 'Code the study',
+              items: [
+                'Use MetaForge to code the study up',
+                'Use AI to help adapt the code and workflow, but keep an eye on assumptions and limitations rather than accepting the first suggestion.'
+              ]
+            }
+          ]
+        },
         links: [
-          { label: 'Lab wiki →',  url: 'https://usyd-meta-lab.github.io/lab_wiki.html' },
           { label: 'MetaForge →', url: 'https://metaforge.live' },
+          { label: 'Publications →', url: 'publications.html' },
+          { label: 'Task Gallery →', url: '/task-gallery/' },
         ]
       },
       {
         dot: 'Ethics',
         title: 'Ethics &amp; Preregistration',
-        desc: 'Each new study needs ethics coverage — use the lab umbrella protocol where possible and contact Kit for updates when adding new study arms. Preregister each study on AsPredicted before any data collection begins.',
+        desc: 'Submit your ethics application under the lab umbrella protocol and preregister your design on AsPredicted before any data collection. SONA advertisement text must match the ethics documents exactly — contact Kit early.',
+        panel: {
+          label: 'Compliance',
+          title: 'Ethics',
+          intro: 'Umbrella ethics applications',
+          sections: [],
+          applicationCards: [
+            {
+              tone: 'gold',
+              code: '2025/HE001700',
+              title: 'Within-person Changes in Cognitive Performance',
+              summary: 'EMA/ESM studies on how cognitive and metacognitive performance fluctuate over time and which internal and external factors predict those changes.',
+              directory: 'ethics/EMA-Studies-2025_HE001700/',
+              files: [
+                { label: 'Project description', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - V2. project-description-template.docx' },
+                { label: 'Consent form', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - Consent_Form (clean).docx' },
+                { label: 'PIS SONA', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700 - PIS_SONA (CLEAN).docx' },
+                { label: 'PIS Prolific', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700 - PIS_Prolific (CLEAN).docx' },
+                { label: 'SONA recruitment', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - SONA_recruitment (clean).docx' },
+                { label: 'Prolific recruitment', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - Prolific_recruitment (clean).docx' },
+                { label: 'Appendix measures', path: 'ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03 - Appendix_measures.docx' }
+              ]
+            },
+            {
+              tone: 'warm',
+              code: '2022/796',
+              title: 'Using metacognitive self-evaluation to improve cognitive performance',
+              summary: 'Studies on how self-evaluation changes cognitive performance and how self-assessment can be designed to work more effectively.',
+              directory: 'ethics/Lab-Online-Studies 2022_796/',
+              files: [
+                { label: 'Application form', path: 'ethics/Lab-Online-Studies 2022_796/Application Form.doc' },
+                { label: 'Application PDF', path: 'ethics/Lab-Online-Studies 2022_796/796 Application.pdf' },
+                { label: 'Advertisements', path: 'ethics/Lab-Online-Studies 2022_796/Advertisements.docx' },
+                { label: 'Appendix cognitive tasks', path: 'ethics/Lab-Online-Studies 2022_796/Appendix Cognitive Tasks.docx' },
+                { label: 'Participant information sheet - SONA paid', path: 'ethics/Lab-Online-Studies 2022_796/PIS SONA Paid.docx' },
+                { label: 'Participant information sheet - paid', path: 'ethics/Lab-Online-Studies 2022_796/V2 PIS PAID.docx' },
+                { label: 'Participant information sheet - SONA', path: 'ethics/Lab-Online-Studies 2022_796/V2 PIS SONA.docx' },
+                { label: 'Participant information sheet - unpaid', path: 'ethics/Lab-Online-Studies 2022_796/V2 PIS Unpaid.docx' },
+                { label: 'Debrief', path: 'ethics/Lab-Online-Studies 2022_796/V2 Debrief.docx' },
+                { label: 'Survey measures', path: 'ethics/Lab-Online-Studies 2022_796/V2 Survey Measures.docx' }
+              ]
+            },
+            {
+              tone: 'rose',
+              code: '2022/HE000239',
+              title: 'Extrinsic Emotion Regulation Strategies and Perceived Efficacy',
+              summary: 'Studies on how emotional intensity, feedback, and closeness shape emotion regulation strategy choice and perceived effectiveness.',
+              directory: 'ethics/Project 2022_HE000239/',
+              files: [
+                { label: 'Application form', path: 'ethics/Project 2022_HE000239/2022__239.docx' },
+                { label: 'Amendment request', path: 'ethics/Project 2022_HE000239/2022__239 (mod request).docx' },
+                { label: 'PIS paid', path: 'ethics/Project 2022_HE000239/2022_HE000239 - PIS Paid.docx' },
+                { label: 'PIS SONA', path: 'ethics/Project 2022_HE000239/2022_HE000239 - PIS SONA.docx' },
+                { label: 'Advertisements', path: 'ethics/Project 2022_HE000239/Advertisements_TMPHEC1XCziw3ahuap202296121922.docx' },
+                { label: 'Debrief statement', path: 'ethics/Project 2022_HE000239/DebriefStatement_TMPHEC4wdNqpMFN83a202296121922.docx' },
+                { label: 'Emotion regulation task', path: 'ethics/Project 2022_HE000239/EmotionRegulationTask_TMPHEC3h9HMwACzDB0202296121922.docx' },
+                { label: 'HREC form', path: 'ethics/Project 2022_HE000239/HREC Form.docx' },
+                { label: 'IAPS images', path: 'ethics/Project 2022_HE000239/IAPSimages_TMPHEC1pCTsh7OOYVX202296122135.docx' },
+                { label: 'Survey content', path: 'ethics/Project 2022_HE000239/SurveyContent_TMPHEC7dDPAJI5gNdn202296121922.docx' }
+              ]
+            }
+          ]
+        },
         links: [
-          { label: 'myResearch Ethics →', url: 'https://sydneyuni.service-now.com/sm?id=sc_cat_item&table=sc_cat_item&sys_id=e31be5fbc3e842100cc4dd0bb001313e' },
-          { label: 'AsPredicted →',       url: 'https://aspredicted.org/' },
-          { label: 'Ethics repo →',       url: 'https://github.sydney.edu.au/usyd-meta-lab/Ethics' },
-        ]
-      },
-      {
-        dot: 'Pilot',
-        title: 'Piloting',
-        desc: 'Run a small pilot (~15–20 participants) per study to stress-test flow, timing, and the data pipeline. Use results to confirm power estimates and refine stimuli. Pilot each study separately before committing to full collection.',
-        links: [
-          { label: 'MetaForge →', url: 'https://metaforge.live' },
-          { label: 'SONA →',      url: 'https://sydneypsych.sona-systems.com/' },
-          { label: 'Prolific →',  url: 'https://prolific.com' },
+          { label: 'myResearch Ethics →', url: 'https://ethics.myresearch.sydney.edu.au' }
         ]
       },
       {
         dot: 'Collect',
         title: 'Data Collection',
-        desc: 'Recruit via SONA or Prolific across multiple studies, potentially spanning 1–2 years. Plan your SONA credit budget across studies, monitor incoming data weekly for quality, and stay within preregistered sample sizes.',
+        desc: 'Recruit via SONA or Prolific across multiple studies, potentially spanning 1–2 years. Pilot first, then use the cards below to see the full launch steps for each platform and plan credit budgets and monitor data weekly.',
+        panel: {
+          label: 'Running',
+          title: 'Data collection',
+          intro: 'Pilot first, then choose a launch channel below to see the full setup and go-live steps.',
+          sections: [],
+          launchLabel: 'Go live',
+          launchCards: [
+            {
+              tone: 'gold',
+              title: 'Launch on SONA',
+              summary: 'Add slots only after school approval, keep the wording exact, and connect the completion redirect back into MetaForge.',
+              detail: 'The SONA launch path has three parts: build the study in SONA, get school approval, and then wire the completion URL back into MetaForge so participants return with the correct credit token.',
+              sections: [
+                {
+                  title: 'Preregister',
+                  items: [
+                    'Preregister the study before any data collection starts.',
+                    'Use AsPredicted for the preregistration record.',
+                    'Keep the preregistration aligned with the final SONA wording and the analysis plan.'
+                  ]
+                },
+                {
+                  title: 'Pilot first',
+                  items: [
+                    'Run a small pilot before opening the study to the full sample.',
+                    'Treat it as a real test of the workflow, not a loose demo.',
+                    'Check for broken instructions, timing issues, and missing data writes.',
+                    'Use the pilot to see whether the exclusion plan and power assumptions still make sense.'
+                  ]
+                },
+                {
+                  title: 'Study setup',
+                  items: [
+                    'Add a new study in SONA.',
+                    'Make the study name, brief abstract, and detailed description exactly match the SONA advertisement text in the ethics documents.',
+                    'Set credit so that 1 credit = 60 minutes.',
+                    'Set duration to the study duration.',
+                    'Enter the Human Research Ethics Committee approval code, for example <code>2022/796</code>.',
+                    'Set Active Study to <strong>Yes</strong>.',
+                    'If the study is online, use the MetaForge link with <code>&amp;survey_code=%SURVEY_CODE%</code> added.',
+                    'Keep Automatic Credit Granting set to <strong>No</strong>.'
+                  ]
+                },
+                {
+                  title: 'Completion and approval',
+                  items: [
+                    'Open the study in SONA to get the Completion URL.',
+                    'Copy the completion link into MetaForge under <strong>Settings → Distribute → Redirects</strong>, but remove the <code>survey_code</code> part.',
+                    'Submit the school approval form before you go live.',
+                    'Approval usually takes a few days, then you can put up timeslots.',
+                    'Use timeslot dates in the next few days so participants are not waiting until the last minute.'
+                  ]
+                },
+                {
+                  title: 'Face-to-face setup',
+                  items: [
+                    'If you are testing in person, book Brennan MacCallum 448 before putting up slots.',
+                    'Use the School of Psychology Resource Booker for the room booking.',
+                    'The room can hold up to 10 participants at a time.'
+                  ]
+                }
+              ],
+              links: [
+                { label: 'SONA →', url: 'https://sydneypsych.sona-systems.com/' },
+                { label: 'SONA Handbook →', url: 'https://intranet.sydney.edu.au/content/dam/intranet/documents/school-of-psychology/subject-pool-handbook-2026.pdf' },
+                { label: 'Approval form →', url: 'https://sydneypsy.qualtrics.com/SE/?SID=SV_1TfHnO0FrAE9F3L' },
+                { label: 'Book lab room →', url: 'https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker' }
+              ]
+            },
+            {
+              tone: 'sage',
+              title: 'Launch on Prolific',
+              summary: 'Use the MetaForge integration or set it up manually, then publish with the right pay and quota settings.',
+              detail: 'The Prolific launch path is lighter than SONA: connect the study, set the participant and payment settings, then publish when the study is ready.',
+              sections: [
+                {
+                  title: 'Preregister',
+                  items: [
+                    'Preregister the study before any data collection starts.',
+                    'Use AsPredicted for the preregistration record.',
+                    'Keep the preregistration aligned with the final Prolific wording and the analysis plan.'
+                  ]
+                },
+                {
+                  title: 'Pilot first',
+                  items: [
+                    'Run a small pilot before publishing the study.',
+                    'Treat it as a full workflow test, including instructions, timing, and data capture.',
+                    'Use the pilot to confirm the task still works as expected and to refine any weak points before the live run.'
+                  ]
+                },
+                {
+                  title: 'Set up the study',
+                  items: [
+                    'Use MetaForge Project Settings → Prolific, or set it up manually if needed.',
+                    'Append the Prolific ID to the study URL.',
+                    'Set pay to £6/hour.',
+                    'Use Quota Sample for balanced gender when that matters for the design.'
+                  ]
+                },
+                {
+                  title: 'Go live and monitor',
+                  items: [
+                    'Publish the study when it is ready.',
+                    'Watch incoming data on MetaForge.',
+                    'Download the final data in MetaForge or via the R API when the run is complete.'
+                  ]
+                }
+              ],
+              links: [
+                { label: 'Prolific →', url: 'https://app.prolific.com' },
+                { label: 'MetaForge →', url: 'https://metaforge.live' }
+              ]
+            }
+          ]
+        },
         links: [
+          { label: 'AsPredicted →',      url: 'https://aspredicted.org/' },
           { label: 'SONA →',               url: 'https://sydneypsych.sona-systems.com/' },
           { label: 'Prolific →',           url: 'https://prolific.com' },
-          { label: 'MetaForge dashboard →', url: 'https://metaforge.live' },
+          { label: 'MetaForge →', url: 'https://metaforge.live' },
+        ]
+      },
+      {
+        dot: 'Data',
+        title: 'Data',
+        desc: 'Keep raw exports untouched, clean them into a working dataset, and run all analysis from a separate script that also writes figures and tables.',
+        panel: {
+          label: 'Data workflow',
+          title: 'Data pipeline',
+          intro: 'Keep the raw export, cleaned data, and analysis outputs separated so you can reproduce the whole PhD cleanly.',
+          sections: [
+            {
+              title: 'Project root',
+              items: [
+                'Keep the thesis file in the main root directory.',
+                'Store folders for <strong>Data</strong>, <strong>Analysis</strong>, and <strong>Tables and Figures</strong> at the same level.'
+              ]
+            },
+            {
+              title: 'Data cleaning',
+              items: [
+                'Use <code>01_clean-data.R</code> to clean the raw MetaForge export.',
+                'Do not edit the raw data file itself.',
+                'The cleaning script should keep only the rows and columns you actually need.',
+                'Write the cleaned output into the <strong>Data</strong> folder.'
+              ]
+            },
+            {
+              title: 'Analysis and outputs',
+              items: [
+                'Use <code>02_analysis.R</code> for the analysis.',
+                'Have the analysis script make figures and tables.',
+                'Auto-save figures and tables into the <strong>Tables and Figures</strong> folder.',
+                'Put the cleaned data and the analysis script on OSF so the workflow can be shared with the thesis or paper.',
+                'Use AI to help you write and refine the code, but keep the script logic clear enough that you can explain it later.'
+              ]
+            }
+          ]
+        },
+        links: [
+          { label: 'MetaLab R package →', url: 'https://github.com/usyd-meta-lab/MetaLab' },
+          { label: 'MetaForge →', url: 'https://metaforge.live' },
+          { label: 'OSF →', url: 'https://osf.io/' },
         ]
       },
       {
         dot: 'Papers',
         title: 'Analysis &amp; Papers',
         desc: 'Run pre-planned analyses for each study and write them up as journal papers — PhD theses at USYD are typically papers-based. Document all preregistration deviations and upload open materials to OSF before submission.',
+        panel: {
+          label: 'Write-up',
+          title: 'Analysis and papers',
+          intro: 'Keep each study tied to the pre-planned analysis, then move the output into the paper structure.',
+          sections: [
+            {
+              title: 'Analysis and reporting',
+              items: [
+                'Run the analysis plan for each study.',
+                'Document preregistration deviations.',
+                'Upload open materials to OSF before submission.'
+              ]
+            }
+          ]
+        },
         links: [
           { label: 'MetaLab R package →', url: 'https://github.com/usyd-meta-lab/MetaLab' },
           { label: 'JASP →',             url: 'https://jasp-stats.org/' },
@@ -1350,6 +1819,21 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
         dot: 'Submission',
         title: 'Thesis &amp; Examination',
         desc: 'Compile your papers into a thesis, write the introduction and synthesis chapters, and submit for examination. Allow 3–6 months for the examination process. Engage with examiner revisions promptly and plan your post-PhD next steps.',
+        panel: {
+          label: 'Milestone',
+          title: 'Thesis and examination',
+          intro: 'The final stage is about assembling the thesis and managing the examination process cleanly.',
+          sections: [
+            {
+              title: 'What comes next',
+              items: [
+                'Compile the thesis from the published work.',
+                'Write the introduction and synthesis chapters.',
+                'Allow time for the examination and revisions.'
+              ]
+            }
+          ]
+        },
         links: [
           { label: 'Graduate Research School →', url: 'https://www.sydney.edu.au/research/graduate-research.html' },
           { label: 'OSF →',                      url: 'https://osf.io/' },
@@ -1362,25 +1846,6 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
   function render(type) {
     const stages = DATA[type];
     const total  = stages.length;
-
-    track.innerHTML = stages.map((s, i) => {
-      const num = String(i + 1).padStart(2, '0');
-      const linksHtml = s.links.map(l =>
-        `<a href="${l.url}" target="_blank" class="step-tag">${l.label}</a>`
-      ).join('');
-      return `
-        <div class="tl-slide">
-          <div class="tl-card">
-            <div class="tl-card-body">
-              <span class="tl-card-phase">Stage ${num}</span>
-              <h3 class="tl-card-title">${s.title}</h3>
-              <p class="tl-card-desc">${s.desc}</p>
-              <div class="step-links" style="margin-top:20px;">${linksHtml}</div>
-            </div>
-            <div class="tl-card-num" aria-hidden="true">${num}</div>
-          </div>
-        </div>`;
-    }).join('');
 
     dotsWrap.innerHTML = stages.map((s, i) => `
       <button class="tl-dot" data-idx="${i}" aria-label="Stage ${i + 1}: ${s.dot}">
@@ -1399,11 +1864,211 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
     goTo(0, total);
   }
 
+  function renderPanel(stage) {
+    if (!panelLabel || !panelTitle || !panelIntro || !panelBody || !panelLinks) return;
+    panelLabel.textContent = stage.panel.label;
+    panelTitle.textContent = stage.panel.title;
+    panelIntro.textContent = stage.panel.intro;
+    const sectionsHtml = stage.panel.sections.map(section => `
+      <div class="tl-panel-section">
+        <h4>${section.title}</h4>
+        <ul class="tl-panel-list">
+          ${section.items.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+      </div>
+    `).join('');
+    const ethicsCardsHtml = stage.panel.applicationCards ? `
+      <div class="tl-ethics-layout">
+        <div class="tl-ethics-left" id="tl-ethics-grid">
+          ${stage.panel.applicationCards.map((card, idx) => `
+            <button type="button" class="tl-ethics-card tl-ethics-card--${card.tone}" data-ethics-idx="${idx}">
+              <span class="tl-ethics-code">${card.code}</span>
+              <h5>${card.title}</h5>
+              <p>${card.summary}</p>
+            </button>
+          `).join('')}
+        </div>
+        <div class="tl-ethics-directory" id="tl-ethics-directory"></div>
+      </div>
+    ` : '';
+    const launchHtml = stage.panel.launchCards ? `
+      <div class="tl-theme-header">
+        <h4>${stage.panel.launchLabel}</h4>
+      </div>
+      <div class="tl-theme-grid" id="tl-launch-grid">
+        ${stage.panel.launchCards.map((card, idx) => `
+          <button type="button" class="tl-theme-card tl-theme-card--${card.tone}" data-launch-idx="${idx}">
+            <h5>${card.title}</h5>
+            <p>${card.summary}</p>
+          </button>
+        `).join('')}
+      </div>
+      <div class="tl-theme-modal" id="tl-launch-modal" aria-hidden="true">
+        <div class="tl-theme-modal-backdrop" data-close-launch></div>
+        <div class="tl-theme-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="tl-launch-modal-title">
+          <button type="button" class="tl-theme-modal-close" data-close-launch aria-label="Close launch details">×</button>
+          <div class="tl-theme-modal-label">${stage.panel.launchLabel}</div>
+          <h5 class="tl-theme-modal-title" id="tl-launch-modal-title"></h5>
+          <p class="tl-theme-modal-detail" id="tl-launch-modal-detail"></p>
+          <div class="tl-launch-modal-body">
+            <div id="tl-launch-modal-sections"></div>
+            <div class="step-links" id="tl-launch-modal-links"></div>
+          </div>
+        </div>
+      </div>
+    ` : '';
+    const themeHtml = stage.panel.themeCards ? `
+      <div class="tl-theme-header">
+        <h4>${stage.panel.themeLabel}</h4>
+        <p class="tl-panel-intro" style="margin-top:8px;">${stage.panel.themeIntro}</p>
+      </div>
+      <div class="tl-theme-grid" id="tl-theme-grid">
+        ${stage.panel.themeCards.map((card, idx) => `
+          <button type="button" class="tl-theme-card tl-theme-card--${card.tone}" data-theme-idx="${idx}">
+            <h5>${card.title}</h5>
+            <p>${card.description}</p>
+          </button>
+        `).join('')}
+      </div>
+      <div class="tl-theme-modal" id="tl-theme-modal" aria-hidden="true">
+        <div class="tl-theme-modal-backdrop" data-close-theme></div>
+        <div class="tl-theme-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="tl-theme-modal-title">
+          <button type="button" class="tl-theme-modal-close" data-close-theme aria-label="Close theme details">×</button>
+          <div class="tl-theme-modal-label">${stage.panel.themeLabel}</div>
+          <h5 class="tl-theme-modal-title" id="tl-theme-modal-title"></h5>
+          <p class="tl-theme-modal-detail" id="tl-theme-modal-detail"></p>
+          <div class="tl-theme-modal-readings" id="tl-theme-modal-readings"></div>
+        </div>
+      </div>
+    ` : '';
+    panelBody.innerHTML = sectionsHtml + ethicsCardsHtml + launchHtml + themeHtml;
+    if (stage.panel.applicationCards) {
+      const ethicsCards = panelBody.querySelectorAll('.tl-ethics-card');
+      const directory = panelBody.querySelector('#tl-ethics-directory');
+      const showApplication = idx => {
+        const card = stage.panel.applicationCards[idx];
+        ethicsCards.forEach((el, i) => el.classList.toggle('tl-ethics-card--active', i === idx));
+        if (!directory || !card) return;
+        directory.innerHTML = `
+          <div class="tl-ethics-directory-header">
+            <div>
+              <div class="tl-ethics-directory-title">${card.title}</div>
+              <div class="tl-ethics-directory-meta">${card.code} • ${card.directory}</div>
+            </div>
+            <a class="step-tag" href="${encodeURI(card.directory)}" target="_blank">Download folder</a>
+          </div>
+          <div class="tl-ethics-directory-list">
+            ${card.files.map(file => `
+              <div class="tl-ethics-file">
+                <a href="${encodeURI(file.path)}" target="_blank" rel="noopener">${file.label}</a>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      };
+      ethicsCards.forEach((el, idx) => el.addEventListener('click', () => showApplication(idx)));
+      showApplication(0);
+    }
+    if (stage.panel.launchCards) {
+      const launchCards = panelBody.querySelectorAll('.tl-theme-card[data-launch-idx]');
+      const modal = panelBody.querySelector('#tl-launch-modal');
+      const modalTitle = panelBody.querySelector('#tl-launch-modal-title');
+      const modalDetail = panelBody.querySelector('#tl-launch-modal-detail');
+      const modalSections = panelBody.querySelector('#tl-launch-modal-sections');
+      const modalLinks = panelBody.querySelector('#tl-launch-modal-links');
+      const closeTargets = panelBody.querySelectorAll('[data-close-launch]');
+      let keydownHandler = null;
+      const openLaunch = idx => {
+        const card = stage.panel.launchCards[idx];
+        launchCards.forEach((el, i) => el.classList.toggle('tl-theme-card--active', i === idx));
+        if (!modal || !modalTitle || !modalDetail || !modalSections || !modalLinks || !card) return;
+        modalTitle.textContent = card.title;
+        modalDetail.textContent = card.detail;
+        modalSections.innerHTML = card.sections.map(section => `
+          <div class="tl-panel-section">
+            <h4>${section.title}</h4>
+            <ul class="tl-panel-list">
+              ${section.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('');
+        modalLinks.innerHTML = card.links.map(l => `
+          <a href="${l.url}" target="_blank" class="step-tag">${l.label}</a>
+        `).join('');
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        keydownHandler = e => {
+          if (e.key === 'Escape') closeLaunch();
+        };
+        document.addEventListener('keydown', keydownHandler);
+      };
+      const closeLaunch = () => {
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        launchCards.forEach(el => el.classList.remove('tl-theme-card--active'));
+        if (keydownHandler) {
+          document.removeEventListener('keydown', keydownHandler);
+          keydownHandler = null;
+        }
+      };
+      closeTargets.forEach(el => el.addEventListener('click', closeLaunch));
+      modal?.addEventListener('click', e => {
+        if (e.target === modal) closeLaunch();
+      });
+      launchCards.forEach((el, idx) => el.addEventListener('click', () => openLaunch(idx)));
+    }
+    if (stage.panel.themeCards) {
+      const themeCards = panelBody.querySelectorAll('.tl-theme-card');
+      const modal = panelBody.querySelector('#tl-theme-modal');
+      const modalTitle = panelBody.querySelector('#tl-theme-modal-title');
+      const modalDetail = panelBody.querySelector('#tl-theme-modal-detail');
+      const modalReadings = panelBody.querySelector('#tl-theme-modal-readings');
+      const closeTargets = panelBody.querySelectorAll('[data-close-theme]');
+      let keydownHandler = null;
+      const openTheme = idx => {
+        const card = stage.panel.themeCards[idx];
+        themeCards.forEach((el, i) => el.classList.toggle('tl-theme-card--active', i === idx));
+        if (!modal || !modalTitle || !modalDetail || !modalReadings || !card) return;
+        modalTitle.textContent = card.title;
+        modalDetail.textContent = card.detail;
+        modalReadings.innerHTML = card.readings.map(reading => `
+          <div class="tl-theme-reading">${reading}</div>
+        `).join('');
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        keydownHandler = e => {
+          if (e.key === 'Escape') closeTheme();
+        };
+        document.addEventListener('keydown', keydownHandler);
+      };
+      const closeTheme = () => {
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        themeCards.forEach(el => el.classList.remove('tl-theme-card--active'));
+        if (keydownHandler) {
+          document.removeEventListener('keydown', keydownHandler);
+          keydownHandler = null;
+        }
+      };
+      closeTargets.forEach(el => el.addEventListener('click', closeTheme));
+      modal?.addEventListener('click', e => {
+        if (e.target === modal) closeTheme();
+      });
+      themeCards.forEach((el, idx) => el.addEventListener('click', () => openTheme(idx)));
+    }
+    panelLinks.innerHTML = stage.links.map(l => `
+      <a href="${l.url}" target="_blank" class="step-tag">${l.label}</a>
+    `).join('');
+    panelLinks.style.display = stage.links.length ? 'flex' : 'none';
+  }
+
   // ── Navigation ───────────────────────────────────────────────────────────
   function goTo(idx, total) {
     total = total ?? DATA[activeType].length;
     current = Math.max(0, Math.min(idx, total - 1));
-    track.style.transform = `translateX(-${current * 100}%)`;
+    const stage = DATA[activeType][current];
     dotsWrap.querySelectorAll('.tl-dot').forEach((d, i) => {
       d.classList.toggle('tl-dot--active', i === current);
       d.classList.toggle('tl-dot--done',   i < current);
@@ -1411,6 +2076,19 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
     fill.style.width = (total > 1 ? current / (total - 1) * 100 : 0) + '%';
     prevBtn.disabled = current === 0;
     nextBtn.disabled = current === total - 1;
+    renderPanel(stage);
+  }
+
+  const ethicsNav = document.querySelector('.nav-links a[href="#ethics"]');
+  if (ethicsNav) {
+    ethicsNav.addEventListener('click', e => {
+      e.preventDefault();
+      const stages = DATA[activeType];
+      const ethicsIdx = stages.findIndex(stage => stage.dot === 'Ethics');
+      const timeline = document.getElementById('timeline');
+      if (timeline) timeline.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (ethicsIdx >= 0) goTo(ethicsIdx, stages.length);
+    });
   }
 
   // ── Toggle ───────────────────────────────────────────────────────────────
@@ -1424,16 +2102,6 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
   });
 
   // ── Swipe ────────────────────────────────────────────────────────────────
-  let startX = null;
-  track.parentElement.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-  track.parentElement.addEventListener('touchend', e => {
-    if (startX === null) return;
-    const dx = e.changedTouches[0].clientX - startX;
-    const total = DATA[activeType].length;
-    if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1, total);
-    startX = null;
-  }, { passive: true });
-
   render('honours');
 })();
 
