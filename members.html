@@ -723,7 +723,8 @@ img { max-width:100%; display:block; }
 }
 .tl-theme-modal#tl-launch-modal .tl-theme-modal-dialog {
   width:100%;
-  height:100vh;
+  height:100dvh;
+  min-height:100dvh;
   max-height:none;
   display:flex;
   flex-direction:column;
@@ -734,12 +735,16 @@ img { max-width:100%; display:block; }
   border-bottom:none;
   box-shadow:none;
   overflow:hidden;
+  box-sizing:border-box;
 }
 .tl-launch-modal-body {
-  flex:1;
+  flex:1 1 auto;
   min-height:0;
-  overflow:auto;
+  overflow-y:auto;
   padding-top:8px;
+  padding-bottom:32px;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
 }
 .tl-theme-modal-close {
   position:absolute;
@@ -1924,6 +1929,14 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
       </div>
     ` : '';
     panelBody.innerHTML = sectionsHtml + ethicsCardsHtml + launchHtml + themeHtml;
+    const launchModalRoot = document.getElementById('tl-launch-modal');
+    if (launchModalRoot && launchModalRoot.parentElement !== document.body) {
+      document.body.appendChild(launchModalRoot);
+    }
+    const themeModalRoot = document.getElementById('tl-theme-modal');
+    if (themeModalRoot && themeModalRoot.parentElement !== document.body) {
+      document.body.appendChild(themeModalRoot);
+    }
     if (stage.panel.applicationCards) {
       const ethicsCards = panelBody.querySelectorAll('.tl-ethics-card');
       const directory = panelBody.querySelector('#tl-ethics-directory');
@@ -1953,17 +1966,22 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
     }
     if (stage.panel.launchCards) {
       const launchCards = panelBody.querySelectorAll('.tl-theme-card[data-launch-idx]');
-      const modal = panelBody.querySelector('#tl-launch-modal');
-      const modalTitle = panelBody.querySelector('#tl-launch-modal-title');
-      const modalDetail = panelBody.querySelector('#tl-launch-modal-detail');
-      const modalSections = panelBody.querySelector('#tl-launch-modal-sections');
-      const modalLinks = panelBody.querySelector('#tl-launch-modal-links');
-      const closeTargets = panelBody.querySelectorAll('[data-close-launch]');
+      const modal = document.getElementById('tl-launch-modal');
+      const modalTitle = modal?.querySelector('#tl-launch-modal-title');
+      const modalDetail = modal?.querySelector('#tl-launch-modal-detail');
+      const modalSections = modal?.querySelector('#tl-launch-modal-sections');
+      const modalLinks = modal?.querySelector('#tl-launch-modal-links');
+      const closeTargets = modal?.querySelectorAll('[data-close-launch]') ?? [];
       let keydownHandler = null;
+      const toggleLaunchIntro = shouldHide => {
+        if (!panelIntro) return;
+        panelIntro.style.display = shouldHide ? 'none' : '';
+      };
       const openLaunch = idx => {
         const card = stage.panel.launchCards[idx];
         launchCards.forEach((el, i) => el.classList.toggle('tl-theme-card--active', i === idx));
         if (!modal || !modalTitle || !modalDetail || !modalSections || !modalLinks || !card) return;
+        toggleLaunchIntro(true);
         modalTitle.textContent = card.title;
         modalDetail.textContent = card.detail;
         modalSections.innerHTML = card.sections.map(section => `
@@ -1988,6 +2006,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
         if (!modal) return;
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
+        toggleLaunchIntro(false);
         launchCards.forEach(el => el.classList.remove('tl-theme-card--active'));
         if (keydownHandler) {
           document.removeEventListener('keydown', keydownHandler);
@@ -2001,12 +2020,12 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
       launchCards.forEach((el, idx) => el.addEventListener('click', () => openLaunch(idx)));
     }
     if (stage.panel.themeCards) {
-      const themeCards = panelBody.querySelectorAll('.tl-theme-card');
-      const modal = panelBody.querySelector('#tl-theme-modal');
-      const modalTitle = panelBody.querySelector('#tl-theme-modal-title');
-      const modalDetail = panelBody.querySelector('#tl-theme-modal-detail');
-      const modalReadings = panelBody.querySelector('#tl-theme-modal-readings');
-      const closeTargets = panelBody.querySelectorAll('[data-close-theme]');
+      const themeCards = panelBody.querySelectorAll('.tl-theme-card[data-theme-idx]');
+      const modal = document.getElementById('tl-theme-modal');
+      const modalTitle = modal?.querySelector('#tl-theme-modal-title');
+      const modalDetail = modal?.querySelector('#tl-theme-modal-detail');
+      const modalReadings = modal?.querySelector('#tl-theme-modal-readings');
+      const closeTargets = modal?.querySelectorAll('[data-close-theme]') ?? [];
       let keydownHandler = null;
       const openTheme = idx => {
         const card = stage.panel.themeCards[idx];
