@@ -478,6 +478,24 @@ async function loadPublications() {
 }
 
 async function fetchRecentPublications() {
+    const sortAndSlice = (records) => records
+        .map((record, index) => ({ ...record, sourceIndex: index }))
+        .sort((a, b) => {
+            const yearDiff = parsePublicationYear(b.year) - parsePublicationYear(a.year);
+            return yearDiff || a.sourceIndex - b.sourceIndex;
+        })
+        .slice(0, 10);
+
+    // Try localStorage first — populated by publications.html on every successful ORCID fetch
+    try {
+        const raw = localStorage.getItem('orcid_pub_cache');
+        if (raw) {
+            const data = JSON.parse(raw);
+            const records = Array.isArray(data) ? data : (data.records || []);
+            if (records.length) return sortAndSlice(records);
+        }
+    } catch {}
+
     const snapshotPaths = [
         'files/publications-orcid-snapshot.json',
         'files/publications-local.json',
@@ -496,13 +514,7 @@ async function fetchRecentPublications() {
             const records = Array.isArray(data) ? data : (data.records || []);
             if (!records.length) continue;
 
-            return records
-                .map((record, index) => ({ ...record, sourceIndex: index }))
-                .sort((a, b) => {
-                    const yearDiff = parsePublicationYear(b.year) - parsePublicationYear(a.year);
-                    return yearDiff || a.sourceIndex - b.sourceIndex;
-                })
-                .slice(0, 10);
+            return sortAndSlice(records);
         } catch (error) {
             console.warn(`Failed to load publication snapshot at ${path}`, error);
         }

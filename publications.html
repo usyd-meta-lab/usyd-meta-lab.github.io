@@ -240,11 +240,35 @@
     return res.json();
   }
 
+  const LOCAL_CACHE_KEY = 'orcid_pub_cache';
+
+  function saveLocalCache(records) {
+    try {
+      localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify({ fetched: new Date().toISOString(), records }));
+    } catch {}
+  }
+
   let fallbackCache = null;
   let fallbackSource = null;
 
   async function fetchFallbackRecords() {
     if (fallbackCache) return fallbackCache;
+
+    // Try localStorage first — updated automatically on every successful ORCID fetch
+    try {
+      const raw = localStorage.getItem(LOCAL_CACHE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        const records = Array.isArray(data) ? data : (data.records || []);
+        if (records.length) {
+          fallbackCache = records;
+          fallbackSource = 'localStorage';
+          return fallbackCache;
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to read localStorage cache', err);
+    }
 
     for (const path of fallbackPaths) {
       if (!path) continue;
@@ -354,6 +378,7 @@
     let records = [];
     try {
       records = await fetchOrcidRecords();
+      saveLocalCache(records);
       const fallbackRecords = await safeFallbackRecords();
       if (isLocalEnv || records.length > fallbackRecords.length) {
         enableDownload(records);
@@ -365,12 +390,14 @@
       }
     } catch (error) {
       console.error('Failed to load ORCID publications', error);
-      hideDownload('Download ORCID snapshot (unavailable)');
       container.textContent = 'Loading local publication list…';
       try {
         records = await fetchFallbackRecords();
+        enableDownload(records);
+        downloadBtn.textContent = `Download cached snapshot (${fallbackSource === 'localStorage' ? 'browser cache' : 'repo snapshot'})`;
       } catch (fallbackError) {
         console.error('Failed to load fallback publications', fallbackError);
+        hideDownload('Download ORCID snapshot (unavailable)');
         container.textContent = 'Unable to load publications at this time.';
         return;
       }
