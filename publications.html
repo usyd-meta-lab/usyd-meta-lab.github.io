@@ -98,11 +98,7 @@
 </a>
 
 <section id="publications">
-  <h2>Publications
-    <button id="download-publications" class="download-btn" type="button" disabled>
-      Download ORCID snapshot
-    </button>
-  </h2>
+  <h2>Publications</h2>
   <div id="pub-container">Loading publications…</div>
 </section>
 
@@ -115,15 +111,6 @@
     'files/publications-local.json'
   ];
   const container = document.getElementById('pub-container');
-  const downloadBtn = document.getElementById('download-publications');
-  const isLocalEnv = (() => {
-    const host = window.location.hostname;
-    if (window.location.protocol === 'file:') return true;
-    if (!host) return true;
-    if (host === 'localhost' || host === '127.0.0.1') return true;
-    if (host.endsWith('.local')) return true;
-    return false;
-  })();
 
   /* ---------- Helper API fetchers ---------- */
   async function fetchSummary() {
@@ -288,15 +275,6 @@
     throw new Error('Fallback request failed: no usable snapshot found');
   }
 
-  async function safeFallbackRecords() {
-    try {
-      return await fetchFallbackRecords();
-    } catch (error) {
-      console.warn('Local fallback snapshot unavailable or invalid', error);
-      return [];
-    }
-  }
-
   function renderRecords(records) {
     container.innerHTML = '';
 
@@ -337,67 +315,18 @@
     });
   }
 
-  function enableDownload(records) {
-    if (!downloadBtn) return;
-    downloadBtn.disabled = false;
-    downloadBtn.textContent = 'Download ORCID snapshot';
-    downloadBtn.classList.add('is-visible');
-    downloadBtn.onclick = () => {
-      const snapshot = { fetched: new Date().toISOString(), records };
-
-      const download = (filename, content, mime) => {
-        const blob = new Blob([content], { type: mime });
-        const url = URL.createObjectURL(blob);
-        const temp = document.createElement('a');
-        temp.href = url;
-        temp.download = filename;
-        document.body.appendChild(temp);
-        temp.click();
-        document.body.removeChild(temp);
-        URL.revokeObjectURL(url);
-      };
-
-      download('publications-orcid-snapshot.json', JSON.stringify(snapshot, null, 2), 'application/json');
-      download('publications-orcid-snapshot.js', `window.__ORCID_SNAPSHOT__ = ${JSON.stringify(snapshot, null, 2)};\n`, 'application/javascript');
-    };
-  }
-
-  function hideDownload(message) {
-    if (!downloadBtn) return;
-    if (message) downloadBtn.textContent = message;
-    downloadBtn.disabled = true;
-    if (isLocalEnv) {
-      downloadBtn.classList.add('is-visible');
-    } else {
-      downloadBtn.classList.remove('is-visible');
-    }
-    downloadBtn.onclick = null;
-  }
-
   (async () => {
     let records = [];
     try {
       records = await fetchOrcidRecords();
       saveLocalCache(records);
-      const fallbackRecords = await safeFallbackRecords();
-      if (isLocalEnv || records.length > fallbackRecords.length) {
-        enableDownload(records);
-      } else {
-        const message = fallbackSource === fallbackPaths[0]
-          ? 'Download ORCID snapshot (current)'
-          : 'Download ORCID snapshot (local copy matched)';
-        hideDownload(message);
-      }
     } catch (error) {
       console.error('Failed to load ORCID publications', error);
       container.textContent = 'Loading local publication list…';
       try {
         records = await fetchFallbackRecords();
-        enableDownload(records);
-        downloadBtn.textContent = `Download cached snapshot (${fallbackSource === 'localStorage' ? 'browser cache' : 'repo snapshot'})`;
       } catch (fallbackError) {
         console.error('Failed to load fallback publications', fallbackError);
-        hideDownload('Download ORCID snapshot (unavailable)');
         container.textContent = 'Unable to load publications at this time.';
         return;
       }
