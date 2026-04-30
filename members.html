@@ -827,6 +827,45 @@ img { max-width:100%; display:block; }
 .tl-toggle-btn--active { background:var(--color-bg-dark); color:var(--color-bg); }
 .tl-toggle-btn:not(.tl-toggle-btn--active):hover { color:var(--color-text); }
 
+/* ── Mobile nav toggle ──────────────────────────────────────────────────── */
+.nav-toggle {
+  display:none; width:48px; height:48px;
+  background:none; border:none; cursor:pointer;
+  flex-direction:column; align-items:center; justify-content:center; gap:5px;
+  flex-shrink:0;
+}
+.nav-toggle span {
+  display:block; width:24px; height:1.5px;
+  background:var(--color-text); transition:all 0.3s var(--ease);
+}
+.nav-toggle span:nth-child(1) { transform:translateY(-4px); }
+.nav-toggle span:nth-child(3) { transform:translateY(4px); }
+.nav-toggle.active span:nth-child(1) { transform:translateY(1.5px) rotate(45deg); }
+.nav-toggle.active span:nth-child(2) { opacity:0; }
+.nav-toggle.active span:nth-child(3) { transform:translateY(-1.5px) rotate(-45deg); }
+
+.mobile-menu {
+  position:fixed; inset:0; z-index:999;
+  background:var(--color-bg);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.5s var(--ease);
+}
+.mobile-menu.active { opacity:1; pointer-events:all; }
+.mobile-menu-links {
+  display:flex; flex-direction:column; gap:24px; text-align:center;
+}
+.mobile-menu-links a {
+  font-family:var(--font-display); font-size:2rem; font-weight:500;
+  color:var(--color-text); opacity:0; transform:translateY(20px);
+  transition:all 0.5s var(--ease);
+}
+.mobile-menu.active .mobile-menu-links a { opacity:1; transform:translateY(0); }
+.mobile-menu.active .mobile-menu-links a:nth-child(1) { transition-delay:0.05s; }
+.mobile-menu.active .mobile-menu-links a:nth-child(2) { transition-delay:0.1s; }
+.mobile-menu.active .mobile-menu-links a:nth-child(3) { transition-delay:0.15s; }
+.mobile-menu.active .mobile-menu-links a:nth-child(4) { transition-delay:0.2s; }
+
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media(max-width:900px){
   :root { --pad:32px; }
@@ -835,8 +874,17 @@ img { max-width:100%; display:block; }
   .tl-topbar { padding-top:0; margin-top:0; }
   .tl-slider { margin-top:42px; }
   .tl-slider { width:100%; }
+  .nav { padding:0 20px; }
+  .tl-ethics-layout { grid-template-columns:1fr; }
+}
+@media(max-width:768px){
+  .nav-links { display:none; }
+  .nav-toggle { display:flex; }
+  .gate-form { flex-direction:column; }
+  .gate-btn { width:100%; }
 }
 @media(max-width:600px){
+  :root { --pad:16px; }
   .software-grid,.resources-grid,.meetings-grid { grid-template-columns:1fr; }
   .step > summary { grid-template-columns:48px 1fr auto; gap:16px; }
   .step-body { padding-left: calc(48px + 16px); }
@@ -849,6 +897,8 @@ img { max-width:100%; display:block; }
   .tl-dot-label { font-size:0.62rem; }
   .tl-panel-card { padding:22px; }
   .tl-panel-body { grid-template-columns:1fr; }
+  .tl-theme-modal-dialog { padding:20px; border-radius:16px; }
+  .footer-inner { flex-direction:column; gap:24px; }
 }
 </style>
 </head>
@@ -898,8 +948,21 @@ img { max-width:100%; display:block; }
       <a href="meetings.html">Meetings</a>
       <a href="#ethics">Ethics</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- ── Mobile menu ───────────────────────────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-links">
+    <a href="https://usyd-meta-lab.github.io/" target="_blank" rel="noopener">Website</a>
+    <a href="https://metaforge.live" target="_blank" rel="noopener">MetaForge</a>
+    <a href="meetings.html">Meetings</a>
+    <a href="#ethics" id="mobileEthicsLink">Ethics</a>
+  </div>
+</div>
 
 <!-- ── Research Project Timeline ─────────────────────────────────────── -->
 <section class="tl-section" id="timeline">
@@ -2086,8 +2149,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
     renderPanel(stage);
   }
 
-  const ethicsNav = document.querySelector('.nav-links a[href="#ethics"]');
-  if (ethicsNav) {
+  document.querySelectorAll('a[href="#ethics"]').forEach(ethicsNav => {
     ethicsNav.addEventListener('click', e => {
       e.preventDefault();
       const stages = DATA[activeType];
@@ -2096,7 +2158,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
       if (timeline) timeline.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (ethicsIdx >= 0) goTo(ethicsIdx, stages.length);
     });
-  }
+  });
 
   // ── Toggle ───────────────────────────────────────────────────────────────
   toggleBtns.forEach(btn => {
@@ -2117,6 +2179,25 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
 }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Mobile nav toggle ──────────────────────────────────────────────────────
+(function() {
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (!navToggle || !mobileMenu) return;
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navToggle.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+})();
 </script>
 </body>
 </html>
