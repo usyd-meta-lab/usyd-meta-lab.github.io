@@ -799,6 +799,19 @@ img { max-width:100%; display:block; }
   line-height:1.7;
   color:var(--color-text-muted);
 }
+.tl-panel-prose {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 680px;
+}
+.tl-panel-prose p {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--color-text-muted);
+}
+
 .onboarding-link {
   color:var(--color-accent);
   font-weight:500;
@@ -1616,6 +1629,25 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
         ]
       },
       {
+        dot: 'Approach',
+        title: 'Stop Planning, Start Running',
+        desc: 'Your PhD is a sequence of experiments, not a perfect plan. Run studies, learn from them, and adapt. The data will teach you more than the literature ever could.',
+        panel: {
+          label: 'Lab philosophy',
+          title: 'Stop Planning, Start Running',
+          intro: 'How to think about doing a PhD in this lab.',
+          sections: [],
+          prose: [
+            'The literature will never tell you everything you need to know. Neither will your research plan. You\'ll learn more from running one poorly designed study than from six months of perfect planning.',
+            'Be systematic about what directly matters: read the core papers in your space thoroughly. Be ruthless about the rest. Your methods don\'t need to be bulletproof before you start; they need to be good enough. There will always be unknowns. Waiting for certainty is procrastination dressed as rigor.',
+            'Think of your PhD as a series of experiments. Some will work. Many won\'t. That\'s the point. Each one teaches you something about your questions, your paradigm, your coding, your statistics, your thinking. Sitting around planning gets you answers to hypotheticals. Running studies gets you real data.',
+            'So run it. Then decide: do I run another study, modify this design, abandon this direction, or stop and write this up? That decision gets easier and smarter with each study you actually do, not with each revision you make to your research plan.',
+            'The PhD isn\'t about getting it right first. It\'s about moving, learning, and adapting. Get started.'
+          ]
+        },
+        links: []
+      },
+      {
         dot: 'Design',
         title: 'Conception &amp; Design',
         desc: 'PhD projects typically involve multiple interconnected studies — map out the full experimental arc, considering how each study builds on the last. Consult Kit about journal targeting early and plan your preregistration strategy across studies.',
@@ -2003,6 +2035,11 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
         </ul>
       </div>
     `).join('');
+    const proseHtml = stage.panel.prose ? `
+      <div class="tl-panel-prose">
+        ${stage.panel.prose.map(p => `<p>${p}</p>`).join('')}
+      </div>
+    ` : '';
     const ethicsCardsHtml = stage.panel.applicationCards ? `
       <div class="tl-ethics-layout">
         <div class="tl-ethics-left" id="tl-ethics-grid">
@@ -2067,7 +2104,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
         </div>
       </div>
     ` : '';
-    panelBody.innerHTML = sectionsHtml + ethicsCardsHtml + launchHtml + themeHtml;
+    panelBody.innerHTML = proseHtml + sectionsHtml + ethicsCardsHtml + launchHtml + themeHtml;
     const launchModalRoot = document.getElementById('tl-launch-modal');
     if (launchModalRoot && launchModalRoot.parentElement !== document.body) {
       document.body.appendChild(launchModalRoot);
