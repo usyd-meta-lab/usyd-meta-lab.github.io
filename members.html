@@ -1847,13 +1847,19 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
                     'Use the pilot to confirm the task still works as expected and to refine any weak points before the live run.'
                   ]
                 },
-                {
+              {
                   title: 'Set up the study',
                   items: [
-                    'Use MetaForge Project Settings → Prolific, or set it up manually if needed.',
-                    'Append the Prolific ID to the study URL.',
+                    'Use MetaForge Project Settings  →  Distribute → Prolific, or set it up manually if needed.',
+                    'Ask Kit for the lab API code or if you are already in the lab Prolific account you can find it <a class="onboarding-link" href="https://app.prolific.com/researcher/workspaces/61111175c8018401b9822e67/settings/tokens" target="_blank" rel="noopener">here</a>.',
+                    'Study name and description should match ethics. Internal name can be whatever you like, ideally it indicates the paradigm/task for future screening',
+                    'Allowed countries is usually set to US and/or UK. Usually a representative gender sample',
                     'Set pay to £6/hour.',
-                    'Use Quota Sample for balanced gender when that matters for the design.'
+                    'Regenerate the completion code and then click set as redirect',
+                    'Create a draft study and open it on Prolific',
+                    'In the study on Prolific you should screen out people who have done similar studies and then schedule the launch',
+                    'Make sure you think about time zones! Setting your study to run in the middle of the US night can really mess with your results'
+                    
                   ]
                 },
                 {
@@ -1861,6 +1867,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
                   items: [
                     'Publish the study when it is ready.',
                     'Watch incoming data on MetaForge.',
+                    'To get more balanced condition cells, I suggest collecting 80% of your data and then manually setting the condition to a particular cell and topping it up to reach the desired n. Built in quotas in MetaForge are a work in progress.',
                     'Download the final data in MetaForge or via the R API when the run is complete.'
                   ]
                 }
