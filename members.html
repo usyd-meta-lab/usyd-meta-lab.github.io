@@ -2021,7 +2021,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
     if (!panelLabel || !panelTitle || !panelIntro || !panelBody || !panelLinks) return;
     panelLabel.textContent = stage.panel.label;
     panelTitle.textContent = stage.panel.title;
-    panelIntro.textContent = stage.panel.intro;
+    panelIntro.innerHTML = stage.panel.intro;
     const sectionsHtml = stage.panel.sections.map(section => `
       <div class="tl-panel-section">
         <h4>${section.title}</h4>
