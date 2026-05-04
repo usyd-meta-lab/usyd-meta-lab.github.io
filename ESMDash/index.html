@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetaForge ESM Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1117;
+      color: #e1e4e8;
+      min-height: 100vh;
+    }
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #f0f6fc;
+    }
+    header .badge {
+      background: #1f6feb;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      font-size: 1.1rem;
+      color: #8b949e;
+    }
+    .landing {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      gap: 1rem;
+    }
+    .landing p {
+      color: #8b949e;
+      font-size: 0.95rem;
+    }
+    .landing .input-row {
+      display: flex;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 480px;
+    }
+    .landing input {
+      flex: 1;
+      padding: 0.6rem 0.9rem;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e1e4e8;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .landing input:focus { border-color: #1f6feb; }
+    .landing input::placeholder { color: #484f58; }
+    .landing button {
+      background: #1f6feb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .landing button:hover { background: #388bfd; }
+    .landing .error { color: #f85149; font-size: 0.85rem; min-height: 1.2em; }
+    .dashboard { display: none; padding: 2rem; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+    .chart-container {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .chart-container h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #f0f6fc;
+    }
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .table-container {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .table-container h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #f0f6fc;
+    }
+    .table-search {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 1rem;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e1e4e8;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .table-search:focus { border-color: #1f6feb; }
+    .table-search::placeholder { color: #484f58; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #21262d;
+      cursor: pointer;
+      user-select: none;
+    }
+    .data-table th:hover { color: #f0f6fc; }
+    .data-table td {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #161b22;
+      color: #e1e4e8;
+    }
+    .data-table tr:hover td { background: #1c2128; }
+    .sort-arrow { margin-left: 0.3rem; font-size: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MetaForge ESM Dashboard</h1>
+    <span class="badge" id="projectBadge">No project loaded</span>
+  </header>
+
+  <div class="landing" id="landing">
+    <p>Enter your MetaForge API token and project ID</p>
+    <div class="input-row">
+      <input type="password" id="apiTokenInput" placeholder="API token" style="font-family: monospace;">
+    </div>
+    <div class="input-row">
+      <input type="text" id="projectIdInput" placeholder="Project ID  e.g. lPUIVdHXVIDiOA4gB38r">
+      <button id="loadProjectBtn">Load</button>
+    </div>
+    <div class="error" id="landingError"></div>
+  </div>
+
+  <div class="loading" id="loading" style="display:none">Loading data...</div>
+
+  <div class="dashboard" id="dashboard">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="label">Participants</div>
+        <div class="value" id="numParticipants">--</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Sessions</div>
+        <div class="value" id="numSessions">--</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Avg Sessions / Participant</div>
+        <div class="value" id="avgSessions">--</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Registrations</div>
+        <div class="value" id="numRegistrations">--</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Data Rows</div>
+        <div class="value" id="numRows">--</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 style="margin: 0;">Sessions Completed per Participant</h2>
+        <div style="display: flex; gap: 1.25rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem; color: #8b949e;">
+            <input type="checkbox" id="useRunCount" style="accent-color: #1f6feb; width: 16px; height: 16px; cursor: pointer;">
+            Count by unique runs
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.85rem; color: #8b949e;">
+            <input type="checkbox" id="sonaOnly" style="accent-color: #1f6feb; width: 16px; height: 16px; cursor: pointer;">
+            SONA-matched only
+          </label>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="sessionsChart"></canvas>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <h2>Participant Lookup</h2>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0.65rem 0.9rem; background: #161b22; border: 1px solid #30363d; border-radius: 6px; flex-wrap: wrap;">
+        <span style="color: #8b949e; font-size: 0.85rem; white-space: nowrap;">Bulk credit: sessions</span>
+        <select id="bulkOp" style="background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 4px; padding: 3px 6px; font-size: 0.85rem; cursor: pointer;">
+          <option value=">=">&ge;</option>
+          <option value=">">&gt;</option>
+          <option value="=">=</option>
+          <option value="<">&lt;</option>
+          <option value="<=">&le;</option>
+        </select>
+        <input type="number" id="bulkN" min="0" value="1" style="width: 60px; background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 4px; padding: 3px 6px; font-size: 0.85rem;">
+        <span id="bulkPreview" style="color: #8b949e; font-size: 0.85rem; flex: 1; white-space: nowrap;">— participants with SONA IDs qualify</span>
+        <button id="bulkCreditBtn" style="background: #1f6feb; color: #fff; border: none; border-radius: 4px; padding: 5px 14px; font-size: 0.85rem; cursor: pointer; white-space: nowrap;">Credit All Matching</button>
+      </div>
+      <input type="text" class="table-search" id="tableSearch" placeholder="Search by EMA ID, SONA ID, or session count...">
+      <table class="data-table" id="participantTable">
+        <thead>
+          <tr>
+            <th data-sort="ema">EMA ID <span class="sort-arrow"></span></th>
+            <th data-sort="sona">SONA ID <span class="sort-arrow"></span></th>
+            <th data-sort="sessions">Sessions <span class="sort-arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const SONA_CREDIT_URL = (sonaId) =>
+      `https://sydneypsych.sona-systems.com/services/SonaAPI.svc/WebstudyCredit?experiment_id=3753&credit_token=cb36a9ca7a154cd4aa433d271de6d053&survey_code=${sonaId}`;
+
+    // Called from table button onclick (btn=element) or bulk loop (btn=null, returns bool).
+    // Uses no-cors because SONA doesn't send CORS headers; the request still goes through.
+    async function sonaCredit(sonaId, btn) {
+      if (btn) { btn.textContent = '…'; btn.disabled = true; }
+      try {
+        await fetch(SONA_CREDIT_URL(sonaId), { mode: 'no-cors' });
+        if (btn) { btn.textContent = '✓'; btn.style.color = '#3fb950'; }
+        return true;
+      } catch (e) {
+        if (btn) { btn.textContent = '✗'; btn.style.color = '#f85149'; }
+        return false;
+      }
+    }
+
+    const METAFORGE_BASE = 'https://us-central1-protocol-js.cloudfunctions.net';
+
+    async function loadProject(projectId, token) {
+      const url = `${METAFORGE_BASE}/apiGetProjectData?projectId=${encodeURIComponent(projectId)}&format=json`;
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error(`MetaForge API ${res.status}: ${await res.text()}`);
+      return res.json();
+    }
+
+    function startDashboard(projectId, token) {
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+
+      // Store in URL hash so reloads keep the project
+      window.location.hash = projectId;
+      document.getElementById('projectBadge').textContent = projectId;
+
+    loadProject(projectId, token).then((payload) => {
+      const rows = payload.data || [];
+
+        // Count sessions per participant (by sessionId) and by unique runId
+        const participantSessions = {};
+        const participantRuns = {};
+        for (const row of rows) {
+          const pid = row.participantId;
+          const sid = row.sessionId;
+          const rid = row.runId;
+          if (!participantSessions[pid]) participantSessions[pid] = new Set();
+          participantSessions[pid].add(sid);
+          if (rid) {
+            if (!participantRuns[pid]) participantRuns[pid] = new Set();
+            participantRuns[pid].add(rid);
+          }
+        }
+
+        const allPids = Object.keys(participantSessions).sort();
+        const registrations = allPids.filter(p => p.startsWith('p_'));
+        const emaParticipants = allPids.filter(p => p.startsWith('ema_'));
+
+        document.getElementById('numRows').textContent = rows.length.toLocaleString();
+
+        // Build SONAID lookup: p_ participant -> SONAID from registration rows
+        const pidToSonaid = {};
+        const esmCodeToPid = {};
+        for (const row of rows) {
+          const pid = row.participantId;
+          const sonaid = (row.SONAID || '').trim();
+          const esmCode = (row.esmCode || '').trim();
+          if (sonaid && pid && !pidToSonaid[pid]) pidToSonaid[pid] = sonaid;
+          if (esmCode && pid.startsWith('p_')) esmCodeToPid[esmCode] = pid;
+        }
+        // Cross-match ema_ participants to SONAID via esmCode in their ID
+        for (const pid of emaParticipants) {
+          if (!pidToSonaid[pid]) {
+            const code = pid.split('_')[1];
+            const linkedPid = esmCodeToPid[code];
+            if (linkedPid && pidToSonaid[linkedPid]) {
+              pidToSonaid[pid] = pidToSonaid[linkedPid];
+            }
+          }
+        }
+
+        // All ESM participant data with SONAID info
+        let countMode = 'session'; // 'session' | 'run'
+
+        function buildAllData() {
+          return emaParticipants.map(pid => {
+            const countSet = countMode === 'run' ? participantRuns[pid] : participantSessions[pid];
+            return { id: pid, count: countSet ? countSet.size : 0, sonaid: pidToSonaid[pid] || null };
+          }).sort((a, b) => b.count - a.count);
+        }
+
+        let allData = buildAllData();
+
+        const shortLabel = (p) => {
+          if (p.startsWith('ema_')) return p.split('_')[1];
+          if (p.startsWith('p_')) return p.substring(2, 9);
+          return p.substring(0, 7);
+        };
+
+        let chart = null;
+
+        const registrationsWithSona = registrations.filter(p => pidToSonaid[p]);
+
+        function renderChart(sonaOnly) {
+          const filtered = sonaOnly ? allData.filter(d => d.sonaid) : allData;
+
+          // Update stats to reflect filtered data
+          const filteredSessions = filtered.reduce((a, b) => a + b.count, 0);
+          document.getElementById('numParticipants').textContent = filtered.length;
+          document.getElementById('numSessions').textContent = filteredSessions;
+          document.getElementById('avgSessions').textContent =
+            filtered.length ? (filteredSessions / filtered.length).toFixed(1) : '0';
+          document.getElementById('numRegistrations').textContent =
+            sonaOnly ? registrationsWithSona.length : registrations.length;
+
+          if (chart) chart.destroy();
+
+          // Set dynamic height based on number of participants
+          document.getElementById('sessionsChart').parentElement.style.height =
+            Math.max(400, filtered.length * 22) + 'px';
+
+          chart = new Chart(document.getElementById('sessionsChart'), {
+            type: 'bar',
+            data: {
+              labels: filtered.map(s => shortLabel(s.id)),
+              datasets: [{
+                label: 'Sessions completed',
+                data: filtered.map(s => s.count),
+                backgroundColor: filtered.map(s =>
+                  s.count >= 4 ? '#3fb950' :
+                  s.count >= 2 ? '#1f6feb' :
+                  '#8b949e'
+                ),
+                borderRadius: 4,
+                maxBarThickness: 18,
+              }]
+            },
+            options: {
+              indexAxis: 'y',
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    title: (items) => {
+                      const d = filtered[items[0].dataIndex];
+                      return d.sonaid ? `${d.id}  (SONA: ${d.sonaid})` : d.id;
+                    },
+                    label: (item) => `${item.raw} session${item.raw !== 1 ? 's' : ''}`
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  ticks: { color: '#8b949e', font: { size: 11 } },
+                  grid: { display: false }
+                },
+                x: {
+                  beginAtZero: true,
+                  ticks: { color: '#8b949e', stepSize: 1 },
+                  grid: { color: '#21262d' },
+                  title: { display: true, text: 'Sessions', color: '#8b949e' }
+                }
+              }
+            }
+          });
+        }
+
+        // Table logic
+        const tbody = document.querySelector('#participantTable tbody');
+        let tableData = allData.map(d => ({ ema: d.id, sona: d.sonaid || '', sessions: d.count }));
+
+        function rebuildData() {
+          allData = buildAllData();
+          tableData = allData.map(d => ({ ema: d.id, sona: d.sonaid || '', sessions: d.count }));
+        }
+        let sortCol = 'sessions';
+        let sortAsc = false;
+
+        function renderTable(sonaOnly, query) {
+          let data = sonaOnly ? tableData.filter(d => d.sona) : tableData;
+          if (query) {
+            const q = query.toLowerCase();
+            data = data.filter(d =>
+              d.ema.toLowerCase().includes(q) ||
+              d.sona.toLowerCase().includes(q) ||
+              String(d.sessions).includes(q)
+            );
+          }
+          data.sort((a, b) => {
+            let av = a[sortCol], bv = b[sortCol];
+            if (sortCol === 'sessions') return sortAsc ? av - bv : bv - av;
+            return sortAsc ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+          });
+          tbody.innerHTML = data.map(d => {
+            const sonaCell = d.sona
+              ? `<button onclick="sonaCredit('${d.sona}', this)" style="background:none; border:none; color:#58a6ff; cursor:pointer; font-size:inherit; padding:0; text-decoration:underline;">${d.sona}</button>`
+              : '—';
+            return `<tr><td>${d.ema}</td><td>${sonaCell}</td><td>${d.sessions}</td></tr>`;
+          }).join('');
+
+          // Update sort arrows
+          document.querySelectorAll('#participantTable th').forEach(th => {
+            const col = th.dataset.sort;
+            th.querySelector('.sort-arrow').textContent = col === sortCol ? (sortAsc ? '▲' : '▼') : '';
+          });
+        }
+
+        document.querySelectorAll('#participantTable th').forEach(th => {
+          th.addEventListener('click', () => {
+            const col = th.dataset.sort;
+            if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+            renderTable(document.getElementById('sonaOnly').checked, document.getElementById('tableSearch').value);
+          });
+        });
+
+        document.getElementById('tableSearch').addEventListener('input', (e) => {
+          renderTable(document.getElementById('sonaOnly').checked, e.target.value);
+        });
+
+        document.getElementById('sonaOnly').addEventListener('change', (e) => {
+          renderChart(e.target.checked);
+          renderTable(e.target.checked, document.getElementById('tableSearch').value);
+          updateBulkPreview();
+        });
+
+        document.getElementById('useRunCount').addEventListener('change', (e) => {
+          countMode = e.target.checked ? 'run' : 'session';
+          rebuildData();
+          const sonaOnly = document.getElementById('sonaOnly').checked;
+          renderChart(sonaOnly);
+          renderTable(sonaOnly, document.getElementById('tableSearch').value);
+          updateBulkPreview();
+        });
+
+        function sessionsMeetsOp(count, op, n) {
+          if (op === '>=') return count >= n;
+          if (op === '>')  return count >  n;
+          if (op === '=')  return count === n;
+          if (op === '<')  return count <  n;
+          if (op === '<=') return count <= n;
+          return false;
+        }
+
+        function bulkCandidates() {
+          const op = document.getElementById('bulkOp').value;
+          const n  = parseInt(document.getElementById('bulkN').value, 10);
+          return tableData.filter(d => d.sona && sessionsMeetsOp(d.sessions, op, n));
+        }
+
+        function updateBulkPreview() {
+          const candidates = bulkCandidates();
+          document.getElementById('bulkPreview').textContent =
+            `${candidates.length} participant${candidates.length !== 1 ? 's' : ''} with SONA IDs qualify`;
+        }
+
+        document.getElementById('bulkOp').addEventListener('change', updateBulkPreview);
+        document.getElementById('bulkN').addEventListener('input', updateBulkPreview);
+
+        document.getElementById('bulkCreditBtn').addEventListener('click', async () => {
+          const candidates = bulkCandidates();
+          if (candidates.length === 0) {
+            alert('No SONA-matched participants meet this criteria.');
+            return;
+          }
+          if (!confirm(`Credit ${candidates.length} participant${candidates.length !== 1 ? 's' : ''} on SONA?`)) return;
+
+          const btn = document.getElementById('bulkCreditBtn');
+          const preview = document.getElementById('bulkPreview');
+          btn.disabled = true;
+          btn.style.opacity = '0.6';
+
+          let passed = 0, failed = 0;
+          for (let i = 0; i < candidates.length; i++) {
+            const d = candidates[i];
+            preview.textContent = `Crediting ${i + 1} / ${candidates.length}…`;
+            const ok = await sonaCredit(d.sona, null);
+            ok ? passed++ : failed++;
+          }
+
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          const msg = failed === 0
+            ? `Done — ${passed} participant${passed !== 1 ? 's' : ''} credited.`
+            : `Done — ${passed} credited, ${failed} failed.`;
+          preview.textContent = msg;
+          setTimeout(updateBulkPreview, 4000);
+        });
+
+        renderChart(false);
+        renderTable(false, '');
+        updateBulkPreview();
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+    }).catch((err) => {
+      console.error(err);
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('landing').style.display = 'flex';
+      document.getElementById('landingError').textContent = `Failed to load data: ${err.message}`;
+    });
+    } // end startDashboard
+
+    // Wire up landing screen
+    document.getElementById('loadProjectBtn').addEventListener('click', () => {
+      const token = document.getElementById('apiTokenInput').value.trim();
+      const id = document.getElementById('projectIdInput').value.trim();
+      if (!token) {
+        document.getElementById('landingError').textContent = 'Please enter your API token.';
+        return;
+      }
+      if (!id) {
+        document.getElementById('landingError').textContent = 'Please enter a project ID.';
+        return;
+      }
+      document.getElementById('landingError').textContent = '';
+      startDashboard(id, token);
+    });
+
+    document.getElementById('apiTokenInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('projectIdInput').focus();
+    });
+
+    document.getElementById('projectIdInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('loadProjectBtn').click();
+    });
+
+    // Auto-load from URL hash is not possible without the token — just pre-fill the project ID
+    const hashId = window.location.hash.slice(1);
+    if (hashId) {
+      document.getElementById('projectIdInput').value = hashId;
+      document.getElementById('apiTokenInput').focus();
+    }
+  </script>
+</body>
+</html>
