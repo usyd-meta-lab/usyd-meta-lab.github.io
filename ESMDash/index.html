@@ -242,6 +242,11 @@
     <div class="table-container">
       <h2>Participant Lookup</h2>
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0.65rem 0.9rem; background: #161b22; border: 1px solid #30363d; border-radius: 6px; flex-wrap: wrap;">
+        <span style="color: #8b949e; font-size: 0.85rem; white-space: nowrap;">SONA (optional)</span>
+        <input type="text" id="sonaExpId" placeholder="Experiment ID" style="width: 120px; background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 4px; padding: 3px 8px; font-size: 0.85rem; outline: none;">
+        <input type="password" id="sonaToken" placeholder="Credit token" style="flex: 1; min-width: 160px; background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 4px; padding: 3px 8px; font-size: 0.85rem; outline: none; font-family: monospace;">
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0.65rem 0.9rem; background: #161b22; border: 1px solid #30363d; border-radius: 6px; flex-wrap: wrap;">
         <span style="color: #8b949e; font-size: 0.85rem; white-space: nowrap;">Bulk credit: sessions</span>
         <select id="bulkOp" style="background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 4px; padding: 3px 6px; font-size: 0.85rem; cursor: pointer;">
           <option value=">=">&ge;</option>
@@ -269,15 +274,28 @@
   </div>
 
   <script>
-    const SONA_CREDIT_URL = (sonaId) =>
-      `https://sydneypsych.sona-systems.com/services/SonaAPI.svc/WebstudyCredit?experiment_id=3753&credit_token=cb36a9ca7a154cd4aa433d271de6d053&survey_code=${sonaId}`;
+    function sonaConfigured() {
+      const expId = (document.getElementById('sonaExpId') || {}).value;
+      const tok   = (document.getElementById('sonaToken') || {}).value;
+      return !!(expId && expId.trim() && tok && tok.trim());
+    }
+
+    function sonaURL(sonaId) {
+      const expId = document.getElementById('sonaExpId').value.trim();
+      const tok   = document.getElementById('sonaToken').value.trim();
+      return `https://sydneypsych.sona-systems.com/services/SonaAPI.svc/WebstudyCredit?experiment_id=${encodeURIComponent(expId)}&credit_token=${encodeURIComponent(tok)}&survey_code=${sonaId}`;
+    }
 
     // Called from table button onclick (btn=element) or bulk loop (btn=null, returns bool).
     // Uses no-cors because SONA doesn't send CORS headers; the request still goes through.
     async function sonaCredit(sonaId, btn) {
+      if (!sonaConfigured()) {
+        alert('Enter a SONA Experiment ID and Credit Token in the settings above first.');
+        return false;
+      }
       if (btn) { btn.textContent = '…'; btn.disabled = true; }
       try {
-        await fetch(SONA_CREDIT_URL(sonaId), { mode: 'no-cors' });
+        await fetch(sonaURL(sonaId), { mode: 'no-cors' });
         if (btn) { btn.textContent = '✓'; btn.style.color = '#3fb950'; }
         return true;
       } catch (e) {
@@ -464,7 +482,9 @@
           });
           tbody.innerHTML = data.map(d => {
             const sonaCell = d.sona
-              ? `<button onclick="sonaCredit('${d.sona}', this)" style="background:none; border:none; color:#58a6ff; cursor:pointer; font-size:inherit; padding:0; text-decoration:underline;">${d.sona}</button>`
+              ? (sonaConfigured()
+                ? `<button onclick="sonaCredit('${d.sona}', this)" style="background:none; border:none; color:#58a6ff; cursor:pointer; font-size:inherit; padding:0; text-decoration:underline;">${d.sona}</button>`
+                : `<span style="color:#8b949e;">${d.sona}</span>`)
               : '—';
             return `<tr><td>${d.ema}</td><td>${sonaCell}</td><td>${d.sessions}</td></tr>`;
           }).join('');
@@ -527,7 +547,19 @@
         document.getElementById('bulkOp').addEventListener('change', updateBulkPreview);
         document.getElementById('bulkN').addEventListener('input', updateBulkPreview);
 
+        function onSonaConfigChange() {
+          const sonaOnly = document.getElementById('sonaOnly').checked;
+          renderTable(sonaOnly, document.getElementById('tableSearch').value);
+          updateBulkPreview();
+        }
+        document.getElementById('sonaExpId').addEventListener('input', onSonaConfigChange);
+        document.getElementById('sonaToken').addEventListener('input', onSonaConfigChange);
+
         document.getElementById('bulkCreditBtn').addEventListener('click', async () => {
+          if (!sonaConfigured()) {
+            alert('Enter a SONA Experiment ID and Credit Token in the settings above first.');
+            return;
+          }
           const candidates = bulkCandidates();
           if (candidates.length === 0) {
             alert('No SONA-matched participants meet this criteria.');
