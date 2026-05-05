@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fixed Interval Notification Calculator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 16px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    padding: 40px;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #6e6e73;
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6e6e73;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+
+  .times-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .time-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .time-row span {
+    font-size: 13px;
+    color: #6e6e73;
+    width: 90px;
+    flex-shrink: 0;
+  }
+
+  input[type="time"] {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid #d2d2d7;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    color: #1d1d1f;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input[type="time"]:focus {
+    border-color: #0071e3;
+  }
+
+  .remove-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: #f5f5f7;
+    color: #6e6e73;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .remove-btn:hover { background: #e5e5ea; }
+
+  .add-btn {
+    background: none;
+    border: 1.5px dashed #d2d2d7;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px;
+    color: #0071e3;
+    cursor: pointer;
+    margin-bottom: 28px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .add-btn:hover { border-color: #0071e3; background: #f0f7ff; }
+
+  .calc-btn {
+    width: 100%;
+    background: #0071e3;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .calc-btn:hover { background: #0077ed; }
+  .calc-btn:active { background: #006acc; }
+
+  .results {
+    margin-top: 28px;
+    display: none;
+  }
+
+  .results.visible { display: block; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #e5e5ea;
+    margin: 28px 0;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .result-item {
+    background: #f5f5f7;
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .result-item .result-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6e6e73;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+
+  .result-item .result-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1d1d1f;
+  }
+
+  .result-item.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .verify-section {
+    background: #f0f7ff;
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .verify-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0071e3;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+
+  .verify-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .verify-time {
+    background: #fff;
+    border: 1px solid #c7e0ff;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0071e3;
+  }
+
+  .warning {
+    background: #fff8ec;
+    border: 1px solid #ffd060;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #7a5c00;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .error {
+    background: #fff0f0;
+    border: 1px solid #ffb3b3;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #c00;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .note {
+    font-size: 13px;
+    color: #6e6e73;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Fixed Interval Calculator</h1>
+  <p class="subtitle">Enter the notification times you want. The calculator works out the MetaForge study settings needed to produce exactly those times.</p>
+
+  <label>Desired notification times</label>
+  <div class="times-list" id="timesList">
+    <div class="time-row">
+      <span>Notification 1</span>
+      <input type="time" value="09:00">
+      <button class="remove-btn" onclick="removeTime(this)" title="Remove">×</button>
+    </div>
+    <div class="time-row">
+      <span>Notification 2</span>
+      <input type="time" value="17:00">
+      <button class="remove-btn" onclick="removeTime(this)" title="Remove">×</button>
+    </div>
+  </div>
+  <button class="add-btn" onclick="addTime()">+ Add notification time</button>
+
+  <button class="calc-btn" onclick="calculate()">Calculate Settings</button>
+
+  <div class="results" id="results">
+    <hr class="divider">
+    <div id="messages"></div>
+    <div class="result-grid" id="resultGrid"></div>
+    <div class="verify-section" id="verifySection">
+      <div class="verify-label">Verification — actual times produced</div>
+      <div class="verify-times" id="verifyTimes"></div>
+    </div>
+    <p class="note" id="resultNote"></p>
+  </div>
+</div>
+
+<script>
+  function addTime() {
+    const list = document.getElementById('timesList');
+    const count = list.children.length + 1;
+    const row = document.createElement('div');
+    row.className = 'time-row';
+    row.innerHTML = `
+      <span>Notification ${count}</span>
+      <input type="time" value="12:00">
+      <button class="remove-btn" onclick="removeTime(this)" title="Remove">×</button>
+    `;
+    list.appendChild(row);
+    renumberRows();
+  }
+
+  function removeTime(btn) {
+    const list = document.getElementById('timesList');
+    if (list.children.length <= 1) return;
+    btn.closest('.time-row').remove();
+    renumberRows();
+  }
+
+  function renumberRows() {
+    const rows = document.querySelectorAll('.time-row');
+    rows.forEach((row, i) => {
+      row.querySelector('span').textContent = `Notification ${i + 1}`;
+    });
+  }
+
+  function formatTime(totalMinutes) {
+    const h = Math.floor(totalMinutes / 60);
+    const m = totalMinutes % 60;
+    const ampm = h < 12 ? 'AM' : 'PM';
+    const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+  }
+
+  function toMinutes(timeStr) {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  function fromMinutes(totalMinutes) {
+    const h = Math.floor(totalMinutes / 60) % 24;
+    const m = totalMinutes % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
+  // Simulate the Swift integer-division algorithm to verify
+  function simulateFixed(startMinutes, endMinutes, count) {
+    const windowSize = endMinutes - startMinutes;
+    const interval = Math.floor(windowSize / count); // integer division
+    const times = [];
+    for (let i = 0; i < count; i++) {
+      const total = startMinutes + (interval * i) + Math.floor(interval / 2);
+      times.push(total);
+    }
+    return times;
+  }
+
+  function calculate() {
+    const inputs = document.querySelectorAll('.time-row input[type="time"]');
+    const requestedMinutes = Array.from(inputs).map(el => toMinutes(el.value)).sort((a, b) => a - b);
+    const count = requestedMinutes.length;
+
+    const messagesEl = document.getElementById('messages');
+    const resultGrid = document.getElementById('resultGrid');
+    const verifySection = document.getElementById('verifySection');
+    const verifyTimesEl = document.getElementById('verifyTimes');
+    const resultNote = document.getElementById('resultNote');
+    const resultsEl = document.getElementById('results');
+
+    messagesEl.innerHTML = '';
+    resultGrid.innerHTML = '';
+    verifyTimesEl.innerHTML = '';
+    resultNote.textContent = '';
+    resultsEl.classList.add('visible');
+
+    if (count < 2) {
+      messagesEl.innerHTML = '<div class="error">Enter at least 2 notification times.</div>';
+      resultGrid.style.display = 'none';
+      verifySection.style.display = 'none';
+      return;
+    }
+
+    // Check equal spacing
+    const gaps = [];
+    for (let i = 1; i < count; i++) {
+      gaps.push(requestedMinutes[i] - requestedMinutes[i - 1]);
+    }
+    const minGap = Math.min(...gaps);
+    const maxGap = Math.max(...gaps);
+    const isEvenlySpaced = maxGap - minGap <= 1; // allow 1-min rounding tolerance
+
+    if (!isEvenlySpaced) {
+      messagesEl.innerHTML = `<div class="warning">⚠️ Fixed interval mode spaces notifications <strong>evenly</strong>. Your times aren't equally spaced (gaps: ${gaps.join(', ')} min). The calculator will use the average gap — actual times will differ from what you entered.</div>`;
+    }
+
+    // Work backwards from the algorithm:
+    // notification[i] = startMinutes + (interval * i) + floor(interval / 2)
+    // interval = floor(windowSize / count)
+    //
+    // From the first notification: startMinutes = t[0] - floor(interval/2)
+    // We want interval = average gap between desired times
+    const avgGap = Math.round((requestedMinutes[count - 1] - requestedMinutes[0]) / (count - 1));
+    const interval = avgGap;
+
+    // startMinutes = t[0] - floor(interval / 2)
+    const startMinutes = requestedMinutes[0] - Math.floor(interval / 2);
+
+    if (startMinutes < 0) {
+      messagesEl.innerHTML += `<div class="error">The calculated start time is before midnight. Try later notification times.</div>`;
+      resultGrid.style.display = 'none';
+      verifySection.style.display = 'none';
+      return;
+    }
+
+    // windowSize = interval * count, so endMinutes_in_code = startMinutes + interval * count
+    // Code computes: endMinutes = endHour * 60 + endMinute - 1
+    // So actual end setting = endMinutes_in_code + 1
+    const endMinutesCode = startMinutes + interval * count;
+    const endMinutesSetting = endMinutesCode + 1;
+
+    if (endMinutesSetting > 24 * 60) {
+      messagesEl.innerHTML += `<div class="error">The calculated end time exceeds midnight. Try earlier notification times.</div>`;
+      resultGrid.style.display = 'none';
+      verifySection.style.display = 'none';
+      return;
+    }
+
+    // Simulate what the algorithm actually produces
+    const actualMinutes = simulateFixed(startMinutes, endMinutesCode, count);
+    const matchesRequested = actualMinutes.every((t, i) => t === requestedMinutes[i]);
+
+    resultGrid.style.display = 'grid';
+    verifySection.style.display = 'block';
+
+    resultGrid.innerHTML = `
+      <div class="result-item">
+        <div class="result-label">Start Time</div>
+        <div class="result-value">${formatTime(startMinutes)}</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">End Time</div>
+        <div class="result-value">${formatTime(endMinutesSetting)}</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Notifications / Day</div>
+        <div class="result-value">${count}</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Schedule Type</div>
+        <div class="result-value">Fixed</div>
+      </div>
+    `;
+
+    actualMinutes.forEach(t => {
+      const chip = document.createElement('div');
+      chip.className = 'verify-time';
+      chip.textContent = formatTime(t);
+      verifyTimesEl.appendChild(chip);
+    });
+
+    if (!matchesRequested) {
+      const wanted = requestedMinutes.map(formatTime).join(', ');
+      const got = actualMinutes.map(formatTime).join(', ');
+      messagesEl.innerHTML += `<div class="warning">⚠️ Due to integer rounding in the algorithm, the actual times (${got}) won't exactly match your requested times (${wanted}). These are as close as fixed interval mode can get.</div>`;
+    }
+
+    resultNote.textContent = 'The Min Interval setting is not used by fixed mode — spacing is determined by the window size alone.';
+  }
+</script>
+</body>
+</html>
