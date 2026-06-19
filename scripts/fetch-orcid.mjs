@@ -93,7 +93,7 @@ function parseOrcidContributors(contrib = []) {
   }).filter(Boolean);
 }
 
-const cleanTitle = t => t?.replace(/: [A-Z][A-Za-z0-9 ,&–-]{2,60}$/, '') || 'Untitled';
+const cleanTitle = t => t || 'Untitled';
 
 async function main() {
   console.log('Fetching ORCID publications...');

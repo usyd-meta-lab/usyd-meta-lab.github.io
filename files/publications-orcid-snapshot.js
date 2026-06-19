@@ -1,6 +1,13 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-06-17T07:46:33.959Z",
+  "fetched": "2026-06-19T04:47:28.356Z",
   "records": [
+    {
+      "title": "The interdependence of emotion regulation in romantic couples: A longitudinal dyadic analysis of six strategies.",
+      "year": "2026",
+      "authors": "Xiao, H. H., Double, K. S., Pinkus, R. T., & MacCann, C.",
+      "doi": "10.1037/emo0001703",
+      "journal": "Emotion"
+    },
     {
       "title": "Metacognitive Monitoring Predicts and Enhances Emotion Management Knowledge",
       "year": "2026",
@@ -44,7 +51,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Psychological Research"
     },
     {
-      "title": "Valuing your partner more",
+      "title": "Valuing your partner more: Linking emotional intelligence to better relationship quality",
       "year": "2026",
       "authors": "Xiao, H., Double, K., Pinkus, R., & MacCann, C.",
       "doi": "10.1177/02654075251399696",
@@ -79,7 +86,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Behavior Research Methods"
     },
     {
-      "title": "The Impact of Test Preparation on Performance of Large-Scale Educational Tests",
+      "title": "The Impact of Test Preparation on Performance of Large-Scale Educational Tests: A Meta-analysis of Experimental Studies",
       "year": "2025",
       "authors": "Hao, Z., Baird, J., Masri, Y., & Double, K.",
       "doi": "10.3102/00346543251360775",
@@ -114,7 +121,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Scientific Reports"
     },
     {
-      "title": "Emotion Regulation Efficacy Beliefs",
+      "title": "Emotion Regulation Efficacy Beliefs: The Outsized Impact of Base Rates",
       "year": "2024",
       "authors": "Double, K., Pinkus, R., MacCann, C., & Gross, J.",
       "doi": "10.1037/emo0001273",
@@ -191,14 +198,14 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Emotion"
     },
     {
-      "title": "Emotional intelligence and attachment in adulthood",
+      "title": "Emotional intelligence and attachment in adulthood: A meta-analysis",
       "year": "2022",
       "authors": "Walker, S., Double, K., Kunst, H., Zhang, M., & MacCann, C.",
       "doi": "10.1016/j.paid.2021.111174",
       "journal": "Personality and Individual Differences"
     },
     {
-      "title": "The Complicated Relationship Between the Dark Triad and Emotional Intelligence",
+      "title": "The Complicated Relationship Between the Dark Triad and Emotional Intelligence: A Systematic Review",
       "year": "2021",
       "authors": "Walker, S., Double, K., & Birney, D.",
       "doi": "10.1177/17540739211014585",
@@ -212,7 +219,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Cognitive Research: Principles and Implications"
     },
     {
-      "title": "Emotional Intelligence Predicts Academic Performance",
+      "title": "Emotional Intelligence Predicts Academic Performance: A Meta-Analysis",
       "year": "2020",
       "authors": "MacCann, C., Jiang, Y., Brown, L., Bucich, M., Double, K., & Minbashian, A.",
       "doi": "10.1037/bul0000219",
@@ -233,7 +240,7 @@ window.__ORCID_SNAPSHOT__ = {
       "journal": "Nature Human Behaviour"
     },
     {
-      "title": "The Impact of Peer Assessment on Academic Performance",
+      "title": "The Impact of Peer Assessment on Academic Performance: A Meta-analysis of Control Group Studies",
       "year": "2020",
       "authors": "Double, K., McGrane, J., & Hopfenbeck, T.",
       "doi": "10.1007/s10648-019-09510-3",
