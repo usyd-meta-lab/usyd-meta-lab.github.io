@@ -5,19 +5,43 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ORCID_ID = '0000-0001-8120-1573';
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// ORCID's public API intermittently returns 5xx/429 under bursty load, so
+// retry transient failures with exponential backoff before giving up.
+async function fetchWithRetry(url, { retries = 4, baseDelayMs = 1000 } = {}) {
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+    if (res.ok) return res;
+    const transient = res.status === 429 || res.status >= 500;
+    if (!transient || attempt >= retries) {
+      throw new Error(`Request to ${url} failed: ${res.status}`);
+    }
+    await sleep(baseDelayMs * 2 ** attempt);
+  }
+}
+
+// Run async tasks with a concurrency cap to avoid bursts that trigger ORCID's rate limiting.
+async function mapWithConcurrency(items, limit, fn) {
+  const results = new Array(items.length);
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const i = next++;
+      results[i] = await fn(items[i]);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
 async function fetchSummary() {
-  const res = await fetch(`https://pub.orcid.org/v3.0/${ORCID_ID}/works`, {
-    headers: { Accept: 'application/json' }
-  });
-  if (!res.ok) throw new Error(`ORCID summary failed: ${res.status}`);
+  const res = await fetchWithRetry(`https://pub.orcid.org/v3.0/${ORCID_ID}/works`);
   return (await res.json()).group.map(g => g['work-summary'][0]);
 }
 
 async function fetchFullRecord(code) {
-  const res = await fetch(`https://pub.orcid.org/v3.0/${ORCID_ID}/work/${code}`, {
-    headers: { Accept: 'application/json' }
-  });
-  if (!res.ok) throw new Error(`ORCID work ${code} failed: ${res.status}`);
+  const res = await fetchWithRetry(`https://pub.orcid.org/v3.0/${ORCID_ID}/work/${code}`);
   return res.json();
 }
 
@@ -76,7 +100,7 @@ async function main() {
   const summaries = await fetchSummary();
   console.log(`Found ${summaries.length} works`);
 
-  const detailed = await Promise.all(summaries.map(s => fetchFullRecord(s['put-code'])));
+  const detailed = await mapWithConcurrency(summaries, 5, s => fetchFullRecord(s['put-code']));
 
   const records = [];
   for (const pub of detailed) {

@@ -1,66 +1,59 @@
 {
-  "fetched": "2025-09-24T01:28:13.809Z",
+  "fetched": "2026-06-17T07:46:33.959Z",
   "records": [
-           {
+    {
+      "title": "Metacognitive Monitoring Predicts and Enhances Emotion Management Knowledge",
+      "year": "2026",
+      "authors": "Leckie, R., MacCann, C., & Double, K. S.",
+      "doi": "10.1007/s42761-026-00376-7",
+      "journal": "Affective Science"
+    },
+    {
       "title": "Flow cytometry immunophenotyping and cytogenetic analysis on disaggregated bone marrow trephine biopsies",
       "year": "2026",
-      "authors": "Jeffrey, A., Choy, M., Singh, N., Double, K. S., & Kumar, P.",
+      "authors": "Jeffrey, A., Choy, M., Singh, N., Double, K., & Kumar, P.",
       "doi": "10.1016/j.pathol.2025.11.009",
       "journal": "Pathology"
     },
     {
-      "title": "Rating our certainty: how confidence judgments amplify belief polarization",
+      "title": "Judgments of learning impair rule-based discovery",
       "year": "2026",
-      "authors": "Double, K. S., Pinkus, R. T., Landfear, R., Carnegie, P., Dowell, S., & Goldwater, M. B.",
-      "doi": "10.1007/s00426-026-02239-z",
-      "journal": "Psychological Research"
+      "authors": "Double, K., Tran, D., & Goldwater, M.",
+      "doi": "10.3758/s13421-025-01737-6",
+      "journal": "Memory and Cognition"
     },
-        {
+    {
       "title": "Metacognitive ability is associated with reduced emotion suppression",
       "year": "2026",
       "authors": "Double, K. S.",
       "doi": "10.1038/s41598-026-37054-4",
       "journal": "Scientific Reports"
     },
-     {
-      "title": "Valuing your partner more: Linking emotional intelligence to better relationship quality",
-      "year": "2025",
-      "authors": "Xiao, H. H., Double, K. S., Pinkus, R. T., & MacCann, C.",
+    {
+      "title": "Metacognitive sensitivity moderates reactivity to confidence ratings",
+      "year": "2026",
+      "authors": "Choo, R. & Double, K.",
+      "doi": "10.1080/13546783.2025.2542252",
+      "journal": "Thinking and Reasoning"
+    },
+    {
+      "title": "Rating our certainty: how confidence judgments amplify belief polarization",
+      "year": "2026",
+      "authors": "Double, K., Pinkus, R., Landfear, R., Carnegie, P., Dowell, S., & Goldwater, M.",
+      "doi": "10.1007/s00426-026-02239-z",
+      "journal": "Psychological Research"
+    },
+    {
+      "title": "Valuing your partner more",
+      "year": "2026",
+      "authors": "Xiao, H., Double, K., Pinkus, R., & MacCann, C.",
       "doi": "10.1177/02654075251399696",
       "journal": "Journal of Social and Personal Relationships"
     },
     {
-      "title": "The Impact of Test Preparation on Performance of Large-Scale Educational Tests",
-      "year": "2025",
-      "authors": "Hao, Z., Baird, J., Masri, Y. E., & Double, K.",
-      "doi": "10.3102/00346543251360775",
-      "journal": "Review of Educational Research"
-    },
-    {
-      "title": "Metacognitive sensitivity moderates reactivity to confidence ratings",
-      "year": "2025",
-      "authors": "Choo, R. & Double, K. S.",
-      "doi": "10.1080/13546783.2025.2542252",
-      "journal": "Thinking &amp; Reasoning"
-    },
-    {
-      "title": "Judgments of learning impair rule-based discovery",
-      "year": "2025",
-      "authors": "Double, K. S., Tran, D., & Goldwater, M. B.",
-      "doi": "10.3758/s13421-025-01737-6",
-      "journal": "Memory &amp; Cognition"
-    },
-    {
-      "title": "You Feel Better When Your Partner is Emotionally Intelligent: Self-Rated Emotional Intelligence Shows Partner Effects on Subjective Wellbeing",
-      "year": "2025",
-      "authors": "Double, K. S., Xiao, H., Pinkus, R. T., Walker, S. A., & MacCann, C.",
-      "doi": "10.1007/s10902-025-00914-3",
-      "journal": "Journal of Happiness Studies"
-    },
-    {
       "title": "Consumption of a diet high in fat and sugar is associated with worse spatial navigation ability in a virtual environment",
       "year": "2025",
-      "authors": "Tran, D., Double, K., Johnston, I., Harris, I., & Westbrook, R.",
+      "authors": "Tran, D., Double, K., Johnston, I., Westbrook, R., & Harris, I.",
       "doi": "10.1038/s41366-025-01776-8",
       "journal": "International Journal of Obesity"
     },
@@ -86,6 +79,13 @@
       "journal": "Behavior Research Methods"
     },
     {
+      "title": "The Impact of Test Preparation on Performance of Large-Scale Educational Tests",
+      "year": "2025",
+      "authors": "Hao, Z., Baird, J., Masri, Y., & Double, K.",
+      "doi": "10.3102/00346543251360775",
+      "journal": "Review of Educational Research"
+    },
+    {
       "title": "What Do We Do to Help Others Feel Better? The Eight Strategies of the Regulating Others’ Emotions Scale (ROES)",
       "year": "2025",
       "authors": "MacCann, C. et al.",
@@ -95,9 +95,16 @@
     {
       "title": "When good results mislead: How positive student outcomes lead teachers to overestimate the effectiveness of their assistance",
       "year": "2025",
-      "authors": "Don, H. J., Kim, L. E., & Double, K. S.",
+      "authors": "Don, H., Kim, L., & Double, K.",
       "doi": "10.1016/j.ijer.2025.102719",
       "journal": "International Journal of Educational Research"
+    },
+    {
+      "title": "You Feel Better When Your Partner is Emotionally Intelligent: Self-Rated Emotional Intelligence Shows Partner Effects on Subjective Wellbeing",
+      "year": "2025",
+      "authors": "Double, K., Xiao, H., Pinkus, R., Walker, S., & MacCann, C.",
+      "doi": "10.1007/s10902-025-00914-3",
+      "journal": "Journal of Happiness Studies"
     },
     {
       "title": "Confidence judgments interfere with perceptual decision making",
