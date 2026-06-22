@@ -1,5 +1,5 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-06-19T04:47:28.356Z",
+  "fetched": "2026-06-22T09:17:20.964Z",
   "records": [
     {
       "title": "The interdependence of emotion regulation in romantic couples: A longitudinal dyadic analysis of six strategies.",
