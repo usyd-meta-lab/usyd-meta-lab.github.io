@@ -1,6 +1,13 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-07-20T06:22:55.525Z",
+  "fetched": "2026-07-27T06:36:26.848Z",
   "records": [
+    {
+      "title": "Meta-Analysis of Executive Function in Children With Cerebral Palsy: an Investigation of Challenges to Measurement Validity",
+      "year": "2026",
+      "authors": "Zhan, Y. et al.",
+      "doi": "10.1007/s11065-026-09705-w",
+      "journal": "Neuropsychology Review"
+    },
     {
       "title": "The interdependence of emotion regulation in romantic couples: A longitudinal dyadic analysis of six strategies.",
       "year": "2026",
