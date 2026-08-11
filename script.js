@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     initTaskCarousel();
     initNewsCarousel();
+    initFormerMembersDropdown();
     loadPublications();
 });
 
@@ -452,6 +453,24 @@ function initNewsCarousel() {
     }, { passive: true });
 
     setActive(0);
+}
+
+// --- Former Lab Members Dropdown (touch support) ---
+function initFormerMembersDropdown() {
+    const wrapper = document.querySelector('.team-former');
+    if (!wrapper) return;
+    const label = wrapper.querySelector('.team-former-label');
+
+    label.addEventListener('click', (e) => {
+        e.stopPropagation();
+        wrapper.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!wrapper.contains(e.target)) {
+            wrapper.classList.remove('active');
+        }
+    });
 }
 
 // --- Publications from the same snapshot used by publications.html ---
