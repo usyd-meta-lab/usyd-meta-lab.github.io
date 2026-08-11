@@ -1716,6 +1716,83 @@ img {
     opacity: 0.8;
 }
 
+/* --- Former Lab Members --- */
+.team-former {
+    text-align: center;
+    margin-top: 32px;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.team-former-label {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--color-border);
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.team-former:hover .team-former-label {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+}
+
+.team-former-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 16px 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transform: translateX(-50%) translateY(16px);
+    box-shadow: 0 12px 40px rgba(43, 24, 10, 0.08);
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.team-former:hover .team-former-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(8px);
+}
+
+.team-former-member {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.team-former-member img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.team-former-member h4 {
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.team-former-member span {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
 /* --- Publications Section --- */
 .publications-list {
     display: flex;
