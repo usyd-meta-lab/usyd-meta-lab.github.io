@@ -1,5 +1,5 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-08-03T06:30:23.755Z",
+  "fetched": "2026-08-10T04:45:21.909Z",
   "records": [
     {
       "title": "Meta-Analysis of Executive Function in Children With Cerebral Palsy: an Investigation of Challenges to Measurement Validity",
@@ -7,6 +7,13 @@ window.__ORCID_SNAPSHOT__ = {
       "authors": "Zhan, Y. et al.",
       "doi": "10.1007/s11065-026-09705-w",
       "journal": "Neuropsychology Review"
+    },
+    {
+      "title": "The Relationship Between Emotional Intelligence and Emotion Regulation: A Meta-Analysis",
+      "year": "2026",
+      "authors": "Xiao, H. H., Double, K. S., Pinkus, R. T., Kalwani, M., Leckie, R., & MacCann, C.",
+      "doi": "10.1177/08902070261469936",
+      "journal": "European Journal of Personality"
     },
     {
       "title": "The interdependence of emotion regulation in romantic couples: A longitudinal dyadic analysis of six strategies.",
