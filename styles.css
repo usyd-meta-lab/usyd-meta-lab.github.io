@@ -1751,6 +1751,8 @@ img {
     border: 1px solid var(--color-border);
     border-radius: 16px;
     padding: 16px 24px;
+    display: flex;
+    gap: 24px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
@@ -1770,6 +1772,18 @@ img {
     display: flex;
     align-items: center;
     gap: 14px;
+    text-align: left;
+}
+
+.team-former-col + .team-former-col {
+    border-left: 1px solid var(--color-border);
+    padding-left: 24px;
+}
+
+.team-former-member + .team-former-member {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
 }
 
 .team-former-member img {
