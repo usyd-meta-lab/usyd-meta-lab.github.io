@@ -1,6 +1,13 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-08-10T04:45:21.909Z",
+  "fetched": "2026-08-17T03:55:34.194Z",
   "records": [
+    {
+      "title": "I Will Listen to Your Emotions, But I Will Hide My Own: People’s Different Strategies to Regulate Their Own Versus Others’ Emotions",
+      "year": "2026",
+      "authors": "Double, K. S., Pinkus, R. T., Walker, S. A., & MacCann, C.",
+      "doi": "10.1027/1618-3169/a000668",
+      "journal": "Experimental Psychology"
+    },
     {
       "title": "Meta-Analysis of Executive Function in Children With Cerebral Palsy: an Investigation of Challenges to Measurement Validity",
       "year": "2026",
