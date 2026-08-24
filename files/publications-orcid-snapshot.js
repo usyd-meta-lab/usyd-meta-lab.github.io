@@ -1,5 +1,5 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-08-17T03:55:34.194Z",
+  "fetched": "2026-08-24T03:59:21.713Z",
   "records": [
     {
       "title": "I Will Listen to Your Emotions, But I Will Hide My Own: People’s Different Strategies to Regulate Their Own Versus Others’ Emotions",
