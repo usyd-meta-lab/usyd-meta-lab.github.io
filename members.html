@@ -507,8 +507,61 @@ img { max-width:100%; display:block; }
 }
 .tl-panel-body {
   display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.tl-panel-sections {
+  display:grid;
   grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
   gap:16px;
+}
+.tl-panel-banner {
+  grid-column:1 / -1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  padding:20px 22px;
+  border-radius:18px;
+  background:linear-gradient(135deg, rgba(200,149,108,0.14), rgba(200,149,108,0.05));
+  border:1px solid rgba(200,149,108,0.35);
+}
+.tl-panel-banner-copy { max-width:560px; }
+.tl-panel-banner-tag {
+  display:inline-block;
+  font-size:0.7rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--color-accent);
+  margin-bottom:6px;
+}
+.tl-panel-banner-copy p {
+  font-size:0.9rem;
+  line-height:1.65;
+  color:var(--color-text-muted);
+  margin:0;
+}
+.tl-panel-banner-btn {
+  flex-shrink:0;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:11px 20px;
+  border-radius:999px;
+  background:var(--color-accent);
+  color:var(--color-bg);
+  font-size:0.85rem;
+  font-weight:600;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:all 0.25s var(--ease);
+  box-shadow:0 6px 18px rgba(200,149,108,0.25);
+}
+.tl-panel-banner-btn:hover {
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(200,149,108,0.32);
 }
 .tl-panel-section {
   padding:18px 18px 16px;
@@ -1072,7 +1125,7 @@ img { max-width:100%; display:block; }
   .tl-topbar { display: none; }
   .tl-mobile-steps { display: block; }
   .tl-panel-card { padding:22px; }
-  .tl-panel-body { grid-template-columns:1fr; }
+  .tl-panel-sections { grid-template-columns:1fr; }
   .tl-theme-modal-dialog { padding:20px; border-radius:16px; }
   .footer-inner { flex-direction:column; gap:24px; }
 }
@@ -1680,6 +1733,12 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
           label: 'Write-up',
           title: 'Analysis and thesis',
           intro: '',
+          banner: {
+            tag: 'Template',
+            text: 'Not sure how to start your introduction? Our thesis introduction scaffold breaks it down into sections with prompts, so you can build your argument piece by piece instead of staring at a blank page.',
+            label: 'Download the template →',
+            url: 'files/Thesis_Introduction_Scaffold.docx'
+          },
           sections: [
             {
               title: 'Writing your thesis',
@@ -2121,6 +2180,12 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
           label: 'Final stage',
           title: 'Writing your thesis',
           intro: 'By the time you come to writing your thesis, your work should already be done.',
+          banner: {
+            tag: 'Template',
+            text: 'Not sure how to start your introduction? Our thesis introduction scaffold breaks it down into sections with prompts, so you can build your argument piece by piece instead of staring at a blank page.',
+            label: 'Download the template →',
+            url: 'files/Thesis_Introduction_Scaffold.docx'
+          },
           sections: [],
           prose: [
             'Most of your thesis will be a series of papers that you have hopefully already written up. Typically a thesis has four or so empirical chapters — each one a paper — though the number can vary depending on the size and scope of each study.',
@@ -2172,17 +2237,30 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
     panelLabel.textContent = stage.panel.label;
     panelTitle.textContent = stage.panel.title;
     panelIntro.innerHTML = stage.panel.intro;
-    const sectionsHtml = stage.panel.sections.map(section => `
-      <div class="tl-panel-section">
-        <h4>${section.title}</h4>
-        <ul class="tl-panel-list">
-          ${section.items.map(item => `<li>${item}</li>`).join('')}
-        </ul>
+    const sectionsHtml = stage.panel.sections.length ? `
+      <div class="tl-panel-sections">
+        ${stage.panel.sections.map(section => `
+          <div class="tl-panel-section">
+            <h4>${section.title}</h4>
+            <ul class="tl-panel-list">
+              ${section.items.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('')}
       </div>
-    `).join('');
+    ` : '';
     const proseHtml = stage.panel.prose ? `
       <div class="tl-panel-prose">
         ${stage.panel.prose.map(p => `<p>${p}</p>`).join('')}
+      </div>
+    ` : '';
+    const bannerHtml = stage.panel.banner ? `
+      <div class="tl-panel-banner">
+        <div class="tl-panel-banner-copy">
+          <span class="tl-panel-banner-tag">${stage.panel.banner.tag}</span>
+          <p>${stage.panel.banner.text}</p>
+        </div>
+        <a class="tl-panel-banner-btn" href="${stage.panel.banner.url}" download>${stage.panel.banner.label}</a>
       </div>
     ` : '';
     const ethicsCardsHtml = stage.panel.applicationCards ? `
@@ -2253,7 +2331,7 @@ document.getElementById('pwInput').addEventListener('keydown', e => {
       panelBody.innerHTML = stage.panel.customHtml;
       return;
     }
-    panelBody.innerHTML = proseHtml + sectionsHtml + ethicsCardsHtml + launchHtml + themeHtml;
+    panelBody.innerHTML = bannerHtml + proseHtml + sectionsHtml + ethicsCardsHtml + launchHtml + themeHtml;
     const launchModalRoot = document.getElementById('tl-launch-modal');
     if (launchModalRoot && launchModalRoot.parentElement !== document.body) {
       document.body.appendChild(launchModalRoot);
