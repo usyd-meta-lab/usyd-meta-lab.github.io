@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Big Five: Where do you sit? — Teaching demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --color-bg: #fcf6ef;
+            --color-bg-warm: #f6f0e9;
+            --color-bg-card: #f0e8dd;
+            --color-bg-dark: #2b180a;
+            --color-text: #2b180a;
+            --color-text-muted: #6b5a4a;
+            --color-text-light: #9a8a7a;
+            --color-accent: #c8956c;
+            --color-accent-hover: #b07a52;
+            --color-border: #e0d4c6;
+            --color-white: #fff;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 96px; }
+        .wrap.wide { max-width: 1240px; }
+
+        /* --- Header --- */
+        .top { border-bottom: 1px solid var(--color-border); background: var(--color-bg-warm); }
+        .top-inner {
+            max-width: 1240px; margin: 0 auto; padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .brand { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+        .brand span { color: var(--color-text-light); font-family: var(--font-body); font-size: 12px;
+            font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-left: 10px; }
+        .session-tag {
+            font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--color-text-muted); background: var(--color-bg-card);
+            border: 1px solid var(--color-border); border-radius: 999px; padding: 5px 12px; white-space: nowrap;
+        }
+
+        h1 { font-family: var(--font-display); font-size: clamp(28px, 4.4vw, 40px); font-weight: 600;
+            line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 12px; }
+        h2 { font-family: var(--font-display); font-size: 24px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+        h3 { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
+        .lede { font-size: 17px; color: var(--color-text-muted); max-width: 62ch; }
+        .muted { color: var(--color-text-muted); font-size: 14px; }
+        .tiny { font-size: 12.5px; color: var(--color-text-light); }
+
+        /* --- Steps --- */
+        .stepper { display: flex; gap: 8px; align-items: center; margin-bottom: 28px; flex-wrap: wrap; }
+        .step { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-text-light); }
+        .step .dot {
+            width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+            border: 1px solid var(--color-border); background: var(--color-white);
+            font-size: 12px; font-weight: 600; color: var(--color-text-light);
+        }
+        .step.on { color: var(--color-text); font-weight: 600; }
+        .step.on .dot { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+        .step.done .dot { background: var(--color-bg-dark); border-color: var(--color-bg-dark); color: #fff; }
+        .step-sep { flex: 0 0 20px; height: 1px; background: var(--color-border); }
+
+        /* --- Cards --- */
+        .card {
+            background: var(--color-white); border: 1px solid var(--color-border);
+            border-radius: 14px; padding: 22px 24px; margin-bottom: 18px;
+        }
+        .card.flat { background: var(--color-bg-warm); }
+
+        .trait-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+        .trait-name { font-family: var(--font-display); font-size: 21px; font-weight: 600; }
+        .trait-def { font-size: 14px; color: var(--color-text-muted); margin-top: 2px; max-width: 60ch; }
+        .readout { font-size: 13px; font-weight: 600; color: var(--color-accent-hover);
+            background: var(--color-bg-card); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+        .readout.unset { color: var(--color-text-light); font-weight: 500; }
+
+        /* --- Bell curve + slider --- */
+        .curve-wrap { position: relative; margin-top: 10px; }
+        .curve-wrap svg { display: block; width: 100%; height: auto; }
+        .curve-wrap input[type=range] {
+            position: absolute; left: 6.25%; width: 87.5%; top: calc(63.03% - 13px);
+            margin: 0; height: 26px; background: transparent; -webkit-appearance: none; appearance: none; cursor: grab;
+        }
+        .curve-wrap input[type=range]:active { cursor: grabbing; }
+        input[type=range]::-webkit-slider-runnable-track { height: 26px; background: transparent; }
+        input[type=range]::-moz-range-track { height: 26px; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%;
+            background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(43,24,10,.28);
+        }
+        input[type=range]::-moz-range-thumb {
+            width: 22px; height: 22px; border-radius: 50%;
+            background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(43,24,10,.28);
+        }
+        input[type=range]:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-bg-dark); outline-offset: 2px; }
+        .anchors { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light); margin-top: 2px; }
+
+        /* --- Mini-IPIP --- */
+        .scale-legend {
+            position: sticky; top: 0; z-index: 5; background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border); padding: 10px 0 8px; margin-bottom: 6px;
+        }
+        .legend-grid { display: grid; grid-template-columns: 1fr repeat(5, 62px); gap: 6px; align-items: end; }
+        .legend-grid .lbl { font-size: 11px; line-height: 1.25; text-align: center; color: var(--color-text-muted); }
+        .item {
+            display: grid; grid-template-columns: 1fr repeat(5, 62px); gap: 6px; align-items: center;
+            padding: 11px 12px; border-radius: 10px; border: 1px solid transparent;
+        }
+        .item:nth-child(odd) { background: var(--color-bg-warm); }
+        .item.missing { border-color: #c0392b; background: #fdeeec; }
+        .item .q { font-size: 15px; }
+        .item .q b { font-weight: 600; color: var(--color-text-light); margin-right: 8px; }
+        .opts-row { display: contents; }
+        .opt { display: grid; place-items: center; }
+        .opt input { width: 20px; height: 20px; accent-color: var(--color-accent-hover); cursor: pointer; }
+
+        .legend-mobile { display: none; }
+
+        @media (max-width: 640px) {
+            .legend-grid { display: none; }
+            .legend-mobile {
+                display: flex; justify-content: space-between; gap: 10px;
+                font-size: 11.5px; color: var(--color-text-muted); font-weight: 500;
+            }
+            .item { grid-template-columns: 1fr; gap: 10px; padding: 14px 12px; }
+            .opts-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+            .opt {
+                border: 1px solid var(--color-border); border-radius: 10px; padding: 10px 2px 7px;
+                background: #fff; gap: 3px; cursor: pointer;
+            }
+            .opt::after { content: attr(data-n); font-size: 11px; color: var(--color-text-light); }
+            .opt:has(input:checked) { border-color: var(--color-accent); background: var(--color-bg-card); }
+            .opt:has(input:checked)::after { color: var(--color-accent-hover); font-weight: 600; }
+        }
+
+        @media (max-width: 420px) {
+            .brand { font-size: 15px; }
+            .brand span { display: none; }
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            font-family: var(--font-body); font-size: 15px; font-weight: 500; cursor: pointer;
+            border-radius: 999px; padding: 12px 26px; border: 1px solid var(--color-bg-dark);
+            background: var(--color-bg-dark); color: #fff; transition: background .2s, color .2s, transform .15s;
+        }
+        .btn:hover { background: #3d240f; transform: translateY(-1px); }
+        .btn.ghost { background: transparent; color: var(--color-text); border-color: var(--color-border); }
+        .btn.ghost:hover { background: var(--color-bg-card); }
+        .btn.accent { background: var(--color-accent); border-color: var(--color-accent); }
+        .btn.accent:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+        .btn.small { font-size: 13px; padding: 7px 16px; }
+        .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 24px; }
+
+        input[type=text] {
+            font-family: var(--font-body); font-size: 16px; padding: 11px 14px; border-radius: 10px;
+            border: 1px solid var(--color-border); background: #fff; color: var(--color-text); width: 220px;
+        }
+        input[type=text]:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+
+        /* --- Screens --- */
+        .screen { display: none; }
+        .screen.active { display: block; animation: fade .35s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+        /* --- Results --- */
+        .legend-keys { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--color-text-muted); margin-bottom: 4px; }
+        .key { display: flex; align-items: center; gap: 7px; }
+        .swatch { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+        .swatch.line { width: 16px; height: 0; border-top: 2px dashed var(--color-text-light); border-radius: 0; }
+
+        .toggle-row { display: flex; gap: 6px; background: var(--color-bg-card); padding: 4px; border-radius: 999px; }
+        .toggle-row button {
+            font-family: var(--font-body); font-size: 13px; font-weight: 500; cursor: pointer;
+            border: none; background: transparent; color: var(--color-text-muted); padding: 7px 15px; border-radius: 999px;
+        }
+        .toggle-row button.on { background: #fff; color: var(--color-text); box-shadow: 0 1px 4px rgba(43,24,10,.12); }
+
+        .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 18px; }
+        @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+        table.gap { width: 100%; border-collapse: collapse; font-size: 14px; }
+        table.gap th, table.gap td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--color-border); }
+        table.gap th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--color-text-light); font-weight: 600; }
+        table.gap td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .delta-up { color: #b07a52; font-weight: 600; }
+        .delta-dn { color: #4a7c59; font-weight: 600; }
+
+        .banner {
+            border-radius: 12px; padding: 14px 16px; font-size: 14px; margin-bottom: 18px;
+            border: 1px solid var(--color-border); background: var(--color-bg-card);
+        }
+        .banner.err { background: #fdeeec; border-color: #e8b4ad; color: #8c2f22; }
+        .banner code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px;
+            background: rgba(43,24,10,.07); padding: 1px 5px; border-radius: 4px; }
+        .banner pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+            background: rgba(43,24,10,.06); padding: 10px 12px; border-radius: 8px; margin-top: 8px; overflow-x: auto; }
+
+        .live { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--color-text-muted); }
+        .live .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4a7c59; animation: pulse 1.8s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.8); } }
+
+        .n-big { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1; }
+
+        .joinbox { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+        #qr { line-height: 0; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid var(--color-border); }
+        .joinurl { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; word-break: break-all; }
+
+        .footer-note { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--color-border); }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div class="top-inner">
+            <div class="brand">Big Five &amp; the bell curve<span>Teaching demo</span></div>
+            <div class="session-tag" id="sessionTag">—</div>
+        </div>
+    </header>
+
+    <div class="wrap" id="wrap">
+
+        <!-- ============ JOIN ============ -->
+        <section class="screen active" id="screen-join">
+            <h1>Where do you think you sit?</h1>
+            <p class="lede">First you'll place yourself on a bell curve for each of the Big Five personality
+                traits. Then you'll complete the Mini-IPIP, a 20-item personality measure. Finally you'll see
+                how your self-estimate compares to your measured score — and to the rest of the class, live.</p>
+
+            <div class="card" style="margin-top:26px">
+                <h3>Join the session</h3>
+                <p class="muted" style="margin:6px 0 14px">Enter the session code your instructor put on screen.</p>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+                    <input type="text" id="codeInput" placeholder="e.g. PSYC1001" maxlength="16" autocomplete="off"
+                        autocapitalize="characters" spellcheck="false">
+                    <button class="btn accent" id="joinBtn">Start</button>
+                </div>
+            </div>
+
+            <div class="card flat">
+                <h3>Anonymous</h3>
+                <p class="muted" style="margin-top:6px">No name, email or ID is collected. Your responses are stored
+                    only as an anonymous set of numbers so the class distribution can be drawn. This is a
+                    classroom demonstration, not a psychological assessment.</p>
+            </div>
+
+            <p class="tiny" style="margin-top:20px">Instructors: open the projector view at
+                <code id="classLinkHint">?view=class&amp;s=CODE</code></p>
+        </section>
+
+        <!-- ============ SELF-RATING ============ -->
+        <section class="screen" id="screen-self">
+            <div class="stepper" id="stepper1"></div>
+            <h1>Step 1 — Rate yourself</h1>
+            <p class="lede">For each trait, drag the marker to where you think you fall <em>compared with other
+                    people</em>. The curve shows how the trait is distributed in the population: most people
+                sit near the middle, very few at the extremes.</p>
+            <div id="selfCards" style="margin-top:26px"></div>
+            <div class="actions">
+                <button class="btn accent" id="toIpipBtn">Continue to the Mini-IPIP</button>
+                <span class="muted" id="selfHint">Move all five markers to continue.</span>
+            </div>
+        </section>
+
+        <!-- ============ MINI-IPIP ============ -->
+        <section class="screen" id="screen-ipip">
+            <div class="stepper" id="stepper2"></div>
+            <h1>Step 2 — The Mini-IPIP</h1>
+            <p class="lede">How accurately does each statement describe you <em>as you generally are now</em>,
+                compared with other people you know of the same sex and roughly your age? Be honest — nobody
+                sees your individual answers.</p>
+
+            <div class="scale-legend">
+                <div class="legend-grid">
+                    <div></div>
+                    <div class="lbl">Very<br>inaccurate</div>
+                    <div class="lbl">Moderately<br>inaccurate</div>
+                    <div class="lbl">Neither</div>
+                    <div class="lbl">Moderately<br>accurate</div>
+                    <div class="lbl">Very<br>accurate</div>
+                </div>
+                <div class="legend-mobile"><span>1 = very inaccurate</span><span>5 = very accurate</span></div>
+            </div>
+
+            <div id="itemList"></div>
+
+            <div class="actions">
+                <button class="btn accent" id="submitBtn">Submit &amp; see the class</button>
+                <span class="muted" id="ipipHint"></span>
+            </div>
+            <p class="tiny" style="margin-top:14px">Mini-IPIP items © Donnellan, Oswald, Baird &amp; Lucas (2006),
+                drawn from the public-domain International Personality Item Pool (ipip.ori.org).</p>
+        </section>
+
+        <!-- ============ RESULTS ============ -->
+        <section class="screen" id="screen-results">
+            <div class="stepper" id="stepper3"></div>
+            <div id="resultsBanner"></div>
+            <h1>Step 3 — You and the class</h1>
+            <p class="lede">The dashed line is the theoretical bell curve. The shaded curve is
+                <strong>your class</strong>, redrawn every time somebody submits. Each dot is one person.</p>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin:22px 0 14px">
+                <div class="live"><span class="pulse"></span><span id="liveCount">Waiting for responses…</span></div>
+                <div class="toggle-row" id="resToggle">
+                    <button data-set="ipip" class="on">Measured (Mini-IPIP)</button>
+                    <button data-set="self">Self-ratings</button>
+                    <button data-set="both">Both</button>
+                </div>
+            </div>
+
+            <div class="legend-keys">
+                <div class="key"><span class="swatch" style="background:rgba(43,24,10,.18)"></span>Class distribution</div>
+                <div class="key"><span class="swatch" style="background:var(--color-bg-dark)"></span>Your measured score</div>
+                <div class="key"><span class="swatch" style="background:var(--color-accent)"></span>Your self-rating</div>
+                <div class="key"><span class="swatch line"></span>Theoretical normal curve</div>
+            </div>
+
+            <div id="resultCards" style="margin-top:14px"></div>
+
+            <div class="card">
+                <h2>Self-estimate vs. measured</h2>
+                <p class="muted" style="margin-bottom:14px">A positive gap means you placed yourself higher than the
+                    questionnaire did. Watch what the class average does — the "better-than-average effect" is one of
+                    the most reliable findings in social psychology.</p>
+                <table class="gap" id="gapTable"></table>
+            </div>
+
+            <div class="footer-note">
+                <p class="tiny">Percentiles for the Mini-IPIP are calculated against indicative published means and
+                    standard deviations from undergraduate samples (Donnellan et al., 2006), so they are approximate.
+                    Your rank <em>within this class</em> is calculated directly from the responses shown.
+                    A 20-item screener is far too short for any individual decision — it is used here purely to make
+                    the distribution visible.</p>
+            </div>
+        </section>
+
+        <!-- ============ CLASS / PROJECTOR VIEW ============ -->
+        <section class="screen" id="screen-class">
+            <div id="classBanner"></div>
+            <div class="card" style="margin-bottom:22px">
+                <div class="joinbox">
+                    <div id="qr"></div>
+                    <div style="flex:1; min-width:240px">
+                        <h2>Join the demo</h2>
+                        <p class="joinurl" id="joinUrl"></p>
+                        <p class="muted" style="margin-top:8px">Session code: <strong id="classCode"></strong></p>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="n-big" id="classN">0</div>
+                        <div class="tiny">responses</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px">
+                <div class="live"><span class="pulse"></span>Live — updates as students submit</div>
+                <div class="toggle-row" id="classToggle">
+                    <button data-set="ipip" class="on">Measured (Mini-IPIP)</button>
+                    <button data-set="self">Self-ratings</button>
+                    <button data-set="both">Both</button>
+                </div>
+            </div>
+
+            <div class="grid2" id="classCards"></div>
+
+            <div class="card">
+                <h2>Class self-estimate vs. measured</h2>
+                <table class="gap" id="classGapTable"></table>
+            </div>
+
+            <div class="actions">
+                <button class="btn ghost small" id="simBtn">Add 20 simulated responses</button>
+                <button class="btn ghost small" id="resetBtn">Clear this session's data</button>
+                <span class="tiny">Simulated responses are drawn on this screen only — they are never saved to the
+                    database, so refreshing removes them. "Clear" permanently deletes every <em>real</em>
+                    response in session <strong id="resetCode"></strong>.</span>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import {
+            getFirestore, collection, doc, setDoc, deleteDoc, getDocs, onSnapshot, serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaz1nWglmiKv9W_MrbulS__h8aieCPPE8",
+            authDomain: "meetings-b9e5e.firebaseapp.com",
+            projectId: "meetings-b9e5e",
+            storageBucket: "meetings-b9e5e.firebasestorage.app",
+            messagingSenderId: "368747163289",
+            appId: "1:368747163289:web:29719439e3b61126331208"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const ROOT = 'bigfive_demo';
+
+        /* ============================================================
+           TRAITS, ITEMS, NORMS
+           ============================================================ */
+
+        const TRAITS = [
+            {
+                key: 'O', name: 'Openness to Experience',
+                def: 'Curious, imaginative, drawn to ideas and new experiences — versus practical, conventional and happy with the familiar.',
+                lo: 'Practical, conventional', hi: 'Curious, imaginative'
+            },
+            {
+                key: 'C', name: 'Conscientiousness',
+                def: 'Organised, dependable and self-disciplined — versus spontaneous, flexible and less bothered by structure.',
+                lo: 'Spontaneous, flexible', hi: 'Organised, disciplined'
+            },
+            {
+                key: 'E', name: 'Extraversion',
+                def: 'Outgoing, talkative and energised by company — versus reserved, quiet and happier in small settings.',
+                lo: 'Reserved, quiet', hi: 'Outgoing, sociable'
+            },
+            {
+                key: 'A', name: 'Agreeableness',
+                def: 'Warm, trusting and cooperative — versus direct, sceptical and comfortable with competition.',
+                lo: 'Direct, sceptical', hi: 'Warm, cooperative'
+            },
+            {
+                key: 'N', name: 'Neuroticism',
+                def: 'Reacts strongly to stress and moods shift readily — versus calm, even-tempered and hard to rattle.',
+                lo: 'Calm, even-tempered', hi: 'Reactive, moods shift'
+            }
+        ];
+
+        // Mini-IPIP (Donnellan et al., 2006). r = reverse-scored.
+        const ITEMS = [
+            { t: 'E', r: false, text: 'Am the life of the party.' },
+            { t: 'A', r: false, text: "Sympathise with others' feelings." },
+            { t: 'C', r: false, text: 'Get chores done right away.' },
+            { t: 'N', r: false, text: 'Have frequent mood swings.' },
+            { t: 'O', r: false, text: 'Have a vivid imagination.' },
+            { t: 'E', r: true, text: "Don't talk a lot." },
+            { t: 'A', r: true, text: "Am not interested in other people's problems." },
+            { t: 'C', r: true, text: 'Often forget to put things back in their proper place.' },
+            { t: 'N', r: true, text: 'Am relaxed most of the time.' },
+            { t: 'O', r: true, text: 'Have difficulty understanding abstract ideas.' },
+            { t: 'E', r: false, text: 'Talk to a lot of different people at parties.' },
+            { t: 'A', r: false, text: "Feel others' emotions." },
+            { t: 'C', r: false, text: 'Like order.' },
+            { t: 'N', r: false, text: 'Get upset easily.' },
+            { t: 'O', r: true, text: 'Am not interested in abstract ideas.' },
+            { t: 'E', r: true, text: 'Keep in the background.' },
+            { t: 'A', r: true, text: 'Am not really interested in others.' },
+            { t: 'C', r: true, text: 'Make a mess of things.' },
+            { t: 'N', r: true, text: 'Seldom feel blue.' },
+            { t: 'O', r: true, text: 'Do not have a good imagination.' }
+        ];
+
+        // Indicative undergraduate norms for the Mini-IPIP (1-5 scale) used to
+        // place a raw score on the same z-axis as the self-ratings.
+        const NORMS = {
+            O: { m: 3.70, sd: 0.70 },
+            C: { m: 3.40, sd: 0.78 },
+            E: { m: 3.35, sd: 0.90 },
+            A: { m: 3.95, sd: 0.68 },
+            N: { m: 2.80, sd: 0.85 }
+        };
+
+        /* ============================================================
+           MATHS
+           ============================================================ */
+
+        const pdf = z => Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+
+        function cdf(z) { // Abramowitz & Stegun 7.1.26 via erf
+            const s = z < 0 ? -1 : 1, x = Math.abs(z) / Math.SQRT2;
+            const t = 1 / (1 + 0.3275911 * x);
+            const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+            return 0.5 * (1 + s * y);
+        }
+
+        const pct = z => Math.min(99, Math.max(1, Math.round(cdf(z) * 100)));
+        const clampZ = z => Math.max(-3.2, Math.min(3.2, z));
+        const zFromScore = (k, score) => clampZ((score - NORMS[k].m) / NORMS[k].sd);
+
+        function ordinal(n) {
+            const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+            return n + (s[(v - 20) % 10] || s[v] || s[0]);
+        }
+
+        function mean(a) { return a.reduce((x, y) => x + y, 0) / a.length; }
+        function sd(a) {
+            if (a.length < 2) return 1;
+            const m = mean(a);
+            return Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / (a.length - 1)) || 1;
+        }
+        function percentileRank(arr, v) {
+            if (!arr.length) return 50;
+            let below = 0, equal = 0;
+            for (const x of arr) { if (x < v) below++; else if (x === v) equal++; }
+            return Math.round(((below + 0.5 * equal) / arr.length) * 100);
+        }
+
+        // Gaussian kernel density on a z-grid
+        function kde(values, grid) {
+            if (!values.length) return grid.map(() => 0);
+            const h = Math.max(0.22, 1.06 * sd(values) * Math.pow(values.length, -0.2));
+            return grid.map(g => mean(values.map(v => pdf((g - v) / h))) / h);
+        }
+
+        /* ============================================================
+           CHART
+           ============================================================ */
+
+        const VB = { w: 640, h: 216, l: 40, r: 600, top: 20, base: 150, dotTop: 158, dotBot: 186, axis: 204 };
+        const ZMIN = -3.5, ZMAX = 3.5;
+        const xOf = z => VB.l + ((Math.max(ZMIN, Math.min(ZMAX, z)) - ZMIN) / (ZMAX - ZMIN)) * (VB.r - VB.l);
+
+        function curvePath(vals, grid, scale, close) {
+            let d = '';
+            grid.forEach((g, i) => {
+                const x = xOf(g).toFixed(1);
+                const y = (VB.base - vals[i] * scale).toFixed(1);
+                d += (i === 0 ? 'M' : 'L') + x + ' ' + y + ' ';
+            });
+            if (close) d += 'L' + xOf(grid[grid.length - 1]).toFixed(1) + ' ' + VB.base + ' L' + xOf(grid[0]).toFixed(1) + ' ' + VB.base + ' Z';
+            return d;
+        }
+
+        const GRID = Array.from({ length: 141 }, (_, i) => ZMIN + (i * (ZMAX - ZMIN)) / 140);
+
+        function axisSvg(lo, hi) {
+            const ticks = [-2, -1, 0, 1, 2];
+            let s = `<line x1="${VB.l}" y1="${VB.base}" x2="${VB.r}" y2="${VB.base}" stroke="#e0d4c6" stroke-width="1.5"/>`;
+            ticks.forEach(z => {
+                const x = xOf(z);
+                s += `<line x1="${x}" y1="${VB.base}" x2="${x}" y2="${VB.base + 5}" stroke="#e0d4c6" stroke-width="1.5"/>`;
+                s += `<text x="${x}" y="${VB.axis}" text-anchor="middle" font-size="11" fill="#9a8a7a" font-family="Inter,sans-serif">${ordinal(pct(z))}</text>`;
+            });
+            if (lo) s += `<text x="${VB.l}" y="${VB.axis + 15}" text-anchor="start" font-size="11.5" fill="#9a8a7a" font-family="Inter,sans-serif">← ${lo}</text>`;
+            if (hi) s += `<text x="${VB.r}" y="${VB.axis + 15}" text-anchor="end" font-size="11.5" fill="#9a8a7a" font-family="Inter,sans-serif">${hi} →</text>`;
+            return s;
+        }
+
+        function markerSvg(z, colour, label, row, dim) {
+            const x = xOf(z);
+            const y = VB.top + row * 20;
+            const flip = x > VB.r - 90;
+            const tw = label.length * 6.2 + 18;
+            const bx = flip ? x - tw - 6 : x + 6;
+            return `
+            <line x1="${x}" y1="${VB.base}" x2="${x}" y2="${y - 2}" stroke="${colour}" stroke-width="2"
+                  stroke-dasharray="${dim ? '4 4' : '0'}" opacity="${dim ? .45 : 1}"/>
+            <circle cx="${x}" cy="${VB.base}" r="5.5" fill="${colour}" opacity="${dim ? .45 : 1}"/>
+            <rect x="${bx}" y="${y - 11}" width="${tw}" height="19" rx="9.5" fill="${colour}" opacity="${dim ? .45 : 1}"/>
+            <text x="${bx + tw / 2}" y="${y + 2.5}" text-anchor="middle" font-size="11" font-weight="600"
+                  fill="#fff" font-family="Inter,sans-serif">${label}</text>`;
+        }
+
+        function dotsSvg(values, colour) {
+            if (!values.length) return '';
+            const bins = new Map();
+            let s = '';
+            const sorted = [...values].sort((a, b) => a - b);
+            for (const v of sorted) {
+                const b = Math.round(xOf(v) / 7);
+                const n = bins.get(b) || 0;
+                bins.set(b, n + 1);
+                const row = n % 6;
+                const y = VB.dotTop + row * ((VB.dotBot - VB.dotTop) / 5);
+                s += `<circle cx="${xOf(v).toFixed(1)}" cy="${y.toFixed(1)}" r="3.1" fill="${colour}" opacity="${n >= 6 ? .35 : .62}"/>`;
+            }
+            return s;
+        }
+
+        /**
+         * opts: { selfVals[], ipipVals[], show:'self'|'ipip'|'both',
+         *         mySelf:z|null, myIpip:z|null, lo, hi, showRef:bool }
+         */
+        function renderChart(opts) {
+            const height = VB.base - VB.top;
+            const ref = GRID.map(pdf);
+            const sets = [];
+            if (opts.show !== 'ipip' && opts.selfVals && opts.selfVals.length)
+                sets.push({ vals: kde(opts.selfVals, GRID), fill: 'rgba(200,149,108,.30)', stroke: '#c8956c', raw: opts.selfVals });
+            if (opts.show !== 'self' && opts.ipipVals && opts.ipipVals.length)
+                sets.push({ vals: kde(opts.ipipVals, GRID), fill: 'rgba(43,24,10,.16)', stroke: '#2b180a', raw: opts.ipipVals });
+
+            let peak = Math.max(...ref);
+            sets.forEach(s => { peak = Math.max(peak, Math.max(...s.vals)); });
+            const scale = height / (peak * 1.06);
+
+            let body = '';
+            if (opts.fillTo !== null && opts.fillTo !== undefined) {
+                const sub = GRID.filter(g => g <= opts.fillTo);
+                if (sub.length > 1) {
+                    body += `<path d="${curvePath(sub.map(pdf), sub, scale, true)}" fill="rgba(200,149,108,.22)"/>`;
+                }
+            }
+            if (opts.showRef !== false) {
+                body += `<path d="${curvePath(ref, GRID, scale, false)}" fill="none" stroke="#9a8a7a"
+                          stroke-width="1.5" stroke-dasharray="5 5" opacity=".75"/>`;
+            }
+            sets.forEach(s => {
+                body += `<path d="${curvePath(s.vals, GRID, scale, true)}" fill="${s.fill}" stroke="${s.stroke}" stroke-width="2"/>`;
+            });
+            body += axisSvg(opts.lo, opts.hi);
+            sets.forEach(s => { body += dotsSvg(s.raw, s.stroke); });
+
+            if (opts.myIpip !== null && opts.myIpip !== undefined && opts.show !== 'self')
+                body += markerSvg(opts.myIpip, '#2b180a', opts.ipipLabel || 'You (measured)', 0);
+            if (opts.mySelf !== null && opts.mySelf !== undefined && opts.show !== 'ipip')
+                body += markerSvg(opts.mySelf, '#c8956c', opts.selfLabel || 'You (self-rating)', opts.show === 'both' ? 1 : 0);
+
+            return `<svg viewBox="0 0 ${VB.w} ${VB.h + 22}" role="img" aria-hidden="true">${body}</svg>`;
+        }
+
+        /* ============================================================
+           STATE
+           ============================================================ */
+
+        const params = new URLSearchParams(location.search);
+        let sessionCode = (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 16);
+        const isClassView = params.get('view') === 'class';
+
+        const selfZ = {};        // trait -> z
+        const touched = {};      // trait -> bool
+        const answers = {};      // item index -> 1..5
+        let myIpipScores = null; // trait -> mean 1..5
+        let responses = [];      // live from Firestore: [{id, self:{}, ipip:{}}]
+        let localSim = [];       // rehearsal-only, never written to the database
+        const allResponses = () => responses.concat(localSim);
+        let resShow = 'ipip', classShow = 'ipip';
+        let unsub = null;
+
+        const PID_KEY = 'b5demo_pid';
+        function pid() {
+            let v = localStorage.getItem(PID_KEY);
+            if (!v) { v = 'p' + Math.random().toString(36).slice(2, 11) + Date.now().toString(36); localStorage.setItem(PID_KEY, v); }
+            return v;
+        }
+
+        const $ = id => document.getElementById(id);
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function stepper(el, active) {
+            const names = ['Rate yourself', 'Mini-IPIP', 'Compare'];
+            el.innerHTML = names.map((n, i) => {
+                const cls = i === active ? 'on' : (i < active ? 'done' : '');
+                return `<div class="step ${cls}"><span class="dot">${i < active ? '✓' : i + 1}</span>${n}</div>` +
+                    (i < 2 ? '<span class="step-sep"></span>' : '');
+            }).join('');
+        }
+
+        /* ============================================================
+           SCREEN 1 — SELF RATING
+           ============================================================ */
+
+        function buildSelfCards() {
+            $('selfCards').innerHTML = TRAITS.map(t => `
+              <div class="card" data-trait="${t.key}">
+                <div class="trait-head">
+                  <div>
+                    <div class="trait-name">${t.name}</div>
+                    <div class="trait-def">${t.def}</div>
+                  </div>
+                  <div class="readout unset" id="read-${t.key}">Drag to place yourself</div>
+                </div>
+                <div class="curve-wrap">
+                  <div id="svg-${t.key}"></div>
+                  <input type="range" min="-3" max="3" step="0.05" value="0" id="rng-${t.key}"
+                         aria-label="Your self-rating for ${t.name}">
+                </div>
+              </div>`).join('');
+
+            TRAITS.forEach(t => {
+                selfZ[t.key] = 0; touched[t.key] = false;
+                const rng = $('rng-' + t.key);
+                const paint = () => {
+                    selfZ[t.key] = parseFloat(rng.value);
+                    $('svg-' + t.key).innerHTML = renderChart({
+                        show: 'none', selfVals: [], ipipVals: [], lo: t.lo, hi: t.hi,
+                        mySelf: selfZ[t.key], selfLabel: touched[t.key] ? ordinal(pct(selfZ[t.key])) : '?',
+                        myIpip: null, fillTo: touched[t.key] ? selfZ[t.key] : null
+                    });
+                    const r = $('read-' + t.key);
+                    if (touched[t.key]) {
+                        r.className = 'readout';
+                        r.textContent = `Higher than about ${pct(selfZ[t.key])}% of people`;
+                    }
+                    updateSelfGate();
+                };
+                const mark = () => { touched[t.key] = true; paint(); };
+                rng.addEventListener('input', mark);
+                rng.addEventListener('change', mark);
+                paint();
+            });
+            updateSelfGate();
+        }
+
+        function updateSelfGate() {
+            const n = TRAITS.filter(t => touched[t.key]).length;
+            const ok = n === TRAITS.length;
+            $('toIpipBtn').disabled = !ok;
+            $('selfHint').textContent = ok ? 'All five placed — nice.' : `${TRAITS.length - n} trait${TRAITS.length - n === 1 ? '' : 's'} still to place.`;
+        }
+
+        /* ============================================================
+           SCREEN 2 — MINI-IPIP
+           ============================================================ */
+
+        function buildItems() {
+            $('itemList').innerHTML = ITEMS.map((it, i) => `
+              <div class="item" id="item-${i}">
+                <div class="q"><b>${i + 1}</b>${it.text}</div>
+                <div class="opts-row">
+                  ${[1, 2, 3, 4, 5].map(v => `
+                    <label class="opt" data-n="${v}" title="${['Very inaccurate', 'Moderately inaccurate', 'Neither', 'Moderately accurate', 'Very accurate'][v - 1]}">
+                      <input type="radio" name="i${i}" value="${v}"
+                             aria-label="${it.text} — ${['Very inaccurate', 'Moderately inaccurate', 'Neither', 'Moderately accurate', 'Very accurate'][v - 1]}">
+                    </label>`).join('')}
+                </div>
+              </div>`).join('');
+
+            $('itemList').addEventListener('change', e => {
+                if (e.target.type !== 'radio') return;
+                const i = parseInt(e.target.name.slice(1), 10);
+                answers[i] = parseInt(e.target.value, 10);
+                $('item-' + i).classList.remove('missing');
+                const left = ITEMS.length - Object.keys(answers).length;
+                $('ipipHint').textContent = left ? `${left} item${left === 1 ? '' : 's'} left.` : 'All done.';
+            });
+            $('ipipHint').textContent = `${ITEMS.length} items left.`;
+        }
+
+        function scoreIpip() {
+            const sums = {}, counts = {};
+            ITEMS.forEach((it, i) => {
+                const raw = answers[i];
+                const v = it.r ? 6 - raw : raw;
+                sums[it.t] = (sums[it.t] || 0) + v;
+                counts[it.t] = (counts[it.t] || 0) + 1;
+            });
+            const out = {};
+            Object.keys(sums).forEach(k => { out[k] = sums[k] / counts[k]; });
+            return out;
+        }
+
+        /* ============================================================
+           FIRESTORE
+           ============================================================ */
+
+        function responsesCol() { return collection(db, ROOT, sessionCode, 'responses'); }
+
+        function fireError(err, target) {
+            const denied = /permission|insufficient/i.test(err && err.message || '');
+            const rules = `match /${ROOT}/{session}/responses/{pid} {\n  allow read, write: if true;\n}`;
+            $(target).innerHTML = `<div class="banner err"><strong>Can't reach the live database.</strong>
+              ${denied ? 'Firestore rejected the request — the security rules for this project need to allow the demo collection.' : 'Network or configuration error.'}
+              <br><span class="tiny">${(err && err.message || err)}</span>
+              ${denied ? `<pre>rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    ${rules.split('\n').join('\n    ')}\n  }\n}</pre>` : ''}
+              </div>`;
+        }
+
+        async function submitResponse() {
+            const payload = {
+                self: Object.fromEntries(TRAITS.map(t => [t.key, Number(selfZ[t.key].toFixed(3))])),
+                ipip: Object.fromEntries(Object.entries(myIpipScores).map(([k, v]) => [k, Number(v.toFixed(3))])),
+                ts: serverTimestamp()
+            };
+            await setDoc(doc(db, ROOT, sessionCode, 'responses', pid()), payload);
+        }
+
+        function listen(onData, errTarget) {
+            if (unsub) unsub();
+            unsub = onSnapshot(responsesCol(), snap => {
+                responses = [];
+                snap.forEach(d => {
+                    const v = d.data();
+                    if (v && v.self && v.ipip) responses.push({ id: d.id, self: v.self, ipip: v.ipip });
+                });
+                onData();
+            }, err => fireError(err, errTarget));
+        }
+
+        /* ============================================================
+           DISTRIBUTIONS
+           ============================================================ */
+
+        function traitData(key) {
+            const pool = allResponses();
+            const selfVals = pool.map(r => clampZ(r.self[key])).filter(Number.isFinite);
+            const ipipVals = pool.map(r => zFromScore(key, r.ipip[key])).filter(Number.isFinite);
+            return { selfVals, ipipVals };
+        }
+
+        function renderResults() {
+            const n = allResponses().length;
+            $('liveCount').textContent = n === 0 ? 'Waiting for responses…'
+                : `${n} response${n === 1 ? '' : 's'} in — curve updates live`;
+
+            $('resultCards').innerHTML = TRAITS.map(t => {
+                const d = traitData(t.key);
+                const mine = myIpipScores ? zFromScore(t.key, myIpipScores[t.key]) : null;
+                const rank = mine === null ? null : percentileRank(d.ipipVals, mine);
+                const selfRank = percentileRank(d.selfVals, selfZ[t.key]);
+                const chart = renderChart({
+                    show: resShow, selfVals: d.selfVals, ipipVals: d.ipipVals,
+                    mySelf: selfZ[t.key], myIpip: mine,
+                    selfLabel: 'Self ' + ordinal(pct(selfZ[t.key])),
+                    ipipLabel: 'You ' + ordinal(pct(mine)),
+                    lo: t.lo, hi: t.hi
+                });
+                const inClass = n > 1
+                    ? `Within this class you sit at about the <strong>${ordinal(rank)} percentile</strong> on the measured score, and you placed yourself at the <strong>${ordinal(selfRank)}</strong>.`
+                    : 'Once classmates submit, your rank within the class will appear here.';
+                return `<div class="card">
+                    <div class="trait-head">
+                      <div><div class="trait-name">${t.name}</div><div class="trait-def">${t.def}</div></div>
+                      <div class="readout">${myIpipScores ? myIpipScores[t.key].toFixed(2) + ' / 5' : ''}</div>
+                    </div>
+                    <div class="curve-wrap">${chart}</div>
+                    <p class="muted" style="margin-top:8px">${inClass}</p>
+                  </div>`;
+            }).join('');
+
+            renderGapTable($('gapTable'), true);
+        }
+
+        function renderGapTable(el, includeMine) {
+            const n = allResponses().length;
+            const rows = TRAITS.map(t => {
+                const d = traitData(t.key);
+                const classSelf = d.selfVals.length ? mean(d.selfVals) : null;
+                const classIpip = d.ipipVals.length ? mean(d.ipipVals) : null;
+                const classGap = (classSelf !== null && classIpip !== null) ? classSelf - classIpip : null;
+                let mineCells = '';
+                if (includeMine) {
+                    const mine = myIpipScores ? zFromScore(t.key, myIpipScores[t.key]) : null;
+                    const g = mine === null ? null : pct(selfZ[t.key]) - pct(mine);
+                    mineCells = `<td class="num">${ordinal(pct(selfZ[t.key]))}</td>
+                                 <td class="num">${mine === null ? '—' : ordinal(pct(mine))}</td>
+                                 <td class="num">${g === null ? '—' : `<span class="${g >= 0 ? 'delta-up' : 'delta-dn'}">${g > 0 ? '+' : ''}${g}</span>`}</td>`;
+                }
+                const cg = classGap === null ? '—' :
+                    `<span class="${classGap >= 0 ? 'delta-up' : 'delta-dn'}">${classGap > 0 ? '+' : ''}${(classGap).toFixed(2)} SD</span>`;
+                return `<tr><td>${t.name}</td>${mineCells}<td class="num">${cg}</td></tr>`;
+            }).join('');
+
+            el.innerHTML = `<thead><tr><th>Trait</th>
+                ${includeMine ? '<th style="text-align:right">Your estimate</th><th style="text-align:right">Measured</th><th style="text-align:right">Gap (pctile)</th>' : ''}
+                <th style="text-align:right">Class average gap${n ? ` (n=${n})` : ''}</th></tr></thead><tbody>${rows}</tbody>`;
+        }
+
+        function renderClass() {
+            const n = allResponses().length;
+            $('classN').textContent = n;
+            $('classCards').innerHTML = TRAITS.map(t => {
+                const d = traitData(t.key);
+                const chart = renderChart({
+                    show: classShow, selfVals: d.selfVals, ipipVals: d.ipipVals,
+                    mySelf: null, myIpip: null, lo: t.lo, hi: t.hi
+                });
+                const cs = d.selfVals.length ? mean(d.selfVals) : null;
+                const ci = d.ipipVals.length ? mean(d.ipipVals) : null;
+                return `<div class="card">
+                    <div class="trait-head">
+                      <div class="trait-name">${t.name}</div>
+                      <div class="readout">${ci === null ? '—' : 'class mean ' + ordinal(pct(ci)) + ' pctile'}</div>
+                    </div>
+                    <div class="curve-wrap">${chart}</div>
+                    <p class="tiny" style="margin-top:6px">
+                      ${cs === null ? '' : `Average self-rating ${ordinal(pct(cs))} percentile · average measured ${ordinal(pct(ci))} percentile`}
+                    </p>
+                  </div>`;
+            }).join('');
+            renderGapTable($('classGapTable'), false);
+        }
+
+        /* ============================================================
+           WIRING
+           ============================================================ */
+
+        function setSession(code) {
+            sessionCode = code;
+            $('sessionTag').textContent = 'Session ' + code;
+            const u = new URL(location.href);
+            u.searchParams.set('s', code);
+            u.searchParams.delete('view');
+            history.replaceState(null, '', u);
+        }
+
+        $('joinBtn').addEventListener('click', () => {
+            const raw = $('codeInput').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            if (!raw) { $('codeInput').focus(); return; }
+            setSession(raw);
+            startSurvey();
+        });
+        $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('joinBtn').click(); });
+
+        function startSurvey() {
+            const preseed = parseInt(params.get('sim') || '0', 10);
+            if (preseed > 0) addSimulated(Math.min(300, preseed));
+            buildSelfCards();
+            stepper($('stepper1'), 0);
+            show('screen-self');
+        }
+
+        $('toIpipBtn').addEventListener('click', () => {
+            buildItems();
+            stepper($('stepper2'), 1);
+            show('screen-ipip');
+        });
+
+        $('submitBtn').addEventListener('click', async () => {
+            const missing = ITEMS.map((_, i) => i).filter(i => !answers[i]);
+            if (missing.length) {
+                missing.forEach(i => $('item-' + i).classList.add('missing'));
+                $('item-' + missing[0]).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                $('ipipHint').textContent = `${missing.length} item${missing.length === 1 ? '' : 's'} still need an answer.`;
+                return;
+            }
+            myIpipScores = scoreIpip();
+            $('submitBtn').disabled = true;
+            $('submitBtn').textContent = 'Submitting…';
+            stepper($('stepper3'), 2);
+            show('screen-results');
+            renderResults();
+            try {
+                await submitResponse();
+            } catch (err) {
+                fireError(err, 'resultsBanner');
+            }
+            listen(renderResults, 'resultsBanner');
+        });
+
+        $('resToggle').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            resShow = b.dataset.set;
+            [...$('resToggle').children].forEach(c => c.classList.toggle('on', c === b));
+            renderResults();
+        });
+        $('classToggle').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            classShow = b.dataset.set;
+            [...$('classToggle').children].forEach(c => c.classList.toggle('on', c === b));
+            renderClass();
+        });
+
+        /* ---- Projector view ---- */
+        function startClassView() {
+            document.getElementById('wrap').classList.add('wide');
+            $('sessionTag').textContent = 'Session ' + sessionCode;
+            $('classCode').textContent = sessionCode;
+            $('resetCode').textContent = sessionCode;
+            const join = location.origin + location.pathname + '?s=' + encodeURIComponent(sessionCode);
+            $('joinUrl').textContent = join.replace(/^https?:\/\//, '');
+            if (typeof QRCode !== 'undefined') {
+                new QRCode($('qr'), { text: join, width: 176, height: 176, colorDark: '#2b180a', colorLight: '#ffffff' });
+            } else {
+                $('qr').innerHTML = '<span class="tiny" style="display:block;width:176px">QR unavailable — share the link.</span>';
+            }
+            const preseed = parseInt(params.get('sim') || '0', 10);
+            if (preseed > 0) addSimulated(Math.min(300, preseed));
+            show('screen-class');
+            renderClass();
+            listen(renderClass, 'classBanner');
+        }
+
+        function gauss() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        }
+
+        function addSimulated(count) {
+            for (let i = 0; i < count; i++) {
+                const self = {}, ipip = {};
+                TRAITS.forEach(t => {
+                    const trueZ = gauss();
+                    // self-ratings are inflated for every trait except Neuroticism,
+                    // where "better than average" means rating yourself lower
+                    const bias = t.key === 'N' ? -0.35 : 0.45;
+                    self[t.key] = Number(clampZ(trueZ * 0.55 + bias + gauss() * 0.55).toFixed(3));
+                    ipip[t.key] = Number(Math.max(1, Math.min(5,
+                        NORMS[t.key].m + trueZ * NORMS[t.key].sd)).toFixed(3));
+                });
+                localSim.push({ id: 'sim_' + localSim.length, self, ipip, sim: true });
+            }
+        }
+
+        $('simBtn').addEventListener('click', () => {
+            addSimulated(20);
+            renderClass();
+        });
+
+        $('resetBtn').addEventListener('click', async () => {
+            if (!confirm(`Permanently delete all ${responses.length} responses in session ${sessionCode}? This cannot be undone.`)) return;
+            $('resetBtn').disabled = true;
+            localSim = [];
+            renderClass();
+            try {
+                const snap = await getDocs(responsesCol());
+                for (const d of snap.docs) await deleteDoc(doc(db, ROOT, sessionCode, 'responses', d.id));
+            } catch (err) { fireError(err, 'classBanner'); }
+            $('resetBtn').disabled = false;
+        });
+
+        /* ---- Boot ---- */
+        $('classLinkHint').textContent = location.pathname + '?view=class&s=CODE';
+        if (sessionCode) {
+            setSession(sessionCode);
+            if (isClassView) { startClassView(); }
+            else { startSurvey(); }
+        } else {
+            $('sessionTag').textContent = 'No session';
+            $('codeInput').focus();
+        }
+    </script>
+</body>
+
+</html>
