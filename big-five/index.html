@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Big Five: Where do you sit? — Teaching demo</title>
+    <title>Big 5 and the Self — Teaching demo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -15,16 +15,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --color-bg: #fcf6ef;
-            --color-bg-warm: #f6f0e9;
-            --color-bg-card: #f0e8dd;
-            --color-bg-dark: #2b180a;
-            --color-text: #2b180a;
-            --color-text-muted: #6b5a4a;
-            --color-text-light: #9a8a7a;
-            --color-accent: #c8956c;
-            --color-accent-hover: #b07a52;
-            --color-border: #e0d4c6;
+            --color-bg: #ffffff;
+            --color-bg-warm: #f7f7f8;
+            --color-bg-card: #fbeced;
+            --color-bg-dark: #111111;
+            --color-text: #111111;
+            --color-text-muted: #55555a;
+            --color-text-light: #8a8a90;
+            --color-accent: #c8102e;
+            --color-accent-hover: #9c0a23;
+            --color-border: #e2e2e6;
             --color-white: #fff;
             --font-display: 'Playfair Display', Georgia, serif;
             --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -107,11 +107,11 @@
         input[type=range]::-moz-range-track { height: 26px; background: transparent; }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%;
-            background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(43,24,10,.28);
+            background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(17,17,17,.30);
         }
         input[type=range]::-moz-range-thumb {
             width: 22px; height: 22px; border-radius: 50%;
-            background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(43,24,10,.28);
+            background: var(--color-accent); border: 3px solid #fff; box-shadow: 0 2px 8px rgba(17,17,17,.30);
         }
         input[type=range]:focus-visible::-webkit-slider-thumb { outline: 3px solid var(--color-bg-dark); outline-offset: 2px; }
         .anchors { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light); margin-top: 2px; }
@@ -128,7 +128,7 @@
             padding: 11px 12px; border-radius: 10px; border: 1px solid transparent;
         }
         .item:nth-child(odd) { background: var(--color-bg-warm); }
-        .item.missing { border-color: #c0392b; background: #fdeeec; }
+        .item.missing { border-color: #c8102e; background: #fff5f6; }
         .item .q { font-size: 15px; }
         .item .q b { font-weight: 600; color: var(--color-text-light); margin-right: 8px; }
         .opts-row { display: contents; }
@@ -165,7 +165,7 @@
             border-radius: 999px; padding: 12px 26px; border: 1px solid var(--color-bg-dark);
             background: var(--color-bg-dark); color: #fff; transition: background .2s, color .2s, transform .15s;
         }
-        .btn:hover { background: #3d240f; transform: translateY(-1px); }
+        .btn:hover { background: #2b2b2b; transform: translateY(-1px); }
         .btn.ghost { background: transparent; color: var(--color-text); border-color: var(--color-border); }
         .btn.ghost:hover { background: var(--color-bg-card); }
         .btn.accent { background: var(--color-accent); border-color: var(--color-accent); }
@@ -196,7 +196,7 @@
             font-family: var(--font-body); font-size: 13px; font-weight: 500; cursor: pointer;
             border: none; background: transparent; color: var(--color-text-muted); padding: 7px 15px; border-radius: 999px;
         }
-        .toggle-row button.on { background: #fff; color: var(--color-text); box-shadow: 0 1px 4px rgba(43,24,10,.12); }
+        .toggle-row button.on { background: #fff; color: var(--color-text); box-shadow: 0 1px 4px rgba(17,17,17,.14); }
 
         .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 18px; }
         @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
@@ -205,21 +205,21 @@
         table.gap th, table.gap td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--color-border); }
         table.gap th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--color-text-light); font-weight: 600; }
         table.gap td.num { text-align: right; font-variant-numeric: tabular-nums; }
-        .delta-up { color: #b07a52; font-weight: 600; }
-        .delta-dn { color: #4a7c59; font-weight: 600; }
+        .delta-up { color: #c8102e; font-weight: 600; }
+        .delta-dn { color: #444448; font-weight: 600; }
 
         .banner {
             border-radius: 12px; padding: 14px 16px; font-size: 14px; margin-bottom: 18px;
             border: 1px solid var(--color-border); background: var(--color-bg-card);
         }
-        .banner.err { background: #fdeeec; border-color: #e8b4ad; color: #8c2f22; }
+        .banner.err { background: #fff5f6; border-color: #c8102e; color: #8c0a1e; }
         .banner code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px;
-            background: rgba(43,24,10,.07); padding: 1px 5px; border-radius: 4px; }
+            background: rgba(17,17,17,.07); padding: 1px 5px; border-radius: 4px; }
         .banner pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
-            background: rgba(43,24,10,.06); padding: 10px 12px; border-radius: 8px; margin-top: 8px; overflow-x: auto; }
+            background: rgba(17,17,17,.06); padding: 10px 12px; border-radius: 8px; margin-top: 8px; overflow-x: auto; }
 
         .live { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--color-text-muted); }
-        .live .pulse { width: 8px; height: 8px; border-radius: 50%; background: #4a7c59; animation: pulse 1.8s ease-in-out infinite; }
+        .live .pulse { width: 8px; height: 8px; border-radius: 50%; background: #c8102e; animation: pulse 1.8s ease-in-out infinite; }
         @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.8); } }
 
         .n-big { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1; }
@@ -235,7 +235,7 @@
 <body>
     <header class="top">
         <div class="top-inner">
-            <div class="brand">Big Five &amp; the bell curve<span>Teaching demo</span></div>
+            <div class="brand">Big 5 and the Self<span>Teaching demo</span></div>
             <div class="session-tag" id="sessionTag">—</div>
         </div>
     </header>
@@ -332,7 +332,7 @@
             </div>
 
             <div class="legend-keys">
-                <div class="key"><span class="swatch" style="background:rgba(43,24,10,.18)"></span>Class distribution</div>
+                <div class="key"><span class="swatch" style="background:rgba(17,17,17,.18)"></span>Class distribution</div>
                 <div class="key"><span class="swatch" style="background:var(--color-bg-dark)"></span>Your measured score</div>
                 <div class="key"><span class="swatch" style="background:var(--color-accent)"></span>Your self-rating</div>
                 <div class="key"><span class="swatch line"></span>Theoretical normal curve</div>
@@ -551,14 +551,14 @@
 
         function axisSvg(lo, hi) {
             const ticks = [-2, -1, 0, 1, 2];
-            let s = `<line x1="${VB.l}" y1="${VB.base}" x2="${VB.r}" y2="${VB.base}" stroke="#e0d4c6" stroke-width="1.5"/>`;
+            let s = `<line x1="${VB.l}" y1="${VB.base}" x2="${VB.r}" y2="${VB.base}" stroke="#e2e2e6" stroke-width="1.5"/>`;
             ticks.forEach(z => {
                 const x = xOf(z);
-                s += `<line x1="${x}" y1="${VB.base}" x2="${x}" y2="${VB.base + 5}" stroke="#e0d4c6" stroke-width="1.5"/>`;
-                s += `<text x="${x}" y="${VB.axis}" text-anchor="middle" font-size="11" fill="#9a8a7a" font-family="Inter,sans-serif">${ordinal(pct(z))}</text>`;
+                s += `<line x1="${x}" y1="${VB.base}" x2="${x}" y2="${VB.base + 5}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+                s += `<text x="${x}" y="${VB.axis}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="Inter,sans-serif">${ordinal(pct(z))}</text>`;
             });
-            if (lo) s += `<text x="${VB.l}" y="${VB.axis + 15}" text-anchor="start" font-size="11.5" fill="#9a8a7a" font-family="Inter,sans-serif">← ${lo}</text>`;
-            if (hi) s += `<text x="${VB.r}" y="${VB.axis + 15}" text-anchor="end" font-size="11.5" fill="#9a8a7a" font-family="Inter,sans-serif">${hi} →</text>`;
+            if (lo) s += `<text x="${VB.l}" y="${VB.axis + 15}" text-anchor="start" font-size="11.5" fill="#8a8a90" font-family="Inter,sans-serif">← ${lo}</text>`;
+            if (hi) s += `<text x="${VB.r}" y="${VB.axis + 15}" text-anchor="end" font-size="11.5" fill="#8a8a90" font-family="Inter,sans-serif">${hi} →</text>`;
             return s;
         }
 
@@ -602,9 +602,9 @@
             const ref = GRID.map(pdf);
             const sets = [];
             if (opts.show !== 'ipip' && opts.selfVals && opts.selfVals.length)
-                sets.push({ vals: kde(opts.selfVals, GRID), fill: 'rgba(200,149,108,.30)', stroke: '#c8956c', raw: opts.selfVals });
+                sets.push({ vals: kde(opts.selfVals, GRID), fill: 'rgba(200,16,46,.20)', stroke: '#c8102e', raw: opts.selfVals });
             if (opts.show !== 'self' && opts.ipipVals && opts.ipipVals.length)
-                sets.push({ vals: kde(opts.ipipVals, GRID), fill: 'rgba(43,24,10,.16)', stroke: '#2b180a', raw: opts.ipipVals });
+                sets.push({ vals: kde(opts.ipipVals, GRID), fill: 'rgba(17,17,17,.14)', stroke: '#111111', raw: opts.ipipVals });
 
             let peak = Math.max(...ref);
             sets.forEach(s => { peak = Math.max(peak, Math.max(...s.vals)); });
@@ -614,11 +614,11 @@
             if (opts.fillTo !== null && opts.fillTo !== undefined) {
                 const sub = GRID.filter(g => g <= opts.fillTo);
                 if (sub.length > 1) {
-                    body += `<path d="${curvePath(sub.map(pdf), sub, scale, true)}" fill="rgba(200,149,108,.22)"/>`;
+                    body += `<path d="${curvePath(sub.map(pdf), sub, scale, true)}" fill="rgba(200,16,46,.16)"/>`;
                 }
             }
             if (opts.showRef !== false) {
-                body += `<path d="${curvePath(ref, GRID, scale, false)}" fill="none" stroke="#9a8a7a"
+                body += `<path d="${curvePath(ref, GRID, scale, false)}" fill="none" stroke="#8a8a90"
                           stroke-width="1.5" stroke-dasharray="5 5" opacity=".75"/>`;
             }
             sets.forEach(s => {
@@ -628,9 +628,9 @@
             sets.forEach(s => { body += dotsSvg(s.raw, s.stroke); });
 
             if (opts.myIpip !== null && opts.myIpip !== undefined && opts.show !== 'self')
-                body += markerSvg(opts.myIpip, '#2b180a', opts.ipipLabel || 'You (measured)', 0);
+                body += markerSvg(opts.myIpip, '#111111', opts.ipipLabel || 'You (measured)', 0);
             if (opts.mySelf !== null && opts.mySelf !== undefined && opts.show !== 'ipip')
-                body += markerSvg(opts.mySelf, '#c8956c', opts.selfLabel || 'You (self-rating)', opts.show === 'both' ? 1 : 0);
+                body += markerSvg(opts.mySelf, '#c8102e', opts.selfLabel || 'You (self-rating)', opts.show === 'both' ? 1 : 0);
 
             return `<svg viewBox="0 0 ${VB.w} ${VB.h + 22}" role="img" aria-hidden="true">${body}</svg>`;
         }
@@ -979,7 +979,7 @@
             const join = location.origin + location.pathname + '?s=' + encodeURIComponent(sessionCode);
             $('joinUrl').textContent = join.replace(/^https?:\/\//, '');
             if (typeof QRCode !== 'undefined') {
-                new QRCode($('qr'), { text: join, width: 176, height: 176, colorDark: '#2b180a', colorLight: '#ffffff' });
+                new QRCode($('qr'), { text: join, width: 176, height: 176, colorDark: '#111111', colorLight: '#ffffff' });
             } else {
                 $('qr').innerHTML = '<span class="tiny" style="display:block;width:176px">QR unavailable — share the link.</span>';
             }
