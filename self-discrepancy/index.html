@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Actual, Ideal, Ought: Teaching demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --color-bg: #ffffff;
+            --color-bg-warm: #f7f7f8;
+            --color-bg-card: #fbeced;
+            --color-bg-dark: #111111;
+            --color-text: #111111;
+            --color-text-muted: #55555a;
+            --color-text-light: #8a8a90;
+            --color-accent: #c8102e;
+            --color-accent-hover: #9c0a23;
+            --color-border: #e2e2e6;
+            --color-white: #fff;
+
+            /* validated categorical slots, in stack order */
+            --cat-anxious: #c8102e;
+            --cat-sad: #e8677f;
+            --cat-motivated: #1a1a1a;
+            --cat-content: #8f8f96;
+
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .wrap { max-width: 780px; margin: 0 auto; padding: 32px 20px 96px; }
+        .wrap.wide { max-width: 1320px; }
+
+        .top { border-bottom: 1px solid var(--color-border); background: var(--color-bg-warm); }
+        .top-inner {
+            max-width: 1320px; margin: 0 auto; padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .brand { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+        .brand span {
+            color: var(--color-text-light); font-family: var(--font-body); font-size: 12px;
+            font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-left: 10px;
+        }
+        .session-tag {
+            font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--color-text-muted); background: var(--color-bg-card);
+            border: 1px solid var(--color-border); border-radius: 999px; padding: 5px 12px; white-space: nowrap;
+        }
+
+        h1 {
+            font-family: var(--font-display); font-size: clamp(26px, 4.2vw, 38px); font-weight: 600;
+            line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 12px;
+        }
+        h2 { font-family: var(--font-display); font-size: 23px; font-weight: 600; letter-spacing: -0.01em; }
+        h3 { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+        .lede { font-size: 17px; color: var(--color-text-muted); max-width: 62ch; }
+        .muted { color: var(--color-text-muted); font-size: 14px; }
+        .tiny { font-size: 12.5px; color: var(--color-text-light); }
+
+        .card {
+            background: var(--color-white); border: 1px solid var(--color-border);
+            border-radius: 14px; padding: 22px 24px; margin-bottom: 18px;
+        }
+        .card.flat { background: var(--color-bg-warm); }
+
+        /* ---- progress ---- */
+        .phase {
+            font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--color-accent); margin-bottom: 10px;
+        }
+        .bar { height: 4px; background: var(--color-border); border-radius: 999px; margin-bottom: 30px; overflow: hidden; }
+        .bar i { display: block; height: 100%; background: var(--color-accent); border-radius: 999px; transition: width .35s ease; }
+
+        /* ---- 1 to 10 scale ---- */
+        .scale {
+            display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; margin: 26px 0 10px;
+        }
+        .scale button {
+            font-family: var(--font-body); font-size: 19px; font-weight: 500;
+            aspect-ratio: 1 / 1; border-radius: 12px; cursor: pointer;
+            border: 1.5px solid var(--color-border); background: #fff; color: var(--color-text);
+            transition: background .12s, border-color .12s, color .12s, transform .12s;
+        }
+        .scale button:hover { border-color: var(--color-accent); transform: translateY(-2px); }
+        .scale button[aria-pressed="true"] {
+            background: var(--color-accent); border-color: var(--color-accent); color: #fff;
+        }
+        .scale-ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--color-text-light); }
+
+        @media (max-width: 560px) {
+            .scale { grid-template-columns: repeat(5, 1fr); gap: 9px; }
+            .scale button { font-size: 18px; }
+        }
+
+        /* ---- emotion choices ---- */
+        .choices { display: grid; gap: 10px; margin-top: 26px; }
+        .choices button {
+            font-family: var(--font-body); font-size: 16.5px; font-weight: 500; text-align: left;
+            padding: 17px 20px; border-radius: 12px; cursor: pointer;
+            border: 1.5px solid var(--color-border); background: #fff; color: var(--color-text);
+            display: flex; align-items: center; gap: 13px;
+            transition: background .12s, border-color .12s, transform .12s;
+        }
+        .choices button:hover { border-color: var(--color-accent); transform: translateY(-1px); }
+        .choices button[aria-pressed="true"] { background: var(--color-bg-card); border-color: var(--color-accent); }
+        .chip { width: 13px; height: 13px; border-radius: 4px; flex: 0 0 13px; }
+
+        /* ---- buttons ---- */
+        .btn {
+            font-family: var(--font-body); font-size: 15px; font-weight: 500; cursor: pointer;
+            border-radius: 999px; padding: 12px 26px; border: 1px solid var(--color-bg-dark);
+            background: var(--color-bg-dark); color: #fff; transition: background .2s, transform .15s;
+        }
+        .btn:hover { background: #2b2b2b; transform: translateY(-1px); }
+        .btn.ghost { background: transparent; color: var(--color-text); border-color: var(--color-border); }
+        .btn.ghost:hover { background: var(--color-bg-warm); }
+        .btn.accent { background: var(--color-accent); border-color: var(--color-accent); }
+        .btn.accent:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+        .btn.small { font-size: 13px; padding: 7px 16px; }
+        .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 26px; }
+        .backlink {
+            background: none; border: none; font-family: var(--font-body); font-size: 14px;
+            color: var(--color-text-light); cursor: pointer; padding: 6px 0; text-decoration: underline;
+        }
+
+        input[type=text] {
+            font-family: var(--font-body); font-size: 16px; padding: 11px 14px; border-radius: 10px;
+            border: 1px solid var(--color-border); background: #fff; color: var(--color-text); width: 220px;
+        }
+        input[type=text]:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+
+        .screen { display: none; }
+        .screen.active { display: block; animation: fade .3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+        /* ---- results / panels ---- */
+        .panel { border: 1px solid var(--color-border); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px; background: #fff; }
+        .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; }
+        .panel-tag {
+            font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--color-accent);
+        }
+        .panel-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+        @media (max-width: 900px) { .panel-grid { grid-template-columns: 1fr; } }
+
+        .legend-keys { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--color-text-muted); margin: 10px 0 2px; }
+        .key { display: flex; align-items: center; gap: 7px; }
+        .swatch { width: 13px; height: 13px; border-radius: 4px; display: inline-block; }
+        .swatch.ring { border-radius: 50%; }
+        .swatch.line { width: 16px; height: 0; border-top: 2px dashed var(--color-text-light); border-radius: 0; }
+
+        svg.chart { display: block; width: 100%; height: auto; overflow: visible; }
+
+        .callout {
+            background: var(--color-bg-warm); border-left: 3px solid var(--color-accent);
+            border-radius: 0 10px 10px 0; padding: 14px 18px; margin-top: 16px; font-size: 14.5px;
+        }
+        .callout b { font-weight: 600; }
+
+        table.tab { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 14px; }
+        table.tab th, table.tab td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--color-border); }
+        table.tab th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--color-text-light); font-weight: 600; }
+        table.tab td.num, table.tab th.num { text-align: right; font-variant-numeric: tabular-nums; }
+        table.tab tr.hl td { background: var(--color-bg-card); font-weight: 500; }
+
+        .toggle-row { display: flex; gap: 6px; background: var(--color-bg-warm); padding: 4px; border-radius: 999px; }
+        .toggle-row button {
+            font-family: var(--font-body); font-size: 13px; font-weight: 500; cursor: pointer;
+            border: none; background: transparent; color: var(--color-text-muted); padding: 7px 15px; border-radius: 999px;
+        }
+        .toggle-row button.on { background: #fff; color: var(--color-text); box-shadow: 0 1px 4px rgba(17,17,17,.14); }
+
+        .banner { border-radius: 12px; padding: 14px 16px; font-size: 14px; margin-bottom: 18px; border: 1px solid var(--color-border); background: var(--color-bg-warm); }
+        .banner.err { background: #fff5f6; border-color: var(--color-accent); color: #8c0a1e; }
+        .banner pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; background: rgba(17,17,17,.06); padding: 10px 12px; border-radius: 8px; margin-top: 8px; overflow-x: auto; }
+
+        .live { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--color-text-muted); }
+        .live .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); animation: pulse 1.8s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.8); } }
+
+        .n-big { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1; }
+        .joinbox { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+        #qr { line-height: 0; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid var(--color-border); }
+        .joinurl { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; word-break: break-all; }
+        .armsplit { font-size: 13px; color: var(--color-text-muted); margin-top: 6px; }
+
+        .yours { display: flex; gap: 30px; flex-wrap: wrap; margin: 18px 0 4px; }
+        .yours div span { display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--color-text-light); }
+        .yours div strong { font-family: var(--font-display); font-size: 32px; font-weight: 600; }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div class="top-inner">
+            <div class="brand">Actual, Ideal, Ought<span>Teaching demo</span></div>
+            <div class="session-tag" id="sessionTag"></div>
+        </div>
+    </header>
+
+    <div class="wrap" id="wrap">
+
+        <!-- ============ JOIN ============ -->
+        <section class="screen active" id="screen-join">
+            <h1>Two quick ratings</h1>
+            <p class="lede">Three short questions about how your week has gone. It takes under two minutes,
+                and your answers are anonymous. The results go straight up on the screen.</p>
+
+            <div class="card" style="margin-top:26px">
+                <h3>Join the session</h3>
+                <p class="muted" style="margin:6px 0 14px">Enter the session code your lecturer put on screen.</p>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+                    <input type="text" id="codeInput" placeholder="e.g. PSYC2017" maxlength="16" autocomplete="off"
+                        autocapitalize="characters" spellcheck="false">
+                    <button class="btn accent" id="joinBtn">Start</button>
+                </div>
+            </div>
+
+            <div class="card flat">
+                <h3>Anonymous</h3>
+                <p class="muted" style="margin-top:6px">No name, email or ID is collected, and this is not an
+                    assessment. Your three numbers are stored on their own so the class pattern can be drawn.</p>
+            </div>
+
+            <p class="tiny" style="margin-top:20px">Lecturers: the projector view is at
+                <code id="classLinkHint"></code></p>
+        </section>
+
+        <!-- ============ PHASE 1A: ACTUAL ============ -->
+        <section class="screen" id="screen-actual">
+            <div class="phase">Phase 1 of 3</div>
+            <div class="bar"><i style="width:16%"></i></div>
+            <h1>How productive have you <em>actually</em> been this week?</h1>
+            <p class="lede">Go with your gut. There is no right answer.</p>
+            <div class="scale" id="scaleActual"></div>
+            <div class="scale-ends"><span>1: not at all productive</span><span>10: extremely productive</span></div>
+        </section>
+
+        <!-- ============ PHASE 1B: IDEAL OR OUGHT ============ -->
+        <section class="screen" id="screen-guide">
+            <div class="phase">Phase 2 of 3</div>
+            <div class="bar"><i style="width:50%"></i></div>
+            <h1 id="guideQuestion"></h1>
+            <p class="lede" id="guideSub"></p>
+            <div class="scale" id="scaleGuide"></div>
+            <div class="scale-ends"><span>1: not at all productive</span><span>10: extremely productive</span></div>
+            <button class="backlink" id="backToActual">Back to the previous question</button>
+        </section>
+
+        <!-- ============ PHASE 2: EMOTION ============ -->
+        <section class="screen" id="screen-emotion">
+            <div class="phase">Phase 3 of 3</div>
+            <div class="bar"><i style="width:84%"></i></div>
+            <h1>Which emotion best describes how you feel about your academic performance right now?</h1>
+            <p class="lede">Pick the closest one.</p>
+            <div class="choices" id="emotionChoices"></div>
+            <button class="backlink" id="backToGuide">Back to the previous question</button>
+        </section>
+
+        <!-- ============ DONE ============ -->
+        <section class="screen" id="screen-done">
+            <div id="doneBanner"></div>
+            <h1>That is everything. Look up at the screen.</h1>
+            <p class="lede">Your response is anonymous and is now part of the class pattern. Here is what you
+                said, for your own reference.</p>
+
+            <div class="card" style="margin-top:24px">
+                <div class="yours" id="yourNumbers"></div>
+                <p class="muted" id="yourGapLine" style="margin-top:10px"></p>
+            </div>
+
+            <div class="live"><span class="pulse"></span><span id="doneCount">Sending your response</span></div>
+
+            <div class="card flat" style="margin-top:26px">
+                <h3>What this is measuring</h3>
+                <p class="muted" style="margin-top:6px">This is a demonstration of self-discrepancy theory
+                    (Higgins, 1987). The gap between how you see yourself now and the standard you hold
+                    yourself to is thought to predict which kind of bad feeling shows up. Your lecturer will
+                    walk through the class results in a moment.</p>
+            </div>
+        </section>
+
+        <!-- ============ CLASS / PROJECTOR ============ -->
+        <section class="screen" id="screen-class">
+            <div id="classBanner"></div>
+
+            <div class="card" style="margin-bottom:22px">
+                <div class="joinbox">
+                    <div id="qr"></div>
+                    <div style="flex:1; min-width:240px">
+                        <h2>Join the demo</h2>
+                        <p class="joinurl" id="joinUrl"></p>
+                        <p class="muted" style="margin-top:8px">Session code: <strong id="classCode"></strong></p>
+                        <p class="armsplit" id="armSplit"></p>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="n-big" id="classN">0</div>
+                        <div class="tiny">responses</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="live" style="margin-bottom:16px"><span class="pulse"></span>Live: updates as students submit</div>
+
+            <!-- Panel A -->
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <div class="panel-tag">Panel A</div>
+                        <h2>The discrepancy gap</h2>
+                    </div>
+                </div>
+                <p class="muted" style="max-width:70ch">Every dot is one student. The dashed line is where the
+                    two ratings are equal. Anything above the line is a self-discrepancy: the standard sits
+                    higher than the current self.</p>
+
+                <div class="legend-keys" id="panelALegend"></div>
+
+                <div class="panel-grid" style="margin-top:8px">
+                    <div id="scatterWrap"></div>
+                    <div>
+                        <h3 style="font-size:16px; margin-bottom:6px">Average size of the gap</h3>
+                        <div id="gapBarsWrap"></div>
+                        <div id="panelAStats"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel B -->
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <div class="panel-tag">Panel B</div>
+                        <h2>Emotional profiles</h2>
+                    </div>
+                    <div class="toggle-row" id="thresholdToggle">
+                        <button data-min="0" class="on">All responses</button>
+                        <button data-min="2">Gap of 2 or more</button>
+                    </div>
+                </div>
+                <p class="muted" style="max-width:70ch">The same students, split by which standard they were
+                    asked about, and by the emotion they chose.</p>
+
+                <div class="legend-keys" id="panelBLegend"></div>
+                <div id="stackWrap" style="margin-top:6px"></div>
+                <div id="panelBCallout"></div>
+                <table class="tab" id="crossTab"></table>
+            </div>
+
+            <div class="actions">
+                <button class="btn ghost small" id="simBtn">Add 24 simulated responses</button>
+                <button class="btn ghost small" id="resetBtn">Clear this session's data</button>
+                <span class="tiny">Simulated responses are drawn on this screen only. They are never saved to
+                    the database, so refreshing removes them. "Clear" permanently deletes every real response
+                    in session <strong id="resetCode"></strong>.</span>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import {
+            getFirestore, collection, doc, setDoc, deleteDoc, getDocs, onSnapshot, serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaz1nWglmiKv9W_MrbulS__h8aieCPPE8",
+            authDomain: "meetings-b9e5e.firebaseapp.com",
+            projectId: "meetings-b9e5e",
+            storageBucket: "meetings-b9e5e.firebasestorage.app",
+            messagingSenderId: "368747163289",
+            appId: "1:368747163289:web:29719439e3b61126331208"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const ROOT = 'selfdisc_demo';
+
+        /* ============================================================
+           DEFINITIONS
+           ============================================================ */
+
+        const ARMS = {
+            ideal: {
+                label: 'Ideal',
+                question: 'How productive would you <em>like</em> to be?',
+                sub: 'Your hopes and wishes for yourself, not anyone else’s.',
+                colour: '#c8102e', shape: 'circle'
+            },
+            ought: {
+                label: 'Ought',
+                question: 'How productive do you feel you <em>should</em> be?',
+                sub: 'Based on what is expected of you, and what you see as your duties and obligations.',
+                colour: '#1a1a1a', shape: 'square'
+            }
+        };
+
+        // Stack order matters: this ordering keeps every adjacent pair separable.
+        const EMOTIONS = [
+            { key: 'anxious', label: 'Anxious / Guilty', colour: 'var(--cat-anxious)', hex: '#c8102e', family: 'agitation' },
+            { key: 'sad', label: 'Disappointed / Sad', colour: 'var(--cat-sad)', hex: '#e8677f', family: 'dejection' },
+            { key: 'motivated', label: 'Motivated', colour: 'var(--cat-motivated)', hex: '#1a1a1a', family: 'approach' },
+            { key: 'content', label: 'Content', colour: 'var(--cat-content)', hex: '#8f8f96', family: 'satisfied' }
+        ];
+        const EMO = Object.fromEntries(EMOTIONS.map(e => [e.key, e]));
+
+        /* ============================================================
+           HELPERS
+           ============================================================ */
+
+        const $ = id => document.getElementById(id);
+        const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+        const pctOf = (n, d) => d ? Math.round((n / d) * 100) : 0;
+        const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        // deterministic 0..1 from a string, so jitter never moves between renders
+        function hash01(str, salt) {
+            let h = 2166136261;
+            const s = str + '|' + salt;
+            for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+            return ((h >>> 0) % 100000) / 100000;
+        }
+
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ============================================================
+           STATE
+           ============================================================ */
+
+        const params = new URLSearchParams(location.search);
+        let sessionCode = (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 16);
+        const isClassView = params.get('view') === 'class';
+
+        let myArm = null, myActual = null, myGuide = null, myEmotion = null;
+        let responses = [], localSim = [];
+        let unsub = null, minGap = 0;
+        const allResponses = () => responses.concat(localSim);
+
+        const PID_KEY = 'selfdisc_pid', ARM_KEY = 'selfdisc_arm';
+        function pid() {
+            let v = localStorage.getItem(PID_KEY);
+            if (!v) { v = 'p' + Math.random().toString(36).slice(2, 11) + Date.now().toString(36); localStorage.setItem(PID_KEY, v); }
+            return v;
+        }
+        function assignArm() {
+            let a = localStorage.getItem(ARM_KEY);
+            if (a !== 'ideal' && a !== 'ought') {
+                a = Math.random() < 0.5 ? 'ideal' : 'ought';
+                localStorage.setItem(ARM_KEY, a);
+            }
+            return a;
+        }
+
+        /* ============================================================
+           PHASE 1 AND 2 UI
+           ============================================================ */
+
+        function buildScale(el, onPick) {
+            el.innerHTML = Array.from({ length: 10 }, (_, i) =>
+                `<button type="button" data-v="${i + 1}" aria-pressed="false"
+                         aria-label="${i + 1} out of 10">${i + 1}</button>`).join('');
+            el.addEventListener('click', e => {
+                const b = e.target.closest('button'); if (!b) return;
+                [...el.querySelectorAll('button')].forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+                setTimeout(() => onPick(parseInt(b.dataset.v, 10)), 280);
+            });
+        }
+
+        function setScaleValue(el, v) {
+            [...el.querySelectorAll('button')].forEach(b =>
+                b.setAttribute('aria-pressed', String(parseInt(b.dataset.v, 10) === v)));
+        }
+
+        function buildEmotions() {
+            $('emotionChoices').innerHTML = EMOTIONS.map(e =>
+                `<button type="button" data-k="${e.key}" aria-pressed="false">
+                   <span class="chip" style="background:${e.hex}"></span>${e.label}
+                 </button>`).join('');
+            $('emotionChoices').addEventListener('click', e => {
+                const b = e.target.closest('button'); if (!b) return;
+                [...$('emotionChoices').querySelectorAll('button')].forEach(x =>
+                    x.setAttribute('aria-pressed', String(x === b)));
+                myEmotion = b.dataset.k;
+                setTimeout(finish, 280);
+            });
+        }
+
+        /* ============================================================
+           FIRESTORE
+           ============================================================ */
+
+        const responsesCol = () => collection(db, ROOT, sessionCode, 'responses');
+
+        function fireError(err, target) {
+            const denied = /permission|insufficient/i.test((err && err.message) || '');
+            $(target).innerHTML = `<div class="banner err"><strong>Cannot reach the live database.</strong>
+              ${denied ? 'Firestore rejected the request. The security rules for this project need to allow the demo collection.' : 'Network or configuration error.'}
+              <br><span class="tiny">${esc((err && err.message) || err)}</span>
+              ${denied ? `<pre>match /${ROOT}/{session}/responses/{pid} {\n  allow read, write: if true;\n}</pre>` : ''}
+              </div>`;
+        }
+
+        async function finish() {
+            renderYours();
+            show('screen-done');
+            try {
+                await setDoc(doc(db, ROOT, sessionCode, 'responses', pid()), {
+                    arm: myArm, actual: myActual, guide: myGuide, emotion: myEmotion, ts: serverTimestamp()
+                });
+                $('doneCount').textContent = 'Your response is in';
+            } catch (err) {
+                fireError(err, 'doneBanner');
+                $('doneCount').textContent = 'Could not save your response';
+            }
+            listen(() => {
+                const n = allResponses().length;
+                $('doneCount').textContent = `${n} response${n === 1 ? '' : 's'} in so far`;
+            }, 'doneBanner');
+        }
+
+        function listen(onData, errTarget) {
+            if (unsub) unsub();
+            unsub = onSnapshot(responsesCol(), snap => {
+                responses = [];
+                snap.forEach(d => {
+                    const v = d.data();
+                    if (v && (v.arm === 'ideal' || v.arm === 'ought') &&
+                        Number.isFinite(v.actual) && Number.isFinite(v.guide) && EMO[v.emotion]) {
+                        responses.push({ id: d.id, arm: v.arm, actual: v.actual, guide: v.guide, emotion: v.emotion });
+                    }
+                });
+                onData();
+            }, err => fireError(err, errTarget));
+        }
+
+        function renderYours() {
+            const a = ARMS[myArm];
+            const gap = myGuide - myActual;
+            $('yourNumbers').innerHTML = `
+                <div><span>Actual</span><strong>${myActual}</strong></div>
+                <div><span>${a.label}</span><strong>${myGuide}</strong></div>
+                <div><span>Gap</span><strong>${gap > 0 ? '+' + gap : gap}</strong></div>
+                <div><span>Feeling</span><strong style="font-size:20px">${EMO[myEmotion].label}</strong></div>`;
+            $('yourGapLine').textContent = gap > 0
+                ? `Your ${a.label.toLowerCase()} standard sits ${gap} point${gap === 1 ? '' : 's'} above where you place yourself right now.`
+                : gap === 0
+                    ? `You placed yourself exactly at your ${a.label.toLowerCase()} standard.`
+                    : `You placed yourself above your ${a.label.toLowerCase()} standard.`;
+        }
+
+        /* ============================================================
+           PANEL A: SCATTER
+           ============================================================ */
+
+        const PA = { w: 560, h: 452, l: 54, r: 536, t: 16, b: 384 };
+        const paX = v => PA.l + ((v - 1) / 9) * (PA.r - PA.l);
+        const paY = v => PA.b - ((v - 1) / 9) * (PA.b - PA.t);
+
+        function renderScatter(rows) {
+            let s = '';
+
+            // discrepancy region (above the diagonal)
+            s += `<path d="M ${paX(1)} ${paY(1)} L ${paX(10)} ${paY(10)} L ${paX(1)} ${paY(10)} Z"
+                    fill="#c8102e" opacity="0.045"/>`;
+
+            // grid
+            for (let v = 1; v <= 10; v++) {
+                s += `<line x1="${paX(v)}" y1="${PA.t}" x2="${paX(v)}" y2="${PA.b}" stroke="#f0f0f2" stroke-width="1"/>`;
+                s += `<line x1="${PA.l}" y1="${paY(v)}" x2="${PA.r}" y2="${paY(v)}" stroke="#f0f0f2" stroke-width="1"/>`;
+            }
+
+            // axes
+            s += `<line x1="${PA.l}" y1="${PA.b}" x2="${PA.r}" y2="${PA.b}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+            s += `<line x1="${PA.l}" y1="${PA.t}" x2="${PA.l}" y2="${PA.b}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+
+            // diagonal
+            s += `<line x1="${paX(1)}" y1="${paY(1)}" x2="${paX(10)}" y2="${paY(10)}"
+                    stroke="#8a8a90" stroke-width="2" stroke-dasharray="6 5"/>`;
+            s += `<text x="${paX(2.5) + 10}" y="${paY(2.5) + 16}" font-size="12"
+                    fill="#8a8a90" font-family="Inter,sans-serif">actual equals standard</text>`;
+            s += `<text x="${paX(1.6)}" y="${paY(9.5)}" font-size="12.5" fill="#c8102e"
+                    font-family="Inter,sans-serif" font-weight="600">discrepancy</text>`;
+
+            // ticks
+            for (let v = 1; v <= 10; v++) {
+                s += `<text x="${paX(v)}" y="${PA.b + 19}" text-anchor="middle" font-size="12"
+                        fill="#8a8a90" font-family="Inter,sans-serif">${v}</text>`;
+                s += `<text x="${PA.l - 11}" y="${paY(v) + 4}" text-anchor="end" font-size="12"
+                        fill="#8a8a90" font-family="Inter,sans-serif">${v}</text>`;
+            }
+            s += `<text x="${(PA.l + PA.r) / 2}" y="${PA.b + 44}" text-anchor="middle" font-size="13"
+                    fill="#55555a" font-family="Inter,sans-serif">Actual productivity this week</text>`;
+            s += `<text x="18" y="${(PA.t + PA.b) / 2}" text-anchor="middle" font-size="13" fill="#55555a"
+                    font-family="Inter,sans-serif" transform="rotate(-90 18 ${(PA.t + PA.b) / 2})">Ideal or Ought standard</text>`;
+
+            // marks, ought drawn first so the red ideal points read on top
+            const order = [...rows].sort((p, q) => (p.arm === 'ought' ? -1 : 1));
+            for (const r of order) {
+                const jit = (v, salt) => Math.max(1, Math.min(10, v + (hash01(r.id, salt) - 0.5) * 0.42));
+                const x = paX(jit(r.actual, 'x')), y = paY(jit(r.guide, 'y'));
+                const c = ARMS[r.arm].colour;
+                s += ARMS[r.arm].shape === 'circle'
+                    ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.5" fill="${c}" fill-opacity="0.82" stroke="#fff" stroke-width="2"/>`
+                    : `<rect x="${(x - 5).toFixed(1)}" y="${(y - 5).toFixed(1)}" width="10" height="10" rx="2"
+                         fill="${c}" fill-opacity="0.82" stroke="#fff" stroke-width="2"/>`;
+            }
+
+            return `<svg class="chart" viewBox="0 0 ${PA.w} ${PA.h}" role="img"
+                      aria-label="Scatter plot of each student's actual rating against their ideal or ought standard">${s}</svg>`;
+        }
+
+        /* ============================================================
+           PANEL A: MEAN GAP BARS
+           ============================================================ */
+
+        function renderGapBars(byArm) {
+            const W = 340, rowH = 62, top = 14;
+            const maxGap = Math.max(1, ...Object.values(byArm).map(g => g.meanGap || 0));
+            const scaleMax = Math.max(2, Math.ceil(maxGap));
+            const barL = 66, barR = W - 46;
+            let s = '';
+            ['ideal', 'ought'].forEach((k, i) => {
+                const g = byArm[k];
+                const y = top + i * rowH;
+                s += `<text x="0" y="${y + 15}" font-size="13" font-weight="600" fill="#111111"
+                        font-family="Inter,sans-serif">${ARMS[k].label}</text>`;
+                s += `<text x="0" y="${y + 31}" font-size="11.5" fill="#8a8a90"
+                        font-family="Inter,sans-serif">n = ${g.n}</text>`;
+                s += `<line x1="${barL}" y1="${y + 4}" x2="${barL}" y2="${y + 34}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+                if (g.n) {
+                    const w = Math.max(2, ((g.meanGap || 0) / scaleMax) * (barR - barL));
+                    s += `<rect x="${barL}" y="${y + 7}" width="${w.toFixed(1)}" height="24" rx="4"
+                            fill="${ARMS[k].colour}"/>`;
+                    s += `<text x="${(barL + w + 9).toFixed(1)}" y="${y + 24}" font-size="14" font-weight="600"
+                            fill="#111111" font-family="Inter,sans-serif">+${g.meanGap.toFixed(1)}</text>`;
+                } else {
+                    s += `<text x="${barL + 9}" y="${y + 24}" font-size="13" fill="#8a8a90"
+                            font-family="Inter,sans-serif">no responses yet</text>`;
+                }
+            });
+            const h = top + 2 * rowH + 6;
+            s += `<text x="${barL}" y="${h - 2}" font-size="11.5" fill="#8a8a90"
+                    font-family="Inter,sans-serif">mean points above the diagonal (0 to ${scaleMax})</text>`;
+            return `<svg class="chart" viewBox="0 0 ${W} ${h + 8}" role="img"
+                      aria-label="Average discrepancy for the ideal group and the ought group">${s}</svg>`;
+        }
+
+        /* ============================================================
+           PANEL B: 100 PERCENT STACKED BARS
+           ============================================================ */
+
+        function renderStacks(byArm) {
+            const W = 760, rowH = 92, top = 10, barL = 96, barR = W - 8, barH = 46;
+            let s = '';
+            ['ideal', 'ought'].forEach((k, i) => {
+                const g = byArm[k];
+                const y = top + i * rowH;
+                s += `<text x="0" y="${y + 24}" font-size="14" font-weight="600" fill="#111111"
+                        font-family="Inter,sans-serif">${ARMS[k].label}</text>`;
+                s += `<text x="0" y="${y + 42}" font-size="11.5" fill="#8a8a90"
+                        font-family="Inter,sans-serif">n = ${g.n}</text>`;
+                if (!g.n) {
+                    s += `<rect x="${barL}" y="${y}" width="${barR - barL}" height="${barH}" rx="5"
+                            fill="#f7f7f8" stroke="#e2e2e6"/>`;
+                    s += `<text x="${barL + 14}" y="${y + 29}" font-size="13" fill="#8a8a90"
+                            font-family="Inter,sans-serif">waiting for responses</text>`;
+                    return;
+                }
+                let x = barL;
+                const total = barR - barL;
+                EMOTIONS.forEach(e => {
+                    const cnt = g.emo[e.key] || 0;
+                    if (!cnt) return;
+                    const w = (cnt / g.n) * total;
+                    const drawW = Math.max(1, w - 2); // 2px surface gap between segments
+                    s += `<rect x="${x.toFixed(1)}" y="${y}" width="${drawW.toFixed(1)}" height="${barH}" rx="4"
+                            fill="${e.hex}"/>`;
+                    const p = pctOf(cnt, g.n);
+                    if (w > 52) {
+                        const ink = e.key === 'content' || e.key === 'sad' ? '#111111' : '#ffffff';
+                        s += `<text x="${(x + drawW / 2).toFixed(1)}" y="${y + 28}" text-anchor="middle"
+                                font-size="13.5" font-weight="600" fill="${ink}"
+                                font-family="Inter,sans-serif">${p}%</text>`;
+                    }
+                    x += w;
+                });
+            });
+            const h = top + 2 * rowH;
+            return `<svg class="chart" viewBox="0 0 ${W} ${h}" role="img"
+                      aria-label="Emotion breakdown within the ideal group and the ought group">${s}</svg>`;
+        }
+
+        /* ============================================================
+           AGGREGATION
+           ============================================================ */
+
+        function summarise(rows) {
+            const out = {};
+            ['ideal', 'ought'].forEach(k => {
+                const set = rows.filter(r => r.arm === k);
+                const gaps = set.map(r => r.guide - r.actual);
+                const emo = {};
+                EMOTIONS.forEach(e => { emo[e.key] = set.filter(r => r.emotion === e.key).length; });
+                out[k] = {
+                    n: set.length,
+                    meanGap: set.length ? mean(gaps) : 0,
+                    withGap: gaps.filter(g => g > 0).length,
+                    emo
+                };
+            });
+            return out;
+        }
+
+        /* ============================================================
+           CLASS VIEW RENDER
+           ============================================================ */
+
+        function renderClass() {
+            const rows = allResponses();
+            $('classN').textContent = rows.length;
+
+            const all = summarise(rows);
+            $('armSplit').textContent = `Ideal group: ${all.ideal.n} · Ought group: ${all.ought.n}`;
+
+            // ---- Panel A ----
+            $('panelALegend').innerHTML = ['ideal', 'ought'].map(k =>
+                `<div class="key"><span class="swatch ${ARMS[k].shape === 'circle' ? 'ring' : ''}"
+                   style="background:${ARMS[k].colour}"></span>Actual vs ${ARMS[k].label}</div>`).join('') +
+                `<div class="key"><span class="swatch line"></span>Actual equals standard</div>`;
+
+            $('scatterWrap').innerHTML = renderScatter(rows);
+            $('gapBarsWrap').innerHTML = renderGapBars(all);
+
+            const stat = k => all[k].n
+                ? `<strong>${pctOf(all[k].withGap, all[k].n)}%</strong> of the ${ARMS[k].label} group rated their standard above their actual self`
+                : `No ${ARMS[k].label} responses yet`;
+            $('panelAStats').innerHTML =
+                `<p class="muted" style="margin-top:14px">${stat('ideal')}.</p>
+                 <p class="muted" style="margin-top:6px">${stat('ought')}.</p>`;
+
+            // ---- Panel B ----
+            const filtered = minGap > 0 ? rows.filter(r => (r.guide - r.actual) >= minGap) : rows;
+            const sub = summarise(filtered);
+
+            $('panelBLegend').innerHTML = EMOTIONS.map(e =>
+                `<div class="key"><span class="swatch" style="background:${e.hex}"></span>${e.label}</div>`).join('');
+            $('stackWrap').innerHTML = renderStacks(sub);
+
+            const dej = k => sub[k].n ? pctOf(sub[k].emo.sad, sub[k].n) : null;
+            const agi = k => sub[k].n ? pctOf(sub[k].emo.anxious, sub[k].n) : null;
+            const fmt = v => v === null ? 'n/a' : v + '%';
+            $('panelBCallout').innerHTML = `<div class="callout">
+                <b>Dejection</b> (disappointed or sad): Ideal ${fmt(dej('ideal'))} versus Ought ${fmt(dej('ought'))}.<br>
+                <b>Agitation</b> (anxious or guilty): Ideal ${fmt(agi('ideal'))} versus Ought ${fmt(agi('ought'))}.
+                ${minGap > 0 ? `<br><span class="tiny">Restricted to students whose gap is ${minGap} points or more.</span>` : ''}
+            </div>`;
+
+            $('crossTab').innerHTML =
+                `<thead><tr><th>Group</th>${EMOTIONS.map(e => `<th class="num">${e.label}</th>`).join('')}<th class="num">Total</th></tr></thead>
+                 <tbody>${['ideal', 'ought'].map(k => {
+                    const g = sub[k];
+                    return `<tr${g.n ? '' : ' class="hl"'}><td>${ARMS[k].label}</td>${EMOTIONS.map(e =>
+                        `<td class="num">${g.emo[e.key] || 0}${g.n ? ` <span class="tiny">(${pctOf(g.emo[e.key] || 0, g.n)}%)</span>` : ''}</td>`).join('')
+                        }<td class="num">${g.n}</td></tr>`;
+                }).join('')}</tbody>`;
+        }
+
+        /* ============================================================
+           SIMULATION (local only, never written to the database)
+           ============================================================ */
+
+        function gauss() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        }
+        const clamp10 = v => Math.max(1, Math.min(10, Math.round(v)));
+        function pick(weights) {
+            const total = Object.values(weights).reduce((a, b) => a + b, 0);
+            let r = Math.random() * total;
+            for (const [k, w] of Object.entries(weights)) { r -= w; if (r <= 0) return k; }
+            return Object.keys(weights)[0];
+        }
+
+        function addSimulated(count) {
+            for (let i = 0; i < count; i++) {
+                const arm = Math.random() < 0.5 ? 'ideal' : 'ought';
+                const actual = clamp10(5.2 + gauss() * 1.8);
+                const guide = clamp10(actual + Math.max(0, 2.6 + gauss() * 1.5));
+                const gap = guide - actual;
+                const w = gap >= 2
+                    ? (arm === 'ideal'
+                        ? { sad: 45, anxious: 15, motivated: 28, content: 12 }
+                        : { sad: 15, anxious: 48, motivated: 25, content: 12 })
+                    : { sad: 10, anxious: 10, motivated: 35, content: 45 };
+                localSim.push({
+                    id: 'sim_' + localSim.length + '_' + Math.random().toString(36).slice(2, 7),
+                    arm, actual, guide, emotion: pick(w), sim: true
+                });
+            }
+        }
+
+        /* ============================================================
+           WIRING
+           ============================================================ */
+
+        function setSession(code) {
+            sessionCode = code;
+            $('sessionTag').textContent = 'Session ' + code;
+            const u = new URL(location.href);
+            u.searchParams.set('s', code);
+            u.searchParams.delete('view');
+            history.replaceState(null, '', u);
+        }
+
+        $('joinBtn').addEventListener('click', () => {
+            const raw = $('codeInput').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            if (!raw) { $('codeInput').focus(); return; }
+            setSession(raw);
+            startSurvey();
+        });
+        $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('joinBtn').click(); });
+
+        function startSurvey() {
+            myArm = assignArm();
+            const a = ARMS[myArm];
+            $('guideQuestion').innerHTML = a.question;
+            $('guideSub').textContent = a.sub;
+            buildScale($('scaleActual'), v => { myActual = v; show('screen-guide'); });
+            buildScale($('scaleGuide'), v => { myGuide = v; show('screen-emotion'); });
+            buildEmotions();
+            show('screen-actual');
+        }
+
+        $('backToActual').addEventListener('click', () => {
+            setScaleValue($('scaleActual'), myActual);
+            show('screen-actual');
+        });
+        $('backToGuide').addEventListener('click', () => {
+            setScaleValue($('scaleGuide'), myGuide);
+            show('screen-guide');
+        });
+
+        $('thresholdToggle').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            minGap = parseInt(b.dataset.min, 10);
+            [...$('thresholdToggle').children].forEach(c => c.classList.toggle('on', c === b));
+            renderClass();
+        });
+
+        function startClassView() {
+            $('wrap').classList.add('wide');
+            $('sessionTag').textContent = 'Session ' + sessionCode;
+            $('classCode').textContent = sessionCode;
+            $('resetCode').textContent = sessionCode;
+            const join = location.origin + location.pathname + '?s=' + encodeURIComponent(sessionCode);
+            $('joinUrl').textContent = join.replace(/^https?:\/\//, '');
+            if (typeof QRCode !== 'undefined') {
+                new QRCode($('qr'), { text: join, width: 176, height: 176, colorDark: '#111111', colorLight: '#ffffff' });
+            } else {
+                $('qr').innerHTML = '<span class="tiny" style="display:block;width:176px">QR unavailable. Share the link.</span>';
+            }
+            const preseed = parseInt(params.get('sim') || '0', 10);
+            if (preseed > 0) addSimulated(Math.min(400, preseed));
+            show('screen-class');
+            renderClass();
+            listen(renderClass, 'classBanner');
+        }
+
+        $('simBtn').addEventListener('click', () => { addSimulated(24); renderClass(); });
+
+        $('resetBtn').addEventListener('click', async () => {
+            if (!confirm(`Permanently delete all ${responses.length} saved responses in session ${sessionCode}? This cannot be undone.`)) return;
+            $('resetBtn').disabled = true;
+            localSim = [];
+            renderClass();
+            try {
+                const snap = await getDocs(responsesCol());
+                for (const d of snap.docs) await deleteDoc(doc(db, ROOT, sessionCode, 'responses', d.id));
+            } catch (err) { fireError(err, 'classBanner'); }
+            $('resetBtn').disabled = false;
+        });
+
+        /* ---- boot ---- */
+        $('classLinkHint').textContent = location.pathname + '?view=class&s=CODE';
+        if (sessionCode) {
+            setSession(sessionCode);
+            if (isClassView) startClassView(); else startSurvey();
+        } else {
+            $('sessionTag').textContent = 'No session';
+            $('codeInput').focus();
+        }
+    </script>
+</body>
+
+</html>
