@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Big 5 and the Self — Teaching demo</title>
+    <title>Big 5 and the Self: Teaching demo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -236,7 +236,7 @@
     <header class="top">
         <div class="top-inner">
             <div class="brand">Big 5 and the Self<span>Teaching demo</span></div>
-            <div class="session-tag" id="sessionTag">—</div>
+            <div class="session-tag" id="sessionTag"></div>
         </div>
     </header>
 
@@ -247,7 +247,7 @@
             <h1>Where do you think you sit?</h1>
             <p class="lede">First you'll place yourself on a bell curve for each of the Big Five personality
                 traits. Then you'll complete the Mini-IPIP, a 20-item personality measure. Finally you'll see
-                how your self-estimate compares to your measured score — and to the rest of the class, live.</p>
+                how your self-estimate compares to your measured score, and to the rest of the class, live.</p>
 
             <div class="card" style="margin-top:26px">
                 <h3>Join the session</h3>
@@ -273,7 +273,7 @@
         <!-- ============ SELF-RATING ============ -->
         <section class="screen" id="screen-self">
             <div class="stepper" id="stepper1"></div>
-            <h1>Step 1 — Rate yourself</h1>
+            <h1>Step 1: Rate yourself</h1>
             <p class="lede">For each trait, drag the marker to where you think you fall <em>compared with other
                     people</em>. The curve shows how the trait is distributed in the population: most people
                 sit near the middle, very few at the extremes.</p>
@@ -287,9 +287,9 @@
         <!-- ============ MINI-IPIP ============ -->
         <section class="screen" id="screen-ipip">
             <div class="stepper" id="stepper2"></div>
-            <h1>Step 2 — The Mini-IPIP</h1>
+            <h1>Step 2: The Mini-IPIP</h1>
             <p class="lede">How accurately does each statement describe you <em>as you generally are now</em>,
-                compared with other people you know of the same sex and roughly your age? Be honest — nobody
+                compared with other people you know of the same sex and roughly your age? Be honest: nobody
                 sees your individual answers.</p>
 
             <div class="scale-legend">
@@ -318,7 +318,7 @@
         <section class="screen" id="screen-results">
             <div class="stepper" id="stepper3"></div>
             <div id="resultsBanner"></div>
-            <h1>Step 3 — You and the class</h1>
+            <h1>Step 3: You and the class</h1>
             <p class="lede">The dashed line is the theoretical bell curve. The shaded curve is
                 <strong>your class</strong>, redrawn every time somebody submits. Each dot is one person.</p>
 
@@ -343,7 +343,7 @@
             <div class="card">
                 <h2>Self-estimate vs. measured</h2>
                 <p class="muted" style="margin-bottom:14px">A positive gap means you placed yourself higher than the
-                    questionnaire did. Watch what the class average does — the "better-than-average effect" is one of
+                    questionnaire did. Watch what the class average does: the "better-than-average effect" is one of
                     the most reliable findings in social psychology.</p>
                 <table class="gap" id="gapTable"></table>
             </div>
@@ -352,7 +352,7 @@
                 <p class="tiny">Percentiles for the Mini-IPIP are calculated against indicative published means and
                     standard deviations from undergraduate samples (Donnellan et al., 2006), so they are approximate.
                     Your rank <em>within this class</em> is calculated directly from the responses shown.
-                    A 20-item screener is far too short for any individual decision — it is used here purely to make
+                    A 20-item screener is far too short for any individual decision. It is used here purely to make
                     the distribution visible.</p>
             </div>
         </section>
@@ -376,7 +376,7 @@
             </div>
 
             <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:14px">
-                <div class="live"><span class="pulse"></span>Live — updates as students submit</div>
+                <div class="live"><span class="pulse"></span>Live: updates as students submit</div>
                 <div class="toggle-row" id="classToggle">
                     <button data-set="ipip" class="on">Measured (Mini-IPIP)</button>
                     <button data-set="self">Self-ratings</button>
@@ -394,7 +394,7 @@
             <div class="actions">
                 <button class="btn ghost small" id="simBtn">Add 20 simulated responses</button>
                 <button class="btn ghost small" id="resetBtn">Clear this session's data</button>
-                <span class="tiny">Simulated responses are drawn on this screen only — they are never saved to the
+                <span class="tiny">Simulated responses are drawn on this screen only. They are never saved to the
                     database, so refreshing removes them. "Clear" permanently deletes every <em>real</em>
                     response in session <strong id="resetCode"></strong>.</span>
             </div>
@@ -427,27 +427,27 @@
         const TRAITS = [
             {
                 key: 'O', name: 'Openness to Experience',
-                def: 'Curious, imaginative, drawn to ideas and new experiences — versus practical, conventional and happy with the familiar.',
+                def: 'Curious, imaginative, drawn to ideas and new experiences, versus practical, conventional and happy with the familiar.',
                 lo: 'Practical, conventional', hi: 'Curious, imaginative'
             },
             {
                 key: 'C', name: 'Conscientiousness',
-                def: 'Organised, dependable and self-disciplined — versus spontaneous, flexible and less bothered by structure.',
+                def: 'Organised, dependable and self-disciplined, versus spontaneous, flexible and less bothered by structure.',
                 lo: 'Spontaneous, flexible', hi: 'Organised, disciplined'
             },
             {
                 key: 'E', name: 'Extraversion',
-                def: 'Outgoing, talkative and energised by company — versus reserved, quiet and happier in small settings.',
+                def: 'Outgoing, talkative and energised by company, versus reserved, quiet and happier in small settings.',
                 lo: 'Reserved, quiet', hi: 'Outgoing, sociable'
             },
             {
                 key: 'A', name: 'Agreeableness',
-                def: 'Warm, trusting and cooperative — versus direct, sceptical and comfortable with competition.',
+                def: 'Warm, trusting and cooperative, versus direct, sceptical and comfortable with competition.',
                 lo: 'Direct, sceptical', hi: 'Warm, cooperative'
             },
             {
                 key: 'N', name: 'Neuroticism',
-                def: 'Reacts strongly to stress and moods shift readily — versus calm, even-tempered and hard to rattle.',
+                def: 'Reacts strongly to stress and moods shift readily, versus calm, even-tempered and hard to rattle.',
                 lo: 'Calm, even-tempered', hi: 'Reactive, moods shift'
             }
         ];
@@ -676,7 +676,7 @@
         }
 
         /* ============================================================
-           SCREEN 1 — SELF RATING
+           SCREEN 1: SELF RATING
            ============================================================ */
 
         function buildSelfCards() {
@@ -725,11 +725,11 @@
             const n = TRAITS.filter(t => touched[t.key]).length;
             const ok = n === TRAITS.length;
             $('toIpipBtn').disabled = !ok;
-            $('selfHint').textContent = ok ? 'All five placed — nice.' : `${TRAITS.length - n} trait${TRAITS.length - n === 1 ? '' : 's'} still to place.`;
+            $('selfHint').textContent = ok ? 'All five placed.' : `${TRAITS.length - n} trait${TRAITS.length - n === 1 ? '' : 's'} still to place.`;
         }
 
         /* ============================================================
-           SCREEN 2 — MINI-IPIP
+           SCREEN 2: MINI-IPIP
            ============================================================ */
 
         function buildItems() {
@@ -740,7 +740,7 @@
                   ${[1, 2, 3, 4, 5].map(v => `
                     <label class="opt" data-n="${v}" title="${['Very inaccurate', 'Moderately inaccurate', 'Neither', 'Moderately accurate', 'Very accurate'][v - 1]}">
                       <input type="radio" name="i${i}" value="${v}"
-                             aria-label="${it.text} — ${['Very inaccurate', 'Moderately inaccurate', 'Neither', 'Moderately accurate', 'Very accurate'][v - 1]}">
+                             aria-label="${it.text}: ${['Very inaccurate', 'Moderately inaccurate', 'Neither', 'Moderately accurate', 'Very accurate'][v - 1]}">
                     </label>`).join('')}
                 </div>
               </div>`).join('');
@@ -779,7 +779,7 @@
             const denied = /permission|insufficient/i.test(err && err.message || '');
             const rules = `match /${ROOT}/{session}/responses/{pid} {\n  allow read, write: if true;\n}`;
             $(target).innerHTML = `<div class="banner err"><strong>Can't reach the live database.</strong>
-              ${denied ? 'Firestore rejected the request — the security rules for this project need to allow the demo collection.' : 'Network or configuration error.'}
+              ${denied ? 'Firestore rejected the request. The security rules for this project need to allow the demo collection.' : 'Network or configuration error.'}
               <br><span class="tiny">${(err && err.message || err)}</span>
               ${denied ? `<pre>rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    ${rules.split('\n').join('\n    ')}\n  }\n}</pre>` : ''}
               </div>`;
@@ -820,7 +820,7 @@
         function renderResults() {
             const n = allResponses().length;
             $('liveCount').textContent = n === 0 ? 'Waiting for responses…'
-                : `${n} response${n === 1 ? '' : 's'} in — curve updates live`;
+                : `${n} response${n === 1 ? '' : 's'} in, curve updates live`;
 
             $('resultCards').innerHTML = TRAITS.map(t => {
                 const d = traitData(t.key);
@@ -862,10 +862,10 @@
                     const mine = myIpipScores ? zFromScore(t.key, myIpipScores[t.key]) : null;
                     const g = mine === null ? null : pct(selfZ[t.key]) - pct(mine);
                     mineCells = `<td class="num">${ordinal(pct(selfZ[t.key]))}</td>
-                                 <td class="num">${mine === null ? '—' : ordinal(pct(mine))}</td>
-                                 <td class="num">${g === null ? '—' : `<span class="${g >= 0 ? 'delta-up' : 'delta-dn'}">${g > 0 ? '+' : ''}${g}</span>`}</td>`;
+                                 <td class="num">${mine === null ? 'n/a' : ordinal(pct(mine))}</td>
+                                 <td class="num">${g === null ? 'n/a' : `<span class="${g >= 0 ? 'delta-up' : 'delta-dn'}">${g > 0 ? '+' : ''}${g}</span>`}</td>`;
                 }
-                const cg = classGap === null ? '—' :
+                const cg = classGap === null ? 'n/a' :
                     `<span class="${classGap >= 0 ? 'delta-up' : 'delta-dn'}">${classGap > 0 ? '+' : ''}${(classGap).toFixed(2)} SD</span>`;
                 return `<tr><td>${t.name}</td>${mineCells}<td class="num">${cg}</td></tr>`;
             }).join('');
@@ -889,7 +889,7 @@
                 return `<div class="card">
                     <div class="trait-head">
                       <div class="trait-name">${t.name}</div>
-                      <div class="readout">${ci === null ? '—' : 'class mean ' + ordinal(pct(ci)) + ' pctile'}</div>
+                      <div class="readout">${ci === null ? 'n/a' : 'class mean ' + ordinal(pct(ci)) + ' pctile'}</div>
                     </div>
                     <div class="curve-wrap">${chart}</div>
                     <p class="tiny" style="margin-top:6px">
@@ -981,7 +981,7 @@
             if (typeof QRCode !== 'undefined') {
                 new QRCode($('qr'), { text: join, width: 176, height: 176, colorDark: '#111111', colorLight: '#ffffff' });
             } else {
-                $('qr').innerHTML = '<span class="tiny" style="display:block;width:176px">QR unavailable — share the link.</span>';
+                $('qr').innerHTML = '<span class="tiny" style="display:block;width:176px">QR unavailable. Share the link.</span>';
             }
             const preseed = parseInt(params.get('sim') || '0', 10);
             if (preseed > 0) addSimulated(Math.min(300, preseed));
