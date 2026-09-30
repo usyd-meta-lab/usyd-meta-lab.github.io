@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USYD Meta Lab — Recruitment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<style>
+:root {
+  --color-bg:        #fcf6ef;
+  --color-bg-warm:   #f6f0e9;
+  --color-bg-card:   #f0e8dd;
+  --color-bg-dark:   #2b180a;
+  --color-text:      #2b180a;
+  --color-text-muted:#6b5a4a;
+  --color-text-light:#9a8a7a;
+  --color-accent:    #c8956c;
+  --color-accent-h:  #b07a52;
+  --color-border:    #e0d4c6;
+  --font-display:    'Playfair Display', Georgia, serif;
+  --font-body:       'Inter', -apple-system, sans-serif;
+  --font-logo:       'Caveat', cursive;
+  --ease:            cubic-bezier(0.16,1,0.3,1);
+  --container:       1100px;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; -webkit-font-smoothing:antialiased; }
+body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-text); line-height:1.6; }
+a { color:inherit; text-decoration:none; }
+.container {
+  max-width:var(--container); margin:0 auto; padding:0 24px 96px;
+  min-height:100vh; display:flex; flex-direction:column; padding-top:96px;
+}
+
+.nav-logo {
+  display:inline-flex; align-items:center; gap:10px;
+  position:absolute; top:28px; left:40px;
+  text-decoration:none; color:var(--color-text);
+  transition:opacity 0.3s;
+}
+.nav-logo:hover { opacity:0.7; }
+.nav-logo-mark {
+  width:36px; height:36px; flex-shrink:0;
+}
+.nav-logo-mark svg { width:100%; height:100%; }
+.nav-logo-wordmark { display:flex; flex-direction:column; line-height:1; }
+.nav-logo-name {
+  font-family:var(--font-logo); font-size:1.25rem; font-weight:700;
+  color:var(--color-text);
+}
+.nav-logo-sub {
+  font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--color-text-muted); margin-top:2px;
+}
+@media(max-width:600px){ .nav-logo { left:24px; } }
+
+.page-header {
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:14px; padding:48px 0;
+}
+.page-icon { width:56px; height:56px; color:var(--color-accent); display:flex; }
+.page-icon svg { width:100%; height:100%; }
+.page-title {
+  font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem);
+  font-weight:500; line-height:1.15; letter-spacing:-0.03em;
+}
+.page-desc { font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:600px; }
+.page-close {
+  position:absolute; top:24px; right:40px;
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--color-border); background:var(--color-bg-warm);
+  color:var(--color-text-muted);
+  transition:all 0.3s var(--ease);
+}
+.page-close:hover { color:var(--color-text); border-color:var(--color-accent); transform:rotate(90deg); }
+.page-close:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
+.page-close svg { width:18px; height:18px; }
+@media(max-width:600px){ .page-close { right:24px; } }
+
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 20px 10px 22px; border-radius:100px; font-size:0.85rem; font-weight:500;
+  border:1.5px solid var(--color-border); background:var(--color-bg-warm);
+  transition:all 0.3s var(--ease);
+}
+.btn:hover { border-color:var(--color-accent); transform:translateY(-1px); }
+.ext-icon { width:14px; height:14px; opacity:0.7; transition:transform 0.3s var(--ease), opacity 0.3s; }
+.btn:hover .ext-icon { transform:translate(2px,-2px); opacity:1; }
+.btn--dark { background:var(--color-bg-dark); color:var(--color-bg); border-color:var(--color-bg-dark); }
+.btn--dark:hover { background:#3d2a18; border-color:#3d2a18; }
+
+.app-list { display:flex; flex-direction:column; gap:20px; }
+.app-card {
+  border:1px solid var(--color-border); border-radius:20px; padding:28px;
+  box-shadow:0 8px 24px rgba(43,24,10,0.04);
+}
+.app-card--gold { background:linear-gradient(180deg, rgba(250,240,222,0.98), rgba(252,246,239,0.96)); }
+.app-card--warm { background:linear-gradient(180deg, rgba(255,244,233,0.98), rgba(252,246,239,0.96)); }
+.app-card--rose { background:linear-gradient(180deg, rgba(250,236,232,0.98), rgba(252,246,239,0.96)); }
+.app-card--sage { background:linear-gradient(180deg, rgba(238,244,236,0.98), rgba(252,246,239,0.96)); }
+.app-code {
+  display:inline-block; margin-bottom:8px;
+  font-size:0.76rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--color-accent);
+}
+.app-card h3 {
+  font-family:var(--font-display); font-size:1.3rem; font-weight:500;
+  line-height:1.25; letter-spacing:-0.02em; margin-bottom:8px;
+}
+.app-card > p { font-size:0.92rem; line-height:1.7; color:var(--color-text-muted); margin-bottom:20px; max-width:720px; }
+.app-list { max-width:760px; margin:0 auto; }
+@media(max-width:600px){ .app-card { padding:20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="hub.html" class="nav-logo" aria-label="Back to hub">
+    <span class="nav-logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+        <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+        <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+        <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+      </svg>
+    </span>
+    <span class="nav-logo-wordmark">
+      <span class="nav-logo-name">Meta Lab</span>
+      <span class="nav-logo-sub">University of Sydney</span>
+    </span>
+  </a>
+
+  <a href="hub.html" class="page-close" aria-label="Close and return to hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+
+  <div class="page-header">
+    <span class="page-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+    <h1 class="page-title">Recruitment</h1>
+  </div>
+
+  <div class="app-list">
+    <article class="app-card app-card--gold">
+      <span class="app-code">Participant pool</span>
+      <h3>SONA</h3>
+      <p>The School’s participant pool. Recruit USYD Psychology students, who take part in studies for course credit.</p>
+      <a class="btn btn--dark" href="https://sydneypsych.sona-systems.com/" target="_blank" rel="noopener">Open SONA<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+    </article>
+
+    <article class="app-card app-card--warm">
+      <span class="app-code">Paid online</span>
+      <h3>Prolific</h3>
+      <p>Recruit paid participants online when you need people beyond the student pool.</p>
+      <a class="btn btn--dark" href="https://prolific.com" target="_blank" rel="noopener">Open Prolific<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+    </article>
+
+    <article class="app-card app-card--rose">
+      <span class="app-code">In-person testing</span>
+      <h3>Resource Booker</h3>
+      <p>Book School of Psychology testing rooms if you’re running participants in person.</p>
+      <a class="btn btn--dark" href="https://unisyd.sharepoint.com/teams/SchoolofPsychologyResourceBooker" target="_blank" rel="noopener">Book a room<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+    </article>
+  </div>
+</div>
+
+</body>
+</html>

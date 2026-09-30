@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USYD Meta Lab — Ethics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<style>
+:root {
+  --color-bg:        #fcf6ef;
+  --color-bg-warm:   #f6f0e9;
+  --color-bg-card:   #f0e8dd;
+  --color-bg-dark:   #2b180a;
+  --color-text:      #2b180a;
+  --color-text-muted:#6b5a4a;
+  --color-text-light:#9a8a7a;
+  --color-accent:    #c8956c;
+  --color-accent-h:  #b07a52;
+  --color-border:    #e0d4c6;
+  --font-display:    'Playfair Display', Georgia, serif;
+  --font-body:       'Inter', -apple-system, sans-serif;
+  --font-logo:       'Caveat', cursive;
+  --ease:            cubic-bezier(0.16,1,0.3,1);
+  --container:       1100px;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; -webkit-font-smoothing:antialiased; }
+body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-text); line-height:1.6; }
+a { color:inherit; text-decoration:none; }
+.container {
+  max-width:var(--container); margin:0 auto; padding:0 24px 96px;
+  min-height:100vh; display:flex; flex-direction:column; padding-top:96px;
+}
+
+.nav-logo {
+  display:inline-flex; align-items:center; gap:10px;
+  position:absolute; top:28px; left:40px;
+  text-decoration:none; color:var(--color-text);
+  transition:opacity 0.3s;
+}
+.nav-logo:hover { opacity:0.7; }
+.nav-logo-mark {
+  width:36px; height:36px; flex-shrink:0;
+}
+.nav-logo-mark svg { width:100%; height:100%; }
+.nav-logo-wordmark { display:flex; flex-direction:column; line-height:1; }
+.nav-logo-name {
+  font-family:var(--font-logo); font-size:1.25rem; font-weight:700;
+  color:var(--color-text);
+}
+.nav-logo-sub {
+  font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--color-text-muted); margin-top:2px;
+}
+@media(max-width:600px){ .nav-logo { left:24px; } }
+
+.page-header {
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:14px; padding:48px 0;
+}
+.page-icon { width:56px; height:56px; color:var(--color-accent); display:flex; }
+.page-icon svg { width:100%; height:100%; }
+.page-title {
+  font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem);
+  font-weight:500; line-height:1.15; letter-spacing:-0.03em;
+}
+.page-desc { font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:600px; }
+.page-close {
+  position:absolute; top:24px; right:40px;
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--color-border); background:var(--color-bg-warm);
+  color:var(--color-text-muted);
+  transition:all 0.3s var(--ease);
+}
+.page-close:hover { color:var(--color-text); border-color:var(--color-accent); transform:rotate(90deg); }
+.page-close:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
+.page-close svg { width:18px; height:18px; }
+@media(max-width:600px){ .page-close { right:24px; } }
+
+.ethics-intro {
+  max-width:720px; margin:0 auto 32px; text-align:center;
+  font-size:0.95rem; line-height:1.75; color:var(--color-text-muted);
+}
+.ethics-intro a { color:var(--color-accent); font-weight:500; }
+.ethics-intro a:hover { color:var(--color-accent-h); }
+.ethics-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:56px; }
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 20px 10px 22px; border-radius:100px; font-size:0.85rem; font-weight:500;
+  border:1.5px solid var(--color-border); background:var(--color-bg-warm);
+  transition:all 0.3s var(--ease);
+}
+.btn:hover { border-color:var(--color-accent); transform:translateY(-1px); }
+.ext-icon { width:14px; height:14px; opacity:0.7; transition:transform 0.3s var(--ease), opacity 0.3s; }
+.btn:hover .ext-icon { transform:translate(2px,-2px); opacity:1; }
+.btn--dark { background:var(--color-bg-dark); color:var(--color-bg); border-color:var(--color-bg-dark); }
+.btn--dark:hover { background:#3d2a18; border-color:#3d2a18; }
+
+.section-title {
+  font-family:var(--font-display); font-size:1.5rem; font-weight:500;
+  letter-spacing:-0.02em; margin-bottom:20px;
+}
+.app-list { display:flex; flex-direction:column; gap:20px; }
+.app-card {
+  border:1px solid var(--color-border); border-radius:20px; padding:28px;
+  box-shadow:0 8px 24px rgba(43,24,10,0.04);
+}
+.app-card--gold { background:linear-gradient(180deg, rgba(250,240,222,0.98), rgba(252,246,239,0.96)); }
+.app-card--warm { background:linear-gradient(180deg, rgba(255,244,233,0.98), rgba(252,246,239,0.96)); }
+.app-card--rose { background:linear-gradient(180deg, rgba(250,236,232,0.98), rgba(252,246,239,0.96)); }
+.app-card--sage { background:linear-gradient(180deg, rgba(238,244,236,0.98), rgba(252,246,239,0.96)); }
+.app-code {
+  display:inline-block; margin-bottom:8px;
+  font-size:0.76rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--color-accent);
+}
+.app-card h3 {
+  font-family:var(--font-display); font-size:1.3rem; font-weight:500;
+  line-height:1.25; letter-spacing:-0.02em; margin-bottom:8px;
+}
+.app-card > p { font-size:0.92rem; line-height:1.7; color:var(--color-text-muted); margin-bottom:20px; max-width:720px; }
+.file-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:10px;
+  list-style:none;
+}
+.file-grid a {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border:1px solid var(--color-border); border-radius:14px;
+  background:rgba(252,246,239,0.9);
+  font-size:0.85rem; font-weight:500; color:var(--color-text);
+  transition:all 0.3s var(--ease);
+}
+.file-grid a:hover { border-color:var(--color-accent); transform:translateY(-1px); }
+.file-grid svg { width:16px; height:16px; flex:0 0 16px; color:var(--color-accent); }
+@media(max-width:600px){ .app-card { padding:20px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="hub.html" class="nav-logo" aria-label="Back to hub">
+    <span class="nav-logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+        <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+        <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+        <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+      </svg>
+    </span>
+    <span class="nav-logo-wordmark">
+      <span class="nav-logo-name">Meta Lab</span>
+      <span class="nav-logo-sub">University of Sydney</span>
+    </span>
+  </a>
+
+  <a href="hub.html" class="page-close" aria-label="Close and return to hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+
+  <div class="page-header">
+    <span class="page-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
+    <h1 class="page-title">Ethics</h1>
+  </div>
+
+  <p class="ethics-intro">Umbrella ethics applications. Before you use any participant information sheet, run it through the <a href="https://usyd-meta-lab.github.io/PIS/" target="_blank" rel="noopener">PIS updater</a> to add yourself as an investigator and refresh the version and date automatically.</p>
+
+
+  <div class="ethics-actions">
+    <a class="btn btn--dark" href="https://ethics.myresearch.sydney.edu.au" target="_blank" rel="noopener">myResearch Ethics<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+    <a class="btn" href="https://usyd-meta-lab.github.io/PIS/" target="_blank" rel="noopener">PIS updater<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+  </div>
+
+  <h2 class="section-title">Umbrella applications</h2>
+  <div class="app-list">
+    <article class="app-card app-card--gold">
+      <span class="app-code">2025/HE001700</span>
+      <h3>Within-person Changes in Cognitive Performance</h3>
+      <p>EMA/ESM studies on how cognitive and metacognitive performance fluctuate over time and which internal and external factors predict those changes.</p>
+      <ul class="file-grid">
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03%20-%20V2.%20project-description-template.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Project description</a></li>
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03%20-%20Consent_Form%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Consent form</a></li>
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700%20-%20PIS_SONA%20%28CLEAN%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>PIS SONA</a></li>
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700%20-%20PIS_Prolific%20%28CLEAN%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>PIS Prolific</a></li>
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03%20-%20SONA_recruitment%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>SONA recruitment</a></li>
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03%20-%20Prolific_recruitment%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Prolific recruitment</a></li>
+        <li><a href="ethics/EMA-Studies-2025_HE001700/2025_HE001700_v0_03%20-%20Appendix_measures.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Appendix measures</a></li>
+      </ul>
+    </article>
+
+    <article class="app-card app-card--warm">
+      <span class="app-code">2022/796</span>
+      <h3>Using metacognitive self-evaluation to improve cognitive performance</h3>
+      <p>Studies on how self-evaluation changes cognitive performance and how self-assessment can be designed to work more effectively.</p>
+      <ul class="file-grid">
+        <li><a href="ethics/Lab-Online-Studies%202022_796/Application%20Form.doc" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Application form</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/V2.%20Advertisements%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Advertisements</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/2022_HE000796%20-%20PIS%20Paid%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Participant information sheet - Prolific</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/2022_HE000796%20-%20PIS%20SONA%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Participant information sheet - SONA</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/2022_HE000796%20-%20PIS%20Unpaid%20%28clean%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Participant information sheet - Unpaid</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/V2%20Debrief.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Debrief</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/V7%20Survey%20Measures_CLEAN.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Survey measures</a></li>
+        <li><a href="ethics/Lab-Online-Studies%202022_796/V6%20Appendix%20Cognitive%20Tasks_CLEAN.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Cognitive tasks</a></li>
+      </ul>
+    </article>
+
+    <article class="app-card app-card--rose">
+      <span class="app-code">2022/HE000239</span>
+      <h3>Extrinsic Emotion Regulation Strategies and Perceived Efficacy</h3>
+      <p>Studies on how emotional intensity, feedback, and closeness shape emotion regulation strategy choice and perceived effectiveness.</p>
+      <ul class="file-grid">
+        <li><a href="ethics/Project%202022_HE000239/2022__239.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Application form</a></li>
+        <li><a href="ethics/Project%202022_HE000239/2022__239%20%28mod%20request%29.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Amendment request</a></li>
+        <li><a href="ethics/Project%202022_HE000239/2022_HE000239%20-%20PIS%20Paid.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>PIS paid</a></li>
+        <li><a href="ethics/Project%202022_HE000239/2022_HE000239%20-%20PIS%20SONA.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>PIS SONA</a></li>
+        <li><a href="ethics/Project%202022_HE000239/Advertisements_TMPHEC1XCziw3ahuap202296121922.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Advertisements</a></li>
+        <li><a href="ethics/Project%202022_HE000239/DebriefStatement_TMPHEC4wdNqpMFN83a202296121922.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Debrief statement</a></li>
+        <li><a href="ethics/Project%202022_HE000239/EmotionRegulationTask_TMPHEC3h9HMwACzDB0202296121922.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Emotion regulation task</a></li>
+        <li><a href="ethics/Project%202022_HE000239/HREC%20Form.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>HREC form</a></li>
+        <li><a href="ethics/Project%202022_HE000239/IAPSimages_TMPHEC1pCTsh7OOYVX202296122135.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>IAPS images</a></li>
+        <li><a href="ethics/Project%202022_HE000239/SurveyContent_TMPHEC7dDPAJI5gNdn202296121922.docx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>Survey content</a></li>
+      </ul>
+    </article>
+  </div>
+</div>
+
+</body>
+</html>

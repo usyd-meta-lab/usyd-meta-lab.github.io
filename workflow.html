@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USYD Meta Lab — Workflow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<style>
+:root {
+  --color-bg:        #fcf6ef;
+  --color-bg-warm:   #f6f0e9;
+  --color-bg-card:   #f0e8dd;
+  --color-bg-dark:   #2b180a;
+  --color-text:      #2b180a;
+  --color-text-muted:#6b5a4a;
+  --color-text-light:#9a8a7a;
+  --color-accent:    #c8956c;
+  --color-accent-h:  #b07a52;
+  --color-border:    #e0d4c6;
+  --font-display:    'Playfair Display', Georgia, serif;
+  --font-body:       'Inter', -apple-system, sans-serif;
+  --font-logo:       'Caveat', cursive;
+  --ease:            cubic-bezier(0.16,1,0.3,1);
+  --container:       1100px;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; -webkit-font-smoothing:antialiased; }
+body { font-family:var(--font-body); background:var(--color-bg); color:var(--color-text); line-height:1.6; }
+a { color:inherit; text-decoration:none; }
+.container {
+  max-width:var(--container); margin:0 auto; padding:0 24px 96px;
+  min-height:100vh; display:flex; flex-direction:column; padding-top:96px;
+}
+
+.nav-logo {
+  display:inline-flex; align-items:center; gap:10px;
+  position:absolute; top:28px; left:40px;
+  text-decoration:none; color:var(--color-text);
+  transition:opacity 0.3s;
+}
+.nav-logo:hover { opacity:0.7; }
+.nav-logo-mark {
+  width:36px; height:36px; flex-shrink:0;
+}
+.nav-logo-mark svg { width:100%; height:100%; }
+.nav-logo-wordmark { display:flex; flex-direction:column; line-height:1; }
+.nav-logo-name {
+  font-family:var(--font-logo); font-size:1.25rem; font-weight:700;
+  color:var(--color-text);
+}
+.nav-logo-sub {
+  font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--color-text-muted); margin-top:2px;
+}
+@media(max-width:600px){ .nav-logo { left:24px; } }
+
+.page-header {
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:14px; padding:48px 0;
+}
+.page-icon { width:56px; height:56px; color:var(--color-accent); display:flex; }
+.page-icon svg { width:100%; height:100%; }
+.page-title {
+  font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem);
+  font-weight:500; line-height:1.15; letter-spacing:-0.03em;
+}
+.page-desc { font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:600px; }
+.page-close {
+  position:absolute; top:24px; right:40px;
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--color-border); background:var(--color-bg-warm);
+  color:var(--color-text-muted);
+  transition:all 0.3s var(--ease);
+}
+.page-close:hover { color:var(--color-text); border-color:var(--color-accent); transform:rotate(90deg); }
+.page-close:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
+.page-close svg { width:18px; height:18px; }
+@media(max-width:600px){ .page-close { right:24px; } }
+.workflow {
+  display:grid; grid-template-columns:220px minmax(0, 1fr); gap:56px;
+  max-width:960px; margin:0 auto; width:100%;
+}
+/* Timeline / TOC */
+.toc { position:sticky; top:32px; align-self:start; }
+.toc-label {
+  font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--color-accent); margin-bottom:14px;
+}
+.toc ol { list-style:none; position:relative; }
+.toc ol::before {
+  content:""; position:absolute; left:5px; top:10px; bottom:10px;
+  width:1px; background:var(--color-border);
+}
+.toc a {
+  position:relative; display:flex; align-items:center; gap:14px;
+  padding:6px 0; font-size:0.85rem; color:var(--color-text-light);
+  transition:color 0.25s;
+}
+.toc a::before {
+  content:""; flex:0 0 11px; height:11px; border-radius:50%;
+  background:var(--color-bg); border:1.5px solid var(--color-border);
+  position:relative; z-index:1;
+  transition:all 0.3s var(--ease);
+}
+.toc a:hover { color:var(--color-text); }
+.toc a.done { color:var(--color-text-muted); }
+.toc a.done::before { border-color:var(--color-accent); }
+.toc a.active { color:var(--color-text); font-weight:500; }
+.toc a.active::before { background:var(--color-accent); border-color:var(--color-accent); transform:scale(1.25); }
+.toc a:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; border-radius:6px; }
+
+/* Stages */
+.stages { list-style:none; }
+.stage {
+  scroll-margin-top:32px;
+  padding:28px 0 64px; border-top:1px solid var(--color-border);
+}
+.stage:first-child { border-top:0; padding-top:0; }
+.stage h2 {
+  font-family:var(--font-display); font-size:1.6rem; font-weight:500;
+  letter-spacing:-0.02em; line-height:1.25;
+}
+@media(max-width:800px){
+  .workflow { grid-template-columns:1fr; }
+  .toc { display:none; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior:smooth; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="hub.html" class="nav-logo" aria-label="Back to hub">
+    <span class="nav-logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M28 62 Q14 60 14 46 Q14 34 24 30 Q24 18 36 18 Q40 12 50 14 Q60 12 64 18 Q76 18 76 30 Q86 34 86 46 Q86 60 72 62 Q68 70 60 70 Q54 74 50 72 Q46 74 40 70 Q32 70 28 62Z" stroke="#2b180a" stroke-width="2.6" fill="none" stroke-linejoin="round"/>
+        <path d="M30 44 Q36 38 36 48 Q36 54 30 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M70 44 Q64 38 64 48 Q64 54 70 56" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+        <path d="M50 16 Q50 28 50 42" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.28"/>
+        <path d="M40 40 Q45 34 50 40 Q55 34 60 40" stroke="#2b180a" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.65"/>
+        <path d="M42 50 Q50 56 58 50" stroke="#2b180a" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <path d="M50 34 Q50 40 50 50" stroke="#6b5a4a" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.35"/>
+      </svg>
+    </span>
+    <span class="nav-logo-wordmark">
+      <span class="nav-logo-name">Meta Lab</span>
+      <span class="nav-logo-sub">University of Sydney</span>
+    </span>
+  </a>
+
+  <a href="hub.html" class="page-close" aria-label="Close and return to hub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></a>
+
+  <div class="page-header">
+    <span class="page-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></span>
+    <h1 class="page-title">Workflow</h1>
+    <p class="page-desc">The stages of a project, in order, with the links you’ll need at each one.</p>
+  </div>
+
+  <div class="workflow">
+    <nav class="toc" aria-label="Stages">
+      <p class="toc-label">Timeline</p>
+      <ol>
+        <li><a href="#stage-get-set-up">Get set up</a></li>
+        <li><a href="#stage-find-your-question">Find your question</a></li>
+        <li><a href="#stage-proposal">Proposal</a></li>
+        <li><a href="#stage-build">Build</a></li>
+        <li><a href="#stage-ethics">Ethics</a></li>
+        <li><a href="#stage-preregister">Preregister</a></li>
+        <li><a href="#stage-pilot-collect">Pilot &amp; collect</a></li>
+        <li><a href="#stage-analyse">Analyse</a></li>
+        <li><a href="#stage-write-up">Write up</a></li>
+        <li><a href="#stage-share">Share</a></li>
+      </ol>
+    </nav>
+
+    <ol class="stages">
+    <li class="stage" id="stage-get-set-up">
+      <h2>Get set up</h2>
+    </li>
+    <li class="stage" id="stage-find-your-question">
+      <h2>Find your question</h2>
+    </li>
+    <li class="stage" id="stage-proposal">
+      <h2>Proposal</h2>
+    </li>
+    <li class="stage" id="stage-build">
+      <h2>Build</h2>
+    </li>
+    <li class="stage" id="stage-ethics">
+      <h2>Ethics</h2>
+    </li>
+    <li class="stage" id="stage-preregister">
+      <h2>Preregister</h2>
+    </li>
+    <li class="stage" id="stage-pilot-collect">
+      <h2>Pilot &amp; collect</h2>
+    </li>
+    <li class="stage" id="stage-analyse">
+      <h2>Analyse</h2>
+    </li>
+    <li class="stage" id="stage-write-up">
+      <h2>Write up</h2>
+    </li>
+    <li class="stage" id="stage-share">
+      <h2>Share</h2>
+    </li>
+    </ol>
+  </div>
+</div>
+
+<script>
+// Timeline: highlight the stage currently in view; earlier stages are marked done.
+(function () {
+  const links = [...document.querySelectorAll('.toc a')];
+  const stages = links.map(a => document.querySelector(a.getAttribute('href')));
+  let picked = null; // stage chosen from the timeline, kept until the reader scrolls themselves
+
+  function mark(current) {
+    links.forEach((a, i) => {
+      a.classList.toggle('active', i === current);
+      a.classList.toggle('done', i < current);
+      if (i === current) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current');
+    });
+  }
+  function update() {
+    if (picked !== null) return mark(picked);
+    const line = 96; // a stage counts as current once its top reaches just below the top of the screen
+    let current = 0;
+    stages.forEach((el, i) => { if (el.getBoundingClientRect().top <= line) current = i; });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = stages.length - 1;
+    mark(current);
+  }
+
+  links.forEach((a, i) => a.addEventListener('click', () => { picked = i; mark(i); }));
+  ['wheel', 'touchstart', 'keydown'].forEach(ev =>
+    addEventListener(ev, () => { picked = null; }, { passive: true }));
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+})();
+</script>
+
+</body>
+</html>
