@@ -126,6 +126,30 @@ a { color:inherit; text-decoration:none; }
   font-family:var(--font-display); font-size:1.6rem; font-weight:500;
   letter-spacing:-0.02em; line-height:1.25;
 }
+.stage p { margin-top:14px; font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:640px; }
+.stage p a { color:var(--color-text); text-decoration:underline; text-decoration-color:var(--color-accent); text-underline-offset:3px; transition:color 0.25s; }
+.stage p a:hover { color:var(--color-accent-h); }
+.stage p a:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; border-radius:2px; }
+.stage h3 {
+  margin-top:32px; font-size:0.78rem; font-weight:600; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--color-accent);
+}
+.stage .steps { margin-top:14px; padding-left:1.4em; max-width:640px; color:var(--color-text-muted); line-height:1.75; }
+.stage .steps li + li { margin-top:10px; }
+.stage .steps li::marker { color:var(--color-accent); font-weight:600; }
+.stage .steps a { color:var(--color-text); text-decoration:underline; text-decoration-color:var(--color-accent); text-underline-offset:3px; }
+.stage .steps a:hover { color:var(--color-accent-h); }
+.stage code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.85em; background:var(--color-bg-card); padding:1px 5px; border-radius:4px; color:var(--color-text); }
+.cmd { position:relative; margin-top:10px; }
+.cmd pre { background:var(--color-bg-dark); border-radius:10px; padding:14px 76px 14px 16px; }
+.cmd pre code { background:none; padding:0; color:#fcf6ef; font-size:0.82rem; white-space:pre-wrap; overflow-wrap:anywhere; }
+.cmd-copy {
+  position:absolute; top:8px; right:8px; font:500 0.75rem var(--font-body);
+  padding:5px 10px; border-radius:6px; border:1px solid rgba(252,246,239,0.25);
+  background:transparent; color:#fcf6ef; cursor:pointer; transition:background 0.2s;
+}
+.cmd-copy:hover { background:rgba(252,246,239,0.12); }
+.cmd-copy:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
 @media(max-width:800px){
   .workflow { grid-template-columns:1fr; }
   .toc { display:none; }
@@ -168,47 +192,68 @@ a { color:inherit; text-decoration:none; }
       <ol>
         <li><a href="#stage-get-set-up">Get set up</a></li>
         <li><a href="#stage-find-your-question">Find your question</a></li>
-        <li><a href="#stage-proposal">Proposal</a></li>
-        <li><a href="#stage-build">Build</a></li>
-        <li><a href="#stage-ethics">Ethics</a></li>
-        <li><a href="#stage-preregister">Preregister</a></li>
-        <li><a href="#stage-pilot-collect">Pilot &amp; collect</a></li>
+        <li><a href="#stage-research-plan">Research plan</a></li>
+        <li><a href="#stage-code-the-experiment">Code the experiment</a></li>
+        <li><a href="#stage-collect">Collect</a></li>
         <li><a href="#stage-analyse">Analyse</a></li>
         <li><a href="#stage-write-up">Write up</a></li>
-        <li><a href="#stage-share">Share</a></li>
       </ol>
     </nav>
 
     <ol class="stages">
     <li class="stage" id="stage-get-set-up">
       <h2>Get set up</h2>
+      <p>Before we first meet, or within your first week or two, work through the <a href="onboarding.html" target="_blank" rel="noopener">onboarding guide</a> and get set up.</p>
     </li>
     <li class="stage" id="stage-find-your-question">
       <h2>Find your question</h2>
+      <p>Start by picking a research area that interests you. We can then brainstorm topics and research questions together in our one-on-one meetings. Honours students can find a set of paradigms and starter references on the lab&rsquo;s Honours page.<!-- TODO: create the Honours page and link it here --></p>
     </li>
-    <li class="stage" id="stage-proposal">
-      <h2>Proposal</h2>
+    <li class="stage" id="stage-research-plan">
+      <h2>Research plan</h2>
+      <p>Both PhD and Honours students write a research plan. The length depends on your degree, but keep it succinct and follow the <a href="writing.html" target="_blank" rel="noopener">writing guide</a>, which lists the sections a research plan needs. The plan is not marked, and you don&rsquo;t need to respond to the feedback. It is simply a chance to get suggestions from another academic early in your program.</p>
     </li>
-    <li class="stage" id="stage-build">
-      <h2>Build</h2>
+    <li class="stage" id="stage-code-the-experiment">
+      <h2>Code the experiment</h2>
+      <p>Rather than coding by hand, we build experiments with Claude Code and the lab&rsquo;s <a href="https://github.com/usyd-meta-lab/meta-lab-jsPsych" target="_blank" rel="noopener">jsPsych kit</a>. You describe the study, and Claude writes the code and shows you the experiment as it builds it.</p>
+
+      <h3>Install (once)</h3>
+      <ol class="steps">
+        <li>Install <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a> (the LTS version). On Windows, also install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a>. Macs already have it.</li>
+        <li>Install the <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude desktop app</a> and sign in. You will build your experiment in its Code tab.</li>
+        <li>Open Terminal (on a Mac, in Applications &rsaquo; Utilities) and run these two commands, one at a time. Each should end with &ldquo;Successfully added&rdquo; or &ldquo;Successfully installed&rdquo;. If a Mac asks you to install command line developer tools, click Install and then run the command again.
+          <div class="cmd"><pre><code>npx @anthropic-ai/claude-code plugin marketplace add usyd-meta-lab/meta-lab-jsPsych</code></pre><button type="button" class="cmd-copy">Copy</button></div>
+          <div class="cmd"><pre><code>npx @anthropic-ai/claude-code plugin install meta-lab@usyd-meta-lab</code></pre><button type="button" class="cmd-copy">Copy</button></div>
+        </li>
+      </ol>
+
+      <h3>Start your experiment</h3>
+      <ol class="steps">
+        <li>Make a folder for your experiments, such as <em>Experiments</em> in Documents.</li>
+        <li>In the Code tab of the Claude app, start a new session in that folder and say &ldquo;start a new experiment&rdquo;. Claude creates a folder for your study inside it.</li>
+        <li>Claude asks a few questions about your study, including the ethics protocol, where participants come from, how long it takes, and the design. It then builds the experiment and opens a preview so you can watch it take shape.</li>
+        <li>Keep describing changes (e.g., &ldquo;add a practice block with feedback&rdquo;) and Claude builds each one. Next time, start your session in the study&rsquo;s own folder.</li>
+      </ol>
+      <p>Claude will ask for the completion link from SONA or Prolific. If you haven&rsquo;t created the study there yet, you can add the link later.</p>
+
+      <h3>Share it with Kit</h3>
+      <p>Create a project on <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> named after your study and share it with Kit. Add your experiment&rsquo;s <code>src/experiment.js</code> and <code>study.config.json</code> files to the project, and update them whenever the experiment changes. If you can&rsquo;t find these files, ask Claude Code to show you where they are. You will use the same project to check your data and analysis later.</p>
+
+      <h3>Pilot</h3>
+      <p>Claude writes the code, but you are responsible for piloting it thoroughly. Use the experiment dashboard to click through every part from the participant&rsquo;s point of view. At the end of each run, check the recorded data to make sure everything you need is being saved. To fix bugs or make changes, simply describe them to Claude. When you&rsquo;re ready to collect data, ask Claude to &ldquo;launch the study&rdquo;.</p>
     </li>
-    <li class="stage" id="stage-ethics">
-      <h2>Ethics</h2>
-    </li>
-    <li class="stage" id="stage-preregister">
-      <h2>Preregister</h2>
-    </li>
-    <li class="stage" id="stage-pilot-collect">
-      <h2>Pilot &amp; collect</h2>
+    <li class="stage" id="stage-collect">
+      <h2>Collect</h2>
+      <p>We collect data through two platforms, <a href="recruitment.html" target="_blank" rel="noopener">Prolific and SONA</a>. When you set up your study, use the exact advertisement wording from the <a href="ethics.html" target="_blank" rel="noopener">umbrella ethics</a> application you are using. A video showing how to put a study on SONA is available on the <a href="recruitment.html" target="_blank" rel="noopener">recruitment page</a>. Before collecting data, consider preregistering your study on <a href="https://aspredicted.org/" target="_blank" rel="noopener">AsPredicted</a>.</p>
+      <p>Start with data from 10 participants. Add that data to your Claude project and ask Claude to check it, run some preliminary analyses, and confirm everything is working. You should also check the data yourself, including reading participants&rsquo; answers to any debug questions.</p>
     </li>
     <li class="stage" id="stage-analyse">
       <h2>Analyse</h2>
+      <p>Run your analysis in R, but also keep an analysis chat in your Claude project. Use it to help write your code and to check that you get the same numbers as Claude. By the end, you will need a clean data file and an R analysis script to publish alongside your paper or thesis.</p>
     </li>
     <li class="stage" id="stage-write-up">
       <h2>Write up</h2>
-    </li>
-    <li class="stage" id="stage-share">
-      <h2>Share</h2>
+      <p>Use the lab <a href="writing.html" target="_blank" rel="noopener">writing guide</a> to write up your project.</p>
     </li>
     </ol>
   </div>
@@ -244,6 +289,17 @@ a { color:inherit; text-decoration:none; }
   addEventListener('resize', update);
   update();
 })();
+</script>
+
+<script>
+// Copy buttons on terminal commands.
+document.querySelectorAll('.cmd-copy').forEach(btn => btn.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(btn.previousElementSibling.textContent);
+    btn.textContent = 'Copied';
+  } catch { btn.textContent = 'Select and copy'; }
+  setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
+}));
 </script>
 
 </body>
