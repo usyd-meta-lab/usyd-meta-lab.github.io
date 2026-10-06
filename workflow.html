@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="gate.js"></script>
 <title>USYD Meta Lab — Workflow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -140,16 +141,6 @@ a { color:inherit; text-decoration:none; }
 .stage .steps a { color:var(--color-text); text-decoration:underline; text-decoration-color:var(--color-accent); text-underline-offset:3px; }
 .stage .steps a:hover { color:var(--color-accent-h); }
 .stage code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.85em; background:var(--color-bg-card); padding:1px 5px; border-radius:4px; color:var(--color-text); }
-.cmd { position:relative; margin-top:10px; }
-.cmd pre { background:var(--color-bg-dark); border-radius:10px; padding:14px 76px 14px 16px; }
-.cmd pre code { background:none; padding:0; color:#fcf6ef; font-size:0.82rem; white-space:pre-wrap; overflow-wrap:anywhere; }
-.cmd-copy {
-  position:absolute; top:8px; right:8px; font:500 0.75rem var(--font-body);
-  padding:5px 10px; border-radius:6px; border:1px solid rgba(252,246,239,0.25);
-  background:transparent; color:#fcf6ef; cursor:pointer; transition:background 0.2s;
-}
-.cmd-copy:hover { background:rgba(252,246,239,0.12); }
-.cmd-copy:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
 @media(max-width:800px){
   .workflow { grid-template-columns:1fr; }
   .toc { display:none; }
@@ -207,40 +198,30 @@ a { color:inherit; text-decoration:none; }
     </li>
     <li class="stage" id="stage-find-your-question">
       <h2>Find your question</h2>
-      <p>Start by picking a research area that interests you. We can then brainstorm topics and research questions together in our one-on-one meetings. Honours students can find a set of paradigms and starter references on the lab&rsquo;s Honours page.<!-- TODO: create the Honours page and link it here --></p>
+      <p>Start by picking a research area that interests you. We can then brainstorm topics and research questions together in our one-on-one meetings. Honours students can find a set of paradigms and starter references on the lab&rsquo;s <a href="honours.html" target="_blank" rel="noopener">Honours page</a>.</p>
     </li>
     <li class="stage" id="stage-research-plan">
       <h2>Research plan</h2>
-      <p>Both PhD and Honours students write a research plan. The length depends on your degree, but keep it succinct and follow the <a href="writing.html" target="_blank" rel="noopener">writing guide</a>, which lists the sections a research plan needs. The plan is not marked, and you don&rsquo;t need to respond to the feedback. It is simply a chance to get suggestions from another academic early in your program.</p>
+      <p>Both PhD and Honours students write a research plan. The length depends on your degree, but keep it succinct and follow the <a href="writing.html" target="_blank" rel="noopener">writing guide</a>, which lists the sections a research plan needs. The plan is not marked, and you don&rsquo;t need to respond to the feedback. It is simply a chance to get suggestions from another academic early in your program. Honours students should also read the proposal tips and meeting timeline on the <a href="honours.html" target="_blank" rel="noopener">Honours page</a>.</p>
     </li>
     <li class="stage" id="stage-code-the-experiment">
       <h2>Code the experiment</h2>
-      <p>Rather than coding by hand, we build experiments with Claude Code and the lab&rsquo;s <a href="https://github.com/usyd-meta-lab/meta-lab-jsPsych" target="_blank" rel="noopener">jsPsych kit</a>. You describe the study, and Claude writes the code and shows you the experiment as it builds it.</p>
-
-      <h3>Install (once)</h3>
-      <ol class="steps">
-        <li>Install <a href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a> (the LTS version). On Windows, also install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a>. Macs already have it.</li>
-        <li>Install the <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude desktop app</a> and sign in. You will build your experiment in its Code tab.</li>
-        <li>Open Terminal (on a Mac, in Applications &rsaquo; Utilities) and run these two commands, one at a time. Each should end with &ldquo;Successfully added&rdquo; or &ldquo;Successfully installed&rdquo;. If a Mac asks you to install command line developer tools, click Install and then run the command again.
-          <div class="cmd"><pre><code>npx @anthropic-ai/claude-code plugin marketplace add usyd-meta-lab/meta-lab-jsPsych</code></pre><button type="button" class="cmd-copy">Copy</button></div>
-          <div class="cmd"><pre><code>npx @anthropic-ai/claude-code plugin install meta-lab@usyd-meta-lab</code></pre><button type="button" class="cmd-copy">Copy</button></div>
-        </li>
-      </ol>
+      <p>We build and run experiments on <a href="https://2ndorder.live" target="_blank" rel="noopener">Second Order</a>, the lab&rsquo;s experiment platform. There is no website to log in to and no code to write by hand. You work entirely in a chat with Claude or ChatGPT: you describe the study, and the AI builds it in jsPsych, tests it and hosts it for you. The steps below use Claude, but ChatGPT works the same way. If you haven&rsquo;t connected Second Order yet, follow the steps in the <a href="onboarding.html" target="_blank" rel="noopener">onboarding guide</a> first.</p>
 
       <h3>Start your experiment</h3>
       <ol class="steps">
-        <li>Make a folder for your experiments, such as <em>Experiments</em> in Documents.</li>
-        <li>In the Code tab of the Claude app, start a new session in that folder and say &ldquo;start a new experiment&rdquo;. Claude creates a folder for your study inside it.</li>
-        <li>Claude asks a few questions about your study, including the ethics protocol, where participants come from, how long it takes, and the design. It then builds the experiment and opens a preview so you can watch it take shape.</li>
-        <li>Keep describing changes (e.g., &ldquo;add a practice block with feedback&rdquo;) and Claude builds each one. Next time, start your session in the study&rsquo;s own folder.</li>
+        <li>On <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> or in the <a href="https://claude.ai/download" target="_blank" rel="noopener">Claude desktop app</a>, create a project named after your study and share it with Kit. Have all your chats about the study in this project, so Kit can see them too.</li>
+        <li>Start a chat in the project and describe your study, for example &ldquo;Create a new Second Order study where participants &hellip;&rdquo;.</li>
+        <li>Claude asks a few questions, including the ethics protocol, where participants come from (Prolific or SONA), how long it takes, and the design. It then builds the experiment and runs simulated participants to check the data are recorded properly.</li>
+        <li>Keep describing changes (e.g., &ldquo;add a practice block with feedback&rdquo;). Each change goes live straight away.</li>
+        <li>Ask Claude to &ldquo;share the study with Kit&rdquo; so Kit can open it too.</li>
       </ol>
-      <p>Claude will ask for the completion link from SONA or Prolific. If you haven&rsquo;t created the study there yet, you can add the link later.</p>
-
-      <h3>Share it with Kit</h3>
-      <p>Create a project on <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> named after your study and share it with Kit. Add your experiment&rsquo;s <code>src/experiment.js</code> and <code>study.config.json</code> files to the project, and update them whenever the experiment changes. If you can&rsquo;t find these files, ask Claude Code to show you where they are. You will use the same project to check your data and analysis later.</p>
 
       <h3>Pilot</h3>
-      <p>Claude writes the code, but you are responsible for piloting it thoroughly. Use the experiment dashboard to click through every part from the participant&rsquo;s point of view. At the end of each run, check the recorded data to make sure everything you need is being saved. To fix bugs or make changes, simply describe them to Claude. When you&rsquo;re ready to collect data, ask Claude to &ldquo;launch the study&rdquo;.</p>
+      <p>Claude writes the code, but you are responsible for piloting it thoroughly. Ask Claude to &ldquo;show me the dashboard&rdquo;. The dashboard lets you run the whole study, or any single part of it, and shows the data at the end without saving anything. Click through every part from the participant&rsquo;s point of view, and check that everything you need for your analysis is being recorded. To fix bugs or make changes, simply describe them to Claude.</p>
+
+      <h3>Launch</h3>
+      <p>When you&rsquo;re ready to collect data, ask Claude to &ldquo;check the study is ready to launch&rdquo; and work through anything it flags. Then ask for a participant link for Prolific or SONA. For Prolific, create the study there first so you can give Claude the completion link. Because the link always runs the live experiment, any change you make once data collection has started reaches participants immediately. Ask Claude to save a version before making a big change.</p>
     </li>
     <li class="stage" id="stage-collect">
       <h2>Collect</h2>
@@ -249,7 +230,8 @@ a { color:inherit; text-decoration:none; }
     </li>
     <li class="stage" id="stage-analyse">
       <h2>Analyse</h2>
-      <p>Run your analysis in R, but also keep an analysis chat in your Claude project. Use it to help write your code and to check that you get the same numbers as Claude. By the end, you will need a clean data file and an R analysis script to publish alongside your paper or thesis.</p>
+      <p>Because your data are on Second Order, Claude can read them directly and run the analysis for you in a chat in your project. Ask it to clean the data, apply your exclusions and run your planned analyses.</p>
+      <p>Treat Claude&rsquo;s results as a first pass, not the final answer. You must reproduce every analysis yourself in R (or similar), check that you get the same numbers, and work out why if you don&rsquo;t. Claude can help you write the R code. To get the data for R, ask Claude for a download link. By the end, you will need a clean data file and an R analysis script to publish alongside your paper or thesis.</p>
     </li>
     <li class="stage" id="stage-write-up">
       <h2>Write up</h2>
@@ -291,16 +273,6 @@ a { color:inherit; text-decoration:none; }
 })();
 </script>
 
-<script>
-// Copy buttons on terminal commands.
-document.querySelectorAll('.cmd-copy').forEach(btn => btn.addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(btn.previousElementSibling.textContent);
-    btn.textContent = 'Copied';
-  } catch { btn.textContent = 'Select and copy'; }
-  setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
-}));
-</script>
 
 </body>
 </html>

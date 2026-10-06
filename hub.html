@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="gate.js"></script>
 <title>USYD Meta Lab — Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -228,6 +229,7 @@ body.drawer-open .drawer { transform:none; }
       </button>
       <ul class="panel-links" id="resourcesList">
         <li><a href="ethics.html">Ethics <span aria-hidden="true">→</span></a></li>
+        <li><a href="honours.html">Honours <span aria-hidden="true">→</span></a></li>
         <li><a href="recruitment.html">Recruitment <span aria-hidden="true">→</span></a></li>
         <li><a href="resources.html" id="openAllResources" aria-haspopup="dialog">All resources <span aria-hidden="true">→</span></a></li>
       </ul>
@@ -247,28 +249,8 @@ body.drawer-open .drawer { transform:none; }
   </header>
   <div class="drawer-body">
       <section class="drawer-group">
-        <h3 class="drawer-group-title">Lab-built tools</h3>
+        <h3 class="drawer-group-title">Tools</h3>
         <ul>
-          <li><a class="drawer-item" href="https://metaforge.live" target="_blank" rel="noopener">
-            <span class="drawer-item-name">MetaForge<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">The lab’s platform for building and hosting online experiments. Use it to program your study and get a link to share with participants.</span>
-          </a></li>
-          <li><a class="drawer-item" href="https://apps.apple.com/us/app/metaforge-live/id6758686932" target="_blank" rel="noopener">
-            <span class="drawer-item-name">MetaForge Live (iOS)<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">iPhone app for experience-sampling (ESM) studies, where participants answer short surveys on their phone throughout the day. Supports images, video and complex visual displays.</span>
-          </a></li>
-          <li><a class="drawer-item" href="https://github.com/usyd-meta-lab/MetaLab" target="_blank" rel="noopener">
-            <span class="drawer-item-name">MetaLab R package<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">The lab’s R package of analysis functions for metacognition research. Install it from GitHub to use them in your own scripts.</span>
-          </a></li>
-          <li><a class="drawer-item" href="https://usyd-meta-lab.github.io/ESMDash" target="_blank" rel="noopener">
-            <span class="drawer-item-name">ESM Dashboard<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">Watch data come in while an experience-sampling study is running, so you can spot problems early.</span>
-          </a></li>
-          <li><a class="drawer-item" href="https://usyd-meta-lab.github.io/esm-interval" target="_blank" rel="noopener">
-            <span class="drawer-item-name">ESM Scheduler<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">Plan when participants in an experience-sampling study get their prompts across the day.</span>
-          </a></li>
           <li><a class="drawer-item" href="https://meta-measures-905740620170.australia-southeast1.run.app" target="_blank" rel="noopener">
             <span class="drawer-item-name">Meta Measures<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
             <span class="drawer-item-desc">Web app that calculates metacognition measures such as meta-d′ from your data, without writing the code yourself.</span>
@@ -281,17 +263,9 @@ body.drawer-open .drawer { transform:none; }
             <span class="drawer-item-name">Psych Norms<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
             <span class="drawer-item-desc">Build word-pair lists for experiments, or look up the properties of word pairs you already have.</span>
           </a></li>
-          <li><a class="drawer-item" href="https://github.com/kitdouble/ERT" target="_blank" rel="noopener">
-            <span class="drawer-item-name">Emotional Advice Task<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">Code for the lab’s emotion-regulation experiments. Start here if your project uses this paradigm.</span>
-          </a></li>
           <li><a class="drawer-item" href="archived/files/meta/index.html">
             <span class="drawer-item-name">Meta-analysis in R</span>
             <span class="drawer-item-desc">Workshop materials on running a meta-analysis in R.</span>
-          </a></li>
-          <li><a class="drawer-item" href="https://github.com/usyd-meta-lab" target="_blank" rel="noopener">
-            <span class="drawer-item-name">Lab GitHub<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
-            <span class="drawer-item-desc">Where all the lab’s code lives. Browse it for task code and analysis scripts from past projects.</span>
           </a></li>
           <li><a class="drawer-item" href="https://usyd-meta-lab.github.io/PIS/" target="_blank" rel="noopener">
             <span class="drawer-item-name">PIS Updater<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
@@ -339,25 +313,46 @@ body.drawer-open .drawer { transform:none; }
             <span class="drawer-item-name">Ethics</span>
             <span class="drawer-item-desc">The lab’s umbrella ethics applications and all their documents.</span>
           </a></li>
+          <li><a class="drawer-item" href="honours.html">
+            <span class="drawer-item-name">Honours</span>
+            <span class="drawer-item-desc">This year&rsquo;s Honours project themes, with starter readings, and how to write and present the proposal.</span>
+          </a></li>
           <li><a class="drawer-item" href="recruitment.html">
             <span class="drawer-item-name">Recruitment</span>
             <span class="drawer-item-desc">Where to find participants: SONA, Prolific and the room booker for in-person testing.</span>
+          </a></li>
+          <li><a class="drawer-item" href="index.html">
+            <span class="drawer-item-name">Website</span>
+            <span class="drawer-item-desc">The lab&rsquo;s public website: people, research and news.</span>
           </a></li>
           <li><a class="drawer-item" href="publications.html">
             <span class="drawer-item-name">Publications</span>
             <span class="drawer-item-desc">Every lab paper, kept up to date from ORCID.</span>
           </a></li>
-          <li><a class="drawer-item" href="/task-gallery/">
-            <span class="drawer-item-name">Task Gallery</span>
-            <span class="drawer-item-desc">Browse tasks and paradigms from past lab studies. A good place to start when designing your own.</span>
-          </a></li>
           <li><a class="drawer-item" href="meetings.html">
             <span class="drawer-item-name">Meetings</span>
             <span class="drawer-item-desc">Lab meeting schedule and booking.</span>
           </a></li>
-          <li><a class="drawer-item" href="members.html">
-            <span class="drawer-item-name">Members onboarding guide</span>
-            <span class="drawer-item-desc">Password-protected walkthrough of an Honours or PhD project, from onboarding to thesis.</span>
+        </ul>
+      </section>
+      <section class="drawer-group">
+        <h3 class="drawer-group-title">ESM tools</h3>
+        <ul>
+          <li><a class="drawer-item" href="https://metaforge.live" target="_blank" rel="noopener">
+            <span class="drawer-item-name">MetaForge<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <span class="drawer-item-desc">An older platform that is now only used to code experience-sampling (ESM) studies.</span>
+          </a></li>
+          <li><a class="drawer-item" href="https://apps.apple.com/us/app/metaforge-live/id6758686932" target="_blank" rel="noopener">
+            <span class="drawer-item-name">MetaForge Live (iOS)<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <span class="drawer-item-desc">iPhone app for experience-sampling (ESM) studies, where participants answer short surveys on their phone throughout the day. Supports images, video and complex visual displays.</span>
+          </a></li>
+          <li><a class="drawer-item" href="https://usyd-meta-lab.github.io/ESMDash" target="_blank" rel="noopener">
+            <span class="drawer-item-name">ESM Dashboard<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <span class="drawer-item-desc">Watch data come in while an experience-sampling study is running, so you can spot problems early.</span>
+          </a></li>
+          <li><a class="drawer-item" href="https://usyd-meta-lab.github.io/esm-interval" target="_blank" rel="noopener">
+            <span class="drawer-item-name">ESM Scheduler<svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+            <span class="drawer-item-desc">Plan when participants in an experience-sampling study get their prompts across the day.</span>
           </a></li>
         </ul>
       </section>

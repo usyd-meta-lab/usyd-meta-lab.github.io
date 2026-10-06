@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="gate.js"></script>
 <title>USYD Meta Lab — Writing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,6 +71,8 @@ a { color:inherit; text-decoration:none; }
   font-weight:500; line-height:1.15; letter-spacing:-0.03em;
 }
 .page-desc { font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:600px; }
+.page-desc a { color:var(--color-text); text-decoration:underline; text-decoration-color:var(--color-accent); text-underline-offset:3px; }
+.page-desc a:hover { color:var(--color-accent-h); }
 .page-close {
   position:absolute; top:24px; right:40px;
   width:44px; height:44px; border-radius:50%;
@@ -82,6 +85,195 @@ a { color:inherit; text-decoration:none; }
 .page-close:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
 .page-close svg { width:18px; height:18px; }
 @media(max-width:600px){ .page-close { right:24px; } }
+.workflow { max-width:880px; margin:0 auto; width:100%; }
+/* Stages */
+.stages { list-style:none; }
+.stage {
+  scroll-margin-top:84px;
+  padding:28px 0 64px; border-top:1px solid var(--color-border);
+}
+.stage:first-child { border-top:0; padding-top:0; }
+.stage h2 {
+  font-family:var(--font-display); font-size:1.6rem; font-weight:500;
+  letter-spacing:-0.02em; line-height:1.25;
+}
+.stage p { margin-top:14px; font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:640px; }
+.stage p a { color:var(--color-text); text-decoration:underline; text-decoration-color:var(--color-accent); text-underline-offset:3px; transition:color 0.25s; }
+.stage p a:hover { color:var(--color-accent-h); }
+.stage p a:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; border-radius:2px; }
+.stage h3 {
+  margin-top:32px; font-size:0.78rem; font-weight:600; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--color-accent);
+}
+.stage .steps { margin-top:14px; padding-left:1.4em; max-width:640px; color:var(--color-text-muted); line-height:1.75; }
+.stage .steps li + li { margin-top:10px; }
+.stage .steps li::marker { color:var(--color-accent); font-weight:600; }
+.stage .steps a { color:var(--color-text); text-decoration:underline; text-decoration-color:var(--color-accent); text-underline-offset:3px; }
+.stage .steps a:hover { color:var(--color-accent-h); }
+.stage code { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.85em; background:var(--color-bg-card); padding:1px 5px; border-radius:4px; color:var(--color-text); }
+/* Lead and shape diagram */
+.lead { margin-bottom:24px; }
+.lead h2 { font-family:var(--font-display); font-size:1.9rem; font-weight:500; letter-spacing:-0.02em; }
+.lead p { margin-top:12px; font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:640px; }
+.shape { margin:40px auto 16px; max-width:520px; }
+.shape svg { width:100%; height:auto; display:block; overflow:visible; }
+.shape .box { fill:var(--color-bg-card); stroke:var(--color-border); }
+.shape .band { fill:var(--color-accent); transition:fill-opacity 0.25s; }
+.shape a:hover .band, .shape a:focus-visible .band { fill-opacity:0.85; }
+.shape a:focus-visible { outline:none; }
+.shape text { font-family:var(--font-body); fill:var(--color-text); }
+.shape .t-title { font-family:var(--font-display); font-size:16px; }
+.shape .t-band { font-size:13px; }
+.shape .t-sub { font-size:11px; fill:var(--color-text-muted); }
+.shape .t-note { font-size:11px; font-style:italic; fill:var(--color-text-light); }
+.shape .t-side { font-size:10px; letter-spacing:0.12em; text-transform:uppercase; fill:var(--color-text-light); }
+.shape-caption { font-size:0.8rem; color:var(--color-text-light); }
+
+.shape { scroll-margin-top:84px; }
+
+/* Sticky section nav */
+.section-nav {
+  position:sticky; top:0; z-index:20; margin:0 -16px 40px; padding:14px 16px;
+  display:flex; justify-content:center;
+  background:rgba(252,246,239,0.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid transparent; transition:border-color 0.3s;
+}
+.section-nav.stuck { border-bottom-color:var(--color-border); }
+.section-nav ol {
+  list-style:none; display:flex; gap:4px; padding:4px; border-radius:999px;
+  background:var(--color-bg-warm); border:1px solid var(--color-border);
+}
+.section-nav a {
+  display:block; padding:7px 16px; border-radius:999px; font-size:0.85rem; font-weight:500;
+  color:var(--color-text-muted); transition:background 0.3s var(--ease), color 0.25s;
+}
+.section-nav a:hover { color:var(--color-text); }
+.section-nav a[aria-current] { background:var(--color-accent); color:#fff; }
+.section-nav a:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
+.lead { scroll-margin-top:84px; }
+@media(max-width:600px){
+  .section-nav a { padding:6px 10px; font-size:0.78rem; }
+}
+
+/* Discussion widening diagram */
+.widen { margin:32px auto 8px; max-width:440px; }
+.widen svg { width:100%; height:auto; display:block; }
+.widen .band { fill:var(--color-accent); }
+.widen text { font-family:var(--font-body); font-size:13px; fill:var(--color-text); }
+
+/* Review prompts */
+.prompts { list-style:none; margin-top:28px; border-top:1px solid var(--color-border); }
+.prompt { border-bottom:1px solid var(--color-border); }
+.prompt summary {
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:18px; padding:16px 4px;
+}
+.prompt summary::-webkit-details-marker { display:none; }
+.prompt summary::after {
+  content:"+"; margin-left:auto; font-size:1.2rem; line-height:1; color:var(--color-accent);
+  transition:transform 0.3s var(--ease);
+}
+.prompt details[open] summary::after { transform:rotate(45deg); }
+.prompt summary:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; border-radius:6px; }
+.prompt-num {
+  flex:0 0 32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:var(--color-bg-card); color:var(--color-accent-h); font-size:0.85rem; font-weight:600;
+}
+.prompt-head strong { display:block; font-family:var(--font-display); font-size:1.12rem; font-weight:500; color:var(--color-text); }
+.prompt-head span { display:block; margin-top:2px; font-size:0.9rem; color:var(--color-text-muted); }
+.prompt-body { position:relative; margin:0 0 20px 50px; }
+.prompt-body pre { background:var(--color-bg-dark); border-radius:12px; padding:18px 84px 18px 20px; }
+.prompt-body code {
+  font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.8rem; line-height:1.65;
+  color:#fcf6ef; white-space:pre-wrap; overflow-wrap:anywhere;
+}
+.prompt-copy {
+  position:absolute; top:10px; right:10px; font:500 0.75rem var(--font-body);
+  padding:6px 12px; border-radius:6px; border:1px solid rgba(252,246,239,0.25);
+  background:transparent; color:#fcf6ef; cursor:pointer; transition:background 0.2s;
+}
+.prompt-copy:hover { background:rgba(252,246,239,0.12); }
+.prompt-copy:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
+@media(max-width:600px){ .prompt-body { margin-left:0; } }
+
+/* Method and results */
+.chapter { margin-top:72px; padding-top:56px; border-top:1px solid var(--color-border); scroll-margin-top:84px; }
+.chapter h2 { font-family:var(--font-display); font-size:1.9rem; font-weight:500; letter-spacing:-0.02em; }
+.chapter > p { margin-top:12px; line-height:1.75; color:var(--color-text-muted); max-width:640px; }
+.parts { margin-top:28px; border-top:1px solid var(--color-border); }
+.parts > div {
+  display:grid; grid-template-columns:150px minmax(0,1fr); gap:24px;
+  padding:16px 0; border-bottom:1px solid var(--color-border);
+}
+.parts dt { font-family:var(--font-display); font-size:1.08rem; color:var(--color-text); }
+.parts dd { line-height:1.7; color:var(--color-text-muted); }
+.checks { list-style:none; margin-top:24px; display:grid; gap:12px; }
+.checks li { position:relative; padding-left:30px; line-height:1.7; color:var(--color-text-muted); }
+.checks li::before {
+  content:""; position:absolute; left:2px; top:7px; width:14px; height:8px;
+  border-left:2px solid var(--color-accent); border-bottom:2px solid var(--color-accent);
+  transform:rotate(-45deg);
+}
+.checks strong { color:var(--color-text); font-weight:600; }
+.chapter .hint {
+  display:flex; gap:12px; align-items:flex-start; margin-top:28px; max-width:640px;
+  font-size:0.9rem; line-height:1.65; color:var(--color-text-muted);
+}
+.chapter .hint svg { flex:0 0 18px; width:18px; height:18px; margin-top:2px; color:var(--color-accent); }
+@media(max-width:600px){ .parts > div { grid-template-columns:1fr; gap:4px; } }
+
+/* Part dividers */
+.part { padding:56px 0 48px; border-top:1px solid var(--color-border); }
+.part-num {
+  font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--color-accent);
+}
+.part h2 {
+  margin-top:6px; font-family:var(--font-display); font-size:2.2rem; font-weight:500;
+  letter-spacing:-0.03em; line-height:1.15;
+}
+.part > p { margin-top:12px; font-size:1rem; line-height:1.75; color:var(--color-text-muted); max-width:600px; }
+.rules { list-style:none; margin-top:28px; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
+.rule { display:flex; gap:14px; align-items:flex-start; padding:18px; border-radius:14px; background:var(--color-bg-warm); border:1px solid var(--color-border); }
+.rule svg { flex:0 0 34px; width:34px; height:34px; color:var(--color-accent); }
+.rule strong { display:block; font-weight:600; font-size:0.95rem; color:var(--color-text); }
+.rule span { display:block; margin-top:4px; font-size:0.88rem; line-height:1.6; color:var(--color-text-muted); }
+
+/* Each section: guidance beside an excerpt from an example introduction */
+.stage-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:40px; align-items:start; }
+.stage .stage-body p { max-width:none; }
+.excerpt {
+  position:relative; margin-top:4px; padding:22px 24px 20px;
+  background:#fffdf9; border:1px solid var(--color-border); border-radius:4px;
+  box-shadow:0 1px 0 var(--color-border), 0 10px 24px -14px rgba(43,24,10,0.25);
+}
+.excerpt::before {
+  content:"Example"; position:absolute; top:-9px; left:18px; padding:0 8px;
+  background:var(--color-bg); font-size:0.64rem; font-weight:600; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--color-accent);
+}
+.stage .excerpt p {
+  margin:0; font-family:Georgia, 'Times New Roman', serif; font-size:0.93rem;
+  line-height:1.7; color:var(--color-text);
+}
+.stage .excerpt p + p { margin-top:8px; }
+.excerpt .ph { color:var(--color-accent-h); }
+
+.part + .stage { border-top:0; padding-top:0; }
+
+/* General principles */
+.principles { list-style:none; margin-top:24px; display:grid; gap:14px; }
+.principle { display:flex; gap:18px; align-items:flex-start; }
+.principle svg { flex:0 0 40px; width:40px; height:40px; color:var(--color-accent); }
+.principle strong { display:block; font-weight:600; color:var(--color-text); }
+.principle span { display:block; margin-top:2px; line-height:1.7; color:var(--color-text-muted); }
+
+@media(max-width:1000px){
+  .stage-body { grid-template-columns:1fr; gap:20px; }
+}
+@media(max-width:600px){
+  .rules { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior:smooth; } }
 </style>
 </head>
 <body>
@@ -113,8 +305,332 @@ a { color:inherit; text-decoration:none; }
     <p class="page-desc">Guides and templates for writing up your research.</p>
   </div>
 
-  <!-- Content goes here -->
+  <div class="workflow">
+    <div>
+      <nav class="section-nav" aria-label="Sections of a paper">
+        <ol>
+          <li><a href="#introduction">Introduction</a></li>
+          <li><a href="#method">Method</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#discussion">Discussion</a></li>
+          <li><a href="#review">Review</a></li>
+        </ol>
+      </nav>
+      <div class="lead" id="introduction">
+        <h2>The introduction</h2>
+        <p>An introduction has two parts. The opening tells the whole story of your study in plain language. The rest steps back and builds the theoretical case, narrowing from the broad research area down to your research questions.</p>
+        <figure class="shape" id="map">
+          <svg viewBox="0 0 480 396" role="img" aria-labelledby="shape-title">
+          <title id="shape-title">The shape of an introduction: a short plain-language opening, then a theory section that narrows from the research area down to the research questions.</title>
+          <a href="#p-context"><rect class="box" x="130" y="6" width="220" height="62" rx="12"/>
+          <text class="t-title" x="240" y="32" text-anchor="middle">The opening</text>
+          <text class="t-sub" x="240" y="52" text-anchor="middle">Context · Problem · Solution</text></a>
+          <text class="t-note" x="240" y="90" text-anchor="middle">then step back and narrow down</text>
+          <a href="#p-area"><path class="band" fill-opacity="0.14" d="M10.0 104 L470.0 104 L451.3 142 L28.7 142Z"/><text class="t-band" x="240" y="127.5" text-anchor="middle">Research area</text></a>
+          <a href="#p-topic"><path class="band" fill-opacity="0.22" d="M30.2 145 L449.8 145 L431.1 183 L48.9 183Z"/><text class="t-band" x="240" y="168.5" text-anchor="middle">Research topic</text></a>
+          <a href="#p-research-problem"><path class="band" fill-opacity="0.31" d="M50.4 186 L429.6 186 L410.8 224 L69.2 224Z"/><text class="t-band" x="240" y="209.5" text-anchor="middle">Research problem</text></a>
+          <a href="#p-known"><path class="band" fill-opacity="0.39" d="M70.6 227 L409.4 227 L390.6 265 L89.4 265Z"/><text class="t-band" x="240" y="250.5" text-anchor="middle">What we know</text></a>
+          <a href="#p-unknown"><path class="band" fill-opacity="0.47" d="M90.8 268 L389.2 268 L370.4 306 L109.6 306Z"/><text class="t-band" x="240" y="291.5" text-anchor="middle">What we don’t know</text></a>
+          <a href="#p-current"><path class="band" fill-opacity="0.56" d="M111.1 309 L368.9 309 L350.2 347 L129.8 347Z"/><text class="t-band" x="240" y="332.5" text-anchor="middle">Current study</text></a>
+          <a href="#p-questions"><path class="band" fill-opacity="0.64" d="M131.3 350 L348.7 350 L330.0 388 L150.0 388Z"/><text class="t-band" x="240" y="373.5" text-anchor="middle">Questions</text></a>
+          </svg>
+        </figure>
+        <p class="shape-caption">Each section below sits beside an excerpt from an example introduction on the reactivity of metacognitive ratings. Read the excerpts in order to see how the pieces fit together.</p>
+      </div>
+
+    <ol class="stages">
+    <li class="part">
+      <p class="part-num">Part 1</p>
+      <h2>The opening</h2>
+      <p>Three short paragraphs that give the reader the whole study before any theory.</p>
+      <ul class="rules">
+        <li class="rule"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H14l-6 5v-5H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><path d="M10 13h12M10 17h7"/></svg><div><strong>No jargon</strong><span>A reader should be able to follow the opening without any definitions.</span></div></li>
+        <li class="rule"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="4" width="18" height="24" rx="2"/><path d="M11 10h10M11 14h10M11 18h6"/><circle cx="22" cy="23" r="4" fill="var(--color-bg-warm)"/><path d="m20.4 23 1.1 1.1 2.1-2.2"/></svg><div><strong>A mini-abstract</strong><span>A reader who stops after the opening should still know the problem, why it matters and what you did.</span></div></li>
+      </ul>
+    </li>
+    <li class="stage" id="p-context">
+      <div class="stage-body">
+        <div>
+          <h2>Context</h2>
+          <p>Situate the reader and set the context of the problem you are trying to solve.</p>
+        </div>
+        <div class="excerpt">
+            <p>When psychologists want to know how well people judge their own thinking, they usually just ask them. How confident are you in that answer? How likely are you to remember this later? These ratings appear in hundreds of studies of learning, memory and decision-making.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-problem">
+      <div class="stage-body">
+        <div>
+          <h2>The problem</h2>
+          <p>Specify the problem, and explain why it is a problem.</p>
+        </div>
+        <div class="excerpt">
+            <p>But asking the question may change the answer. A growing body of work suggests that making these ratings can change how people learn and perform. If so, the measure is altering the very thing it is meant to measure.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-solution">
+      <div class="stage-body">
+        <div>
+          <h2>Your solution</h2>
+          <p>Explain how you are going to solve the problem in this study.</p>
+        </div>
+        <div class="excerpt">
+            <p>In this study, we compared people who rated their confidence with people who did not, to test whether rating changes performance on <span class="ph">[task]</span>.</p>
+        </div>
+      </div>
+    </li>
+    <li class="part">
+      <p class="part-num">Part 2</p>
+      <h2>The theory</h2>
+      <p>Step back, then narrow down. Each section is a little more specific than the one before, until the reader arrives at your research questions.</p>
+    </li>
+    <li class="stage" id="p-area">
+      <div class="stage-body">
+        <div>
+          <h2>Research area</h2>
+          <p>Now step back and start with very general background. How far you step back depends on the length of the piece, but it is usually the research area.</p>
+        </div>
+        <div class="excerpt">
+            <p>Metacognition refers to the ability to monitor and control one&rsquo;s own cognitive processes (Flavell, 1979).</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-topic">
+      <div class="stage-body">
+        <div>
+          <h2>Research topic</h2>
+          <p>Narrow to your research topic within that area.</p>
+        </div>
+        <div class="excerpt">
+            <p>Metacognition is most often measured with self-reported ratings, such as judgements of learning or confidence ratings, collected during or after a task.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-research-problem">
+      <div class="stage-body">
+        <div>
+          <h2>Research problem</h2>
+          <p>Introduce the specific research problem your study addresses.</p>
+        </div>
+        <div class="excerpt">
+            <p>These measures rest on an assumption that is rarely tested: that asking for a rating does not change the processes being measured. When it does, the measure is said to be reactive.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-known">
+      <div class="stage-body">
+        <div>
+          <h2>What we know</h2>
+          <p>Review what we already know about the research problem.</p>
+          <p>Organise this by idea, not by paper. Group studies around a finding or argument rather than giving each paper its own paragraph (&ldquo;Smith (2019) found&hellip; Jones (2020) found&hellip;&rdquo;).</p>
+        </div>
+        <div class="excerpt">
+            <p>Judgements of learning are now known to be reactive. Making them improves memory for related word pairs, but has little effect on unrelated pairs (Double et al., 2018; Soderstrom et al., 2015). Confidence ratings can also change performance on reasoning tasks (Double &amp; Birney, 2017).</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-unknown">
+      <div class="stage-body">
+        <div>
+          <h2>What we don&rsquo;t know</h2>
+          <p>Set out what we don&rsquo;t yet know about the research problem, and what we might expect to find.</p>
+          <p>Make the gap concrete. &ldquo;No one has studied this&rdquo; is not enough on its own. Say why it matters that we don&rsquo;t know, and what the possible results would tell us.</p>
+        </div>
+        <div class="excerpt">
+            <p>However, it is unclear whether ratings are reactive in <span class="ph">[context]</span>. This matters because <span class="ph">[why it matters]</span>. If reactivity reflects a change in how people approach the task, we would expect <span class="ph">[prediction]</span>.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-current">
+      <div class="stage-body">
+        <div>
+          <h2>Current study</h2>
+          <p>Summarise the current study and your approach: how it will answer what we don&rsquo;t yet know.</p>
+        </div>
+        <div class="excerpt">
+            <p>In the current study, participants completed <span class="ph">[task]</span> either with or without confidence ratings. This allowed us to test whether <span class="ph">[gap]</span>.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-questions">
+      <div class="stage-body">
+        <div>
+          <h2>Research questions and hypotheses</h2>
+          <p>Finish with your research questions, your hypotheses, or both.</p>
+        </div>
+        <div class="excerpt">
+            <p>We asked whether making confidence ratings changes <span class="ph">[outcome]</span>, and whether any effect depends on <span class="ph">[moderator]</span>.</p>
+        </div>
+      </div>
+    </li>
+    <li class="stage" id="p-principles">
+      <h2>General principles</h2>
+      <ul class="principles">
+        <li class="principle"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 11h24" stroke-width="3"/><path d="M8 18h24M8 24h24M8 30h16" opacity="0.45"/></svg><div><strong>Lead with topic sentences</strong><span>Open each paragraph with a sentence that states its point. Reading only the first sentence of every paragraph should give the whole argument.</span></div></li>
+        <li class="principle"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="6" width="12" height="9" rx="2"/><rect x="23" y="25" width="12" height="9" rx="2"/><path d="M11 15v6a4 4 0 0 0 4 4h8"/><path d="m20 22 3 3-3 3"/></svg><div><strong>Each paragraph sets up the next</strong><span>The research problem creates the need to review what we know, the gap creates the need for your study, and so on. If a paragraph doesn&rsquo;t lead anywhere, cut it or move it.</span></div></li>
+        <li class="principle"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20.5V8a2 2 0 0 1 2-2h12.5L34 19.5a2 2 0 0 1 0 2.8L22.3 34a2 2 0 0 1-2.8 0Z"/><circle cx="13" cy="13" r="2.4"/></svg><div><strong>Define terms once and keep them</strong><span>Introduce each technical term when it first appears in the theory section, then use the same word throughout rather than switching between synonyms.</span></div></li>
+      </ul>
+    </li>
+    </ol>
+
+      <section class="chapter" id="method">
+        <h2>The method</h2>
+        <p>The method should give another researcher everything they need to run your study again. Use these subheadings.</p>
+        <dl class="parts">
+          <div><dt>Participants</dt><dd>Who took part, how many, where they were recruited and what they received for taking part. Give the age and gender breakdown, how you decided on the sample size, and how many people you excluded and why.</dd></div>
+          <div><dt>Design</dt><dd>The independent and dependent variables, and whether each manipulation was between or within participants.</dd></div>
+          <div><dt>Materials</dt><dd>The tasks, measures and stimuli, in enough detail to rebuild them. Link to the materials if you can share them.</dd></div>
+          <div><dt>Procedure</dt><dd>What participants did, in order, and how long it took. Include the ethics approval and, if you preregistered, a link to the preregistration.</dd></div>
+          <div><dt>Analysis</dt><dd>Your planned analyses and the software and packages you used. Say where the data and analysis script are available.</dd></div>
+        </dl>
+        <p class="hint"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c.4 4.6 2.4 6.6 7 7-4.6.4-6.6 2.4-7 7-.4-4.6-2.4-6.6-7-7 4.6-.4 6.6-2.4 7-7Z"/><path d="M19 15c.2 2 1 2.8 3 3-2 .2-2.8 1-3 3-.2-2-1-2.8-3-3 2-.2 2.8-1 3-3Z" opacity="0.6"/></svg><span>Claude or ChatGPT can write a good first draft of the method, especially if you ask in the same chat you used to build the task. It already knows the design, the trials and the exclusions. Check every detail against the experiment itself.</span></p>
+      </section>
+
+      <section class="chapter" id="results">
+        <h2>The results</h2>
+        <p>The results report what you found, without interpreting it. Save what it means for the discussion.</p>
+        <ul class="checks">
+          <li><strong>Start with the data.</strong> Say how the data were screened, how many participants were excluded, and give the descriptive statistics.</li>
+          <li><strong>Follow your research questions.</strong> Report the analyses in the same order as the questions or hypotheses at the end of your introduction.</li>
+          <li><strong>Report each test in full.</strong> Say what was tested, give the test statistic, <em>p</em> value and effect size with its confidence interval, then say in one plain sentence what the result shows.</li>
+          <li><strong>Let tables and figures carry the detail.</strong> Use the text to point out what matters rather than repeating every number.</li>
+          <li><strong>Keep exploratory analyses separate.</strong> Label any analysis you did not plan, after the planned ones. This doesn&rsquo;t apply to basic descriptives such as means, standard deviations and correlations between your measures. You don&rsquo;t need to have planned those, and you don&rsquo;t need to call them exploratory.</li>
+        </ul>
+        <p class="hint"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c.4 4.6 2.4 6.6 7 7-4.6.4-6.6 2.4-7 7-.4-4.6-2.4-6.6-7-7 4.6-.4 6.6-2.4 7-7Z"/><path d="M19 15c.2 2 1 2.8 3 3-2 .2-2.8 1-3 3-.2-2-1-2.8-3-3 2-.2 2.8-1 3-3Z" opacity="0.6"/></svg><span>The same applies here. In the chat where you analysed the data, Claude or ChatGPT already has every number and can draft a solid results section. Check each number against your own R output before you use it.</span></p>
+      </section>
+
+      <section class="chapter" id="discussion">
+        <h2>The discussion</h2>
+        <p>The discussion mirrors the introduction. The introduction narrows from the broad research area down to your questions. The discussion starts with your answers and widens back out to what they mean for the field.</p>
+        <figure class="widen">
+          <svg viewBox="0 0 440 231" role="img" aria-labelledby="widen-title"><title id="widen-title">The discussion widens out: from a summary of your findings to their broader implications, ending with a conclusion.</title><path class="band" fill-opacity="0.64" d="M150.0 6 L290.0 6 L311.7 40 L128.3 40Z"/><text x="220.0" y="27.5" text-anchor="middle">Summary of findings</text><path class="band" fill-opacity="0.54" d="M126.3 43 L313.7 43 L335.4 77 L104.6 77Z"/><text x="220.0" y="64.5" text-anchor="middle">Interpretation</text><path class="band" fill-opacity="0.44" d="M102.7 80 L337.3 80 L359.0 114 L81.0 114Z"/><text x="220.0" y="101.5" text-anchor="middle">Implications</text><path class="band" fill-opacity="0.34" d="M79.0 117 L361.0 117 L382.7 151 L57.3 151Z"/><text x="220.0" y="138.5" text-anchor="middle">Limitations</text><path class="band" fill-opacity="0.24" d="M55.4 154 L384.6 154 L406.3 188 L33.7 188Z"/><text x="220.0" y="175.5" text-anchor="middle">Future directions</text><path class="band" fill-opacity="0.14" d="M31.7 191 L408.3 191 L430.0 225 L10.0 225Z"/><text x="220.0" y="212.5" text-anchor="middle">Conclusion</text></svg>
+        </figure>
+        <dl class="parts">
+          <div><dt>Summary of findings</dt><dd>Restate the aim of the study, then answer each research question in plain language, in the same order as the introduction. Leave out the statistics.</dd></div>
+          <div><dt>Interpretation</dt><dd>For each finding, say what it means and how it fits with the work you reviewed in the introduction. Where your results disagree with past work, offer possible reasons.</dd></div>
+          <div><dt>Implications</dt><dd>Return to the problem from your opening and say what your findings mean for theory, measurement or practice.</dd></div>
+          <div><dt>Limitations</dt><dd>Consider other explanations for your results. Be specific: say how each limitation could have affected your conclusions. Skip generic limitations, such as &ldquo;the sample was mostly students&rdquo;, unless they matter for this question.</dd></div>
+          <div><dt>Future directions</dt><dd>Suggest concrete next studies that follow from your findings or limitations, rather than &ldquo;more research is needed&rdquo;.</dd></div>
+          <div><dt>Conclusion</dt><dd>End with a short paragraph giving the take-home message.</dd></div>
+        </dl>
+        <ul class="checks">
+          <li><strong>No new results.</strong> Everything you discuss should already be in the results section.</li>
+          <li><strong>Interpret, don&rsquo;t repeat.</strong> The results say what you found. The discussion says what it means.</li>
+          <li><strong>Don&rsquo;t overclaim.</strong> Match the strength of your conclusions to the strength of your evidence, especially for null or exploratory results.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="review">
+        <h2>Review your draft</h2>
+        <p>Once you have a full draft, use Claude or ChatGPT to review it with the prompts below. If you write in Word, the easiest way is the Claude plugin for Microsoft Word, which runs the prompts on your document and can leave its feedback as comments or make edits directly. Run the prompts one at a time, in this order. Doing them separately, rather than in one giant &ldquo;check everything&rdquo; prompt, gets you sharper, less generic feedback.</p>
+        <ol class="prompts">
+          <li class="prompt">
+            <details>
+              <summary><span class="prompt-num">1</span><span class="prompt-head"><strong>Logic and reasoning</strong><span>Checks whether every claim is supported, and finds gaps in the argument.</span></span></summary>
+              <div class="prompt-body"><pre><code>Read this draft as a critical reviewer focused only on the argument, not the writing style. For each claim I make, check whether it is actually supported by the evidence or reasoning I provide. Identify:
+- Any claims that are unsupported, overstated, or not backed by what I've cited
+- Gaps in the logical chain (where a conclusion doesn't follow from the premises)
+- Circular reasoning or unstated assumptions I'm relying on
+- Places where I've ignored an obvious counterargument or alternative explanation
+- Any internal contradictions between different parts of the draft
+
+For each issue, quote the specific sentence and explain the problem in one or two sentences. Do not comment on grammar, style, or formatting.</code></pre><button type="button" class="prompt-copy">Copy</button></div>
+            </details>
+          </li>
+          <li class="prompt">
+            <details>
+              <summary><span class="prompt-num">2</span><span class="prompt-head"><strong>Clarity and organisation</strong><span>Reads it as a newcomer and lists the issues that hurt readability most.</span></span></summary>
+              <div class="prompt-body"><pre><code>Read this draft as someone unfamiliar with the topic. Assess:
+- Whether the overall structure makes sense (does each section build logically on the last?)
+- Whether the purpose of each paragraph is clear within the first sentence or two
+- Any paragraphs that try to do too much or wander off topic
+- Sentences that are unclear, ambiguous, or require rereading to understand
+- Whether transitions between sections/paragraphs actually connect the ideas, or just sit there
+
+Give me a short list of the 5-8 highest-impact issues, ordered by how much they hurt readability. For each, quote the passage and suggest a fix. Do not comment on grammar or formatting.</code></pre><button type="button" class="prompt-copy">Copy</button></div>
+            </details>
+          </li>
+          <li class="prompt">
+            <details>
+              <summary><span class="prompt-num">3</span><span class="prompt-head"><strong>Consistency</strong><span>Finds terms, numbers and claims that don&rsquo;t match across the draft.</span></span></summary>
+              <div class="prompt-body"><pre><code>Check this draft for internal consistency only. Look for:
+- Terminology used inconsistently (e.g. switching between two terms for the same concept)
+- Numbers, statistics, or facts stated differently in different places
+- Claims made early in the draft that are contradicted or quietly abandoned later
+- Inconsistent tense, voice, or level of formality across sections
+- Inconsistent citation style or referencing format
+
+List each inconsistency with both locations quoted side by side.</code></pre><button type="button" class="prompt-copy">Copy</button></div>
+            </details>
+          </li>
+          <li class="prompt">
+            <details>
+              <summary><span class="prompt-num">4</span><span class="prompt-head"><strong>Copy edit</strong><span>Sentence-level fixes, given as before-and-after pairs you can accept or reject.</span></span></summary>
+              <div class="prompt-body"><pre><code>Copy edit this draft at the sentence level. Fix:
+- Grammar, punctuation, and spelling errors
+- Awkward or clunky phrasing
+- Unnecessary wordiness or redundancy
+- Passive voice where active would be stronger
+
+Do not change my arguments, structure, or content. Give me the edits as a list of "original -&gt; revised" pairs, not a full rewritten draft, so I can see exactly what changed and decide whether I agree.</code></pre><button type="button" class="prompt-copy">Copy</button></div>
+            </details>
+          </li>
+          <li class="prompt">
+            <details>
+              <summary><span class="prompt-num">5</span><span class="prompt-head"><strong>Formatting check</strong><span>Headings, lists, references, figures and tables.</span></span></summary>
+              <div class="prompt-body"><pre><code>Check this draft for minor formatting issues only:
+- Inconsistent heading levels or heading style
+- Inconsistent spacing, bullet/numbering style, or indentation
+- Citation and reference list formatting errors (missing details, inconsistent style, references not matching in-text citations)
+- Figure/table numbering or caption issues
+- Any obvious layout problems (e.g. orphaned headings, inconsistent font/size cues if described in the text)
+
+List each issue with its location. Do not comment on content, argument, or wording.</code></pre><button type="button" class="prompt-copy">Copy</button></div>
+            </details>
+          </li>
+        </ol>
+        <ul class="checks">
+          <li><strong>Logic first, formatting last.</strong> There&rsquo;s no point polishing sentences around a broken argument.</li>
+          <li><strong>One job per prompt.</strong> If you combine them, the model tends to default to surface-level copy edits and under-reports structural or logical problems.</li>
+          <li><strong>Diagnose, then decide.</strong> The prompts flag problems; they don&rsquo;t fix them. Read every flagged issue and decide whether to act on it. Don&rsquo;t paste the output straight into your draft.</li>
+        </ul>
+      </section>
+    </div>
+  </div>
 </div>
+
+
+<script>
+// Section nav: highlight the section being read, and show a divider once the nav sticks.
+(function () {
+  const nav = document.querySelector('.section-nav');
+  const links = [...nav.querySelectorAll('a')];
+  const sections = links.map(a => document.querySelector(a.getAttribute('href')));
+  function update() {
+    nav.classList.toggle('stuck', nav.getBoundingClientRect().top <= 0);
+    let current = 0;
+    sections.forEach((el, i) => { if (el.getBoundingClientRect().top <= innerHeight * 0.35) current = i; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) current = sections.length - 1;
+    links.forEach((a, i) => { if (i === current) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
+  }
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+})();
+</script>
+
+<script>
+// Copy buttons on the review prompts.
+document.querySelectorAll('.prompt-copy').forEach(btn => btn.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(btn.previousElementSibling.textContent);
+    btn.textContent = 'Copied';
+  } catch { btn.textContent = 'Select and copy'; }
+  setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
+}));
+</script>
 
 </body>
 </html>
