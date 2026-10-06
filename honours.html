@@ -162,6 +162,56 @@ a { color:inherit; text-decoration:none; }
 .countdown li > span { display:block; margin-top:4px; font-size:0.9rem; line-height:1.6; color:var(--color-text-muted); }
 .logistics .ticks { margin-top:28px; }
 
+/* Roadmap */
+.sched { margin-top:28px; border:1px solid var(--color-border); border-radius:18px; background:var(--color-bg-warm); overflow:hidden; }
+.sched-rail { display:flex; gap:20px; padding:20px 22px 16px; overflow-x:auto; border-bottom:1px solid var(--color-border); }
+.sched-phase { flex:0 0 auto; }
+.sched-phase-name {
+  font-size:0.64rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--color-text-light); margin-bottom:8px;
+}
+.sched-weeks { display:flex; gap:6px; }
+.sched-week {
+  min-width:64px; padding:8px 8px 7px; border-radius:10px; border:1px solid var(--color-border);
+  background:var(--color-bg); cursor:pointer; font:inherit; line-height:1.1; text-align:center;
+  color:var(--color-text-muted); transition:all 0.25s var(--ease);
+}
+.sched-week b { display:block; font-family:var(--font-display); font-size:1.15rem; font-weight:500; color:var(--color-text); }
+.sched-week small { display:block; margin-top:4px; font-size:0.6rem; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap; }
+.sched-week:hover { border-color:var(--color-accent); }
+.sched-week[aria-selected="true"] { background:var(--color-accent); border-color:var(--color-accent); color:rgba(255,255,255,0.85); }
+.sched-week[aria-selected="true"] b { color:#fff; }
+.sched-week:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
+.sched-detail { padding:26px 28px 28px; }
+.sched-top { display:flex; align-items:flex-start; gap:16px; }
+.sched-when { font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-accent-h); }
+.sched-title { margin-top:4px; font-family:var(--font-display); font-size:1.6rem; font-weight:500; letter-spacing:-0.02em; line-height:1.2; }
+.sched-nav { margin-left:auto; display:flex; gap:6px; }
+.sched-nav button {
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--color-border); background:var(--color-bg);
+  color:var(--color-text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all 0.25s var(--ease);
+}
+.sched-nav button:hover:not(:disabled) { border-color:var(--color-accent); color:var(--color-text); }
+.sched-nav button:disabled { opacity:0.35; cursor:default; }
+.sched-nav button:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
+.sched-nav svg { width:16px; height:16px; }
+.sched-cols { margin-top:22px; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
+.sched-col { padding:18px 20px; border-radius:12px; background:var(--color-bg); border:1px solid var(--color-border); }
+.sched-col h4 {
+  display:flex; align-items:center; gap:8px; font-size:0.68rem; font-weight:600; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--color-text-light);
+}
+.sched-col h4 svg { width:16px; height:16px; color:var(--color-accent); }
+.sched-col p, .sched-col li { margin-top:8px; font-size:0.95rem; line-height:1.65; color:var(--color-text); }
+.sched-col ul { padding-left:1.1em; }
+.sched-col li::marker { color:var(--color-accent); }
+@media(max-width:600px){
+  .sched-cols { grid-template-columns:1fr; }
+  .sched-detail { padding:22px 18px 24px; }
+  .sched-title { font-size:1.35rem; }
+}
+
 @media(max-width:820px){
   .themes { grid-template-columns:1fr; }
   .theme-top { min-height:0; }
@@ -199,7 +249,7 @@ a { color:inherit; text-decoration:none; }
   <div class="page-header">
     <span class="page-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5Z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/></svg></span>
     <h1 class="page-title">Honours</h1>
-    <p class="page-desc">Project themes and the proposal, for students doing Honours in the Meta Lab.</p>
+    <p class="page-desc">Project themes, a roadmap for first semester and the proposal, for students doing Honours in the Meta Lab.</p>
   </div>
 
   <div class="honours">
@@ -249,6 +299,15 @@ a { color:inherit; text-decoration:none; }
       </ul>
     </section>
 
+    <section class="h-section" id="roadmap">
+      <h2>First semester roadmap</h2>
+      <p>A rough guide to how it usually unfolds, from your first meeting to your second experiment. Each step is roughly one meeting, but the pace will vary from project to project. Pick a step to see what to prepare beforehand and what we aim to settle when we meet.</p>
+      <div class="sched">
+        <div class="sched-rail" role="tablist" aria-label="Roadmap steps" id="schedRail"></div>
+        <div class="sched-detail" role="tabpanel" id="schedDetail" aria-live="polite"></div>
+      </div>
+    </section>
+
     <section class="h-section" id="proposal">
       <h2>Proposal</h2>
       <p>Write a short proposal of about 1,000 words. The background explains why the method matters. The method is the detailed, useful part, and it is what gets the feedback. Aim to make the method easy to judge and improve.</p>
@@ -295,6 +354,98 @@ a { color:inherit; text-decoration:none; }
     </section>
   </div>
 </div>
+
+<script>
+// Honours roadmap: pick a step to see what to prepare and what the meeting aims to settle.
+(function () {
+  const phases = [
+    { name: 'Plan', weeks: [
+      { title: 'Onboarding', short: 'Start', prep: ['Get your accounts and everything else on the <a href="onboarding.html">onboarding page</a> set up.'], aim: 'Welcome, and talk through the year ahead.' },
+      { title: 'Research questions', short: 'Questions', prep: ['Decide on a theme and draft 3&ndash;6 research questions.'], aim: 'Pick 1 or 2 research questions to start developing experiments around.' },
+      { title: 'Experiment ideas', short: 'Ideas', prep: ['Sketch out 1&ndash;2 experiment ideas.'], aim: 'Choose the experiment.' },
+      { title: 'Pitch the idea', short: 'Pitch', prep: ['Draft a one-page pitch covering:', '* the question or problem you are trying to solve', '* how your experiment answers it', '* a basic outline of the experiment'], aim: 'Make sure the experiment is feasible and appropriate for Honours.' },
+      { title: 'Refine the experiment', short: 'Refine', prep: ['A complete outline of the experiment in PowerPoint, plus any decisions still to be made.'], aim: 'A final version of the experiment.' },
+    ]},
+    { name: 'Build', weeks: [
+      { title: 'Coding', short: 'Code', prep: ['Draft any ethics modifications you need.'], aim: 'Get set up with the paradigm in Claude or ChatGPT.' },
+      { title: 'Code review', short: 'Review', prep: ['Finished code, ready for review.'], aim: 'Kit goes through the code in full and notes any issues.' },
+      { title: 'Pilot', short: 'Pilot', prep: ['Launch the study and collect data from 10 people.'], aim: 'Discuss the pilot data and any changes.' },
+    ]},
+    { name: 'Run', weeks: [
+      { title: 'Minimal analysis', short: 'Analyse', prep: ['Analyse the data, just enough to see the main effect.'], aim: 'Plan Experiment 2.' },
+      { title: 'Follow-up', short: 'Exp 2', prep: ['Experiment 2 code, ready for review.'], aim: 'Discuss the Experiment 2 code and prepare to launch.' },
+      { title: 'Experiment 2 discussion', short: 'Next', prep: ['Analyse the data, just enough to see the main effect.'], aim: 'Plan the writing and the rest of the year.' },
+    ]},
+  ];
+  const weeks = phases.flatMap(p => p.weeks.map(w => ({ ...w, phase: p.name })));
+  const rail = document.getElementById('schedRail');
+  const detail = document.getElementById('schedDetail');
+  const icPrep = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>';
+  const icAim = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></svg>';
+  const arrow = d => `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  let current = 0;
+  const buttons = [];
+
+  phases.forEach(phase => {
+    const group = document.createElement('div');
+    group.className = 'sched-phase';
+    group.innerHTML = `<p class="sched-phase-name">${phase.name}</p><div class="sched-weeks"></div>`;
+    phase.weeks.forEach(w => {
+      const i = weeks.indexOf(weeks.find(x => x.title === w.title));
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sched-week';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-controls', 'schedDetail');
+      b.setAttribute('aria-label', `Step ${i + 1}: ${w.title}`);
+      b.innerHTML = `<b>${i + 1}</b><small>${w.short}</small>`;
+      b.addEventListener('click', () => select(i));
+      b.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); select(Math.min(i + 1, weeks.length - 1), true); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); select(Math.max(i - 1, 0), true); }
+      });
+      buttons[i] = b;
+      group.querySelector('.sched-weeks').appendChild(b);
+    });
+    rail.appendChild(group);
+  });
+
+  function list(items) {
+    const bullets = items.filter(t => t.startsWith('* ')).map(t => `<li>${t.slice(2)}</li>`).join('');
+    const text = items.filter(t => !t.startsWith('* ')).map(t => `<p>${t}</p>`).join('');
+    return text + (bullets ? `<ul>${bullets}</ul>` : '');
+  }
+
+  function select(i, focus) {
+    current = i;
+    const w = weeks[i];
+    buttons.forEach((b, j) => {
+      b.setAttribute('aria-selected', j === i ? 'true' : 'false');
+      b.tabIndex = j === i ? 0 : -1;
+    });
+    if (focus) buttons[i].focus();
+    buttons[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    detail.innerHTML = `
+      <div class="sched-top">
+        <div>
+          <p class="sched-when">Step ${i + 1} of ${weeks.length} &middot; ${w.phase}</p>
+          <h3 class="sched-title">${w.title}</h3>
+        </div>
+        <div class="sched-nav">
+          <button type="button" data-step="-1" aria-label="Previous step" ${i === 0 ? 'disabled' : ''}>${arrow('M10 3 5 8l5 5')}</button>
+          <button type="button" data-step="1" aria-label="Next step" ${i === weeks.length - 1 ? 'disabled' : ''}>${arrow('m6 3 5 5-5 5')}</button>
+        </div>
+      </div>
+      <div class="sched-cols">
+        <div class="sched-col"><h4>${icPrep}Before the meeting</h4>${list(w.prep)}</div>
+        <div class="sched-col"><h4>${icAim}When we meet</h4><p>${w.aim}</p></div>
+      </div>`;
+    detail.querySelectorAll('[data-step]').forEach(btn =>
+      btn.addEventListener('click', () => select(current + Number(btn.dataset.step))));
+  }
+  select(0);
+})();
+</script>
 
 </body>
 </html>
