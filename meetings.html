@@ -234,6 +234,13 @@
       height: 18px;
     }
 
+    .past-toggle {
+      margin-top: 14px; padding: 6px 0; border: 0; background: none; cursor: pointer;
+      font: inherit; font-size: 0.85rem; font-weight: 500; color: var(--accent-light);
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+    .past-toggle:hover { color: var(--text); }
+    .past-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
     .schedule-table {
       width: 100%;
       border-collapse: collapse;
@@ -475,6 +482,7 @@
           </tr>
         </tbody>
       </table>
+      <button type="button" class="past-toggle" id="pastToggle" onclick="togglePast()" hidden>Show past meetings</button>
     </div>
   </div>
 
@@ -545,7 +553,8 @@ const firebaseConfig = {
       if (!dateStr) return '';
       const date = parseDate(dateStr);
       if (!date || isNaN(date.getTime())) return '';
-      return date.toISOString().split('T')[0];
+      const pad = n => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     }
 
     function showStatus(message, type = 'success') {
@@ -563,6 +572,12 @@ const firebaseConfig = {
     // ============================================================
     // CRUD OPERATIONS
     // ============================================================
+    let showPast = false;
+    window.togglePast = function() {
+      showPast = !showPast;
+      loadMeetings();
+    };
+
     async function loadMeetings() {
       const tbody = document.getElementById('schedule-body');
 
@@ -575,16 +590,20 @@ const firebaseConfig = {
           meetings.push({ id: doc.id, ...doc.data() });
         });
 
-        // Filter to show only future meetings
+        // Show only upcoming meetings unless past ones have been asked for
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const futureMeetings = meetings.filter(m => {
           const meetingDate = parseDate(m.date);
           return meetingDate && meetingDate >= today;
         });
+        const pastCount = meetings.length - futureMeetings.length;
 
-        const meetingsToShow = futureMeetings.length > 0 ? futureMeetings : meetings;
-        renderMeetings(meetingsToShow);
+        const toggle = document.getElementById('pastToggle');
+        toggle.hidden = pastCount === 0;
+        toggle.textContent = showPast ? 'Hide past meetings' : `Show past meetings (${pastCount})`;
+
+        renderMeetings(showPast ? meetings : futureMeetings, 'No upcoming meetings scheduled yet.');
       } catch (error) {
         console.error('Failed to load meetings:', error);
         tbody.innerHTML = `
@@ -597,14 +616,14 @@ const firebaseConfig = {
       }
     }
 
-    function renderMeetings(meetings) {
+    function renderMeetings(meetings, emptyMessage = 'No meetings scheduled.') {
       const tbody = document.getElementById('schedule-body');
 
       if (!meetings || meetings.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="4" style="text-align: center; color: var(--muted);">
-              No meetings scheduled. Click "Add Meeting" to create one.
+              ${emptyMessage} Click "Add Meeting" to create one.
             </td>
           </tr>
         `;
