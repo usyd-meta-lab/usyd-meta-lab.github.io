@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Do You Know What You Know?</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --accent:#e64626; --accent-dark:#b8321a; --accent-soft:#fdece7;
+  --ink:#000000; --muted:#414141; --light:#8a8a8a; --line:#d9d9d9; --soft:#f6f6f6; --bg:#ffffff;
+  --serif:'Times New Roman', Times, serif;
+  --mono:ui-monospace,'SF Mono','JetBrains Mono',Consolas,monospace;
+  --sans:Arial,'Helvetica Neue',Helvetica,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.45;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+input{font:inherit}
+.top{border-bottom:1px solid var(--line)}
+.top-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.brand b{color:var(--muted);font-weight:400}
+.tag{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);padding:4px 10px}
+.wrap{max-width:640px;margin:0 auto;padding:24px 18px 80px}
+.wrap.host{max-width:1280px}
+h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1;margin:0 0 10px}
+h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.15;margin:0 0 8px}
+h3{font-family:var(--serif);font-weight:400;font-size:20px;margin:0 0 6px}
+.label{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.tiny{font-size:12.5px;color:var(--light)}
+.lede{font-size:18px;color:var(--muted);margin-bottom:18px}
+.card{border:1px solid var(--line);padding:20px;margin:0 0 16px;background:#fff}
+.card.soft{background:var(--soft)}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:1px solid var(--accent);padding:12px 18px;font-size:15px;text-decoration:none;text-align:center}
+.btn:hover{background:var(--accent-dark);border-color:var(--accent-dark)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.small{padding:7px 12px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.block{display:block;width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+.prog{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between}
+.bar{height:3px;background:var(--line);margin-bottom:22px}
+.bar i{display:block;height:3px;background:var(--accent)}
+.q{font-family:var(--serif);font-size:26px;line-height:1.2;margin:4px 0 20px}
+.opts{display:grid;gap:10px}
+.opt{border:1px solid var(--line);background:#fff;padding:16px;text-align:left;font-size:17px}
+.opt:hover{border-color:var(--ink)}
+.opt.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.chips{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.chips.five{grid-template-columns:repeat(5,1fr)}
+.chip{border:1px solid var(--line);background:#fff;padding:14px 0;font-family:var(--mono);font-size:15px}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.anch{display:flex;justify-content:space-between;font-size:12px;color:var(--light);margin-top:6px}
+.sub{margin-top:22px}
+.txt{width:100%;font-size:20px;padding:14px;border:1px solid var(--line);outline:none}
+.txt:focus{border-color:var(--accent)}
+.center{text-align:center}
+.big-wait{padding:50px 10px;text-align:center}
+.big-wait h1{margin-bottom:8px}
+.dotpulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);animation:p 1.3s infinite;margin-right:8px;vertical-align:middle}
+@keyframes p{0%{opacity:.25}50%{opacity:1}100%{opacity:.25}}
+.teams{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.teambtn{border:1px solid var(--line);background:#fff;padding:22px 10px;font-family:var(--serif);font-size:24px}
+.teambtn:hover{border-color:var(--accent);color:var(--accent)}
+.stat{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.stat:first-of-type{border-top:0}
+.stat b{font-family:var(--mono);font-weight:400;color:var(--accent);white-space:nowrap}
+.titem{border-top:1px solid var(--line);padding:14px 0}
+.titem .tq{font-family:var(--serif);font-size:19px;margin-bottom:8px}
+.titem .opts{grid-template-columns:1fr 1fr}
+.titem .opt{padding:12px;font-size:15px}
+.adv{border-left:3px solid var(--accent);background:var(--accent-soft);padding:14px 16px;margin:0 0 18px}
+.adv .v{font-family:var(--serif);font-size:30px}
+input[type=range]{width:100%;accent-color:var(--accent);height:34px}
+.readout{font-family:var(--serif);font-size:28px;text-align:center;margin:8px 0}
+.banner{border:1px solid var(--accent);background:var(--accent-soft);padding:12px 14px;margin-bottom:14px;font-size:14px}
+.banner pre{background:#fff;border:1px solid var(--line);padding:8px;margin-top:8px;font-size:12px;overflow:auto}
+
+/* ---------- host ---------- */
+.hostgrid{display:grid;grid-template-columns:1fr;gap:16px}
+.join{display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);padding:14px 18px}
+.join #qr{width:116px;height:116px}
+.join #qr img,.join #qr canvas{width:116px!important;height:116px!important}
+.joinurl{font-family:var(--mono);font-size:17px;word-break:break-all}
+.code{font-family:var(--serif);font-size:44px;line-height:1;color:var(--accent)}
+.nbig{font-family:var(--serif);font-size:44px;line-height:1;text-align:right}
+.phases{display:flex;gap:4px;flex-wrap:wrap}
+.ph{border:1px solid var(--line);background:#fff;padding:6px 10px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.ph.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.ph.done{color:var(--ink);border-color:#bbb}
+.ph.h2{border-style:dashed}
+.stage{border:1px solid var(--line);padding:26px 30px;min-height:520px}
+.stage h1{font-size:40px}
+.prompt{font-family:var(--serif);font-size:23px;color:var(--muted);margin:2px 0 16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1px solid var(--line);background:#fff;padding:7px 12px;font-family:var(--mono);font-size:12px}
+.tab.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:6px 0 4px}
+.legend span i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:middle}
+.keystats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.ks{border-top:2px solid var(--ink);padding-top:8px}
+.ks .n{font-family:var(--serif);font-size:34px;line-height:1.1}
+.ks .l{font-size:13.5px;color:var(--muted)}
+.tutor{margin-top:18px;border-left:3px solid var(--line);padding:8px 14px;font-size:14px;color:var(--muted)}
+.tutor b{font-family:var(--mono);font-weight:400;font-size:11.5px;color:var(--accent);display:block;margin-bottom:2px;text-transform:uppercase}
+.progress-teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+.pt{border:1px solid var(--line);padding:12px}
+.pt .tn{font-family:var(--serif);font-size:22px}
+.pt .bar{margin:8px 0 0}
+.lb{width:100%;border-collapse:collapse;font-size:18px}
+.lb td,.lb th{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}
+.lb th{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted)}
+.lb td.r,.lb th.r{text-align:right;font-family:var(--mono)}
+.lb tr:first-child td{font-weight:bold}
+.controls{border-top:1px solid var(--line);padding-top:14px}
+body.present .controls,body.present .tutor{display:none}
+.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media (max-width:700px){
+  .stage{padding:16px}
+  .stage h1{font-size:30px}
+  .prompt{font-size:19px}
+  .code,.nbig{font-size:32px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand">Meta Lab <b>· Metacognition tutorial</b></div>
+  <div class="tag" id="tag">PSYC2016</div>
+</div></header>
+<main id="app"></main>
+
+<script type="module">
+/* =====================================================================
+   CONFIG
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyBaz1nWglmiKv9W_MrbulS__h8aieCPPE8",
+  authDomain: "meetings-b9e5e.firebaseapp.com",
+  projectId: "meetings-b9e5e",
+  storageBucket: "meetings-b9e5e.firebasestorage.app",
+  messagingSenderId: "368747163289",
+  appId: "1:368747163289:web:29719439e3b61126331208"
+};
+const ROOT = 'metacog_tutorial';
+const TEAM_NAMES = ['A','B','C','D','E','F','G','H'];
+
+/* =====================================================================
+   QUESTION BANK
+   p = rough expected proportion correct (used only for simulated data)
+   ===================================================================== */
+const R1 = [
+  { id:'t1', q:'Who painted <em>The Persistence of Memory</em>, the painting of melting clocks?', accept:['dali'], opts:['Salvador Dalí','René Magritte','Joan Miró','Pablo Picasso'], p:.55 },
+  { id:'t2', q:'Who wrote the novel <em>Frankenstein</em>?', accept:['shelley','shelly'], opts:['Mary Shelley','Bram Stoker','Emily Brontë','Jane Austen'], p:.5 },
+  { id:'t3', q:'What is the smallest bone in the human body?', accept:['stapes','stirrup'], opts:['Stapes','Incus','Malleus','Hyoid'], p:.3 },
+  { id:'t4', q:'Who composed <em>The Four Seasons</em>?', accept:['vivaldi'], opts:['Antonio Vivaldi','J. S. Bach','George Frideric Handel','W. A. Mozart'], p:.5 },
+  { id:'t5', q:'Titan is the largest moon of which planet?', accept:['saturn'], opts:['Saturn','Jupiter','Neptune','Uranus'], p:.45 },
+  { id:'t6', q:'In which Indian city is the Taj Mahal?', accept:['agra'], opts:['Agra','Delhi','Jaipur','Mumbai'], p:.4 }
+];
+// two-choice items; correct answer is always listed first (display order is shuffled)
+const R2 = [
+  { id:'e1', type:'easy', q:'What is the capital of Australia?', a:['Canberra','Sydney'], p:.97 },
+  { id:'e2', type:'easy', q:'Which has more legs?', a:['A spider','An ant'], p:.95 },
+  { id:'e3', type:'easy', q:'Which planet is closer to the Sun?', a:['Venus','Mars'], p:.85 },
+  { id:'e4', type:'easy', q:'Which is the largest ocean?', a:['The Pacific','The Atlantic'], p:.95 },
+  { id:'e5', type:'easy', q:'Who wrote <em>Romeo and Juliet</em>?', a:['William Shakespeare','Christopher Marlowe'], p:.97 },
+  { id:'e6', type:'easy', q:'Which gas do plants take in for photosynthesis?', a:['Carbon dioxide','Oxygen'], p:.93 },
+  { id:'h1', type:'hard', q:'Which country has the larger population?', a:['Indonesia','Brazil'], p:.7 },
+  { id:'h2', type:'hard', q:'Which element has the higher atomic number?', a:['Lead','Gold'], p:.6 },
+  { id:'h3', type:'hard', q:'Which university was founded first?', a:['The University of Sydney','The University of Melbourne'], p:.65 },
+  { id:'h4', type:'hard', q:'Which city has the larger population?', a:['Brisbane','Perth'], p:.7 },
+  { id:'h5', type:'hard', q:'Which city is further from Sydney?', a:['Perth','Auckland'], p:.75 },
+  { id:'d1', type:'deceptive', q:'Which city is further north?', a:['Rome','New York'], p:.3 },
+  { id:'d2', type:'deceptive', q:'Which city is further south?', a:['Melbourne','Auckland'], p:.35 },
+  { id:'d3', type:'deceptive', q:'Which country has the larger land area?', a:['India','Greenland'], p:.3 },
+  { id:'d4', type:'deceptive', q:'Which planet has the hottest surface?', a:['Venus','Mercury'], p:.35 },
+  { id:'d5', type:'deceptive', q:'What is the capital of Turkey?', a:['Ankara','Istanbul'], p:.5 }
+];
+// round 3: the six R1 items as multiple choice + four new items. Correct option first.
+const R3_NEW = [
+  { id:'n1', q:'Which planet has the shortest day?', opts:['Jupiter','Saturn','Earth','Mercury'], p:.35 },
+  { id:'n2', q:'How many bones are in the adult human body?', opts:['206','186','212','226'], p:.7 },
+  { id:'n3', q:'Which country has the longest coastline?', opts:['Canada','Australia','Russia','Indonesia'], p:.35 },
+  { id:'n4', q:"Who was Australia's first Prime Minister?", opts:['Edmund Barton','Alfred Deakin','Robert Menzies','Henry Parkes'], p:.55 }
+];
+const R3 = R1.map(x => ({ id:x.id, q:x.q, opts:x.opts, p:Math.min(.92, x.p + .3), fromR1:true })).concat(R3_NEW);
+const R4 = [
+  { id:'g1', type:'deceptive', q:'Which contains more neurons?', a:['The cerebellum','The cerebral cortex'], p:.3 },
+  { id:'g2', type:'deceptive', q:'Which is older?', a:['The University of Oxford','The Aztec Empire'], p:.35 },
+  { id:'g3', type:'deceptive', q:"Which happened closer in time to Cleopatra's life?", a:['The Moon landing','The building of the Great Pyramid of Giza'], p:.35 },
+  { id:'g4', type:'deceptive', q:'Which appeared on Earth first?', a:['Sharks','Trees'], p:.35 },
+  { id:'g5', type:'hard', q:'Which is wider?', a:['The Pacific Ocean','The Moon'], p:.55 },
+  { id:'g6', type:'hard', q:'Which has more people?', a:['Greater Tokyo','All of Australia'], p:.55 },
+  { id:'g7', type:'hard', q:'Which has the larger surface area?', a:['The Moon','Australia'], p:.65 },
+  { id:'g8', type:'hard', q:'Which city is closer to Sydney?', a:['Wellington','Denpasar (Bali)'], p:.6 }
+];
+// hour 2 estimation items. scale = rough spread used to standardise errors across items
+const EST = [
+  { id:'x1', q:'In what year did the Sydney Opera House officially open?', truth:1973, unit:'', scale:15, year:true },
+  { id:'x2', q:'What is the straight-line distance from Sydney to Perth?', truth:3290, unit:'km', scale:1000 },
+  { id:'x3', q:'How tall is Mount Kosciuszko?', truth:2228, unit:'m', scale:800 },
+  { id:'x4', q:'In what year was the first iPhone released?', truth:2007, unit:'', scale:3, year:true },
+  { id:'x5', q:'What is the population of New Zealand, in millions?', truth:5.3, unit:'million', scale:2 },
+  { id:'x6', q:'How long is the Great Barrier Reef?', truth:2300, unit:'km', scale:800 },
+  { id:'x7', q:'What is the speed of sound in air at sea level?', truth:1235, unit:'km/h', scale:400 },
+  { id:'x8', q:'How tall is Sydney Tower (Centrepoint)?', truth:309, unit:'m', scale:100 },
+  { id:'x9', q:'How many countries are there in Africa?', truth:54, unit:'', scale:12 },
+  { id:'x10', q:'Roughly how many neurons are in the human brain, in billions?', truth:86, unit:'billion', scale:40 }
+];
+const CONF = [50,60,70,80,90,100];
+
+const PHASES = [
+  { id:'lobby',  label:'Lobby' },
+  { id:'r1',     label:'R1 Tip of the tongue', student:true },
+  { id:'r2',     label:'R2 How sure?', student:true },
+  { id:'r3',     label:'R3 Pass or play', student:true },
+  { id:'r4',     label:'R4 Team round', student:true },
+  { id:'pct',    label:'Last question', student:true },
+  { id:'debrief',label:'Reveals' },
+  { id:'h2dk',   label:'H2 · Yourself', adv:true },
+  { id:'h2est',  label:'H2 · Estimates', adv:true, student:true },
+  { id:'h2adv',  label:'H2 · Advice', adv:true, student:true },
+  { id:'h2advr', label:'H2 · Advice reveal', adv:true },
+  { id:'h2group',label:'H2 · The group', adv:true },
+  { id:'end',    label:'Wrap-up' }
+];
+
+/* =====================================================================
+   UTILITIES
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mean = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : NaN;
+const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+const fin = Number.isFinite;
+function hash(s){ let h = 1779033703 ^ s.length; for (let i = 0; i < s.length; i++){ h = Math.imul(h ^ s.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; } return h >>> 0; }
+function rng(seed){ let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, r){ const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function randn(r){ let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const logistic = x => 1 / (1 + Math.exp(-x));
+const logit = p => Math.log(p / (1 - p));
+function norm(s){ return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+function lev(a, b){ const m = a.length, n = b.length; if (!m) return n; if (!n) return m; let prev = Array.from({length:n + 1}, (_, j) => j); for (let i = 1; i <= m; i++){ const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; } return prev[n]; }
+function recallCorrect(item, text){
+  const t = norm(text); if (!t) return false;
+  const words = String(text).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  return item.accept.some(a => t.includes(a) || words.some(w => lev(w, a) <= Math.max(1, Math.floor(a.length / 5))));
+}
+function deepMerge(t, s){ const out = Array.isArray(t) ? t.slice() : { ...(t || {}) }; for (const k in s){ const v = s[k]; if (v && typeof v === 'object' && !Array.isArray(v)) out[k] = deepMerge(out[k], v); else out[k] = v; } return out; }
+function fmtNum(x){ if (!fin(x)) return '–'; const ax = Math.abs(x); const d = ax >= 100 ? 0 : ax >= 10 ? 1 : 2; return Number(x.toFixed(d)).toLocaleString('en-AU'); }
+function fmtEst(item, x){ if (!fin(x)) return '–'; if (item.year) return String(Math.round(x)); return fmtNum(x) + (item.unit ? ' ' + item.unit : ''); }
+const pct0 = x => fin(x) ? Math.round(x * 100) + '%' : '–';
+function ordinal(n){ n = Math.round(n); const s = ['th','st','nd','rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+
+/* =====================================================================
+   DATA LAYER (Firestore, or localStorage for offline rehearsal)
+   ===================================================================== */
+async function makeFirebaseDB(code){
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+  const fs = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+  const app = initializeApp(firebaseConfig);
+  const db = fs.getFirestore(app);
+  const sRef = fs.doc(db, ROOT, code);
+  const rCol = fs.collection(db, ROOT, code, 'resp');
+  const tCol = fs.collection(db, ROOT, code, 'teams');
+  const colSnap = cb => snap => { const o = {}; snap.forEach(d => { o[d.id] = d.data(); }); cb(o); };
+  return {
+    setSession: p => fs.setDoc(sRef, p, { merge:true }),
+    onSession: (cb, err) => fs.onSnapshot(sRef, s => cb(s.exists() ? s.data() : null), err),
+    setResp: (id, p) => fs.setDoc(fs.doc(rCol, id), p, { merge:true }),
+    onResps: (cb, err) => fs.onSnapshot(rCol, colSnap(cb), err),
+    setTeam: (id, p) => fs.setDoc(fs.doc(tCol, id), p, { merge:true }),
+    onTeams: (cb, err) => fs.onSnapshot(tCol, colSnap(cb), err),
+    clear: async () => {
+      for (const col of [rCol, tCol]){ const snap = await fs.getDocs(col); await Promise.all(snap.docs.map(d => fs.deleteDoc(d.ref))); }
+      await fs.deleteDoc(sRef);
+    }
+  };
+}
+function makeLocalDB(code){
+  const KEY = 'mct_local_' + code;
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || { session:null, resp:{}, teams:{} }; } catch(e){ return { session:null, resp:{}, teams:{} }; } };
+  const subs = { session:[], resp:[], teams:[] };
+  const emit = () => { const d = read(); subs.session.forEach(f => f(d.session)); subs.resp.forEach(f => f(d.resp || {})); subs.teams.forEach(f => f(d.teams || {})); };
+  window.addEventListener('storage', e => { if (e.key === KEY) emit(); });
+  const write = fn => { const d = read(); fn(d); localStorage.setItem(KEY, JSON.stringify(d)); setTimeout(emit, 0); return Promise.resolve(); };
+  const sub = (k, cb) => { subs[k].push(cb); setTimeout(() => { const d = read(); cb(k === 'session' ? d.session : (d[k] || {})); }, 0); return () => {}; };
+  return {
+    setSession: p => write(d => { d.session = deepMerge(d.session || {}, p); }),
+    onSession: cb => sub('session', cb),
+    setResp: (id, p) => write(d => { d.resp = d.resp || {}; d.resp[id] = deepMerge(d.resp[id] || {}, p); }),
+    onResps: cb => sub('resp', cb),
+    setTeam: (id, p) => write(d => { d.teams = d.teams || {}; d.teams[id] = deepMerge(d.teams[id] || {}, p); }),
+    onTeams: cb => sub('teams', cb),
+    clear: () => { localStorage.removeItem(KEY); setTimeout(emit, 0); return Promise.resolve(); }
+  };
+}
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const params = new URLSearchParams(location.search);
+const S = {
+  code: (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10),
+  host: params.get('view') === 'host',
+  local: params.get('local') === '1',
+  pid: null, db: null, session: null, resps: {}, teams: {},
+  me: {}, sim: null, lastKey: '', ui: { tab:{}, error:'' }, advCache: {}
+};
+function getPid(){
+  const k = 'mct_pid_' + S.code + (S.local ? '_l' : '');
+  // offline rehearsal: one identity per tab, so several student tabs can run side by side
+  let v = null; try { v = sessionStorage.getItem(k) || (S.local ? null : localStorage.getItem(k)); } catch(e){}
+  if (!v){ v = 'p' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
+  try { sessionStorage.setItem(k, v); if (!S.local) localStorage.setItem(k, v); } catch(e){}
+  return v;
+}
+const phaseIdx = id => PHASES.findIndex(p => p.id === id);
+const curPhase = () => (S.session && S.session.phase) || 'lobby';
+const visiblePhases = () => PHASES.filter(p => !p.adv || (S.session && S.session.adv));
+function allResps(){ return { ...S.resps, ...(S.sim ? S.sim.resps : {}) }; }
+function allTeams(){ return { ...S.teams, ...(S.sim ? S.sim.teams : {}) }; }
+function students(){ return Object.entries(allResps()).filter(([, r]) => r && r.team).map(([id, r]) => ({ id, ...r })); }
+function joinUrl(){ const u = new URL(location.href); u.search = ''; u.searchParams.set('s', S.code); if (S.local) u.searchParams.set('local', '1'); return u.toString(); }
+
+function showError(err){
+  const denied = /permission|insufficient/i.test((err && err.message) || '');
+  S.ui.error = `<div class="banner"><strong>Can't reach the live database.</strong> ${denied ? 'Firestore rejected the request: the security rules need to allow this demo\'s collection.' : 'Network or configuration error.'}
+    <div class="tiny">${esc((err && err.message) || err)}</div>
+    ${denied ? `<pre>match /${ROOT}/{session} {\n  allow read, write: if true;\n  match /{rest=**} {\n    allow read, write: if true;\n  }\n}</pre>` : ''}</div>`;
+  render(true);
+}
+
+/* =====================================================================
+   SCORING HELPERS
+   ===================================================================== */
+const r2Items = () => R2;
+function r3Points(s){ let p = 0, all = 0, n = 0; R3.forEach(it => { const a = s.r3 && s.r3[it.id]; if (!a) return; n++; all += a.ok ? 1 : -2; if (a.play) p += a.ok ? 1 : -2; }); return { p, all, n }; }
+function quizScore(s){
+  let k = 0;
+  R1.forEach(it => { if (s.r1 && s.r1[it.id] && s.r1[it.id].ok) k++; });
+  R2.forEach(it => { if (s.r2 && s.r2[it.id] && s.r2[it.id].ok) k++; });
+  R3.forEach(it => { if (s.r3 && s.r3[it.id] && s.r3[it.id].ok) k++; });
+  R4.forEach(it => { if (s.r4p && s.r4p[it.id] && s.r4p[it.id].ok) k++; });
+  return k;
+}
+function confStats(s, items, key){
+  const tr = items.map(it => s[key] && s[key][it.id]).filter(Boolean);
+  const confs = tr.map(t => t.conf), acc = mean(tr.map(t => t.ok ? 1 : 0));
+  const cR = tr.filter(t => t.ok).map(t => t.conf), cW = tr.filter(t => !t.ok).map(t => t.conf);
+  return { n: tr.length, conf: mean(confs), acc, bias: mean(confs) - acc * 100, gap: (cR.length && cW.length) ? mean(cR) - mean(cW) : NaN };
+}
+function percentiles(list){ // list of {id, score}; returns id -> percentile (0-100) within list
+  const out = {}; const n = list.length;
+  list.forEach(a => { let lo = 0, eq = 0; list.forEach(b => { if (b.score < a.score) lo++; else if (b.score === a.score) eq++; }); out[a.id] = n > 1 ? 100 * (lo + 0.5 * (eq - 1)) / (n - 1) : 50; });
+  return out;
+}
+function roundDone(s, ph){
+  if (!s) return false;
+  const cnt = (o, items, f) => items.filter(it => o && o[it.id] && (!f || f(o[it.id]))).length;
+  switch (ph){
+    case 'r1': return cnt(s.r1, R1, a => a.fok) === R1.length;
+    case 'r2': return cnt(s.r2, R2) === R2.length;
+    case 'r3': return cnt(s.r3, R3, a => 'play' in a) === R3.length;
+    case 'r4': return cnt(s.r4p, R4) === R4.length;
+    case 'pct': return fin(s.pct);
+    case 'h2est': return cnt(s.est, EST) === EST.length;
+    case 'h2adv': return cnt(s.adv, EST, a => fin(a.final)) === EST.filter(it => s.est && s.est[it.id]).length && EST.some(it => s.est && s.est[it.id]);
+    default: return false;
+  }
+}
+
+function doneFor(s, ph){ if (ph === 'r4'){ const t = allTeams()[s.team]; return roundDone(s, 'r4') && !!(t && t.done); } return roundDone(s, ph); }
+
+/* =====================================================================
+   SIMULATED CLASS (never written to the database)
+   ===================================================================== */
+function simulateClass(n, nTeams){
+  const r = rng(hash('sim' + Date.now()));
+  const resps = {}, teams = {};
+  const people = [];
+  for (let i = 0; i < n; i++){
+    const id = 'sim' + i, a = randn(r), team = TEAM_NAMES[i % nTeams];
+    const s = { team, sim:true, r1:{}, r2:{}, r3:{}, r4p:{}, est:{}, adv:{} };
+    // signal-detection style trial: internal evidence x ~ N(d, 1); answer correct if x > 0; confidence grows with |x|.
+    // Deceptive items have d < 0, so confident answers there are mostly wrong.
+    const trial2 = pItem => {
+      const pInd = clamp(logistic(logit(pItem) + 0.7 * a), .02, .98), d = logit(pInd) / 1.702, x = d + randn(r);
+      const c = 50 + 50 * (2 * logistic(1.702 * 0.9 * Math.abs(x)) - 1) + 4 + randn(r) * 6;
+      return { c: x > 0 ? 0 : 1, ok: x > 0, conf: clamp(Math.round(c / 10) * 10, 50, 100) };
+    };
+    // R1 + R3 recognition
+    const recog = {};
+    R1.forEach(it => {
+      const pr = logistic(logit(it.p) + 0.8 * a), recalled = r() < pr;
+      const k = randn(r);
+      const fok = recalled ? (r() < .7 ? 5 : 4) : clamp(Math.round(3 + 1.1 * k + randn(r) * .6), 1, 5);
+      s.r1[it.id] = { text: recalled ? it.accept[0] : '', ok: recalled, fok };
+      recog[it.id] = recalled ? (r() < .95) : (r() < .25 + .75 * logistic(-0.7 + 1.3 * k + 0.4 * a));
+    });
+    R3.forEach(it => {
+      const ok = it.fromR1 ? recog[it.id] : r() < (.25 + .75 * logistic(logit((it.p - .25) / .75) + 0.7 * a));
+      const feel = it.fromR1 ? (s.r1[it.id].fok - 1) / 4 : (ok ? .65 : .35) + randn(r) * .2;
+      const play = feel + randn(r) * .18 > .5;
+      s.r3[it.id] = { c: ok ? 0 : 1 + Math.floor(r() * 3), ok, play };
+    });
+    R2.forEach(it => { s.r2[it.id] = trial2(it.p); });
+    R4.forEach(it => { s.r4p[it.id] = trial2(it.p); });
+    EST.forEach(it => {
+      const z = randn(r) * (0.9 - 0.15 * a);
+      const init = it.truth + z * it.scale;
+      const conf = clamp(Math.round(3 + 0.4 * a - 0.6 * Math.abs(z) + randn(r) * .8), 1, 5);
+      s.est[it.id] = { init: it.year ? Math.round(init) : Number(init.toPrecision(3)), conf };
+    });
+    resps[id] = s; people.push({ id, a, s });
+  }
+  // percentile estimates (weakly related to actual standing)
+  const sc = percentiles(people.map(p => ({ id:p.id, score:quizScore(p.s) })));
+  people.forEach(p => { p.s.pct = clamp(Math.round(58 + 0.25 * (sc[p.id] - 50) + randn(r) * 15), 1, 99); });
+  // advice from other simulated students
+  people.forEach(p => {
+    const order = shuffle(EST.map(e => e.id), r);
+    EST.forEach(it => {
+      const type = order.indexOf(it.id) < EST.length / 2 ? 'one' : 'five';
+      const others = shuffle(people.filter(q => q.id !== p.id), r).slice(0, type === 'one' ? 1 : 5);
+      const advice = mean(others.map(q => q.s.est[it.id].init));
+      const init = p.s.est[it.id].init, conf = p.s.est[it.id].conf;
+      let w;
+      const u = r();
+      if (u < .33) w = 0; else if (u < .41) w = 1; else w = clamp(0.15 + 0.08 * (3 - conf) + (type === 'five' ? .04 : 0) + r() * .45, 0, 1);
+      const final = init + w * (advice - init);
+      p.s.adv[it.id] = { advice, type, final: it.year ? Math.round(final) : Number(final.toPrecision(3)) };
+    });
+  });
+  // team answers in R4: sometimes follow the most confident member, otherwise majority
+  for (let t = 0; t < nTeams; t++){
+    const T = TEAM_NAMES[t], mem = people.filter(p => p.s.team === T); if (!mem.length) continue;
+    const ans = {};
+    R4.forEach(it => {
+      const votes = mem.map(m => m.s.r4p[it.id]);
+      let choice;
+      if (r() < .45){ const top = votes.reduce((b, v) => v.conf > b.conf ? v : b, votes[0]); choice = top.c; }
+      else { const k1 = votes.filter(v => v.c === 0).length; choice = k1 * 2 > votes.length ? 0 : k1 * 2 < votes.length ? 1 : (r() < .5 ? 0 : 1); }
+      ans[it.id] = { c: choice, ok: choice === 0 };
+    });
+    teams[T] = { r4: ans, done:true };
+  }
+  return { resps, teams };
+}
+
+/* =====================================================================
+   CHARTS (plain SVG)
+   ===================================================================== */
+const COL = { accent:'#e64626', ink:'#111111', grey:'#9a9a9a', light:'#f3a48f', dark:'#555555', pale:'#d9d9d9' };
+function frame(o){
+  const W = o.W || 900, H = o.H || 440, m = { l:70, r:24, t:18, b:62, ...(o.m || {}) };
+  const sx = x => m.l + (x - o.x0) / (o.x1 - o.x0) * (W - m.l - m.r);
+  const sy = y => H - m.b - (y - o.y0) / (o.y1 - o.y0) * (H - m.t - m.b);
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" font-family="Arial, Helvetica, sans-serif">`;
+  (o.yTicks || []).forEach(t => { g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(t)}" y2="${sy(t)}" stroke="#ececec"/><text x="${m.l - 10}" y="${sy(t) + 5}" text-anchor="end" font-size="15" fill="#555">${o.yFmt ? o.yFmt(t) : t}</text>`; });
+  (o.xTicks || []).forEach(t => { const lab = o.xFmt ? o.xFmt(t) : t; g += `<text x="${sx(t)}" y="${H - m.b + 24}" text-anchor="middle" font-size="15" fill="#555">${lab}</text>`; });
+  g += `<line x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}" stroke="#111"/>`;
+  if (o.xLabel) g += `<text x="${(m.l + W - m.r) / 2}" y="${H - 12}" text-anchor="middle" font-size="15" fill="#111">${o.xLabel}</text>`;
+  if (o.yLabel) g += `<text transform="translate(18 ${(m.t + H - m.b) / 2}) rotate(-90)" text-anchor="middle" font-size="15" fill="#111">${o.yLabel}</text>`;
+  return { W, H, m, sx, sy, g };
+}
+function lineChart(o){
+  const f = frame(o); let g = f.g;
+  if (o.diag) g += `<line x1="${f.sx(o.x0)}" y1="${f.sy(o.diagY0 ?? o.x0)}" x2="${f.sx(o.x1)}" y2="${f.sy(o.diagY1 ?? o.x1)}" stroke="#999" stroke-dasharray="6 5"/>`;
+  (o.hlines || []).forEach(h => { g += `<line x1="${f.m.l}" x2="${f.W - f.m.r}" y1="${f.sy(h.y)}" y2="${f.sy(h.y)}" stroke="#999" stroke-dasharray="6 5"/><text x="${f.W - f.m.r - 4}" y="${f.sy(h.y) - 7}" text-anchor="end" font-size="13" fill="#777">${h.label}</text>`; });
+  o.series.forEach(s => {
+    const pts = s.pts.filter(p => fin(p[1]));
+    if (pts.length > 1) g += `<polyline fill="none" stroke="${s.color}" stroke-width="3.5" ${s.dash ? 'stroke-dasharray="8 6"' : ''} points="${pts.map(p => f.sx(p[0]) + ',' + f.sy(p[1])).join(' ')}"/>`;
+    pts.forEach(p => {
+      g += `<circle cx="${f.sx(p[0])}" cy="${f.sy(p[1])}" r="7" fill="${s.color}" stroke="#fff" stroke-width="2"/>`;
+      if (o.showN && p[2] != null) g += `<text x="${f.sx(p[0])}" y="${f.sy(p[1]) - 13}" text-anchor="middle" font-size="12" fill="${s.color}">n=${p[2]}</text>`;
+    });
+  });
+  return `<div class="chart">${g}</svg></div>`;
+}
+function barChart(o){
+  if (o.y1 === 'AUTO'){ const mx = Math.max(100, ...o.series.flatMap(s => s.vals).filter(fin)); o = { ...o, y1: Math.ceil(mx * 1.08 / 25) * 25 }; o.yTicks = tick(0, o.y1, o.y1 > 150 ? 50 : 25); }
+  const groups = o.groups, ns = o.series.length;
+  const f = frame({ ...o, x0:0, x1:groups.length, xTicks:[] }); let g = f.g;
+  const gw = (f.W - f.m.l - f.m.r) / groups.length, pad = gw * .16, bw = (gw - 2 * pad) / ns;
+  groups.forEach((lab, gi) => {
+    g += `<text x="${f.m.l + gw * (gi + .5)}" y="${f.H - f.m.b + 24}" text-anchor="middle" font-size="15" fill="#111">${lab}</text>`;
+    if (o.groupSub && o.groupSub[gi]) g += `<text x="${f.m.l + gw * (gi + .5)}" y="${f.H - f.m.b + 42}" text-anchor="middle" font-size="12" fill="#777">${o.groupSub[gi]}</text>`;
+    o.series.forEach((s, si) => {
+      const v = s.vals[gi]; if (!fin(v)) return;
+      const base = (o.y0 < 0 && o.y1 > 0) ? 0 : o.y0, vv = clamp(v, o.y0, o.y1);
+      const x = f.m.l + gw * gi + pad + bw * si, yTop = f.sy(Math.max(vv, base)), yBot = f.sy(Math.min(vv, base));
+      g += `<rect x="${x + 2}" y="${yTop}" width="${bw - 4}" height="${Math.max(0, yBot - yTop)}" fill="${s.color}"/>`;
+      const y = vv >= base ? yTop : yBot + 22;
+      g += `<text x="${x + bw / 2}" y="${y - 7}" text-anchor="middle" font-size="14" fill="#111">${o.vFmt ? o.vFmt(v) : fmtNum(v)}</text>`;
+    });
+  });
+  if (o.y0 < 0 && o.y1 > 0) g += `<line x1="${f.m.l}" x2="${f.W - f.m.r}" y1="${f.sy(0)}" y2="${f.sy(0)}" stroke="#111"/>`;
+  (o.hlines || []).forEach(h => { g += `<line x1="${f.m.l}" x2="${f.W - f.m.r}" y1="${f.sy(h.y)}" y2="${f.sy(h.y)}" stroke="#777" stroke-dasharray="6 5"/><text x="${f.m.l + 6}" y="${f.sy(h.y) - 7}" text-anchor="start" font-size="13" fill="#666">${h.label}</text>`; });
+  return `<div class="chart">${g}</svg></div>`;
+}
+function scatter(o){
+  const f = frame(o); let g = f.g;
+  if (o.diag) g += `<line x1="${f.sx(Math.max(o.x0, o.y0))}" y1="${f.sy(Math.max(o.x0, o.y0))}" x2="${f.sx(Math.min(o.x1, o.y1))}" y2="${f.sy(Math.min(o.x1, o.y1))}" stroke="#999" stroke-dasharray="6 5"/>`;
+  if (o.zeroX) g += `<line x1="${f.sx(0)}" x2="${f.sx(0)}" y1="${f.m.t}" y2="${f.H - f.m.b}" stroke="#bbb"/>`;
+  if (o.zeroY) g += `<line x1="${f.m.l}" x2="${f.W - f.m.r}" y1="${f.sy(0)}" y2="${f.sy(0)}" stroke="#bbb"/>`;
+  (o.labels || []).forEach(l => { g += `<text x="${f.sx(l.x)}" y="${f.sy(l.y)}" text-anchor="${l.anchor || 'middle'}" font-size="14" fill="#888" font-style="italic">${l.text}</text>`; });
+  const jr = rng(7);
+  o.pts.forEach(p => { const jx = (o.jitter || 0) * (jr() - .5), jy = (o.jitter || 0) * (jr() - .5); g += `<circle cx="${f.sx(clamp(p.x + jx, o.x0, o.x1))}" cy="${f.sy(clamp(p.y + jy, o.y0, o.y1))}" r="${p.r || 8}" fill="${p.color || COL.accent}" fill-opacity=".75" stroke="#fff" stroke-width="1.5"/>`; });
+  return `<div class="chart">${g}</svg></div>`;
+}
+const legend = items => `<div class="legend">${items.map(i => `<span><i style="background:${i.color}${i.dash ? ';background:repeating-linear-gradient(90deg,' + i.color + ' 0 5px,transparent 5px 8px)' : ''}"></i>${i.name}</span>`).join('')}</div>`;
+const keystats = items => `<div class="keystats">${items.map(i => `<div class="ks"><div class="n">${i.n}</div><div class="l">${i.l}</div></div>`).join('')}</div>`;
+const tutor = t => `<div class="tutor"><b>Tutor prompt</b>${t}</div>`;
+const tick = (a, b, s) => { const o = []; for (let x = a; x <= b + 1e-9; x += s) o.push(Math.round(x * 100) / 100); return o; };
+
+/* =====================================================================
+   ANALYSES
+   ===================================================================== */
+function anaFOK(){
+  const by = { 1:[], 2:[], 3:[], 4:[], 5:[] }, rec = [];
+  students().forEach(s => R1.forEach(it => {
+    const a = s.r1 && s.r1[it.id], b = s.r3 && s.r3[it.id]; if (!a || !b || !a.fok) return;
+    if (a.ok) rec.push(b.ok ? 1 : 0); else by[a.fok].push(b.ok ? 1 : 0);
+  }));
+  return { by, rec };
+}
+function anaCalib(){
+  const bins = {}; ['all','normal','deceptive'].forEach(k => { bins[k] = {}; CONF.forEach(c => bins[k][c] = []); });
+  const per = [];
+  students().forEach(s => {
+    R2.forEach(it => { const t = s.r2 && s.r2[it.id]; if (!t) return; bins.all[t.conf].push(t.ok ? 1 : 0); bins[it.type === 'deceptive' ? 'deceptive' : 'normal'][t.conf].push(t.ok ? 1 : 0); });
+    const cs = confStats(s, R2, 'r2'); if (cs.n >= 8) per.push(cs);
+  });
+  const typeStats = k => { const tr = []; students().forEach(s => R2.forEach(it => { const t = s.r2 && s.r2[it.id]; if (t && (k === 'all' || (k === 'deceptive') === (it.type === 'deceptive'))) tr.push(t); })); return { conf: mean(tr.map(t => t.conf)), acc: mean(tr.map(t => t.ok ? 100 : 0)), n: tr.length }; };
+  return { bins, per, all: typeStats('all'), dec: typeStats('deceptive'), nor: typeStats('normal') };
+}
+function anaPass(){
+  const per = [], played = [], passed = [];
+  students().forEach(s => {
+    const r = r3Points(s); if (r.n === R3.length) per.push(r);
+    R3.forEach(it => { const a = s.r3 && s.r3[it.id]; if (!a || !('play' in a)) return; (a.play ? played : passed).push(a.ok ? 1 : 0); });
+  });
+  return { per, played, passed };
+}
+function ruleOutcomes(votes){ // votes: [{c, conf, ok}], correct option index 0
+  const n = votes.length; if (!n) return null;
+  const k0 = votes.filter(v => v.c === 0).length;
+  const maj = k0 * 2 > n ? 1 : k0 * 2 < n ? 0 : .5;
+  const w0 = votes.filter(v => v.c === 0).reduce((a, v) => a + (v.conf - 50), 0), w1 = votes.filter(v => v.c !== 0).reduce((a, v) => a + (v.conf - 50), 0);
+  const cw = w0 > w1 ? 1 : w0 < w1 ? 0 : maj;
+  const top = Math.max(...votes.map(v => v.conf)), tops = votes.filter(v => v.conf === top), t0 = tops.filter(v => v.c === 0).length;
+  const mc = t0 * 2 > tops.length ? 1 : t0 * 2 < tops.length ? 0 : maj;
+  return { maj, cw, mc, avg: mean(votes.map(v => v.c === 0 ? 1 : 0)) };
+}
+function anaTeams(){
+  const teams = allTeams(), rows = [];
+  TEAM_NAMES.forEach(T => {
+    const mem = students().filter(s => s.team === T); if (!mem.length) return;
+    const res = { T, n: mem.length, actual:[], maj:[], cw:[], mc:[], avg:[], type:[] };
+    const indiv = mem.map(s => mean(R4.map(it => s.r4p && s.r4p[it.id] ? (s.r4p[it.id].ok ? 1 : 0) : NaN).filter(fin)));
+    R4.forEach(it => {
+      const votes = mem.map(s => s.r4p && s.r4p[it.id]).filter(Boolean); const o = ruleOutcomes(votes); if (!o) return;
+      const ta = teams[T] && teams[T].r4 && teams[T].r4[it.id];
+      res.actual.push(ta ? (ta.c === 0 ? 1 : 0) : NaN); res.maj.push(o.maj); res.cw.push(o.cw); res.mc.push(o.mc); res.avg.push(o.avg); res.type.push(it.type);
+    });
+    res.best = Math.max(...indiv.filter(fin));
+    rows.push(res);
+  });
+  const agg = (key, type) => mean(rows.map(r => mean(r[key].filter((v, i) => fin(v) && (!type || r.type[i] === type)))).filter(fin));
+  return { rows, agg };
+}
+function anaLeaderboard(){
+  const teams = allTeams(), out = [];
+  TEAM_NAMES.forEach(T => {
+    const mem = students().filter(s => s.team === T); if (!mem.length) return;
+    const ind = mean(mem.map(s => R1.filter(it => s.r1 && s.r1[it.id] && s.r1[it.id].ok).length + R2.filter(it => s.r2 && s.r2[it.id] && s.r2[it.id].ok).length + r3Points(s).p));
+    const tr = teams[T] && teams[T].r4 ? R4.filter(it => teams[T].r4[it.id] && teams[T].r4[it.id].c === 0).length : 0;
+    const bias = mean(mem.map(s => Math.abs(confStats(s, R2, 'r2').bias)).filter(fin));
+    out.push({ T, n: mem.length, ind, tr, total: ind + 2 * tr, bias });
+  });
+  return out;
+}
+function quartiles(list, key){ // list sorted by key ascending, split into 4 groups
+  const s = list.slice().sort((a, b) => a[key] - b[key]); const q = [[], [], [], []];
+  s.forEach((x, i) => q[Math.min(3, Math.floor(i * 4 / s.length))].push(x)); return q;
+}
+function anaDK(){
+  const st = students().filter(s => fin(s.pct));
+  const pc = percentiles(students().map(s => ({ id:s.id, score:quizScore(s) })));
+  const list = st.map(s => ({ id:s.id, actual:pc[s.id], est:s.pct, cs:confStats(s, R2, 'r2') }));
+  const q = list.length >= 4 ? quartiles(list, 'actual') : null;
+  return { list, q };
+}
+function simDK(n){
+  const r = rng(99); const list = [];
+  for (let i = 0; i < n; i++) list.push({ id:'x' + i, score: Math.round(24 + randn(r) * 5) + r() * .01, est: clamp(62 + randn(r) * 17, 1, 99) });
+  const pc = percentiles(list); list.forEach(x => x.actual = pc[x.id]);
+  return quartiles(list, 'actual');
+}
+function anaAdvice(){
+  const trials = [];
+  students().forEach(s => EST.forEach(it => {
+    const e = s.est && s.est[it.id], a = s.adv && s.adv[it.id]; if (!e || !a || !fin(a.final) || !fin(a.advice)) return;
+    const d = a.advice - e.init; if (Math.abs(d) < 1e-9) return;
+    const woa = clamp((a.final - e.init) / d, 0, 1);
+    const err = x => Math.min(5, Math.abs(x - it.truth) / it.scale);
+    trials.push({ woa, conf:e.conf, type:a.type, eInit:err(e.init), eFinal:err(a.final), eAvg:err((e.init + a.advice) / 2), eAdv:err(a.advice) });
+  }));
+  return trials;
+}
+function anaGroup(){
+  const pool = students().filter(s => R2.filter(it => s.r2 && s.r2[it.id]).length >= R2.length - 2);
+  const r = rng(2024), B = 300, k = Math.min(5, pool.length);
+  const acc = { normal:{ avg:[], maj:[], cw:[], mc:[], best:[] }, deceptive:{ avg:[], maj:[], cw:[], mc:[], best:[] } };
+  if (k < 3) return { acc, n: pool.length, k };
+  const runGroup = grp => {
+    const bestM = grp.reduce((b, s) => confStats(s, R2, 'r2').acc > confStats(b, R2, 'r2').acc ? s : b, grp[0]);
+    R2.filter(it => it.type !== 'easy').forEach(it => {
+      const votes = grp.map(s => s.r2 && s.r2[it.id]).filter(Boolean); const o = ruleOutcomes(votes); if (!o) return;
+      const T = it.type === 'deceptive' ? 'deceptive' : 'normal';
+      acc[T].avg.push(o.avg); acc[T].maj.push(o.maj); acc[T].cw.push(o.cw); acc[T].mc.push(o.mc);
+      const b = bestM.r2 && bestM.r2[it.id]; if (b) acc[T].best.push(b.ok ? 1 : 0);
+    });
+  };
+  for (let b = 0; b < B; b++) runGroup(shuffle(pool, r).slice(0, k));
+  return { acc, n: pool.length, k };
+}
+
+/* =====================================================================
+   RENDER: entry
+   ===================================================================== */
+function render(force){
+  if (!S.code) return renderLanding();
+  if (S.host) return renderHost();
+  return renderStudent(force);
+}
+function renderLanding(){
+  $('#app').innerHTML = `<div class="wrap">
+    <div class="label">Metacognition tutorial</div>
+    <h1>Do you know what you know?</h1>
+    <p class="lede">A team quiz about confidence. Enter the code on the screen at the front of the room.</p>
+    <div class="card">
+      <input class="txt" id="codeIn" placeholder="Session code" autocomplete="off" style="text-transform:uppercase">
+      <div class="sub"><button class="btn block" id="go">Join</button></div>
+    </div>
+    <div class="card soft">
+      <div class="label" style="margin-bottom:6px">For tutors</div>
+      <p class="muted" style="margin-bottom:12px">Start a session on the room's computer and project it. Students join with the QR code.</p>
+      <div class="row">
+        <button class="btn small" id="newS">Start a session</button>
+        <button class="btn small ghost" id="newA">Start an advanced (2-hour) session</button>
+        <button class="btn small ghost" id="newL">Rehearse offline</button>
+      </div>
+      <p class="tiny" style="margin-top:10px">Offline rehearsal keeps everything in this browser: open student tabs from the join link on the same computer.</p>
+    </div></div>`;
+  const go = () => { const c = norm($('#codeIn').value).toUpperCase(); if (c) location.search = '?s=' + c; };
+  $('#go').onclick = go; $('#codeIn').onkeydown = e => { if (e.key === 'Enter') go(); };
+  const mk = extra => { const c = Array.from({ length:4 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join(''); location.search = `?s=${c}&view=host${extra}`; };
+  $('#newS').onclick = () => mk(''); $('#newA').onclick = () => mk('&adv=1'); $('#newL').onclick = () => mk('&local=1&adv=1');
+}
+
+/* =====================================================================
+   RENDER: student
+   ===================================================================== */
+function saveMe(patch){ S.me = deepMerge(S.me, patch); S.db.setResp(S.pid, patch).catch(showError); render(true); }
+function order(round, items){ return shuffle(items, rng(hash(S.pid + round))); }
+function optOrder(id, k){ return shuffle([...Array(k).keys()], rng(hash(S.pid + id))); }
+const studentPhase = () => { const ph = curPhase(); return PHASES.find(p => p.id === ph) || PHASES[0]; };
+
+function renderStudent(force){
+  const ph = curPhase();
+  const view = studentView(ph);
+  if (!force && view.key === S.lastKey) return;
+  S.lastKey = view.key;
+  $('#app').innerHTML = `<div class="wrap">${S.ui.error}${view.html}</div>`;
+  if (view.bind) view.bind();
+}
+function wait(title, sub){ return { key:'wait:' + title, html:`<div class="big-wait"><div class="label"><span class="dotpulse"></span>${S.me.team ? 'Team ' + S.me.team : ''}</div><h1>${title}</h1><p class="lede">${sub || ''}</p></div>` }; }
+function header(label, i, n){ return `<div class="prog"><span>${label}</span><span>${Math.min(i + 1, n)} / ${n}</span></div><div class="bar"><i style="width:${100 * i / n}%"></i></div>`; }
+
+function studentView(ph){
+  if (!S.session) return wait('Waiting for your tutor', 'The session has not started yet. Keep this page open.');
+  if (!S.me.team) return teamPicker();
+  switch (ph){
+    case 'lobby': return wait(`You're in Team ${S.me.team}`, 'Find your teammates. The quiz starts soon. Points for being right, and for knowing <em>when</em> you\'re right.');
+    case 'r1': return viewR1();
+    case 'r2': return viewConf('r2', R2, 'Round 2 · How sure are you?', 'r2');
+    case 'r3': return viewR3();
+    case 'r4': return viewR4();
+    case 'pct': return viewPct();
+    case 'h2est': return viewEst();
+    case 'h2adv': return viewAdv();
+    default: return viewPersonal(ph);
+  }
+}
+function teamPicker(){
+  const n = (S.session && S.session.nTeams) || 5;
+  return { key:'team' + n, html:`<div class="label">Welcome</div><h1>Pick your team</h1><p class="lede">Sit with your team. Your answers are anonymous: nobody sees individual responses.</p>
+    <div class="teams">${TEAM_NAMES.slice(0, n).map(t => `<button class="teambtn" data-t="${t}">Team ${t}</button>`).join('')}</div>`,
+    bind: () => document.querySelectorAll('.teambtn').forEach(b => b.onclick = () => saveMe({ team:b.dataset.t, joined:Date.now() })) };
+}
+function viewR1(){
+  const items = order('r1', R1), r1 = S.me.r1 || {};
+  const i = items.findIndex(it => !r1[it.id] || !r1[it.id].fok);
+  if (i < 0) return wait('Round 1 done', 'Waiting for the tutor to start the next round.');
+  const it = items[i], a = r1[it.id];
+  if (!a){
+    return { key:'r1q' + it.id, html: header('Round 1 · Tip of the tongue', i, items.length) + `<div class="q">${it.q}</div>
+      <input class="txt" id="ans" placeholder="Type your answer" autocomplete="off" autocapitalize="words">
+      <div class="sub row"><button class="btn" id="sub">Submit answer</button><button class="btn ghost" id="dk">I can't recall it</button></div>
+      <p class="tiny" style="margin-top:12px">Spelling doesn't need to be perfect.</p>`,
+      bind: () => {
+        const send = t => saveMe({ r1:{ [it.id]:{ text:t, ok:recallCorrect(it, t) } } });
+        $('#ans').focus(); $('#sub').onclick = () => { const t = $('#ans').value.trim(); if (t) send(t); else $('#ans').focus(); };
+        $('#ans').onkeydown = e => { if (e.key === 'Enter' && $('#ans').value.trim()) send($('#ans').value.trim()); };
+        $('#dk').onclick = () => send('');
+      } };
+  }
+  const labels = ['Definitely not','Probably not','Maybe','Probably','Definitely'];
+  return { key:'r1f' + it.id, html: header('Round 1 · Tip of the tongue', i, items.length) + `<div class="q" style="font-size:21px;color:var(--muted)">${it.q}</div>
+    <h3>If we showed you four options later, would you recognise the right answer?</h3>
+    <div class="chips five" style="margin-top:12px">${[1,2,3,4,5].map(v => `<button class="chip" data-v="${v}">${v}</button>`).join('')}</div>
+    <div class="anch"><span>${labels[0]}</span><span>${labels[4]}</span></div>`,
+    bind: () => document.querySelectorAll('.chip').forEach(b => b.onclick = () => saveMe({ r1:{ [it.id]:{ fok:Number(b.dataset.v) } } })) };
+}
+function confWidget(key, it, label, i, n, field){
+  const oo = optOrder(it.id, 2), pick = S.ui['pick_' + field + it.id];
+  return { key:`${field}:${it.id}:${pick ?? ''}`, html: header(label, i, n) + `<div class="q">${it.q}</div>
+    <div class="opts">${oo.map(k => `<button class="opt ${pick === k ? 'on' : ''}" data-k="${k}">${it.a[k]}</button>`).join('')}</div>
+    <div class="sub" style="${pick == null ? 'opacity:.35;pointer-events:none' : ''}"><h3>How sure are you?</h3>
+      <div class="chips" style="margin-top:10px">${CONF.map(c => `<button class="chip" data-c="${c}">${c}%</button>`).join('')}</div>
+      <div class="anch"><span>50% = a pure guess</span><span>100% = certain</span></div></div>`,
+    bind: () => {
+      document.querySelectorAll('.opt').forEach(b => b.onclick = () => { S.ui['pick_' + field + it.id] = Number(b.dataset.k); render(true); });
+      document.querySelectorAll('.chip').forEach(b => b.onclick = () => { const c = S.ui['pick_' + field + it.id]; saveMe({ [field]:{ [it.id]:{ c, ok:c === 0, conf:Number(b.dataset.c) } } }); });
+    } };
+}
+function viewConf(round, items0, label, field){
+  const items = order(round, items0), done = S.me[field] || {};
+  const i = items.findIndex(it => !done[it.id]);
+  if (i < 0) return wait('Round 2 done', 'Waiting for the tutor to start the next round.');
+  return confWidget(round, items[i], label, i, items.length, field);
+}
+function viewR3(){
+  const items = order('r3', R3), done = S.me.r3 || {};
+  const i = items.findIndex(it => !done[it.id] || !('play' in done[it.id]));
+  if (i < 0) return wait('Round 3 done', 'Waiting for the tutor to start the team round.');
+  const it = items[i], oo = optOrder('r3' + it.id, it.opts.length), a = done[it.id];
+  return { key:`r3:${it.id}:${a ? a.c : ''}`, html: header('Round 3 · Pass or play', i, items.length) + `
+    <div class="tiny" style="margin-bottom:6px">Right +1 · Wrong −2 · Pass 0</div>
+    <div class="q">${it.q}</div>
+    <div class="opts">${oo.map(k => `<button class="opt ${a && a.c === k ? 'on' : ''}" data-k="${k}">${it.opts[k]}</button>`).join('')}</div>
+    <div class="sub row" style="${a ? '' : 'opacity:.35;pointer-events:none'}">
+      <button class="btn" id="play" style="flex:1">Play it (+1 / −2)</button>
+      <button class="btn ghost" id="pass" style="flex:1">Pass (0)</button></div>`,
+    bind: () => {
+      document.querySelectorAll('.opt').forEach(b => b.onclick = () => { const k = Number(b.dataset.k); S.me = deepMerge(S.me, { r3:{ [it.id]:{ c:k, ok:k === 0 } } }); render(true); });
+      $('#play').onclick = () => { const x = S.me.r3[it.id]; saveMe({ r3:{ [it.id]:{ c:x.c, ok:x.ok, play:true } } }); };
+      $('#pass').onclick = () => { const x = S.me.r3[it.id]; saveMe({ r3:{ [it.id]:{ c:x.c, ok:x.ok, play:false } } }); };
+    } };
+}
+function viewR4(){
+  const items = order('r4', R4), done = S.me.r4p || {};
+  const i = items.findIndex(it => !done[it.id]);
+  if (i >= 0) return confWidget('r4', items[i], 'Round 4 · On your own first', i, items.length, 'r4p');
+  const T = S.me.team, tdoc = S.teams[T] || {}, ta = tdoc.r4 || {};
+  const nDone = R4.filter(it => ta[it.id]).length;
+  if (tdoc.done) return wait('Team answers in', 'Nice work. Waiting for the other teams.');
+  return { key:'r4team:' + JSON.stringify(ta), html:`<div class="label">Round 4 · Team ${T}</div><h2>Now decide as a team</h2>
+    <p class="muted" style="margin-bottom:8px">Discuss each question. Anyone in the team can tap the team's answer; it syncs to all your phones. ${nDone}/${R4.length} answered.</p>
+    ${R4.map(it => { const oo = optOrder(it.id, 2); return `<div class="titem"><div class="tq">${it.q}</div><div class="opts">${oo.map(k => `<button class="opt ${ta[it.id] && ta[it.id].c === k ? 'on' : ''}" data-id="${it.id}" data-k="${k}">${it.a[k]}</button>`).join('')}</div></div>`; }).join('')}
+    <div class="sub"><button class="btn block" id="tdone" ${nDone < R4.length ? 'disabled' : ''}>Lock in our team's answers</button></div>`,
+    bind: () => {
+      document.querySelectorAll('.titem .opt').forEach(b => b.onclick = () => { const k = Number(b.dataset.k); S.teams = deepMerge(S.teams, { [T]:{ r4:{ [b.dataset.id]:{ c:k } } } }); S.db.setTeam(T, { r4:{ [b.dataset.id]:{ c:k } } }).catch(showError); render(true); });
+      $('#tdone').onclick = () => { S.db.setTeam(T, { done:true }).catch(showError); S.teams = deepMerge(S.teams, { [T]:{ done:true } }); render(true); };
+    } };
+}
+function viewPct(){
+  if (fin(S.me.pct)) return wait('All done', 'Eyes on the big screen for the results.');
+  const v = S.ui.pctV ?? 50;
+  return { key:'pct', html:`<div class="label">One last question</div><h2>How did you do compared with everyone in this room?</h2>
+    <p class="muted">Across all four rounds, what percentage of the class do you think you beat?</p>
+    <div class="readout" id="pv">I beat about ${v}% of the class</div>
+    <input type="range" min="0" max="100" step="1" value="${v}" id="pr">
+    <div class="anch"><span>Bottom of the class</span><span>Top of the class</span></div>
+    <div class="sub"><button class="btn block" id="ps">Submit</button></div>`,
+    bind: () => { $('#pr').oninput = e => { S.ui.pctV = Number(e.target.value); $('#pv').textContent = `I beat about ${S.ui.pctV}% of the class`; }; $('#ps').onclick = () => saveMe({ pct: S.ui.pctV ?? 50 }); } };
+}
+function viewEst(){
+  const items = order('est', EST), done = S.me.est || {};
+  const i = items.findIndex(it => !done[it.id]);
+  if (i < 0) return wait('Estimates in', 'Waiting for the tutor. Next you will see what a classmate said.');
+  const it = items[i], pend = S.ui['est_' + it.id];
+  if (pend == null){
+    return { key:'est:' + it.id, html: header('Part 2 · Your estimate', i, items.length) + `<div class="q">${it.q}</div>
+      <div class="row"><input class="txt" id="ev" inputmode="decimal" placeholder="Your best guess" style="flex:1" autocomplete="off">${it.unit ? `<span class="muted" style="font-size:18px">${it.unit}</span>` : ''}</div>
+      <div class="sub"><button class="btn block" id="es">Next</button></div>`,
+      bind: () => { const go = () => { const x = parseFloat(String($('#ev').value).replace(/[, ]/g, '')); if (fin(x)){ S.ui['est_' + it.id] = x; render(true); } else $('#ev').focus(); }; $('#ev').focus(); $('#es').onclick = go; $('#ev').onkeydown = e => { if (e.key === 'Enter') go(); }; } };
+  }
+  return { key:'estc:' + it.id, html: header('Part 2 · Your estimate', i, items.length) + `<div class="q" style="font-size:21px;color:var(--muted)">${it.q}</div>
+    <div class="readout">${fmtEst(it, pend)}</div><h3>How confident are you in this estimate?</h3>
+    <div class="chips five" style="margin-top:10px">${[1,2,3,4,5].map(v => `<button class="chip" data-v="${v}">${v}</button>`).join('')}</div>
+    <div class="anch"><span>A wild guess</span><span>Very confident</span></div>`,
+    bind: () => document.querySelectorAll('.chip').forEach(b => b.onclick = () => saveMe({ est:{ [it.id]:{ init:pend, conf:Number(b.dataset.v) } } })) };
+}
+function adviceFor(it){
+  if (S.advCache[it.id]) return S.advCache[it.id];
+  const types = shuffle(EST.map(e => e.id), rng(hash(S.pid + 'advtype')));
+  const type = types.indexOf(it.id) < EST.length / 2 ? 'one' : 'five';
+  const r = rng(hash(S.pid + it.id + 'adv'));
+  const pool = Object.entries(S.resps).filter(([id, s]) => id !== S.pid && s.est && s.est[it.id] && fin(s.est[it.id].init)).map(([, s]) => s.est[it.id].init);
+  const need = type === 'one' ? 1 : 5, picks = shuffle(pool, r).slice(0, need);
+  while (picks.length < need) picks.push(it.truth + randn(r) * it.scale * .7); // top up when the class is tiny
+  let advice = mean(picks); advice = it.year ? Math.round(advice) : Number(advice.toPrecision(3));
+  S.advCache[it.id] = { advice, type };
+  return S.advCache[it.id];
+}
+function viewAdv(){
+  const est = S.me.est || {}, done = S.me.adv || {};
+  const items = order('est', EST).filter(it => est[it.id]);
+  if (!items.length) return wait('Hang tight', 'You did not give initial estimates, so there is nothing to revise. Watch the screen.');
+  const i = items.findIndex(it => !done[it.id] || !fin(done[it.id].final));
+  if (i < 0) return wait('All done', 'Eyes on the big screen.');
+  const it = items[i], A = adviceFor(it), mine = est[it.id].init;
+  return { key:'adv:' + it.id, html: header('Part 2 · Advice', i, items.length) + `<div class="q" style="font-size:22px">${it.q}</div>
+    <div class="stat" style="border:0"><span>Your estimate</span><b>${fmtEst(it, mine)}</b></div>
+    <div class="adv"><div class="label" style="margin-bottom:4px">${A.type === 'one' ? 'One classmate estimated' : 'The average of five classmates\' estimates'}</div><div class="v">${fmtEst(it, A.advice)}</div></div>
+    <h3>Your final answer</h3>
+    <div class="row"><input class="txt" id="fv" inputmode="decimal" value="${mine}" style="flex:1" autocomplete="off">${it.unit ? `<span class="muted" style="font-size:18px">${it.unit}</span>` : ''}</div>
+    <div class="sub row"><button class="btn" id="fs" style="flex:1">Submit final answer</button><button class="btn ghost" id="fk">Keep mine</button></div>`,
+    bind: () => {
+      const send = x => saveMe({ adv:{ [it.id]:{ advice:A.advice, type:A.type, final:x } } });
+      $('#fs').onclick = () => { const x = parseFloat(String($('#fv').value).replace(/[, ]/g, '')); if (fin(x)) send(x); else $('#fv').focus(); };
+      $('#fk').onclick = () => send(mine);
+      $('#fv').onkeydown = e => { if (e.key === 'Enter') $('#fs').click(); };
+    } };
+}
+function viewPersonal(ph){
+  const me = S.me; const cs = confStats(me, R2, 'r2'), r3 = r3Points(me);
+  const rec = R1.filter(it => me.r1 && me.r1[it.id] && me.r1[it.id].ok).length;
+  let rows = '';
+  if (cs.n){
+    rows += `<div class="stat"><span>Round 2: you were right on</span><b>${pct0(cs.acc)}</b></div>`;
+    rows += `<div class="stat"><span>Your average confidence</span><b>${Math.round(cs.conf)}%</b></div>`;
+    rows += `<div class="stat"><span>So you were</span><b>${Math.abs(cs.bias) < 5 ? 'well calibrated' : (cs.bias > 0 ? 'overconfident by ' + Math.round(cs.bias) : 'underconfident by ' + Math.round(-cs.bias)) + (Math.abs(cs.bias) < 5 ? '' : ' pts')}</b></div>`;
+    if (fin(cs.gap)) rows += `<div class="stat"><span>Confidence when right vs wrong</span><b>${cs.gap >= 0 ? '+' : ''}${Math.round(cs.gap)} pts</b></div>`;
+  }
+  if (r3.n) rows += `<div class="stat"><span>Pass or play: your score</span><b>${r3.p}</b></div><div class="stat"><span>…if you had played every question</span><b>${r3.all}</b></div>`;
+  if (me.r1) rows += `<div class="stat"><span>Round 1: answers recalled</span><b>${rec} / ${R1.length}</b></div>`;
+  if (['h2dk','h2advr','h2group','end'].includes(ph) && fin(me.pct)){
+    const pc = percentiles(Object.entries(S.resps).filter(([, s]) => s.team).map(([id, s]) => ({ id, score:quizScore(s) })));
+    if (fin(pc[S.pid])) rows += `<div class="stat"><span>You guessed you beat</span><b>${me.pct}%</b></div><div class="stat"><span>You actually beat</span><b>${Math.round(pc[S.pid])}%</b></div>`;
+  }
+  if (['h2advr','h2group','end'].includes(ph)){
+    const w = EST.map(it => { const e = me.est && me.est[it.id], a = me.adv && me.adv[it.id]; if (!e || !a || !fin(a.final) || a.advice === e.init) return NaN; return clamp((a.final - e.init) / (a.advice - e.init), 0, 1); }).filter(fin);
+    if (w.length) rows += `<div class="stat"><span>How far you moved towards advice</span><b>${Math.round(mean(w) * 100)}%</b></div>`;
+  }
+  const title = ph === 'end' ? 'Thanks for playing' : 'Eyes on the big screen';
+  return { key:'pers:' + ph + ':' + rows.length, html:`<div class="big-wait" style="padding:30px 0 10px"><div class="label">Team ${me.team}</div><h1>${title}</h1></div>
+    ${rows ? `<div class="card"><div class="label" style="margin-bottom:6px">Just for you</div>${rows}</div><p class="tiny">Only you can see this. It is worked out on your phone from your own answers.</p>` : ''}` };
+}
+
+/* =====================================================================
+   RENDER: host
+   ===================================================================== */
+function renderHost(){
+  const ph = curPhase(), vis = visiblePhases(), ci = vis.findIndex(p => p.id === ph);
+  const st = students(), real = Object.values(S.resps).filter(r => r.team).length;
+  const P = PHASES.find(p => p.id === ph);
+  const nDone = P && P.student ? st.filter(s => doneFor(s, ph)).length : null;
+  const scrollY = window.scrollY;
+  $('#app').innerHTML = `<div class="wrap host">${S.ui.error}
+    <div class="hostgrid">
+      <div class="join">
+        <div id="qr"></div>
+        <div style="flex:1;min-width:240px"><div class="label">Join at</div><div class="joinurl">${esc(joinUrl().replace(/^https?:\/\//, ''))}</div>
+          <div class="tiny" style="margin-top:4px">${S.local ? 'Offline rehearsal: data stays in this browser.' : 'Anonymous · live'}${S.sim ? ' · simulated class loaded' : ''}</div></div>
+        <div><div class="label">Code</div><div class="code">${S.code}</div></div>
+        <div style="min-width:110px"><div class="label" style="text-align:right">${nDone == null ? 'Joined' : 'Finished'}</div><div class="nbig">${nDone == null ? st.length : nDone + '<span style="font-size:24px;color:var(--light)">/' + st.length + '</span>'}</div></div>
+      </div>
+      <div class="nav controls">
+        <button class="btn small ghost" id="prev" ${ci <= 0 ? 'disabled' : ''}>← Back</button>
+        <div class="phases">${vis.map((p, i) => `<button class="ph ${i === ci ? 'on' : i < ci ? 'done' : ''} ${p.adv ? 'h2' : ''}" data-ph="${p.id}">${p.label}</button>`).join('')}</div>
+        <button class="btn small" id="next" ${ci >= vis.length - 1 ? 'disabled' : ''}>Next →</button>
+      </div>
+      <div class="stage" id="stage">${hostStage(ph)}</div>
+      <div class="controls row">
+        <button class="btn small ghost" id="present">Hide tutor controls (P)</button>
+        <label class="tiny"><input type="checkbox" id="advT" ${S.session && S.session.adv ? 'checked' : ''}> Advanced class (hour 2)</label>
+        ${ph === 'lobby' ? `<label class="tiny">Teams <select id="nT">${[2,3,4,5,6,7,8].map(n => `<option ${((S.session && S.session.nTeams) || 5) === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
+        <span class="spacer"></span>
+        <button class="btn small ghost" id="simB">${S.sim ? 'Remove simulated class' : 'Load simulated class (25)'}</button>
+        <button class="btn small ghost" id="clr">Clear session data</button>
+      </div>
+      <p class="tiny controls">Simulated students exist on this screen only and are never saved. Use them to rehearse, or if too few students are in the room for the plots to work. Students' phones never show simulated data.</p>
+    </div></div>`;
+  window.scrollTo(0, scrollY);
+  try {
+    if (!S.qrNode && window.QRCode){ S.qrNode = document.createElement('div'); new QRCode(S.qrNode, { text: joinUrl(), width:232, height:232, correctLevel: QRCode.CorrectLevel.M }); }
+    if (S.qrNode) $('#qr').appendChild(S.qrNode);
+  } catch(e){}
+  const go = id => S.db.setSession({ phase:id }).catch(showError);
+  $('#prev').onclick = () => go(vis[ci - 1].id); $('#next').onclick = () => go(vis[ci + 1].id);
+  document.querySelectorAll('.ph').forEach(b => b.onclick = () => go(b.dataset.ph));
+  $('#present').onclick = () => document.body.classList.toggle('present');
+  $('#advT').onchange = e => S.db.setSession({ adv:e.target.checked }).catch(showError);
+  if ($('#nT')) $('#nT').onchange = e => S.db.setSession({ nTeams:Number(e.target.value) }).catch(showError);
+  $('#simB').onclick = () => { S.sim = S.sim ? null : simulateClass(25, (S.session && S.session.nTeams) || 5); render(); };
+  $('#clr').onclick = async () => { if (!confirm(`Permanently delete every real response in session ${S.code}?`)) return; await S.db.clear().catch(showError); S.resps = {}; S.teams = {}; await S.db.setSession({ phase:'lobby', adv:!!(S.session && S.session.adv), nTeams:(S.session && S.session.nTeams) || 5 }); };
+  document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { S.ui.tab[ph] = b.dataset.tab; render(); });
+}
+function tabs(ph, list){ const cur = S.ui.tab[ph] || list[0][0]; return { cur, html:`<div class="tabs controls">${list.map(([k, l]) => `<button class="tab ${k === cur ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>` }; }
+function progressTeams(ph){
+  const n = (S.session && S.session.nTeams) || 5;
+  return `<div class="progress-teams">${TEAM_NAMES.slice(0, n).map(T => { const mem = students().filter(s => s.team === T); const d = mem.filter(s => doneFor(s, ph)).length; return `<div class="pt"><div class="tn">Team ${T}</div><div class="tiny">${ph === 'lobby' ? mem.length + ' joined' : d + ' / ' + mem.length + ' finished'}</div><div class="bar"><i style="width:${mem.length ? 100 * (ph === 'lobby' ? 1 : d / mem.length) : 0}%"></i></div></div>`; }).join('')}</div>`;
+}
+const enough = (n, k) => n >= k ? '' : `<p class="banner">Only ${n} response${n === 1 ? '' : 's'} so far. The pattern will be noisy; consider loading the simulated class.</p>`;
+
+function hostStage(ph){
+  switch (ph){
+    case 'lobby': return `<div class="label">Do you know what you know?</div><h1>A quiz about confidence</h1>
+      <p class="prompt">Scan the code, pick your team, and sit together. Points for being right, and for knowing <em>when</em> you're right.</p>${progressTeams('lobby')}
+      ${tutor('Aim for teams of 4 to 5. The four rounds take about 30 minutes; students move through each round at their own pace, then wait for you.')}`;
+    case 'r1': return roundStage('Round 1', 'Tip of the tongue', 'Recall the answer if you can. Then say how likely you\'d be to recognise it among four options.', 'r1', 'Six questions. Nobody gets feedback yet: the same questions return as multiple choice in round 3.');
+    case 'r2': return roundStage('Round 2', 'How sure are you?', 'Pick an answer, then say how sure you are. 50% means a pure guess.', 'r2', 'Sixteen two-choice questions. Some are deliberately deceptive. Encourage honest confidence ratings rather than safe ones.');
+    case 'r3': return roundStage('Round 3', 'Pass or play', 'Right +1, wrong −2, pass 0. Choose your answer, then decide whether to play it.', 'r3', 'Ten questions, six of them the round 1 questions as multiple choice. Passing well is worth as much as knowing.');
+    case 'r4': return roundStage('Round 4', 'Team round', 'First answer on your own, with confidence. Then agree a team answer together.', 'r4', 'Eight hard questions. Listen for how teams decide: who speaks first, whose confidence wins. You can refer back to it in reveal 4.');
+    case 'pct': return roundStage('Last question', 'How did you do?', 'What percentage of the class do you think you beat?', 'pct', 'One slider. Used in hour 2 (Dunning–Kruger) for advanced classes; harmless otherwise.');
+    case 'debrief': return stageDebrief();
+    case 'h2dk': return stageDK();
+    case 'h2est': return roundStage('Part 2', 'An advisor: your estimate', 'Give your best estimate for each question, and how confident you are.', 'h2est', 'Ten numerical questions. Wait until most students are done before moving on: the advice phase uses classmates\' real estimates.');
+    case 'h2adv': return roundStage('Part 2', 'An advisor: the advice', 'You\'ll see a classmate\'s estimate, or the average of five. Then give your final answer.', 'h2adv', 'Half the questions show one classmate, half show the average of five. Students are not told that five is usually more accurate.');
+    case 'h2advr': return stageAdvice();
+    case 'h2group': return stageGroup();
+    case 'end': return stageEnd();
+  }
+  return '';
+}
+function roundStage(lab, title, prompt, ph, note){
+  return `<div class="label">${lab}</div><h1>${title}</h1><p class="prompt">${prompt}</p>${progressTeams(ph)}${tutor(note)}`;
+}
+
+/* ---------- Hour 1 reveals ---------- */
+function stageDebrief(){
+  const t = tabs('debrief', [['fok','1 · Tip of the tongue'],['cal','2a · Calibration'],['res','2b · Bias vs resolution'],['pp','3 · Pass or play'],['team','4 · Teams'],['lb','Leaderboard']]);
+  let body = '';
+  if (t.cur === 'fok'){
+    const d = anaFOK(); const vals = [1,2,3,4,5].map(k => d.by[k].length ? mean(d.by[k]) * 100 : NaN);
+    const n = [1,2,3,4,5].reduce((a, k) => a + d.by[k].length, 0);
+    body = `<div class="label">Reveal 1</div><h1>You couldn't recall it, but did you know you'd recognise it?</h1>
+      <p class="prompt">Recognition accuracy in round 3 for answers students <em>couldn't</em> recall in round 1, split by their feeling of knowing.</p>${enough(n, 15)}
+      ${barChart({ groups:['1','2','3','4','5','Recalled it'], groupSub:['Definitely not','','Maybe','','Definitely','(for comparison)'], series:[{ name:'Recognised', color:COL.accent, vals:vals.concat(d.rec.length ? mean(d.rec) * 100 : NaN) }], y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Picked the right option', vFmt:v => Math.round(v) + '%', hlines:[{ y:25, label:'Chance (1 in 4)' }], m:{ b:70 } })}
+      ${keystats([{ n:n, l:'answers not recalled' }, { n: pct0(mean(d.by[4].concat(d.by[5]))), l:'recognised when FOK was 4 or 5' }, { n: pct0(mean(d.by[1].concat(d.by[2]))), l:'recognised when FOK was 1 or 2' }])}
+      ${tutor('If the bars rise from left to right, people knew something about memories they could not retrieve. That is monitoring without retrieval (Hart, 1965), the tip-of-the-tongue state from Lecture 1. Ask: what were you monitoring, if not the answer itself?')}`;
+  } else if (t.cur === 'cal'){
+    const d = anaCalib(); const minN = students().length >= 12 ? 5 : 2; const line = k => CONF.map(c => [c, d.bins[k][c].length >= minN ? mean(d.bins[k][c]) * 100 : NaN, d.bins[k][c].length]);
+    body = `<div class="label">Reveal 2a</div><h1>When you said 80%, were you right 80% of the time?</h1>
+      <p class="prompt">Each dot is the class's accuracy at each confidence level. On the dashed line, confidence matches accuracy.</p>${enough(d.all.n, 80)}
+      ${legend([{ name:'All questions', color:COL.ink }, { name:'Normal questions', color:COL.grey }, { name:'Deceptive questions', color:COL.accent }])}
+      ${lineChart({ x0:50, x1:100, y0:0, y1:100, xTicks:CONF, yTicks:tick(0, 100, 25), xFmt:v => v + '%', yFmt:v => v + '%', xLabel:'Confidence', yLabel:'Actually correct', diag:true, showN:false,
+        series:[{ name:'Normal', color:COL.grey, pts:line('normal') }, { name:'Deceptive', color:COL.accent, pts:line('deceptive') }, { name:'All', color:COL.ink, pts:line('all') }] })}
+      ${keystats([{ n: Math.round(d.all.conf) + '% / ' + Math.round(d.all.acc) + '%', l:'average confidence / accuracy, all questions' }, { n: Math.round(d.dec.conf) + '% / ' + Math.round(d.dec.acc) + '%', l:'on the deceptive questions' }, { n: (d.all.conf - d.all.acc >= 0 ? '+' : '') + Math.round(d.all.conf - d.all.acc), l:'class over- (+) or underconfidence (−), points' }])}
+      <p class="tiny">Confidence levels used fewer than ${minN} times are not plotted.</p>${tutor('Below the line is overconfidence. Expect the deceptive questions to sit well below it: confidence follows how an answer <em>feels</em>, not whether it is right. Which deceptive question fooled the room most? (Rome is further north than New York.)')}`;
+  } else if (t.cur === 'res'){
+    const d = anaCalib(); const pts = d.per.filter(p => fin(p.gap)).map(p => ({ x:clamp(p.bias, -40, 40), y:clamp(p.gap, -20, 45) }));
+    body = `<div class="label">Reveal 2b</div><h1>Two different ways to be good</h1>
+      <p class="prompt">Each dot is one student. Left–right: over- or underconfidence (bias). Up–down: how much more confident you were when right than when wrong (resolution).</p>${enough(pts.length, 8)}
+      ${scatter({ pts, x0:-40, x1:40, y0:-20, y1:45, xTicks:tick(-40, 40, 20), yTicks:tick(-20, 40, 20), xLabel:'← underconfident     Bias (points)     overconfident →', yLabel:'Resolution: confidence right − wrong', zeroX:true, zeroY:true, jitter:1.5,
+        labels:[{ x:-38, y:41, text:'Underconfident but discerning', anchor:'start' }, { x:38, y:41, text:'Overconfident but discerning', anchor:'end' }, { x:-38, y:-16, text:'Underconfident and undiscerning', anchor:'start' }, { x:38, y:-16, text:'Overconfident and undiscerning', anchor:'end' }] })}
+      ${keystats([{ n: pts.length, l:'students' }, { n: pts.filter(p => p.y > 5).length, l:'were noticeably more confident when right' }, { n: pts.filter(p => Math.abs(p.x) < 5).length, l:'were within 5 points of perfect calibration' }])}
+      ${tutor('Calibration and resolution are separate. Find a dot near the middle of the x-axis but low on the y-axis: perfectly calibrated on average, yet no idea which answers were right. Link to Lecture 1: this is the bias–sensitivity distinction behind meta-d′.')}`;
+  } else if (t.cur === 'pp'){
+    const d = anaPass(); const pts = d.per.map(p => ({ x:p.all, y:p.p }));
+    const beat = d.per.filter(p => p.p > p.all).length;
+    body = `<div class="label">Reveal 3</div><h1>Did passing pay?</h1>
+      <p class="prompt">Your actual score against the score you would have got by playing every question. Above the dashed line, your passing earned you points.</p>${enough(pts.length, 8)}
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:20px;align-items:start">
+      ${scatter({ W:620, H:480, pts, x0:-20, x1:10, y0:-20, y1:10, xTicks:tick(-20, 10, 5), yTicks:tick(-20, 10, 5), xLabel:'Score if you had played everything', yLabel:'Your actual score', diag:true, jitter:.6 })}
+      ${barChart({ groups:['Played','Passed'], series:[{ name:'acc', color:COL.accent, vals:[mean(d.played) * 100, mean(d.passed) * 100] }], y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Chosen answer was right', vFmt:v => Math.round(v) + '%', W:420, H:480 })}
+      </div>
+      ${keystats([{ n: beat + ' of ' + d.per.length, l:'students beat "play everything"' }, { n: pct0(mean(d.played)), l:'accuracy on questions people played' }, { n: pct0(mean(d.passed)), l:'accuracy on questions people passed (they still chose an answer)' }])}
+      ${tutor('The gap between the two bars is monitoring that is worth something: people passed on the answers that really were shaky. But the points only came from acting on it. Monitoring drives control (Lecture 1, response withholding).')}`;
+  } else if (t.cur === 'team'){
+    const d = anaTeams(), A = d.agg;
+    const ser = [['Team discussion','actual',COL.ink],['Majority vote','maj',COL.grey],['Confidence-weighted vote','cw',COL.accent],['Most confident member','mc',COL.light]];
+    body = `<div class="label">Reveal 4</div><h1>Did your team beat its members?</h1>
+      <p class="prompt">Accuracy in the team round under different ways of combining the same private answers.</p>${enough(d.rows.length, 3)}
+      ${legend(ser.map(s => ({ name:s[0], color:s[2] })).concat([{ name:'Best individual in team', color:COL.dark }, { name:'Average individual', color:COL.pale }]))}
+      ${barChart({ groups:['Hard questions','Deceptive questions','All'], series: ser.map(s => ({ name:s[0], color:s[2], vals:[A(s[1], 'hard') * 100, A(s[1], 'deceptive') * 100, A(s[1]) * 100] })).concat([{ name:'Best', color:COL.dark, vals:[NaN, NaN, mean(d.rows.map(r => r.best)) * 100] }, { name:'Avg', color:COL.pale, vals:[A('avg', 'hard') * 100, A('avg', 'deceptive') * 100, A('avg') * 100] }]), y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Correct', vFmt:v => Math.round(v) + '%' })}
+      <table class="lb" style="margin-top:12px;font-size:15px"><tr><th>Team</th><th class="r">Members</th><th class="r">Discussion</th><th class="r">Majority</th><th class="r">Confidence-weighted</th><th class="r">Best member</th></tr>
+      ${d.rows.map(r => `<tr><td>Team ${r.T}</td><td class="r">${r.n}</td><td class="r">${pct0(mean(r.actual.filter(fin)))}</td><td class="r">${pct0(mean(r.maj))}</td><td class="r">${pct0(mean(r.cw))}</td><td class="r">${pct0(r.best)}</td></tr>`).join('')}</table>
+      ${tutor('Ask each team how they decided. Did the most confident person win the argument? Did the team beat its best member (Bahrami et al., 2010)? Notice the deceptive questions: when everyone shares the same wrong intuition, combining people cannot fix it.')}`;
+  } else {
+    body = leaderboard();
+  }
+  return t.html + body;
+}
+function leaderboard(){
+  const lb = anaLeaderboard().sort((a, b) => b.total - a.total), cal = anaLeaderboard().filter(x => fin(x.bias)).sort((a, b) => a.bias - b.bias)[0];
+  return `<div class="label">Results</div><h1>Leaderboard</h1>
+    <table class="lb"><tr><th>#</th><th>Team</th><th class="r">Avg member score</th><th class="r">Team round ×2</th><th class="r">Total</th></tr>
+    ${lb.map((r, i) => `<tr><td>${i + 1}</td><td>Team ${r.T}</td><td class="r">${fmtNum(r.ind)}</td><td class="r">${r.tr * 2}</td><td class="r">${fmtNum(r.total)}</td></tr>`).join('')}</table>
+    ${cal ? `<div class="card soft" style="margin-top:18px"><div class="label">Best calibrated team</div><h2>Team ${cal.T}</h2><p class="muted">Members' confidence was, on average, within ${Math.round(cal.bias)} points of their accuracy in round 2.</p></div>` : ''}
+    ${tutor('Member score = round 1 recalls + round 2 correct + round 3 points, averaged across members so team size doesn\'t matter. Exit ticket: one change to how you\'ll prepare for the exam, based on today\'s data.')}`;
+}
+function stageEnd(){
+  const adv = S.session && S.session.adv;
+  return `<div class="label">Wrap-up</div><h1>${adv ? 'Confidence is only useful when it tracks accuracy' : 'Monitoring is only useful when it drives control'}</h1>
+    <p class="prompt">${adv ? 'In you, in your advisor, and in your group.' : 'You knew more than you could recall, your confidence carried real information, and the points came from acting on it.'}</p>
+    ${leaderboard()}`;
+}
+
+/* ---------- Hour 2 ---------- */
+function stageDK(){
+  const t = tabs('h2dk', [['a','a · The classic plot'],['b','b · Pure noise'],['c','c · A better test']]);
+  const d = anaDK(); let body = '';
+  const qlab = ['Bottom 25%','2nd','3rd','Top 25%'];
+  const dkLines = q => lineChart({ x0:.5, x1:4.5, y0:0, y1:100, xTicks:[1,2,3,4], xFmt:v => qlab[v - 1], yTicks:tick(0, 100, 25), yFmt:v => v, xLabel:'Actual quiz performance (quartile)', yLabel:'Percentile', series:[{ name:'Actual', color:COL.ink, pts:q.map((g, i) => [i + 1, mean(g.map(x => x.actual))]) }, { name:'Estimated', color:COL.accent, pts:q.map((g, i) => [i + 1, mean(g.map(x => x.est))]) }] });
+  if (t.cur === 'a'){
+    body = `<div class="label">Part 1 · Yourself</div><h1>Do you know how good you are?</h1>
+      <p class="prompt">Students grouped by their actual quiz score. Black: where they really ranked. Orange: where they thought they ranked.</p>${enough(d.list.length, 12)}
+      ${legend([{ name:'Actual percentile', color:COL.ink }, { name:'Estimated percentile', color:COL.accent }])}
+      ${d.q ? dkLines(d.q) : '<p class="muted">Needs at least four students with an estimate.</p>'}
+      ${d.q ? keystats([{ n: Math.round(mean(d.q[0].map(x => x.est - x.actual))) , l:'bottom quarter: average overestimate (points)' }, { n: Math.round(mean(d.q[3].map(x => x.est - x.actual))), l:'top quarter: average over/underestimate' }, { n: Math.round(mean(d.list.map(x => x.est))), l:'average estimated percentile (true average is 50)' }]) : ''}
+      ${tutor('The classic Dunning–Kruger pattern: the lowest scorers overestimate most. Before explaining it, ask the room: what would have to be true for this to show a metacognitive deficit? Then show tab b.')}`;
+  } else if (t.cur === 'b'){
+    const q = simDK(400);
+    body = `<div class="label">Part 1 · Yourself</div><h1>The same plot, from people who know nothing about themselves</h1>
+      <p class="prompt">400 simulated people. Their percentile guesses are random numbers, completely unrelated to how they did, with a slight better-than-average lean.</p>
+      ${legend([{ name:'Actual percentile', color:COL.ink }, { name:'Estimated percentile (random)', color:COL.accent }])}
+      ${dkLines(q)}
+      ${tutor('Pure noise plus a better-than-average lean reproduces the "unskilled and unaware" pattern. Regression to the mean and bounded scales do the work (Lecture 2, Dunning–Kruger "handle with care"). So the classic plot cannot, on its own, show that low performers have worse metacognition.')}`;
+  } else {
+    const q = d.q; const vals = q ? q.map(g => mean(g.map(x => x.cs.gap).filter(fin))) : [];
+    const bias = q ? q.map(g => mean(g.map(x => x.cs.bias).filter(fin))) : [];
+    body = `<div class="label">Part 1 · Yourself</div><h1>A better test: item by item</h1>
+      <p class="prompt">Instead of one global guess, use the round 2 confidence ratings. Do lower scorers show worse resolution, i.e. less difference between their confidence when right and when wrong?</p>${enough(d.list.length, 12)}
+      ${legend([{ name:'Resolution (confidence right − wrong)', color:COL.accent }, { name:'Bias (confidence − accuracy)', color:COL.grey }])}
+      ${q ? barChart({ groups:qlab, series:[{ name:'Resolution', color:COL.accent, vals }, { name:'Bias', color:COL.grey, vals:bias }], y0:-10, y1:40, yTicks:tick(-10, 40, 10), yLabel:'Points', vFmt:v => (v >= 0 ? '+' : '') + Math.round(v) }) : '<p class="muted">Needs at least four students.</p>'}
+      ${tutor('This is the more nuanced framing from Lecture 2: low performers have less reliable signal to monitor. If the orange bars rise from left to right, there is some real difference in resolution, not just a statistical artefact. Trust policy rule 1: when can self-assessment be trusted, and what should replace it when it can\'t?')}`;
+  }
+  return t.html + body;
+}
+function stageAdvice(){
+  const t = tabs('h2advr', [['a','a · How far did you move?'],['b','b · Should you have moved more?'],['c','c · Did confidence guide you?'],['d','d · One advisor or five?']]);
+  const tr = anaAdvice(); let body = enough(tr.length, 40);
+  if (t.cur === 'a'){
+    const bins = [0, .2, .4, .6, .8, 1]; const lab = ['Ignored it (0)','0–20%','20–40%','40–60%','60–80%','80–100%','Adopted it (1)'];
+    const counts = [tr.filter(x => x.woa === 0).length].concat([0,1,2,3,4].map(i => tr.filter(x => x.woa > bins[i] && x.woa <= bins[i + 1] && x.woa < 1).length)).concat([tr.filter(x => x.woa === 1).length]);
+    body = `<div class="label">Part 2 · An advisor</div><h1>How far did you move towards the advice?</h1>
+      <p class="prompt">For each question: 0% means you kept your own answer, 100% means you switched to the advice completely, 50% means you met in the middle.</p>${body}
+      ${barChart({ groups:lab, series:[{ name:'Trials', color:COL.accent, vals:counts.map(c => tr.length ? 100 * c / tr.length : NaN) }], y0:0, y1:Math.max(40, Math.ceil(Math.max(...counts.map(c => tr.length ? 100 * c / tr.length : 0)) / 10) * 10), yTicks:tick(0, 60, 10), yFmt:v => v + '%', yLabel:'Share of answers', vFmt:v => Math.round(v) + '%', m:{ b:70 } })}
+      ${keystats([{ n: pct0(mean(tr.map(x => x.woa))), l:'average move towards the advice' }, { n: pct0(tr.filter(x => x.woa === 0).length / tr.length), l:'of answers ignored the advice entirely' }, { n:'≈ 30%', l:'typical in published studies' }])}
+      ${tutor('Egocentric discounting (Lecture 3): people weight their own opinion far more than an equally informed peer\'s. Ask: why might your own answer feel more trustworthy? (You know your reasons; you only see their number.)')}`;
+  } else if (t.cur === 'b'){
+    const v = [mean(tr.map(x => x.eInit)), mean(tr.map(x => x.eFinal)), mean(tr.map(x => x.eAvg)), mean(tr.map(x => x.eAdv))];
+    body = `<div class="label">Part 2 · An advisor</div><h1>Should you have moved more?</h1>
+      <p class="prompt">Average error (standardised across questions; lower is better).</p>${body}
+      ${barChart({ groups:['Your first answer','Your final answer','Simple average of you + advice','The advice alone'], series:[{ name:'Error', color:COL.accent, vals:v }], y0:0, y1:Math.max(1, Math.ceil(Math.max(...v.filter(fin)) * 5) / 5 + .2), yTicks:tick(0, 2, .25), yFmt:v => v.toFixed(2), yLabel:'Average error (lower = better)', vFmt:v => v.toFixed(2) })}
+      ${keystats([{ n: pct0(1 - v[1] / v[0]), l:'error reduction you actually achieved' }, { n: pct0(1 - v[2] / v[0]), l:'reduction if everyone had just averaged' }])}
+      ${tutor('Averaging two independent estimates cancels out some of each person\'s error, so simply splitting the difference usually beats what people actually do. Trust policy rule 2: when should we defer, and how much?')}`;
+  } else if (t.cur === 'c'){
+    const g = [[1,2],[3],[4,5]].map(cs => tr.filter(x => cs.includes(x.conf)));
+    body = `<div class="label">Part 2 · An advisor</div><h1>Did your confidence decide how much you listened?</h1>
+      <p class="prompt">Movement towards advice, split by how confident you were in your first estimate. And was that the right call?</p>${body}
+      ${legend([{ name:'Move towards advice', color:COL.accent }, { name:'Error of your first estimate', color:COL.grey }])}
+      ${barChart({ groups:['Low confidence (1–2)','Medium (3)','High confidence (4–5)'], groupSub:g.map(x => 'n = ' + x.length), series:[{ name:'WOA', color:COL.accent, vals:g.map(x => mean(x.map(y => y.woa)) * 100) }, { name:'Error', color:COL.grey, vals:g.map(x => mean(x.map(y => y.eInit)) * 100) }], y0:0, y1:'AUTO', yTicks:'AUTO', yLabel:'%  /  error × 100', vFmt:v => Math.round(v), m:{ b:72 } })}
+      ${tutor('Ideally, low confidence should mean both "I moved more" and "my first answer was worse". If the grey bars fall from left to right, confidence carried real information, and using it to decide how much to listen was sensible. Link back to hour 1: confidence is only useful when it tracks accuracy.')}`;
+  } else {
+    const one = tr.filter(x => x.type === 'one'), five = tr.filter(x => x.type === 'five');
+    body = `<div class="label">Part 2 · An advisor</div><h1>One classmate, or the average of five?</h1>
+      <p class="prompt">Half your questions showed one classmate's answer; half showed the average of five.</p>${body}
+      ${legend([{ name:'Move towards advice', color:COL.accent }, { name:'Error of the advice', color:COL.grey }])}
+      ${barChart({ groups:['One classmate','Average of five'], groupSub:['n = ' + one.length, 'n = ' + five.length], series:[{ name:'WOA', color:COL.accent, vals:[mean(one.map(x => x.woa)) * 100, mean(five.map(x => x.woa)) * 100] }, { name:'Error', color:COL.grey, vals:[mean(one.map(x => x.eAdv)) * 100, mean(five.map(x => x.eAdv)) * 100] }], y0:0, y1:'AUTO', yTicks:'AUTO', yLabel:'%  /  error × 100', vFmt:v => Math.round(v), m:{ b:72 } })}
+      ${tutor('The average of five is usually much more accurate (wisdom of crowds) but people often barely weight it more than a single person. Trust policy: does your rule reward independent, aggregated advice?')}`;
+  }
+  return t.html + body;
+}
+function stageGroup(){
+  const t = tabs('h2group', [['a','a · Combining confidence'],['b','b · Your actual teams']]);
+  if (t.cur === 'b') return t.html + stageDebriefTeamsOnly();
+  const d = anaGroup(), A = d.acc;
+  const ser = [['Average individual','avg',COL.pale],['Majority vote','maj',COL.grey],['Confidence-weighted vote','cw',COL.accent],['Follow the most confident','mc',COL.light],['Best member (in hindsight)','best',COL.dark]];
+  return t.html + `<div class="label">Part 3 · The group</div><h1>When should confidence decide?</h1>
+    <p class="prompt">Using everyone's private round 2 answers, the app forms ${300} random groups of ${d.k} and combines their answers in different ways.</p>${enough(d.n, 10)}
+    ${legend(ser.map(s => ({ name:s[0], color:s[2] })))}
+    ${barChart({ groups:['Hard (non-deceptive) questions','Deceptive questions'], series: ser.map(s => ({ name:s[0], color:s[2], vals:[mean(A.normal[s[1]]) * 100, mean(A.deceptive[s[1]]) * 100] })), y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Group answer correct', vFmt:v => Math.round(v) + '%' })}
+    ${keystats([{ n: pct0(mean(A.normal.cw)) + ' vs ' + pct0(mean(A.normal.maj)), l:'hard questions: confidence-weighted vs majority' }, { n: pct0(mean(A.deceptive.cw)) + ' vs ' + pct0(mean(A.deceptive.maj)), l:'deceptive questions: confidence-weighted vs majority' }])}
+    ${tutor('Koriat (2012): confidence tracks how widely an answer is shared, not whether it is true. When most people are right, weighting by confidence helps; when most people share the same wrong intuition, confident members lead the group further astray. Trust policy rule 3: when should confidence decide, and what protects against a confident wrong consensus?')}`;
+}
+function stageDebriefTeamsOnly(){
+  const prev = S.ui.tab.debrief; S.ui.tab.debrief = 'team'; const h = stageDebrief().replace(/<div class="tabs controls">[\s\S]*?<\/div>/, ''); S.ui.tab.debrief = prev; return h;
+}
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+async function boot(){
+  if (!S.code){ render(); return; }
+  $('#tag').textContent = 'Session ' + S.code + (S.local ? ' · offline' : '');
+  S.pid = S.host ? 'host' : getPid();
+  try { S.db = S.local ? makeLocalDB(S.code) : await makeFirebaseDB(S.code); }
+  catch(e){ showError(e); return; }
+  let first = true;
+  S.db.onSession(s => {
+    S.session = s;
+    if (S.host && !s && first){ S.db.setSession({ phase:'lobby', adv: params.get('adv') === '1', nTeams:5, created:Date.now() }).catch(showError); }
+    first = false; render();
+  }, showError);
+  S.db.onResps(o => {
+    S.resps = o || {};
+    if (!S.host){ const mine = S.resps[S.pid]; if (mine) S.me = deepMerge(mine, S.me); }
+    render();
+  }, showError);
+  S.db.onTeams(o => { S.teams = o || {}; render(); }, showError);
+  if (S.host) document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+    if (e.key === 'p' || e.key === 'P') document.body.classList.toggle('present');
+    const vis = visiblePhases(), ci = vis.findIndex(p => p.id === curPhase());
+    if (e.key === 'ArrowRight' && ci < vis.length - 1) S.db.setSession({ phase:vis[ci + 1].id });
+    if (e.key === 'ArrowLeft' && ci > 0) S.db.setSession({ phase:vis[ci - 1].id });
+  });
+}
+boot();
+</script>
+</body>
+</html>
