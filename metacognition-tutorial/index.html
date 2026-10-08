@@ -222,10 +222,12 @@ const PHASES = [
   { id:'lobby',  label:'Lobby' },
   { id:'r1',     label:'R1 Tip of the tongue', student:true },
   { id:'r2',     label:'R2 How sure?', student:true },
+  { id:'pct',    label:'Quick question', student:true },
+  { id:'rv2',    label:'Reveal: confidence', reveal:[['cal','2a · Calibration'],['res','2b · Bias vs resolution']] },
   { id:'r3',     label:'R3 Pass or play', student:true },
+  { id:'rv3',    label:'Reveal: recall & passing', reveal:[['fok','1 · Tip of the tongue'],['pp','3 · Pass or play']] },
   { id:'r4',     label:'R4 Team round', student:true },
-  { id:'pct',    label:'Last question', student:true },
-  { id:'debrief',label:'Reveals' },
+  { id:'rv4',    label:'Reveal: teams', reveal:[['team','4 · Teams'],['lb','Leaderboard']] },
   { id:'h2dk',   label:'H2 · Yourself', adv:true },
   { id:'h2est',  label:'H2 · Estimates', adv:true, student:true },
   { id:'h2adv',  label:'H2 · Advice', adv:true, student:true },
@@ -357,6 +359,12 @@ function quizScore(s){
   R4.forEach(it => { if (s.r4p && s.r4p[it.id] && s.r4p[it.id].ok) k++; });
   return k;
 }
+function earlyScore(s){ // rounds 1 and 2: the basis for the percentile question
+  let k = 0;
+  R1.forEach(it => { if (s.r1 && s.r1[it.id] && s.r1[it.id].ok) k++; });
+  R2.forEach(it => { if (s.r2 && s.r2[it.id] && s.r2[it.id].ok) k++; });
+  return k;
+}
 function confStats(s, items, key){
   const tr = items.map(it => s[key] && s[key][it.id]).filter(Boolean);
   const confs = tr.map(t => t.conf), acc = mean(tr.map(t => t.ok ? 1 : 0));
@@ -428,7 +436,7 @@ function simulateClass(n, nTeams){
     resps[id] = s; people.push({ id, a, s });
   }
   // percentile estimates (weakly related to actual standing)
-  const sc = percentiles(people.map(p => ({ id:p.id, score:quizScore(p.s) })));
+  const sc = percentiles(people.map(p => ({ id:p.id, score:earlyScore(p.s) })));
   people.forEach(p => { p.s.pct = clamp(Math.round(58 + 0.25 * (sc[p.id] - 50) + randn(r) * 15), 1, 99); });
   // advice from other simulated students
   people.forEach(p => {
@@ -603,7 +611,7 @@ function quartiles(list, key){ // list sorted by key ascending, split into 4 gro
 }
 function anaDK(){
   const st = students().filter(s => fin(s.pct));
-  const pc = percentiles(students().map(s => ({ id:s.id, score:quizScore(s) })));
+  const pc = percentiles(students().map(s => ({ id:s.id, score:earlyScore(s) })));
   const list = st.map(s => ({ id:s.id, actual:pc[s.id], est:s.pct, cs:confStats(s, R2, 'r2') }));
   const q = list.length >= 4 ? quartiles(list, 'actual') : null;
   return { list, q };
@@ -760,13 +768,13 @@ function confWidget(key, it, label, i, n, field){
 function viewConf(round, items0, label, field){
   const items = order(round, items0), done = S.me[field] || {};
   const i = items.findIndex(it => !done[it.id]);
-  if (i < 0) return wait('Round 2 done', 'Waiting for the tutor to start the next round.');
+  if (i < 0) return wait('Round 2 done', 'One quick question is coming, then the first results.');
   return confWidget(round, items[i], label, i, items.length, field);
 }
 function viewR3(){
   const items = order('r3', R3), done = S.me.r3 || {};
   const i = items.findIndex(it => !done[it.id] || !('play' in done[it.id]));
-  if (i < 0) return wait('Round 3 done', 'Waiting for the tutor to start the team round.');
+  if (i < 0) return wait('Round 3 done', 'Eyes on the big screen soon for the results.');
   const it = items[i], oo = optOrder('r3' + it.id, it.opts.length), a = done[it.id];
   return { key:`r3:${it.id}:${a ? a.c : ''}`, html: header('Round 3 · Pass or play', i, items.length) + `
     <div class="tiny" style="margin-bottom:6px">Right +1 · Wrong −2 · Pass 0</div>
@@ -787,7 +795,7 @@ function viewR4(){
   if (i >= 0) return confWidget('r4', items[i], 'Round 4 · On your own first', i, items.length, 'r4p');
   const T = S.me.team, tdoc = S.teams[T] || {}, ta = tdoc.r4 || {};
   const nDone = R4.filter(it => ta[it.id]).length;
-  if (tdoc.done) return wait('Team answers in', 'Nice work. Waiting for the other teams.');
+  if (tdoc.done) return wait('Team answers in', 'Nice work. Waiting for the other teams, then the final results.');
   return { key:'r4team:' + JSON.stringify(ta), html:`<div class="label">Round 4 · Team ${T}</div><h2>Now decide as a team</h2>
     <p class="muted" style="margin-bottom:8px">Discuss each question. Anyone in the team can tap the team's answer; it syncs to all your phones. ${nDone}/${R4.length} answered.</p>
     ${R4.map(it => { const oo = optOrder(it.id, 2); return `<div class="titem"><div class="tq">${it.q}</div><div class="opts">${oo.map(k => `<button class="opt ${ta[it.id] && ta[it.id].c === k ? 'on' : ''}" data-id="${it.id}" data-k="${k}">${it.a[k]}</button>`).join('')}</div></div>`; }).join('')}
@@ -798,10 +806,10 @@ function viewR4(){
     } };
 }
 function viewPct(){
-  if (fin(S.me.pct)) return wait('All done', 'Eyes on the big screen for the results.');
+  if (fin(S.me.pct)) return wait('Thanks', 'Eyes on the big screen for the first results.');
   const v = S.ui.pctV ?? 50;
-  return { key:'pct', html:`<div class="label">One last question</div><h2>How did you do compared with everyone in this room?</h2>
-    <p class="muted">Across all four rounds, what percentage of the class do you think you beat?</p>
+  return { key:'pct', html:`<div class="label">Quick question</div><h2>How did you do compared with everyone in this room?</h2>
+    <p class="muted">Across rounds 1 and 2, what percentage of the class do you think you beat?</p>
     <div class="readout" id="pv">I beat about ${v}% of the class</div>
     <input type="range" min="0" max="100" step="1" value="${v}" id="pr">
     <div class="anch"><span>Bottom of the class</span><span>Top of the class</span></div>
@@ -870,8 +878,8 @@ function viewPersonal(ph){
   if (r3.n) rows += `<div class="stat"><span>Pass or play: your score</span><b>${r3.p}</b></div><div class="stat"><span>…if you had played every question</span><b>${r3.all}</b></div>`;
   if (me.r1) rows += `<div class="stat"><span>Round 1: answers recalled</span><b>${rec} / ${R1.length}</b></div>`;
   if (['h2dk','h2advr','h2group','end'].includes(ph) && fin(me.pct)){
-    const pc = percentiles(Object.entries(S.resps).filter(([, s]) => s.team).map(([id, s]) => ({ id, score:quizScore(s) })));
-    if (fin(pc[S.pid])) rows += `<div class="stat"><span>You guessed you beat</span><b>${me.pct}%</b></div><div class="stat"><span>You actually beat</span><b>${Math.round(pc[S.pid])}%</b></div>`;
+    const pc = percentiles(Object.entries(S.resps).filter(([, s]) => s.team).map(([id, s]) => ({ id, score:earlyScore(s) })));
+    if (fin(pc[S.pid])) rows += `<div class="stat"><span>Rounds 1–2: you guessed you beat</span><b>${me.pct}%</b></div><div class="stat"><span>You actually beat</span><b>${Math.round(pc[S.pid])}%</b></div>`;
   }
   if (['h2advr','h2group','end'].includes(ph)){
     const w = EST.map(it => { const e = me.est && me.est[it.id], a = me.adv && me.adv[it.id]; if (!e || !a || !fin(a.final) || a.advice === e.init) return NaN; return clamp((a.final - e.init) / (a.advice - e.init), 0, 1); }).filter(fin);
@@ -948,8 +956,8 @@ function hostStage(ph){
     case 'r2': return roundStage('Round 2', 'How sure are you?', 'Pick an answer, then say how sure you are. 50% means a pure guess.', 'r2', 'Sixteen two-choice questions. Some are deliberately deceptive. Encourage honest confidence ratings rather than safe ones.');
     case 'r3': return roundStage('Round 3', 'Pass or play', 'Right +1, wrong −2, pass 0. Choose your answer, then decide whether to play it.', 'r3', 'Ten questions, six of them the round 1 questions as multiple choice. Passing well is worth as much as knowing.');
     case 'r4': return roundStage('Round 4', 'Team round', 'First answer on your own, with confidence. Then agree a team answer together.', 'r4', 'Eight hard questions. Listen for how teams decide: who speaks first, whose confidence wins. You can refer back to it in reveal 4.');
-    case 'pct': return roundStage('Last question', 'How did you do?', 'What percentage of the class do you think you beat?', 'pct', 'One slider. Used in hour 2 (Dunning–Kruger) for advanced classes; harmless otherwise.');
-    case 'debrief': return stageDebrief();
+    case 'pct': return roundStage('Quick question', 'How did you do?', 'Across rounds 1 and 2, what percentage of the class do you think you beat?', 'pct', 'One slider. Used in hour 2 (Dunning–Kruger) for advanced classes; harmless otherwise.');
+    case 'rv2': case 'rv3': case 'rv4': return stageDebrief(ph);
     case 'h2dk': return stageDK();
     case 'h2est': return roundStage('Part 2', 'An advisor: your estimate', 'Give your best estimate for each question, and how confident you are.', 'h2est', 'Ten numerical questions. Wait until most students are done before moving on: the advice phase uses classmates\' real estimates.');
     case 'h2adv': return roundStage('Part 2', 'An advisor: the advice', 'You\'ll see a classmate\'s estimate, or the average of five. Then give your final answer.', 'h2adv', 'Half the questions show one classmate, half show the average of five. Students are not told that five is usually more accurate.');
@@ -964,8 +972,8 @@ function roundStage(lab, title, prompt, ph, note){
 }
 
 /* ---------- Hour 1 reveals ---------- */
-function stageDebrief(){
-  const t = tabs('debrief', [['fok','1 · Tip of the tongue'],['cal','2a · Calibration'],['res','2b · Bias vs resolution'],['pp','3 · Pass or play'],['team','4 · Teams'],['lb','Leaderboard']]);
+function stageDebrief(ph){
+  const t = tabs(ph, PHASES.find(p => p.id === ph).reveal);
   let body = '';
   if (t.cur === 'fok'){
     const d = anaFOK(); const vals = [1,2,3,4,5].map(k => d.by[k].length ? mean(d.by[k]) * 100 : NaN);
@@ -1025,14 +1033,15 @@ function teamReveal(full){
     { name:'Most confident member', color:COL.dark, vals:types.map(k => A('mc', k) * 100) }
   ];
   const ser = full ? [base[0], base[1], ...rules, base[2]] : base;
-  return `<div class="label">${full ? 'Your actual teams' : 'Reveal 4'}</div><h1>Did your team beat its members?</h1>
+  const inRv4 = curPhase() === 'rv4';
+  return `<div class="label">${inRv4 ? 'Reveal 4' : 'Your actual teams'}</div><h1>Did your team beat its members?</h1>
     <p class="prompt">Accuracy in the team round: the average team member on their own, the answer the team agreed, and the team's best member on their own.</p>${enough(d.rows.length, 3)}
     ${legend(ser.map(x => ({ name:x.name, color:x.color })))}
     ${barChart({ groups, series:ser, y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Correct', vFmt:v => Math.round(v) + '%' })}
-    ${S.ui.tab.debrief === 'team' && curPhase() === 'debrief' ? `<div class="controls" style="margin-top:6px"><button class="btn small ghost" id="rulesT">${full ? 'Hide voting rules' : 'Show voting rules (majority, confidence-weighted)'}</button></div>` : ''}
+    ${curPhase() === 'rv4' && (S.ui.tab.rv4 || 'team') === 'team' ? `<div class="controls" style="margin-top:6px"><button class="btn small ghost" id="rulesT">${full ? 'Hide voting rules' : 'Show voting rules (majority, confidence-weighted)'}</button></div>` : ''}
     <table class="lb" style="margin-top:12px;font-size:15px"><tr><th>Team</th><th class="r">Members</th><th class="r">Average member</th><th class="r">Team discussion</th><th class="r">Best member</th></tr>
     ${d.rows.map(r => `<tr><td>Team ${r.T}</td><td class="r">${r.n}</td><td class="r">${pct0(mean(r.avg))}</td><td class="r">${pct0(mean(r.actual.filter(fin)))}</td><td class="r">${pct0(r.best)}</td></tr>`).join('')}</table>
-    ${tutor(full ? 'The same team-round data, now with three mechanical voting rules applied to members\' private answers. Compare with tab a: does confidence-weighting help on hard questions but not on deceptive ones?' : 'Ask each team how they decided. Did the most confident person win the argument? Teams usually beat their average member, but rarely their best one (Bahrami et al., 2010). On the deceptive questions, discussion cannot fix an intuition everyone shares.')}`;
+    ${tutor(full && inRv4 ? 'The voting rules show what a purely mechanical vote on members\' private answers would have scored. Did any rule beat your discussion?' : full ? 'The same team-round data, now with three mechanical voting rules applied to members\' private answers. Compare with tab a: does confidence-weighting help on hard questions but not on deceptive ones?' : 'Ask each team how they decided. Did the most confident person win the argument? Teams usually beat their average member, but rarely their best one (Bahrami et al., 2010). On the deceptive questions, discussion cannot fix an intuition everyone shares.')}`;
 }
 function leaderboard(){
   const lb = anaLeaderboard().sort((a, b) => b.total - a.total), cal = anaLeaderboard().filter(x => fin(x.bias)).sort((a, b) => a.bias - b.bias)[0];
@@ -1054,10 +1063,10 @@ function stageDK(){
   const t = tabs('h2dk', [['a','a · The classic plot'],['b','b · Pure noise'],['c','c · A better test']]);
   const d = anaDK(); let body = '';
   const qlab = ['Bottom 25%','2nd','3rd','Top 25%'];
-  const dkLines = q => lineChart({ x0:.5, x1:4.5, y0:0, y1:100, xTicks:[1,2,3,4], xFmt:v => qlab[v - 1], yTicks:tick(0, 100, 25), yFmt:v => v, xLabel:'Actual quiz performance (quartile)', yLabel:'Percentile', series:[{ name:'Actual', color:COL.ink, pts:q.map((g, i) => [i + 1, mean(g.map(x => x.actual))]) }, { name:'Estimated', color:COL.accent, pts:q.map((g, i) => [i + 1, mean(g.map(x => x.est))]) }] });
+  const dkLines = q => lineChart({ x0:.5, x1:4.5, y0:0, y1:100, xTicks:[1,2,3,4], xFmt:v => qlab[v - 1], yTicks:tick(0, 100, 25), yFmt:v => v, xLabel:'Actual performance in rounds 1–2 (quartile)', yLabel:'Percentile', series:[{ name:'Actual', color:COL.ink, pts:q.map((g, i) => [i + 1, mean(g.map(x => x.actual))]) }, { name:'Estimated', color:COL.accent, pts:q.map((g, i) => [i + 1, mean(g.map(x => x.est))]) }] });
   if (t.cur === 'a'){
     body = `<div class="label">Part 1 · Yourself</div><h1>Do you know how good you are?</h1>
-      <p class="prompt">Students grouped by their actual quiz score. Black: where they really ranked. Orange: where they thought they ranked.</p>${enough(d.list.length, 12)}
+      <p class="prompt">Students grouped by their actual score in rounds 1 and 2. Black: where they really ranked. Orange: where they thought they ranked.</p>${enough(d.list.length, 12)}
       ${legend([{ name:'Actual percentile', color:COL.ink }, { name:'Estimated percentile', color:COL.accent }])}
       ${d.q ? dkLines(d.q) : '<p class="muted">Needs at least four students with an estimate.</p>'}
       ${d.q ? keystats([{ n: Math.round(mean(d.q[0].map(x => x.est - x.actual))) , l:'bottom quarter: average overestimate (points)' }, { n: Math.round(mean(d.q[3].map(x => x.est - x.actual))), l:'top quarter: average over/underestimate' }, { n: Math.round(mean(d.list.map(x => x.est))), l:'average estimated percentile (true average is 50)' }]) : ''}
