@@ -269,7 +269,7 @@ async function makeFirebaseDB(code){
   const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
   const fs = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
   const app = initializeApp(firebaseConfig);
-  const db = fs.getFirestore(app);
+  const db = fs.initializeFirestore(app, { experimentalForceLongPolling: true });
   const sRef = fs.doc(db, ROOT, code);
   const rCol = fs.collection(db, ROOT, code, 'resp');
   const tCol = fs.collection(db, ROOT, code, 'teams');
@@ -281,6 +281,8 @@ async function makeFirebaseDB(code){
     onResps: (cb, err) => fs.onSnapshot(rCol, colSnap(cb), err),
     setTeam: (id, p) => fs.setDoc(fs.doc(tCol, id), p, { merge:true }),
     onTeams: (cb, err) => fs.onSnapshot(tCol, colSnap(cb), err),
+    getSession: async () => { const d = await fs.getDoc(sRef); return d.exists() ? d.data() : null; },
+    getTeams: async () => { const snap = await fs.getDocs(tCol); const o = {}; snap.forEach(d => { o[d.id] = d.data(); }); return o; },
     clear: async () => {
       for (const col of [rCol, tCol]){ const snap = await fs.getDocs(col); await Promise.all(snap.docs.map(d => fs.deleteDoc(d.ref))); }
       await fs.deleteDoc(sRef);
@@ -302,6 +304,8 @@ function makeLocalDB(code){
     onResps: cb => sub('resp', cb),
     setTeam: (id, p) => write(d => { d.teams = d.teams || {}; d.teams[id] = deepMerge(d.teams[id] || {}, p); }),
     onTeams: cb => sub('teams', cb),
+    getSession: async () => read().session,
+    getTeams: async () => read().teams || {},
     clear: () => { localStorage.removeItem(KEY); setTimeout(emit, 0); return Promise.resolve(); }
   };
 }
@@ -315,7 +319,7 @@ const S = {
   host: params.get('view') === 'host',
   local: params.get('local') === '1',
   pid: null, db: null, session: null, resps: {}, teams: {},
-  me: {}, sim: null, lastKey: '', ui: { tab:{}, error:'' }, advCache: {}
+  me: {}, sim: null, bootAt: Date.now(), lastKey: '', ui: { tab:{}, error:'' }, advCache: {}
 };
 function getPid(){
   const k = 'mct_pid_' + S.code + (S.local ? '_l' : '');
@@ -690,7 +694,11 @@ function wait(title, sub){ return { key:'wait:' + title, html:`<div class="big-w
 function header(label, i, n){ return `<div class="prog"><span>${label}</span><span>${Math.min(i + 1, n)} / ${n}</span></div><div class="bar"><i style="width:${100 * i / n}%"></i></div>`; }
 
 function studentView(ph){
-  if (!S.session) return wait('Waiting for your tutor', 'The session has not started yet. Keep this page open.');
+  if (!S.session){
+    const late = Date.now() - S.bootAt > 8000;
+    return { key:'nosess' + late, html:`<div class="big-wait"><div class="label"><span class="dotpulse"></span>Session ${S.code}</div><h1>Waiting for your tutor</h1><p class="lede">The session has not started yet. Keep this page open.</p>
+      ${late ? `<p class="tiny">Still waiting? Check the code on the screen matches <strong>${S.code}</strong>.${S.local ? '' : ' If your tutor is rehearsing offline, the link needs <code>&amp;local=1</code> and must be opened in the same browser.'}</p>` : ''}</div>` };
+  }
   if (!S.me.team) return teamPicker();
   switch (ph){
     case 'lobby': return wait(`You're in Team ${S.me.team}`, 'Find your teammates. The quiz starts soon. Points for being right, and for knowing <em>when</em> you\'re right.');
@@ -1124,9 +1132,21 @@ async function boot(){
     render();
   }, showError);
   S.db.onTeams(o => { S.teams = o || {}; render(); }, showError);
+  // Fallback: live listeners can stall (Safari background tabs, some campus networks), so re-check every few seconds.
+  const resync = async () => {
+    try {
+      const s = await S.db.getSession();
+      if (s && JSON.stringify(s) !== JSON.stringify(S.session)){ S.session = s; render(); }
+      if (curPhase() === 'r4'){ const t = await S.db.getTeams(); if (JSON.stringify(t) !== JSON.stringify(S.teams)){ S.teams = t; render(); } }
+    } catch(e){}
+  };
+  if (!S.host){ setInterval(() => { if (!document.hidden) resync(); }, 5000); setTimeout(() => render(), 8500); }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) resync(); });
+  window.addEventListener('focus', resync);
   if (S.host) document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
     if (e.key === 'p' || e.key === 'P') document.body.classList.toggle('present');
+    if (/^[1-9]$/.test(e.key)){ const t = document.querySelectorAll('[data-tab]')[Number(e.key) - 1]; if (t) t.click(); }
     const vis = visiblePhases(), ci = vis.findIndex(p => p.id === curPhase());
     if (e.key === 'ArrowRight' && ci < vis.length - 1) S.db.setSession({ phase:vis[ci + 1].id });
     if (e.key === 'ArrowLeft' && ci > 0) S.db.setSession({ phase:vis[ci - 1].id });
