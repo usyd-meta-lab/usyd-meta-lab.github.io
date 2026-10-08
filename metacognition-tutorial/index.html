@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Do You Know What You Know?</title>
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23e64626'/%3E%3C/svg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
@@ -135,8 +134,8 @@ body.present .controls,body.present .tutor{display:none}
 </head>
 <body>
 <header class="top"><div class="top-in">
-  <div class="brand">Meta Lab <b>· Metacognition tutorial</b></div>
-  <div class="tag" id="tag">PSYC2016</div>
+  <div class="brand"><span id="course">PSYC2016</span> <b>· Metacognition tutorial</b></div>
+  <div class="tag" id="tag">Tutorial</div>
 </div></header>
 <main id="app"></main>
 
@@ -467,7 +466,8 @@ function simulateClass(n, nTeams){
    ===================================================================== */
 const COL = { accent:'#e64626', ink:'#111111', grey:'#9a9a9a', light:'#f3a48f', dark:'#555555', pale:'#d9d9d9' };
 function frame(o){
-  const W = o.W || 900, H = o.H || 440, m = { l:70, r:24, t:18, b:62, ...(o.m || {}) };
+  const PRINT = params.get('print') === '1';
+  const W = o.W || (PRINT ? 600 : 900), H = o.H || (PRINT ? 380 : 440), m = { l:70, r:24, t:18, b:62, ...(o.m || {}) };
   const sx = x => m.l + (x - o.x0) / (o.x1 - o.x0) * (W - m.l - m.r);
   const sy = y => H - m.b - (y - o.y0) / (o.y1 - o.y0) * (H - m.t - m.b);
   let g = `<svg viewBox="0 0 ${W} ${H}" role="img" font-family="Arial, Helvetica, sans-serif">`;
@@ -579,6 +579,8 @@ function anaTeams(){
       res.actual.push(ta ? (ta.c === 0 ? 1 : 0) : NaN); res.maj.push(o.maj); res.cw.push(o.cw); res.mc.push(o.mc); res.avg.push(o.avg); res.type.push(it.type);
     });
     res.best = Math.max(...indiv.filter(fin));
+    const bestOf = type => Math.max(...mem.map(s => mean(R4.filter(it => it.type === type && s.r4p && s.r4p[it.id]).map(it => s.r4p[it.id].ok ? 1 : 0))).filter(fin));
+    res.bestT = { hard: bestOf('hard'), deceptive: bestOf('deceptive'), all: res.best };
     rows.push(res);
   });
   const agg = (key, type) => mean(rows.map(r => mean(r[key].filter((v, i) => fin(v) && (!type || r.type[i] === type)))).filter(fin));
@@ -645,6 +647,7 @@ function anaGroup(){
    RENDER: entry
    ===================================================================== */
 function render(force){
+  const c = $('#course'); if (c) c.textContent = S.session && S.session.adv ? 'PSYC5216' : (S.code ? 'PSYC2016' : 'PSYC2016 / PSYC5216');
   if (!S.code) return renderLanding();
   if (S.host) return renderHost();
   return renderStudent(force);
@@ -663,7 +666,7 @@ function renderLanding(){
       <p class="muted" style="margin-bottom:12px">Start a session on the room's computer and project it. Students join with the QR code.</p>
       <div class="row">
         <button class="btn small" id="newS">Start a session</button>
-        <button class="btn small ghost" id="newA">Start an advanced (2-hour) session</button>
+        <button class="btn small ghost" id="newA">Start a PSYC5216 (2-hour) session</button>
         <button class="btn small ghost" id="newL">Rehearse offline</button>
       </div>
       <p class="tiny" style="margin-top:10px">Offline rehearsal keeps everything in this browser: open student tabs from the join link on the same computer.</p>
@@ -905,7 +908,7 @@ function renderHost(){
       <div class="stage" id="stage">${hostStage(ph)}</div>
       <div class="controls row">
         <button class="btn small ghost" id="present">Hide tutor controls (P)</button>
-        <label class="tiny"><input type="checkbox" id="advT" ${S.session && S.session.adv ? 'checked' : ''}> Advanced class (hour 2)</label>
+        <label class="tiny"><input type="checkbox" id="advT" ${S.session && S.session.adv ? 'checked' : ''}> PSYC5216 (adds hour 2)</label>
         ${ph === 'lobby' ? `<label class="tiny">Teams <select id="nT">${[2,3,4,5,6,7,8].map(n => `<option ${((S.session && S.session.nTeams) || 5) === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
         <span class="spacer"></span>
         <button class="btn small ghost" id="simB">${S.sim ? 'Remove simulated class' : 'Load simulated class (25)'}</button>
@@ -927,6 +930,7 @@ function renderHost(){
   $('#simB').onclick = () => { S.sim = S.sim ? null : simulateClass(25, (S.session && S.session.nTeams) || 5); render(); };
   $('#clr').onclick = async () => { if (!confirm(`Permanently delete every real response in session ${S.code}?`)) return; await S.db.clear().catch(showError); S.resps = {}; S.teams = {}; await S.db.setSession({ phase:'lobby', adv:!!(S.session && S.session.adv), nTeams:(S.session && S.session.nTeams) || 5 }); };
   document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { S.ui.tab[ph] = b.dataset.tab; render(); });
+  if ($('#rulesT')) $('#rulesT').onclick = () => { S.ui.rules4 = !S.ui.rules4; render(); };
 }
 function tabs(ph, list){ const cur = S.ui.tab[ph] || list[0][0]; return { cur, html:`<div class="tabs controls">${list.map(([k, l]) => `<button class="tab ${k === cur ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>` }; }
 function progressTeams(ph){
@@ -1000,19 +1004,35 @@ function stageDebrief(){
       ${keystats([{ n: beat + ' of ' + d.per.length, l:'students beat "play everything"' }, { n: pct0(mean(d.played)), l:'accuracy on questions people played' }, { n: pct0(mean(d.passed)), l:'accuracy on questions people passed (they still chose an answer)' }])}
       ${tutor('The gap between the two bars is monitoring that is worth something: people passed on the answers that really were shaky. But the points only came from acting on it. Monitoring drives control (Lecture 1, response withholding).')}`;
   } else if (t.cur === 'team'){
-    const d = anaTeams(), A = d.agg;
-    const ser = [['Team discussion','actual',COL.ink],['Majority vote','maj',COL.grey],['Confidence-weighted vote','cw',COL.accent],['Most confident member','mc',COL.light]];
-    body = `<div class="label">Reveal 4</div><h1>Did your team beat its members?</h1>
-      <p class="prompt">Accuracy in the team round under different ways of combining the same private answers.</p>${enough(d.rows.length, 3)}
-      ${legend(ser.map(s => ({ name:s[0], color:s[2] })).concat([{ name:'Best individual in team', color:COL.dark }, { name:'Average individual', color:COL.pale }]))}
-      ${barChart({ groups:['Hard questions','Deceptive questions','All'], series: ser.map(s => ({ name:s[0], color:s[2], vals:[A(s[1], 'hard') * 100, A(s[1], 'deceptive') * 100, A(s[1]) * 100] })).concat([{ name:'Best', color:COL.dark, vals:[NaN, NaN, mean(d.rows.map(r => r.best)) * 100] }, { name:'Avg', color:COL.pale, vals:[A('avg', 'hard') * 100, A('avg', 'deceptive') * 100, A('avg') * 100] }]), y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Correct', vFmt:v => Math.round(v) + '%' })}
-      <table class="lb" style="margin-top:12px;font-size:15px"><tr><th>Team</th><th class="r">Members</th><th class="r">Discussion</th><th class="r">Majority</th><th class="r">Confidence-weighted</th><th class="r">Best member</th></tr>
-      ${d.rows.map(r => `<tr><td>Team ${r.T}</td><td class="r">${r.n}</td><td class="r">${pct0(mean(r.actual.filter(fin)))}</td><td class="r">${pct0(mean(r.maj))}</td><td class="r">${pct0(mean(r.cw))}</td><td class="r">${pct0(r.best)}</td></tr>`).join('')}</table>
-      ${tutor('Ask each team how they decided. Did the most confident person win the argument? Did the team beat its best member (Bahrami et al., 2010)? Notice the deceptive questions: when everyone shares the same wrong intuition, combining people cannot fix it.')}`;
+    body = teamReveal(!!S.ui.rules4);
   } else {
     body = leaderboard();
   }
   return t.html + body;
+}
+function teamReveal(full){
+  const d = anaTeams(), A = d.agg;
+  const best = k => mean(d.rows.map(r => r.bestT[k]).filter(fin)) * 100;
+  const groups = ['Hard questions','Deceptive questions','All'], types = ['hard','deceptive',null];
+  const base = [
+    { name:'Average member', color:COL.pale, vals:types.map(k => A('avg', k) * 100) },
+    { name:'Team discussion', color:COL.accent, vals:types.map(k => A('actual', k) * 100) },
+    { name:'Best member', color:COL.ink, vals:[best('hard'), best('deceptive'), best('all')] }
+  ];
+  const rules = [
+    { name:'Majority vote', color:COL.grey, vals:types.map(k => A('maj', k) * 100) },
+    { name:'Confidence-weighted vote', color:COL.light, vals:types.map(k => A('cw', k) * 100) },
+    { name:'Most confident member', color:COL.dark, vals:types.map(k => A('mc', k) * 100) }
+  ];
+  const ser = full ? [base[0], base[1], ...rules, base[2]] : base;
+  return `<div class="label">${full ? 'Your actual teams' : 'Reveal 4'}</div><h1>Did your team beat its members?</h1>
+    <p class="prompt">Accuracy in the team round: the average team member on their own, the answer the team agreed, and the team's best member on their own.</p>${enough(d.rows.length, 3)}
+    ${legend(ser.map(x => ({ name:x.name, color:x.color })))}
+    ${barChart({ groups, series:ser, y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Correct', vFmt:v => Math.round(v) + '%' })}
+    ${S.ui.tab.debrief === 'team' && curPhase() === 'debrief' ? `<div class="controls" style="margin-top:6px"><button class="btn small ghost" id="rulesT">${full ? 'Hide voting rules' : 'Show voting rules (majority, confidence-weighted)'}</button></div>` : ''}
+    <table class="lb" style="margin-top:12px;font-size:15px"><tr><th>Team</th><th class="r">Members</th><th class="r">Average member</th><th class="r">Team discussion</th><th class="r">Best member</th></tr>
+    ${d.rows.map(r => `<tr><td>Team ${r.T}</td><td class="r">${r.n}</td><td class="r">${pct0(mean(r.avg))}</td><td class="r">${pct0(mean(r.actual.filter(fin)))}</td><td class="r">${pct0(r.best)}</td></tr>`).join('')}</table>
+    ${tutor(full ? 'The same team-round data, now with three mechanical voting rules applied to members\' private answers. Compare with tab a: does confidence-weighting help on hard questions but not on deceptive ones?' : 'Ask each team how they decided. Did the most confident person win the argument? Teams usually beat their average member, but rarely their best one (Bahrami et al., 2010). On the deceptive questions, discussion cannot fix an intuition everyone shares.')}`;
 }
 function leaderboard(){
   const lb = anaLeaderboard().sort((a, b) => b.total - a.total), cal = anaLeaderboard().filter(x => fin(x.bias)).sort((a, b) => a.bias - b.bias)[0];
@@ -1020,7 +1040,7 @@ function leaderboard(){
     <table class="lb"><tr><th>#</th><th>Team</th><th class="r">Avg member score</th><th class="r">Team round ×2</th><th class="r">Total</th></tr>
     ${lb.map((r, i) => `<tr><td>${i + 1}</td><td>Team ${r.T}</td><td class="r">${fmtNum(r.ind)}</td><td class="r">${r.tr * 2}</td><td class="r">${fmtNum(r.total)}</td></tr>`).join('')}</table>
     ${cal ? `<div class="card soft" style="margin-top:18px"><div class="label">Best calibrated team</div><h2>Team ${cal.T}</h2><p class="muted">Members' confidence was, on average, within ${Math.round(cal.bias)} points of their accuracy in round 2.</p></div>` : ''}
-    ${tutor('Member score = round 1 recalls + round 2 correct + round 3 points, averaged across members so team size doesn\'t matter. Exit ticket: one change to how you\'ll prepare for the exam, based on today\'s data.')}`;
+    ${tutor('Member score = round 1 recalls + round 2 correct + round 3 points, averaged across members so team size doesn\'t matter. Before they leave: one change to how you\'ll prepare for the exam, based on today\'s data.')}`;
 }
 function stageEnd(){
   const adv = S.session && S.session.adv;
@@ -1097,7 +1117,7 @@ function stageAdvice(){
 }
 function stageGroup(){
   const t = tabs('h2group', [['a','a · Combining confidence'],['b','b · Your actual teams']]);
-  if (t.cur === 'b') return t.html + stageDebriefTeamsOnly();
+  if (t.cur === 'b') return t.html + teamReveal(true);
   const d = anaGroup(), A = d.acc;
   const ser = [['Average individual','avg',COL.pale],['Majority vote','maj',COL.grey],['Confidence-weighted vote','cw',COL.accent],['Follow the most confident','mc',COL.light],['Best member (in hindsight)','best',COL.dark]];
   return t.html + `<div class="label">Part 3 · The group</div><h1>When should confidence decide?</h1>
@@ -1106,9 +1126,6 @@ function stageGroup(){
     ${barChart({ groups:['Hard (non-deceptive) questions','Deceptive questions'], series: ser.map(s => ({ name:s[0], color:s[2], vals:[mean(A.normal[s[1]]) * 100, mean(A.deceptive[s[1]]) * 100] })), y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Group answer correct', vFmt:v => Math.round(v) + '%' })}
     ${keystats([{ n: pct0(mean(A.normal.cw)) + ' vs ' + pct0(mean(A.normal.maj)), l:'hard questions: confidence-weighted vs majority' }, { n: pct0(mean(A.deceptive.cw)) + ' vs ' + pct0(mean(A.deceptive.maj)), l:'deceptive questions: confidence-weighted vs majority' }])}
     ${tutor('Koriat (2012): confidence tracks how widely an answer is shared, not whether it is true. When most people are right, weighting by confidence helps; when most people share the same wrong intuition, confident members lead the group further astray. Trust policy rule 3: when should confidence decide, and what protects against a confident wrong consensus?')}`;
-}
-function stageDebriefTeamsOnly(){
-  const prev = S.ui.tab.debrief; S.ui.tab.debrief = 'team'; const h = stageDebrief().replace(/<div class="tabs controls">[\s\S]*?<\/div>/, ''); S.ui.tab.debrief = prev; return h;
 }
 
 /* =====================================================================
