@@ -1,6 +1,13 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-10-05T10:16:25.558Z",
+  "fetched": "2026-10-12T10:34:45.877Z",
   "records": [
+    {
+      "title": "Engaging the learner: measuring engagement dispositions in blended and technology-enhanced higher education",
+      "year": "2026",
+      "authors": "McCarthy, S., Palmer, E., Falkner, N., Ngiam, W. X. Q., & Double, K.",
+      "doi": "10.1080/07294360.2026.2739891",
+      "journal": "Higher Education Research &amp; Development"
+    },
     {
       "title": "I Will Listen to Your Emotions, But I Will Hide My Own: People’s Different Strategies to Regulate Their Own Versus Others’ Emotions",
       "year": "2026",
