@@ -830,7 +830,7 @@
 
         async function save(done) {
             const payload = {
-                t: myTrials.map(t => [t.s, t.r, t.c]),
+                t: myTrials.map(t => ({ s: t.s, r: t.r, c: t.c })),   // Firestore rejects nested arrays
                 n: myTrials.length,
                 done: !!done,
                 ts: serverTimestamp()
@@ -851,8 +851,8 @@
                     const v = d.data();
                     if (v && Array.isArray(v.t) && v.t.length) {
                         const trials = v.t
-                            .filter(a => Array.isArray(a) && a.length === 3)
-                            .map(a => ({ s: a[0], r: a[1], c: a[2] }))
+                            .filter(a => a && typeof a === 'object')
+                            .map(a => ({ s: a.s, r: a.r, c: a.c }))
                             .filter(t => (t.s === 0 || t.s === 1) && (t.r === 0 || t.r === 1) && t.c >= 1 && t.c <= NR);
                         if (trials.length) responses.push({ id: d.id, trials });
                     }
@@ -1119,7 +1119,7 @@
             $('sessionTag').textContent = 'Session ' + code;
             const u = new URL(location.href);
             u.searchParams.set('s', code);
-            u.searchParams.delete('view');
+            if (!isClassView) u.searchParams.delete('view');   // keep view=class so the projector survives a refresh
             history.replaceState(null, '', u);
         }
 
