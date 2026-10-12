@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Metacognition and meta-d prime</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --warm: #f7f7f8;
+            --tint: #fbeced;
+            --ink: #111111;
+            --muted: #55555a;
+            --light: #8a8a90;
+            --accent: #c8102e;
+            --accent-dark: #9c0a23;
+            --border: #e2e2e6;
+            --correct: #c8102e;
+            --incorrect: #8f8f96;
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-height: 1.6; }
+
+        .wrap { max-width: 880px; margin: 0 auto; padding: 30px 20px 90px; }
+        .wrap.wide { max-width: 1400px; }
+
+        .top { border-bottom: 1px solid var(--border); background: var(--warm); }
+        .top-inner {
+            max-width: 1400px; margin: 0 auto; padding: 13px 20px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .brand { font-family: var(--serif); font-size: 17px; font-weight: 600; }
+        .brand span {
+            font-family: var(--mono); font-size: 11px; color: var(--light);
+            text-transform: uppercase; letter-spacing: 0.12em; margin-left: 10px;
+        }
+        .session-tag {
+            font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--muted); background: var(--tint);
+            border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; white-space: nowrap;
+        }
+
+        h1 { font-family: var(--serif); font-size: clamp(27px, 4.3vw, 42px); font-weight: 600; line-height: 1.12; letter-spacing: -0.02em; }
+        h2 { font-family: var(--serif); font-size: 24px; font-weight: 600; }
+        h3 { font-family: var(--serif); font-size: 18px; font-weight: 600; }
+        .lede { font-size: 17.5px; color: var(--muted); max-width: 62ch; margin-top: 10px; }
+        .muted { color: var(--muted); font-size: 14px; }
+        .tiny { font-size: 12.5px; color: var(--light); }
+
+        .eyebrow {
+            font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+        }
+        .label {
+            font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--light);
+        }
+
+        .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 18px; }
+        .card.flat { background: var(--warm); }
+
+        .btn {
+            font-family: var(--sans); font-size: 15px; font-weight: 500; cursor: pointer;
+            border-radius: 999px; padding: 12px 26px; border: 1px solid var(--ink);
+            background: var(--ink); color: #fff; transition: background .18s, transform .14s;
+        }
+        .btn:hover { background: #2b2b2b; transform: translateY(-1px); }
+        .btn.ghost { background: transparent; color: var(--ink); border-color: var(--border); }
+        .btn.ghost:hover { background: var(--warm); }
+        .btn.accent { background: var(--accent); border-color: var(--accent); }
+        .btn.accent:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+        .btn.small { font-size: 13px; padding: 7px 16px; }
+        .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 24px; }
+
+        input[type=text] {
+            font-family: var(--sans); font-size: 16px; padding: 11px 14px; border-radius: 10px;
+            border: 1px solid var(--border); background: #fff; color: var(--ink); width: 220px;
+        }
+        input[type=text]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ---------- task ---------- */
+        .stim-shell {
+            background: #fff; border: 1px solid var(--border); border-radius: 14px;
+            padding: 10px; margin: 18px 0 14px; position: relative;
+        }
+        .stim-shell svg { display: block; width: 100%; height: auto; }
+        .fixation {
+            position: absolute; inset: 0; display: grid; place-items: center;
+            font-family: var(--serif); font-size: 34px; color: var(--light);
+        }
+        .prompt { text-align: center; }
+        .prompt .label { display: block; margin-bottom: 12px; }
+        .respond { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .respond button {
+            font-family: var(--serif); font-size: 21px; font-weight: 600; cursor: pointer;
+            min-width: 136px; padding: 13px 26px; border-radius: 10px;
+            border: 1.5px solid var(--ink); background: var(--ink); color: #fff;
+            transition: background .14s, transform .14s;
+        }
+        .respond button:hover { background: #2b2b2b; transform: translateY(-2px); }
+
+        .conf-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 620px; margin: 0 auto; }
+        .conf-row button {
+            font-family: var(--sans); cursor: pointer; padding: 14px 8px; border-radius: 10px;
+            border: 1.5px solid var(--border); background: #fff; color: var(--ink);
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            transition: border-color .14s, background .14s, transform .14s;
+        }
+        .conf-row button:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .conf-row button b { font-family: var(--serif); font-size: 22px; font-weight: 600; }
+        .conf-row button span { font-size: 11.5px; color: var(--muted); line-height: 1.25; text-align: center; }
+
+        .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .progress .bar { flex: 1; height: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
+        .progress .bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .25s ease; }
+        .progress .count { font-family: var(--mono); font-size: 12px; color: var(--light); white-space: nowrap; }
+
+        .fb { text-align: center; font-family: var(--mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; min-height: 20px; }
+        .fb.right { color: var(--accent); }
+        .fb.wrong { color: var(--light); }
+
+        /* ---------- stats ---------- */
+        .tiles { display: flex; gap: 38px; flex-wrap: wrap; }
+        .tile .label { display: block; margin-bottom: 2px; }
+        .tile strong { font-family: var(--serif); font-size: 38px; font-weight: 600; line-height: 1.05; display: block; }
+        .tile em { font-style: normal; font-size: 12.5px; color: var(--light); }
+
+        .panel { border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 20px; background: #fff; }
+        .panel-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 30px; align-items: start; }
+        @media (max-width: 980px) { .panel-grid { grid-template-columns: 1fr; } }
+
+        svg.chart { display: block; width: 100%; height: auto; overflow: visible; }
+
+        .legend { display: flex; gap: 18px; flex-wrap: wrap; margin: 8px 0 2px; }
+        .legend .k { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+        .legend .sw { width: 14px; height: 14px; border-radius: 3px; }
+        .legend .sw.dash { height: 0; border-top: 2px dashed var(--light); border-radius: 0; }
+
+        table.tab { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 14px; }
+        table.tab th, table.tab td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+        table.tab th { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--light); font-weight: 500; }
+        table.tab td.num, table.tab th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+        .callout { background: var(--warm); border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-top: 16px; font-size: 14.5px; }
+
+        .banner { border-radius: 12px; padding: 14px 16px; font-size: 14px; margin-bottom: 18px; border: 1px solid var(--border); background: var(--warm); }
+        .banner.err { background: #fff5f6; border-color: var(--accent); color: #8c0a1e; }
+        .banner pre { font-family: var(--mono); font-size: 12px; background: rgba(17,17,17,.06); padding: 10px 12px; border-radius: 8px; margin-top: 8px; overflow-x: auto; }
+
+        .live { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+        .live .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.8); } }
+
+        .joinbox { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+        #qr { line-height: 0; background: #fff; padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
+        .joinurl { font-family: var(--mono); font-size: 15px; word-break: break-all; }
+
+        @media (max-width: 560px) {
+            .conf-row { grid-template-columns: repeat(2, 1fr); }
+            .tiles { gap: 24px; }
+            .tile strong { font-size: 30px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div class="top-inner">
+            <div class="brand">Metacognition<span>meta-d&prime; demo</span></div>
+            <div class="session-tag" id="sessionTag"></div>
+        </div>
+    </header>
+
+    <div class="wrap" id="wrap">
+
+        <!-- ================= JOIN ================= -->
+        <section class="screen active" id="screen-join">
+            <div class="eyebrow">Live demonstration</div>
+            <h1>Which side has more dots?</h1>
+            <p class="lede">You will see two patches of dots for a fraction of a second and decide which side
+                had more. After every decision you rate how confident you are. The whole thing takes about
+                three minutes, and we plot the class data live.</p>
+
+            <div class="card" style="margin-top:26px">
+                <h3>Join the session</h3>
+                <p class="muted" style="margin:6px 0 14px">Enter the session code on screen.</p>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+                    <input type="text" id="codeInput" placeholder="e.g. PSYC2016" maxlength="16" autocomplete="off"
+                        autocapitalize="characters" spellcheck="false">
+                    <button class="btn accent" id="joinBtn">Start</button>
+                </div>
+            </div>
+
+            <div class="card flat">
+                <h3>Anonymous</h3>
+                <p class="muted" style="margin-top:6px">No name, email or ID is collected, and this is not an
+                    assessment. Only your responses and confidence ratings are stored, so the class curves can
+                    be drawn.</p>
+            </div>
+
+            <p class="tiny" style="margin-top:20px">Lecturers, the projector view is at
+                <code id="classLinkHint"></code></p>
+        </section>
+
+        <!-- ================= INSTRUCTIONS ================= -->
+        <section class="screen" id="screen-instr">
+            <div class="eyebrow">Before you start</div>
+            <h1>Two judgements per trial</h1>
+            <p class="lede">First decide which side had more dots. Then rate your confidence in that decision
+                from 1 to 4. Confidence means how likely you think it is that you were right, so use the full
+                range. If you were guessing, say 1. If you are sure, say 4.</p>
+
+            <div class="card" style="margin-top:24px">
+                <h3>How it works</h3>
+                <ul class="muted" style="margin:10px 0 0 20px; display:grid; gap:7px">
+                    <li>The dots flash up briefly, so look at the centre and take it in as a whole.</li>
+                    <li>The task adjusts itself to be hard for you, so expect to get some wrong. That is the
+                        point, because we need errors to measure metacognition.</li>
+                    <li>You get feedback during practice only. There is no feedback in the main block.</li>
+                    <li>On a computer you can use the left and right arrow keys, then the number keys 1 to 4.</li>
+                </ul>
+            </div>
+
+            <div class="actions">
+                <button class="btn accent" id="startPracticeBtn">Start practice</button>
+                <span class="muted" id="instrNote"></span>
+            </div>
+        </section>
+
+        <!-- ================= TASK ================= -->
+        <section class="screen" id="screen-task">
+            <div class="progress">
+                <span class="label" id="blockLabel">Practice</span>
+                <span class="bar"><i id="progFill" style="width:0%"></i></span>
+                <span class="count" id="progCount"></span>
+            </div>
+
+            <div class="stim-shell" id="stimShell">
+                <div id="stimSvg"></div>
+                <div class="fixation" id="fixation" hidden>+</div>
+            </div>
+
+            <div class="prompt" id="promptArea"></div>
+            <div class="fb" id="feedback"></div>
+        </section>
+
+        <!-- ================= BLOCK BREAK ================= -->
+        <section class="screen" id="screen-break">
+            <div class="eyebrow">Practice complete</div>
+            <h1>Now the real thing</h1>
+            <p class="lede" id="breakLine"></p>
+            <div class="card flat" style="margin-top:22px">
+                <p class="muted">From here there is no feedback. Keep using the whole confidence range, because
+                    a rating of 4 on every trial tells us nothing about your metacognition.</p>
+            </div>
+            <div class="actions"><button class="btn accent" id="startMainBtn">Begin the main block</button></div>
+        </section>
+
+        <!-- ================= PERSONAL RESULTS ================= -->
+        <section class="screen" id="screen-done">
+            <div id="doneBanner"></div>
+            <div class="eyebrow">Your data</div>
+            <h1>Done. Look up at the screen.</h1>
+            <p class="lede">Your trials are now part of the class pool. Here is your own performance.</p>
+
+            <div class="card" style="margin-top:22px">
+                <div class="tiles" id="yourTiles"></div>
+            </div>
+
+            <div class="card">
+                <div class="label" style="margin-bottom:10px">Your confidence by accuracy</div>
+                <div class="legend" id="yourLegend"></div>
+                <div id="yourChart"></div>
+                <p class="muted" id="yourRead" style="margin-top:10px"></p>
+            </div>
+
+            <div class="live"><span class="pulse"></span><span id="doneCount">Saving</span></div>
+
+            <div class="card flat" style="margin-top:24px">
+                <h3>Why your own numbers are rough</h3>
+                <p class="muted" style="margin-top:6px">Metacognitive sensitivity needs a lot of trials to pin
+                    down. With a few dozen trials your personal estimate bounces around a great deal, which is
+                    why the class pool on the projector is far more trustworthy than anything here.</p>
+            </div>
+        </section>
+
+        <!-- ================= CLASS VIEW ================= -->
+        <section class="screen" id="screen-class">
+            <div id="classBanner"></div>
+
+            <div class="card" style="margin-bottom:20px">
+                <div class="joinbox">
+                    <div id="qr"></div>
+                    <div style="flex:1; min-width:230px">
+                        <h2>Join the demo</h2>
+                        <p class="joinurl" id="joinUrl"></p>
+                        <p class="muted" style="margin-top:8px">Session code <strong id="classCode"></strong></p>
+                    </div>
+                    <div class="tiles" id="headTiles"></div>
+                </div>
+            </div>
+
+            <div class="live" style="margin-bottom:14px"><span class="pulse"></span><span id="liveLabel">Live data</span></div>
+
+            <!-- Panel A + headline SDT -->
+            <div class="panel">
+                <div class="panel-grid">
+                    <div>
+                        <div class="eyebrow">Panel A</div>
+                        <h2>Confidence by accuracy</h2>
+                        <p class="muted" style="margin-top:6px">Good metacognition means high confidence
+                            bars skew correct and low confidence bars skew incorrect.</p>
+                        <div class="legend" id="panelALegend"></div>
+                        <div id="confChart"></div>
+                    </div>
+                    <div>
+                        <div class="eyebrow">Panel B</div>
+                        <h2>Type 2 ROC</h2>
+                        <p class="muted" style="margin-top:6px">How well confidence separates correct from
+                            incorrect trials. The gap between the two curves is the metacognitive shortfall.</p>
+                        <div class="legend" id="panelBLegend"></div>
+                        <div id="rocChart"></div>
+                    </div>
+                </div>
+                <div id="sdtCallout"></div>
+            </div>
+
+            <!-- Panel C -->
+            <div class="panel">
+                <div class="panel-grid">
+                    <div>
+                        <div class="eyebrow">Panel C</div>
+                        <h2>Every student</h2>
+                        <p class="muted" style="margin-top:6px">Each dot is one student. On the diagonal,
+                            metacognition is as good as the perceptual evidence allows. Below it, confidence
+                            is tracking accuracy less well than it could.</p>
+                        <div class="legend" id="panelCLegend"></div>
+                        <div id="scatterChart"></div>
+                        <p class="muted" id="scatterNote" style="margin-top:8px"></p>
+                    </div>
+                    <div>
+                        <div class="label" style="margin-bottom:8px">Pooled across the class</div>
+                        <table class="tab" id="sdtTable"></table>
+                        <div class="callout" id="teachingNote"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn ghost small" id="simBtn">Add 20 simulated students</button>
+                <button class="btn ghost small" id="resetBtn">Clear this session's data</button>
+                <span class="tiny">Simulated students are drawn on this screen only and are never saved to the
+                    database, so refreshing removes them. "Clear" permanently deletes every real response in
+                    session <strong id="resetCode"></strong>.</span>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import {
+            getFirestore, collection, doc, setDoc, deleteDoc, getDocs, onSnapshot, serverTimestamp
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaz1nWglmiKv9W_MrbulS__h8aieCPPE8",
+            authDomain: "meetings-b9e5e.firebaseapp.com",
+            projectId: "meetings-b9e5e",
+            storageBucket: "meetings-b9e5e.firebasestorage.app",
+            messagingSenderId: "368747163289",
+            appId: "1:368747163289:web:29719439e3b61126331208"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const ROOT = 'metad_demo';
+        const NR = 4; // confidence levels
+
+        const $ = id => document.getElementById(id);
+        const sum = a => a.reduce((x, y) => x + y, 0);
+        const mean = a => a.length ? sum(a) / a.length : null;
+        const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+        /* ============================================================
+           NORMAL DISTRIBUTION
+           ============================================================ */
+
+        function erf(x) {
+            const s = x < 0 ? -1 : 1; x = Math.abs(x);
+            const t = 1 / (1 + 0.3275911 * x);
+            const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+            return s * y;
+        }
+        const normcdf = z => 0.5 * (1 + erf(z / Math.SQRT2));
+
+        function norminv(p) {
+            if (p <= 0) return -Infinity;
+            if (p >= 1) return Infinity;
+            const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+            const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+            const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+            const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+            const pl = 0.02425, ph = 1 - pl;
+            let q, r;
+            if (p < pl) {
+                q = Math.sqrt(-2 * Math.log(p));
+                return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+            }
+            if (p > ph) {
+                q = Math.sqrt(-2 * Math.log(1 - p));
+                return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+            }
+            q = p - 0.5; r = q * q;
+            return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q /
+                (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+        }
+
+        function gauss() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        }
+
+        /* ============================================================
+           COUNTS
+           Bin k runs from most confident "left" (k=0) to most confident
+           "right" (k=7). counts[stimulus][k], stimulus 0 = left has more.
+           ============================================================ */
+
+        const binOf = (resp, conf) => resp === 0 ? NR - conf : NR - 1 + conf;
+
+        function tallyTrials(trials) {
+            const counts = [new Array(2 * NR).fill(0), new Array(2 * NR).fill(0)];
+            for (const t of trials) counts[t.s][binOf(t.r, t.c)]++;
+            return counts;
+        }
+
+        function padCounts(counts) {
+            const adj = 1 / (2 * NR);
+            return counts.map(row => row.map(v => v + adj));
+        }
+
+        /* ============================================================
+           TYPE 1 SDT
+           ============================================================ */
+
+        function type1(counts) {
+            const n0 = sum(counts[0]), n1 = sum(counts[1]);
+            if (!n0 || !n1) return null;
+            const H = sum(counts[1].slice(NR)) / n1;   // say "right" when right had more
+            const F = sum(counts[0].slice(NR)) / n0;   // say "right" when left had more
+            const zH = norminv(H), zF = norminv(F);
+            if (!isFinite(zH) || !isFinite(zF)) return null;
+            return { d: zH - zF, c: -0.5 * (zH + zF), H, F };
+        }
+
+        /* ============================================================
+           TYPE 2 ROC AND AUROC
+           ============================================================ */
+
+        function type2Counts(counts) {
+            const corr = new Array(NR + 1).fill(0), inc = new Array(NR + 1).fill(0);
+            for (let cf = 1; cf <= NR; cf++) {
+                corr[cf] = counts[0][NR - cf] + counts[1][NR - 1 + cf];
+                inc[cf] = counts[0][NR - 1 + cf] + counts[1][NR - cf];
+            }
+            return { corr, inc };
+        }
+
+        function type2ROC(counts) {
+            const { corr, inc } = type2Counts(counts);
+            const tC = sum(corr), tI = sum(inc);
+            if (!tC || !tI) return null;
+            const pts = [{ x: 0, y: 0 }];
+            for (let j = NR; j >= 1; j--) {
+                let cc = 0, ci = 0;
+                for (let k = j; k <= NR; k++) { cc += corr[k]; ci += inc[k]; }
+                pts.push({ x: ci / tI, y: cc / tC });
+            }
+            pts.push({ x: 1, y: 1 });
+            let auc = 0;
+            for (let i = 1; i < pts.length; i++) {
+                auc += (pts[i].x - pts[i - 1].x) * (pts[i].y + pts[i - 1].y) / 2;
+            }
+            return { pts, auc };
+        }
+
+        // Theoretical type 2 ROC for an observer with sensitivity dm and criterion c
+        function modelROC(dm, c) {
+            const mu1 = -dm / 2, mu2 = dm / 2;
+            const tC = 0.5 * normcdf(c - mu1) + 0.5 * (1 - normcdf(c - mu2));
+            const tI = 0.5 * normcdf(c - mu2) + 0.5 * (1 - normcdf(c - mu1));
+            if (tC <= 0 || tI <= 0) return [];
+            const out = [];
+            for (let u = 5; u >= 0; u -= 0.05) {
+                const hc = 0.5 * normcdf(c - u - mu1) + 0.5 * (1 - normcdf(c + u - mu2));
+                const hi = 0.5 * normcdf(c - u - mu2) + 0.5 * (1 - normcdf(c + u - mu1));
+                out.push({ x: hi / tI, y: hc / tC });
+            }
+            return out;
+        }
+
+        /* ============================================================
+           META-D PRIME, MAXIMUM LIKELIHOOD (Maniscalco & Lau, 2012)
+           Free parameters: meta-d prime plus 2*(NR-1) type 2 criteria,
+           reparameterised as log gaps so the ordering always holds.
+           ============================================================ */
+
+        function nelderMead(f, x0, iters = 900) {
+            const n = x0.length;
+            let simplex = [x0.slice()];
+            for (let i = 0; i < n; i++) {
+                const p = x0.slice();
+                p[i] += (p[i] !== 0 ? 0.12 * Math.abs(p[i]) : 0.12) + 0.08;
+                simplex.push(p);
+            }
+            let vals = simplex.map(f);
+            for (let it = 0; it < iters; it++) {
+                const order = vals.map((v, i) => i).sort((a, b) => vals[a] - vals[b]);
+                simplex = order.map(i => simplex[i]);
+                vals = order.map(i => vals[i]);
+                if (Math.abs(vals[n] - vals[0]) < 1e-10) break;
+                const centroid = new Array(n).fill(0);
+                for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) centroid[j] += simplex[i][j] / n;
+                const worst = simplex[n];
+                const refl = centroid.map((cv, j) => cv + (cv - worst[j]));
+                const fr = f(refl);
+                if (fr < vals[0]) {
+                    const exp = centroid.map((cv, j) => cv + 2 * (cv - worst[j]));
+                    const fe = f(exp);
+                    if (fe < fr) { simplex[n] = exp; vals[n] = fe; } else { simplex[n] = refl; vals[n] = fr; }
+                } else if (fr < vals[n - 1]) {
+                    simplex[n] = refl; vals[n] = fr;
+                } else {
+                    const con = centroid.map((cv, j) => cv + 0.5 * (worst[j] - cv));
+                    const fc = f(con);
+                    if (fc < vals[n]) { simplex[n] = con; vals[n] = fc; }
+                    else {
+                        for (let i = 1; i <= n; i++) {
+                            simplex[i] = simplex[i].map((v, j) => simplex[0][j] + 0.5 * (v - simplex[0][j]));
+                            vals[i] = f(simplex[i]);
+                        }
+                    }
+                }
+            }
+            let best = 0;
+            for (let i = 1; i <= n; i++) if (vals[i] < vals[best]) best = i;
+            return { x: simplex[best], fx: vals[best] };
+        }
+
+        function fitMetaD(rawCounts) {
+            const counts = padCounts(rawCounts);
+            const t1 = type1(counts);
+            if (!t1 || !isFinite(t1.d) || Math.abs(t1.d) < 1e-3) return null;
+            const { d: d1, c: c1 } = t1;
+
+            const boundaries = p => {
+                const metaD = p[0];
+                const c1p = c1 * (metaD / d1);
+                const b = new Array(2 * NR + 1);
+                b[0] = -Infinity; b[2 * NR] = Infinity; b[NR] = c1p;
+                let cur = c1p;
+                for (let i = 1; i <= NR - 1; i++) { cur -= Math.exp(clamp(p[i], -9, 3)); b[NR - i] = cur; }
+                cur = c1p;
+                for (let i = 1; i <= NR - 1; i++) { cur += Math.exp(clamp(p[NR - 1 + i], -9, 3)); b[NR + i] = cur; }
+                return { b, c1p, metaD };
+            };
+
+            const negLL = p => {
+                const { b, c1p, metaD } = boundaries(p);
+                if (!isFinite(metaD) || metaD < -5 || metaD > 8) return 1e9;
+                let ll = 0;
+                for (const S of [0, 1]) {
+                    const mu = S === 0 ? -metaD / 2 : metaD / 2;
+                    const pR1 = normcdf(c1p - mu), pR2 = 1 - pR1;
+                    if (pR1 <= 1e-10 || pR2 <= 1e-10) return 1e9;
+                    for (let k = 0; k < 2 * NR; k++) {
+                        const pk = normcdf(b[k + 1] - mu) - normcdf(b[k] - mu);
+                        const cp = pk / (k < NR ? pR1 : pR2);
+                        ll += counts[S][k] * Math.log(Math.max(cp, 1e-12));
+                    }
+                }
+                return -ll;
+            };
+
+            let best = null;
+            const starts = [Math.abs(d1), Math.abs(d1) * 0.7, Math.abs(d1) * 1.3, 0.5];
+            for (const s0 of starts) {
+                const init = [s0, Math.log(0.4), Math.log(0.6), Math.log(0.8), Math.log(0.4), Math.log(0.6), Math.log(0.8)];
+                const r = nelderMead(negLL, init);
+                if (!best || r.fx < best.fx) best = r;
+            }
+            const metaD = best.x[0];
+            if (!isFinite(metaD) || best.fx >= 1e9) return null;
+            return { metaD, d: d1, c: c1, mRatio: metaD / d1, negLL: best.fx };
+        }
+
+        /* ============================================================
+           STIMULUS
+           ============================================================ */
+
+        // A phone gets a taller, narrower field so the dots stay big enough to see.
+        function geom() {
+            return window.innerWidth < 640
+                ? { SW: 620, SH: 540, boxes: [{ x0: 18, x1: 292 }, { x0: 328, x1: 602 }] }
+                : { SW: 900, SH: 400, boxes: [{ x0: 36, x1: 420 }, { x0: 480, x1: 864 }] };
+        }
+
+        function dotField(n, box, SH) {
+            const pts = [], minD = 17;
+            let guard = 0;
+            while (pts.length < n && guard < n * 200) {
+                guard++;
+                const r = 4.5 + Math.random() * 3.2;
+                const x = box.x0 + r + Math.random() * (box.x1 - box.x0 - 2 * r);
+                const y = 26 + r + Math.random() * (SH - 52 - 2 * r);
+                let ok = true;
+                for (const p of pts) {
+                    if ((p.x - x) ** 2 + (p.y - y) ** 2 < minD * minD) { ok = false; break; }
+                }
+                if (ok) pts.push({ x, y, r });
+            }
+            return pts;
+        }
+
+        function renderStim(nLeft, nRight) {
+            const G = geom();
+            const pts = [...dotField(nLeft, G.boxes[0], G.SH), ...dotField(nRight, G.boxes[1], G.SH)];
+            const dots = pts.map(p =>
+                `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.r.toFixed(1)}" fill="#111111"/>`).join('');
+            return `<svg viewBox="0 0 ${G.SW} ${G.SH}" role="img" aria-label="Two patches of dots">
+                      <line x1="${G.SW / 2}" y1="18" x2="${G.SW / 2}" y2="${G.SH - 18}" stroke="#f0f0f2" stroke-width="2"/>
+                      ${dots}</svg>`;
+        }
+
+        function blankStim() {
+            const G = geom();
+            return `<svg viewBox="0 0 ${G.SW} ${G.SH}" aria-hidden="true">
+                      <line x1="${G.SW / 2}" y1="18" x2="${G.SW / 2}" y2="${G.SH - 18}" stroke="#f7f7f8" stroke-width="2"/>
+                    </svg>`;
+        }
+
+        /* ============================================================
+           TASK STATE
+           ============================================================ */
+
+        const params = new URLSearchParams(location.search);
+        let sessionCode = (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 16);
+        const isClassView = params.get('view') === 'class';
+        const N_MAIN = clamp(parseInt(params.get('trials') || '40', 10) || 40, 10, 120);
+        const N_PRACTICE = 6;
+        const BASE = 50, SHOW_MS = 350;
+
+        let phase = 'practice', trialNo = 0, delta = 22, step = 4, reversals = 0, lastDir = 0, consecCorrect = 0;
+        let current = null, myTrials = [], awaiting = null;
+        let responses = [], localSim = [], unsub = null, saveTimer = null;
+
+        const PID_KEY = 'metad_pid';
+        function pid() {
+            let v = localStorage.getItem(PID_KEY);
+            if (!v) { v = 'p' + Math.random().toString(36).slice(2, 11) + Date.now().toString(36); localStorage.setItem(PID_KEY, v); }
+            return v;
+        }
+
+        function show(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ---------- staircase ---------- */
+        function updateStaircase(correct) {
+            if (correct) {
+                consecCorrect++;
+                if (consecCorrect >= 2) {
+                    consecCorrect = 0;
+                    if (lastDir === 1) { reversals++; if (reversals === 2) step = 2; if (reversals === 5) step = 1; }
+                    lastDir = -1;
+                    delta = clamp(delta - step, 2, 40);
+                }
+            } else {
+                consecCorrect = 0;
+                if (lastDir === -1) { reversals++; if (reversals === 2) step = 2; if (reversals === 5) step = 1; }
+                lastDir = 1;
+                delta = clamp(delta + step, 2, 40);
+            }
+        }
+
+        /* ---------- trial loop ---------- */
+        function nTrials() { return phase === 'practice' ? N_PRACTICE : N_MAIN; }
+
+        function startTrial() {
+            trialNo++;
+            $('blockLabel').textContent = phase === 'practice' ? 'Practice' : 'Main block';
+            $('progCount').textContent = `${trialNo} / ${nTrials()}`;
+            $('progFill').style.width = ((trialNo - 1) / nTrials() * 100) + '%';
+            $('feedback').textContent = '';
+            $('feedback').className = 'fb';
+            $('promptArea').innerHTML = '';
+
+            const half = Math.round(delta / 2);
+            const stim = Math.random() < 0.5 ? 0 : 1;   // 0 = left has more
+            const nLeft = stim === 0 ? BASE + half : BASE - half;
+            const nRight = stim === 0 ? BASE - half : BASE + half;
+            current = { s: stim, delta, nLeft, nRight };
+
+            $('stimSvg').innerHTML = blankStim();
+            $('fixation').hidden = false;
+            setTimeout(() => {
+                $('fixation').hidden = true;
+                $('stimSvg').innerHTML = renderStim(nLeft, nRight);
+                setTimeout(() => {
+                    $('stimSvg').innerHTML = blankStim();
+                    askResponse();
+                }, SHOW_MS);
+            }, 500);
+        }
+
+        function askResponse() {
+            awaiting = 'response';
+            $('promptArea').innerHTML = `
+                <span class="label">Which side had more dots?</span>
+                <div class="respond">
+                  <button type="button" data-r="0">Left</button>
+                  <button type="button" data-r="1">Right</button>
+                </div>`;
+            $('promptArea').querySelectorAll('button').forEach(b =>
+                b.addEventListener('click', () => takeResponse(parseInt(b.dataset.r, 10))));
+        }
+
+        function takeResponse(r) {
+            if (awaiting !== 'response') return;
+            current.r = r;
+            askConfidence();
+        }
+
+        const CONF_LABELS = ['Guessing', 'Not sure', 'Fairly sure', 'Certain'];
+
+        function askConfidence() {
+            awaiting = 'confidence';
+            $('promptArea').innerHTML = `
+                <span class="label">How confident are you in that answer?</span>
+                <div class="conf-row">
+                  ${CONF_LABELS.map((t, i) =>
+                `<button type="button" data-c="${i + 1}"><b>${i + 1}</b><span>${t}</span></button>`).join('')}
+                </div>`;
+            $('promptArea').querySelectorAll('button').forEach(b =>
+                b.addEventListener('click', () => takeConfidence(parseInt(b.dataset.c, 10))));
+        }
+
+        function takeConfidence(c) {
+            if (awaiting !== 'confidence') return;
+            awaiting = null;
+            current.c = c;
+            const correct = current.r === current.s;
+
+            if (phase === 'practice') {
+                $('feedback').textContent = correct ? 'Correct' : 'Not that time';
+                $('feedback').className = 'fb ' + (correct ? 'right' : 'wrong');
+            } else {
+                myTrials.push({ s: current.s, r: current.r, c: current.c });
+                if (myTrials.length % 5 === 0) queueSave();
+            }
+            updateStaircase(correct);
+
+            $('promptArea').innerHTML = '';
+            $('progFill').style.width = (trialNo / nTrials() * 100) + '%';
+
+            setTimeout(() => {
+                if (trialNo >= nTrials()) endBlock();
+                else startTrial();
+            }, phase === 'practice' ? 750 : 260);
+        }
+
+        function endBlock() {
+            if (phase === 'practice') {
+                phase = 'main'; trialNo = 0;
+                $('breakLine').textContent =
+                    `The main block is ${N_MAIN} trials and runs the same way, without feedback. The difficulty has settled near the level where you get roughly seven in ten right.`;
+                show('screen-break');
+            } else {
+                finish();
+            }
+        }
+
+        /* ---------- keyboard ---------- */
+        document.addEventListener('keydown', e => {
+            if (!$('screen-task').classList.contains('active')) return;
+            if (awaiting === 'response') {
+                if (e.key === 'ArrowLeft') { e.preventDefault(); takeResponse(0); }
+                if (e.key === 'ArrowRight') { e.preventDefault(); takeResponse(1); }
+            } else if (awaiting === 'confidence') {
+                const n = parseInt(e.key, 10);
+                if (n >= 1 && n <= NR) { e.preventDefault(); takeConfidence(n); }
+            }
+        });
+
+        /* ============================================================
+           FIRESTORE
+           ============================================================ */
+
+        const responsesCol = () => collection(db, ROOT, sessionCode, 'responses');
+
+        function fireError(err, target) {
+            const denied = /permission|insufficient/i.test((err && err.message) || '');
+            $(target).innerHTML = `<div class="banner err"><strong>Cannot reach the live database.</strong>
+              ${denied ? 'Firestore rejected the request. The security rules for this project need to allow the demo collection.' : 'Network or configuration error.'}
+              <br><span class="tiny">${esc((err && err.message) || err)}</span>
+              ${denied ? `<pre>match /${ROOT}/{session}/responses/{pid} {\n  allow read, write: if true;\n}</pre>` : ''}
+              </div>`;
+        }
+
+        async function save(done) {
+            const payload = {
+                t: myTrials.map(t => [t.s, t.r, t.c]),
+                n: myTrials.length,
+                done: !!done,
+                ts: serverTimestamp()
+            };
+            await setDoc(doc(db, ROOT, sessionCode, 'responses', pid()), payload);
+        }
+
+        function queueSave() {
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => { save(false).catch(() => { }); }, 120);
+        }
+
+        function listen(onData, errTarget) {
+            if (unsub) unsub();
+            unsub = onSnapshot(responsesCol(), snap => {
+                responses = [];
+                snap.forEach(d => {
+                    const v = d.data();
+                    if (v && Array.isArray(v.t) && v.t.length) {
+                        const trials = v.t
+                            .filter(a => Array.isArray(a) && a.length === 3)
+                            .map(a => ({ s: a[0], r: a[1], c: a[2] }))
+                            .filter(t => (t.s === 0 || t.s === 1) && (t.r === 0 || t.r === 1) && t.c >= 1 && t.c <= NR);
+                        if (trials.length) responses.push({ id: d.id, trials });
+                    }
+                });
+                onData();
+            }, err => fireError(err, errTarget));
+        }
+
+        const allStudents = () => responses.concat(localSim);
+        const allTrials = () => allStudents().flatMap(s => s.trials);
+
+        /* ============================================================
+           CHARTS
+           ============================================================ */
+
+        function confChart(counts, w = 560, h = 330) {
+            const { corr, inc } = type2Counts(counts);
+            const L = 54, R = w - 14, T = 14, B = h - 52;
+            const maxV = Math.max(1, ...corr.slice(1), ...inc.slice(1));
+            const yMax = maxV * 1.15;   // headroom so the count labels clear the plot
+            const bandW = (R - L) / NR;
+            let s = '';
+            for (let g = 0; g <= 4; g++) {
+                const v = Math.ceil(maxV * g / 4);
+                const y = B - (v / yMax) * (B - T);
+                s += `<line x1="${L}" y1="${y.toFixed(1)}" x2="${R}" y2="${y.toFixed(1)}" stroke="#f0f0f2" stroke-width="1"/>`;
+                s += `<text x="${L - 9}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace">${v}</text>`;
+            }
+            s += `<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+            s += `<line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+
+            for (let cf = 1; cf <= NR; cf++) {
+                const x0 = L + (cf - 1) * bandW;
+                const bw = (bandW - 18) / 2;
+                [[corr[cf], '#c8102e', 0], [inc[cf], '#8f8f96', 1]].forEach(([val, col, i]) => {
+                    const bh = (val / yMax) * (B - T);
+                    const x = x0 + 9 + i * (bw + 2);
+                    if (val > 0) {
+                        s += `<rect x="${x.toFixed(1)}" y="${(B - bh).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="4" fill="${col}"/>`;
+                        s += `<text x="${(x + bw / 2).toFixed(1)}" y="${(B - bh - 6).toFixed(1)}" text-anchor="middle" font-size="11" fill="#55555a" font-family="IBM Plex Mono,monospace">${val}</text>`;
+                    }
+                });
+                s += `<text x="${(x0 + bandW / 2).toFixed(1)}" y="${B + 20}" text-anchor="middle" font-size="12.5" fill="#55555a" font-family="IBM Plex Mono,monospace">${cf}</text>`;
+            }
+            s += `<text x="${((L + R) / 2).toFixed(1)}" y="${B + 42}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace" letter-spacing="1.4">CONFIDENCE RATING</text>`;
+            s += `<text x="16" y="${((T + B) / 2).toFixed(1)}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace" letter-spacing="1.4" transform="rotate(-90 16 ${((T + B) / 2).toFixed(1)})">TRIALS</text>`;
+            return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Number of correct and incorrect trials at each confidence rating">${s}</svg>`;
+        }
+
+        function rocChart(counts, fit, w = 480, h = 430) {
+            const L = 54, R = w - 16, T = 16, B = h - 56;
+            const X = p => L + p * (R - L);
+            const Y = p => B - p * (B - T);
+            let s = '';
+            for (let g = 0; g <= 5; g++) {
+                const v = g / 5;
+                s += `<line x1="${X(v)}" y1="${T}" x2="${X(v)}" y2="${B}" stroke="#f5f5f6" stroke-width="1"/>`;
+                s += `<line x1="${L}" y1="${Y(v)}" x2="${R}" y2="${Y(v)}" stroke="#f5f5f6" stroke-width="1"/>`;
+            }
+            s += `<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+            s += `<line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+            s += `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(1)}" stroke="#c9c9cf" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+
+            const path = pts => pts.map((p, i) => (i ? 'L' : 'M') + X(p.x).toFixed(1) + ' ' + Y(p.y).toFixed(1)).join(' ');
+
+            if (fit) {
+                const ideal = modelROC(fit.d, fit.c);
+                if (ideal.length) s += `<path d="${path(ideal)}" fill="none" stroke="#8a8a90" stroke-width="2" stroke-dasharray="6 5"/>`;
+                const mm = modelROC(fit.metaD, fit.c * (fit.metaD / fit.d));
+                if (mm.length) s += `<path d="${path(mm)}" fill="none" stroke="#c8102e" stroke-width="2.5"/>`;
+            }
+            const emp = type2ROC(counts);
+            if (emp) {
+                s += `<path d="${path(emp.pts)}" fill="none" stroke="#111111" stroke-width="1.5" opacity=".55"/>`;
+                emp.pts.forEach(p => {
+                    s += `<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="5" fill="#111111" stroke="#fff" stroke-width="2"/>`;
+                });
+            }
+            [0, 0.5, 1].forEach(v => {
+                s += `<text x="${X(v)}" y="${B + 20}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace">${v}</text>`;
+                s += `<text x="${L - 9}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace">${v}</text>`;
+            });
+            s += `<text x="${((L + R) / 2).toFixed(1)}" y="${B + 42}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace" letter-spacing="1.4">FALSE ALARM RATE, TYPE 2</text>`;
+            s += `<text x="16" y="${((T + B) / 2).toFixed(1)}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace" letter-spacing="1.4" transform="rotate(-90 16 ${((T + B) / 2).toFixed(1)})">HIT RATE, TYPE 2</text>`;
+            return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Type 2 ROC curve with the ideal and fitted meta-d prime models">${s}</svg>`;
+        }
+
+        function scatterChart(pts, w = 520, h = 440) {
+            const L = 54, R = w - 16, T = 16, B = h - 56;
+            const hi = Math.max(2.5, ...pts.map(p => Math.max(p.d, p.metaD)), 1);
+            const X = v => L + clamp(v / hi, 0, 1) * (R - L);
+            const Y = v => B - clamp(v / hi, 0, 1) * (B - T);
+            let s = '';
+            const ticks = [0, 1, 2, 3, 4].filter(t => t <= hi);
+            ticks.forEach(t => {
+                s += `<line x1="${X(t)}" y1="${T}" x2="${X(t)}" y2="${B}" stroke="#f5f5f6" stroke-width="1"/>`;
+                s += `<line x1="${L}" y1="${Y(t)}" x2="${R}" y2="${Y(t)}" stroke="#f5f5f6" stroke-width="1"/>`;
+                s += `<text x="${X(t)}" y="${B + 20}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace">${t}</text>`;
+                s += `<text x="${L - 9}" y="${Y(t) + 4}" text-anchor="end" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace">${t}</text>`;
+            });
+            s += `<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+            s += `<line x1="${L}" y1="${T}" x2="${L}" y2="${B}" stroke="#e2e2e6" stroke-width="1.5"/>`;
+            s += `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(hi)}" y2="${Y(hi)}" stroke="#8a8a90" stroke-width="2" stroke-dasharray="6 5"/>`;
+            s += `<text x="${X(hi) - 8}" y="${Y(hi) + 20}" text-anchor="end" font-size="11.5" fill="#8a8a90" font-family="Inter,sans-serif">meta-d&prime; = d&prime;</text>`;
+            pts.forEach(p => {
+                s += `<circle cx="${X(p.d).toFixed(1)}" cy="${Y(p.metaD).toFixed(1)}" r="5.5" fill="#c8102e" fill-opacity=".72" stroke="#fff" stroke-width="2"/>`;
+            });
+            s += `<text x="${((L + R) / 2).toFixed(1)}" y="${B + 42}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace" letter-spacing="1.4">D PRIME, PERCEPTUAL</text>`;
+            s += `<text x="16" y="${((T + B) / 2).toFixed(1)}" text-anchor="middle" font-size="11" fill="#8a8a90" font-family="IBM Plex Mono,monospace" letter-spacing="1.4" transform="rotate(-90 16 ${((T + B) / 2).toFixed(1)})">META-D PRIME</text>`;
+            return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Each student's meta-d prime plotted against their d prime">${s}</svg>`;
+        }
+
+        /* ============================================================
+           RENDER, STUDENT RESULTS
+           ============================================================ */
+
+        const LEGEND_CI = `<div class="k"><span class="sw" style="background:#c8102e"></span>Correct</div>
+                           <div class="k"><span class="sw" style="background:#8f8f96"></span>Incorrect</div>`;
+
+        function renderYours() {
+            const counts = tallyTrials(myTrials);
+            const nC = sum(type2Counts(counts).corr), nI = sum(type2Counts(counts).inc);
+            const acc = nC / (nC + nI);
+            const mc = mean(myTrials.map(t => t.c));
+            $('yourTiles').innerHTML = `
+                <div class="tile"><span class="label">Accuracy</span><strong>${Math.round(acc * 100)}%</strong><em>${nC} of ${nC + nI}</em></div>
+                <div class="tile"><span class="label">Mean confidence</span><strong>${mc.toFixed(2)}</strong><em>out of ${NR}</em></div>
+                <div class="tile"><span class="label">Trials</span><strong>${myTrials.length}</strong><em>main block</em></div>`;
+            $('yourLegend').innerHTML = LEGEND_CI;
+            $('yourChart').innerHTML = confChart(counts, 620, 300);
+            const roc = type2ROC(padCounts(counts));
+            $('yourRead').textContent = roc
+                ? `Your confidence separated correct from incorrect trials with an area under the type 2 curve of ${roc.auc.toFixed(2)}, where 0.5 means confidence told us nothing.`
+                : 'There were not enough correct and incorrect trials to summarise your confidence.';
+        }
+
+        async function finish() {
+            renderYours();
+            show('screen-done');
+            try {
+                await save(true);
+                $('doneCount').textContent = 'Saved';
+            } catch (err) {
+                fireError(err, 'doneBanner');
+                $('doneCount').textContent = 'Could not save';
+            }
+            listen(() => {
+                const n = allStudents().length, t = allTrials().length;
+                $('doneCount').textContent = `${n} student${n === 1 ? '' : 's'}, ${t} trials in the pool`;
+            }, 'doneBanner');
+        }
+
+        /* ============================================================
+           RENDER, CLASS VIEW
+           ============================================================ */
+
+        function renderClass() {
+            const students = allStudents();
+            const trials = allTrials();
+            const counts = tallyTrials(trials);
+            const t2 = type2Counts(counts);
+            const nC = sum(t2.corr), nI = sum(t2.inc);
+            const acc = (nC + nI) ? nC / (nC + nI) : null;
+            const mc = mean(trials.map(t => t.c));
+
+            $('liveLabel').textContent = `Live data, ${trials.length} trials`;
+            $('headTiles').innerHTML = `
+                <div class="tile"><span class="label">Students</span><strong>${students.length}</strong></div>
+                <div class="tile"><span class="label">Accuracy</span><strong>${acc === null ? '&mdash;' : Math.round(acc * 100) + '%'}</strong><em>${nC} of ${nC + nI}</em></div>
+                <div class="tile"><span class="label">Mean conf</span><strong>${mc === null ? '&mdash;' : mc.toFixed(2)}</strong><em>out of ${NR}</em></div>`;
+
+            $('panelALegend').innerHTML = LEGEND_CI;
+            $('confChart').innerHTML = confChart(counts);
+
+            const fit = trials.length >= 40 ? fitMetaD(counts) : null;
+            const roc = type2ROC(padCounts(counts));
+
+            $('panelBLegend').innerHTML = `
+                <div class="k"><span class="sw" style="background:#111111"></span>Class data</div>
+                <div class="k"><span class="sw" style="background:#c8102e"></span>meta-d&prime; fit</div>
+                <div class="k"><span class="sw dash" style="width:16px"></span>If metacognition were ideal</div>`;
+            $('rocChart').innerHTML = rocChart(counts, fit);
+
+            if (fit) {
+                $('sdtCallout').innerHTML = `<div class="callout">
+                    Perceptual sensitivity <b>d&prime; = ${fit.d.toFixed(2)}</b>, metacognitive sensitivity
+                    <b>meta-d&prime; = ${fit.metaD.toFixed(2)}</b>, efficiency
+                    <b>M-ratio = ${fit.mRatio.toFixed(2)}</b>.
+                    ${fit.mRatio < 0.95
+                        ? `The class is reading its own evidence less well than the evidence allows, losing about ${Math.round((1 - fit.mRatio) * 100)}% of the information that was there.`
+                        : `The class is using close to all of the information that was available to it.`}
+                  </div>`;
+            } else {
+                $('sdtCallout').innerHTML = `<div class="callout">Waiting for more trials before fitting
+                    meta-d&prime;. The fit needs a reasonable number of errors as well as correct responses.</div>`;
+            }
+
+            // per student
+            const perStudent = [], excluded = [];
+            for (const st of students) {
+                if (st.trials.length < 20) { excluded.push(st.id); continue; }
+                const f = fitMetaD(tallyTrials(st.trials));
+                if (!f || !isFinite(f.metaD) || f.d <= 0.05 || f.metaD < -1 || f.metaD > 6) { excluded.push(st.id); continue; }
+                perStudent.push({ id: st.id, d: f.d, metaD: Math.max(0, f.metaD), mRatio: f.mRatio });
+            }
+            $('panelCLegend').innerHTML = `
+                <div class="k"><span class="sw" style="background:#c8102e; border-radius:50%"></span>One student</div>
+                <div class="k"><span class="sw dash" style="width:16px"></span>Perfect efficiency</div>`;
+            $('scatterChart').innerHTML = scatterChart(perStudent);
+            const below = perStudent.filter(p => p.metaD < p.d).length;
+            $('scatterNote').textContent = perStudent.length
+                ? `${perStudent.length} student${perStudent.length === 1 ? '' : 's'} could be fitted, and ${below} of them sit below the diagonal. ${excluded.length} could not be fitted, usually because they had too few trials or almost no errors.`
+                : 'No individual fits yet. Individual estimates need enough trials and a mix of correct and incorrect responses.';
+
+            const mr = perStudent.map(p => p.mRatio).filter(v => isFinite(v) && v > -2 && v < 3);
+            $('sdtTable').innerHTML = `
+                <thead><tr><th>Measure</th><th class="num">Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Trials</td><td class="num">${trials.length}</td></tr>
+                  <tr><td>Accuracy</td><td class="num">${acc === null ? 'n/a' : (acc * 100).toFixed(1) + '%'}</td></tr>
+                  <tr><td>d&prime; (perceptual)</td><td class="num">${fit ? fit.d.toFixed(2) : 'n/a'}</td></tr>
+                  <tr><td>meta-d&prime; (metacognitive)</td><td class="num">${fit ? fit.metaD.toFixed(2) : 'n/a'}</td></tr>
+                  <tr><td>M-ratio</td><td class="num">${fit ? fit.mRatio.toFixed(2) : 'n/a'}</td></tr>
+                  <tr><td>Area under type 2 ROC</td><td class="num">${roc ? roc.auc.toFixed(3) : 'n/a'}</td></tr>
+                  <tr><td>Median M-ratio across students</td><td class="num">${mr.length ? mr.slice().sort((a, b) => a - b)[Math.floor(mr.length / 2)].toFixed(2) : 'n/a'}</td></tr>
+                </tbody>`;
+
+            $('teachingNote').innerHTML = `d&prime; is how well the eyes did. meta-d&prime; is how much of
+                that same evidence the confidence ratings managed to use. Because both are on one scale, the
+                shortfall is readable directly, and the ratio of the two is what we call metacognitive
+                efficiency.`;
+        }
+
+        /* ============================================================
+           SIMULATION, local only
+           ============================================================ */
+
+        function addSimulated(count) {
+            for (let i = 0; i < count; i++) {
+                const d = 0.8 + Math.random() * 1.6;
+                const noise = 0.25 + Math.random() * 1.15;   // metacognitive noise
+                const bias = (Math.random() - 0.5) * 0.3;
+                const cuts = [0.35, 0.9, 1.6];
+                const trials = [];
+                for (let t = 0; t < N_MAIN; t++) {
+                    const s = Math.random() < 0.5 ? 0 : 1;
+                    const x = (s === 0 ? -d / 2 : d / 2) + gauss();
+                    const r = x > bias ? 1 : 0;
+                    const ev = Math.abs(x - bias) + gauss() * noise;
+                    let c = 1;
+                    for (let k = 0; k < cuts.length; k++) if (ev > cuts[k]) c = k + 2;
+                    trials.push({ s, r, c: clamp(c, 1, NR) });
+                }
+                localSim.push({ id: 'sim_' + localSim.length + '_' + Math.random().toString(36).slice(2, 7), trials });
+            }
+        }
+
+        /* ============================================================
+           WIRING
+           ============================================================ */
+
+        function setSession(code) {
+            sessionCode = code;
+            $('sessionTag').textContent = 'Session ' + code;
+            const u = new URL(location.href);
+            u.searchParams.set('s', code);
+            u.searchParams.delete('view');
+            history.replaceState(null, '', u);
+        }
+
+        $('joinBtn').addEventListener('click', () => {
+            const raw = $('codeInput').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            if (!raw) { $('codeInput').focus(); return; }
+            setSession(raw);
+            $('instrNote').textContent = `${N_PRACTICE} practice trials, then ${N_MAIN} for real.`;
+            show('screen-instr');
+        });
+        $('codeInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('joinBtn').click(); });
+
+        $('startPracticeBtn').addEventListener('click', () => {
+            phase = 'practice'; trialNo = 0;
+            show('screen-task');
+            startTrial();
+        });
+        $('startMainBtn').addEventListener('click', () => {
+            show('screen-task');
+            startTrial();
+        });
+
+        function startClassView() {
+            $('wrap').classList.add('wide');
+            $('sessionTag').textContent = 'Session ' + sessionCode;
+            $('classCode').textContent = sessionCode;
+            $('resetCode').textContent = sessionCode;
+            const join = location.origin + location.pathname + '?s=' + encodeURIComponent(sessionCode);
+            $('joinUrl').textContent = join.replace(/^https?:\/\//, '');
+            if (typeof QRCode !== 'undefined') {
+                new QRCode($('qr'), { text: join, width: 168, height: 168, colorDark: '#111111', colorLight: '#ffffff' });
+            } else {
+                $('qr').innerHTML = '<span class="tiny" style="display:block;width:168px">QR unavailable. Share the link.</span>';
+            }
+            const preseed = parseInt(params.get('sim') || '0', 10);
+            if (preseed > 0) addSimulated(Math.min(200, preseed));
+            show('screen-class');
+            renderClass();
+            listen(renderClass, 'classBanner');
+        }
+
+        $('simBtn').addEventListener('click', () => { addSimulated(20); renderClass(); });
+
+        $('resetBtn').addEventListener('click', async () => {
+            if (!confirm(`Permanently delete all ${responses.length} saved students in session ${sessionCode}? This cannot be undone.`)) return;
+            $('resetBtn').disabled = true;
+            localSim = [];
+            renderClass();
+            try {
+                const snap = await getDocs(responsesCol());
+                for (const d of snap.docs) await deleteDoc(doc(db, ROOT, sessionCode, 'responses', d.id));
+            } catch (err) { fireError(err, 'classBanner'); }
+            $('resetBtn').disabled = false;
+        });
+
+        /* ---- boot ---- */
+        $('classLinkHint').textContent = location.pathname + '?view=class&s=CODE';
+        if (sessionCode) {
+            setSession(sessionCode);
+            if (isClassView) startClassView();
+            else { $('instrNote').textContent = `${N_PRACTICE} practice trials, then ${N_MAIN} for real.`; show('screen-instr'); }
+        } else {
+            $('sessionTag').textContent = 'No session';
+            $('codeInput').focus();
+        }
+
+        // expose a few internals so the maths can be checked from the console
+        window.__metad = { fitMetaD, tallyTrials, type1, type2ROC, padCounts, normcdf, norminv };
+    </script>
+</body>
+
+</html>
