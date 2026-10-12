@@ -666,7 +666,7 @@
         const params = new URLSearchParams(location.search);
         let sessionCode = (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 16);
         const isClassView = params.get('view') === 'class';
-        const N_MAIN = clamp(parseInt(params.get('trials') || '40', 10) || 40, 10, 120);
+        const N_MAIN = clamp(parseInt(params.get('trials') || '24', 10) || 24, 10, 120);
         const N_PRACTICE = 6;
         const BASE = 50, SHOW_MS = 350;
 
@@ -1147,7 +1147,7 @@
             $('sessionTag').textContent = 'Session ' + sessionCode;
             $('classCode').textContent = sessionCode;
             $('resetCode').textContent = sessionCode;
-            const join = location.origin + location.pathname + '?s=' + encodeURIComponent(sessionCode);
+            const join = location.origin + location.pathname + '?s=' + encodeURIComponent(sessionCode) + '&trials=' + N_MAIN;
             $('joinUrl').textContent = join.replace(/^https?:\/\//, '');
             if (typeof QRCode !== 'undefined') {
                 new QRCode($('qr'), { text: join, width: 168, height: 168, colorDark: '#111111', colorLight: '#ffffff' });
@@ -1176,7 +1176,7 @@
         });
 
         /* ---- boot ---- */
-        $('classLinkHint').textContent = location.pathname + '?view=class&s=CODE';
+        $('classLinkHint').textContent = location.pathname + '?view=class&s=CODE';  // add &trials=N to change the block length
         if (sessionCode) {
             setSession(sessionCode);
             if (isClassView) startClassView();
