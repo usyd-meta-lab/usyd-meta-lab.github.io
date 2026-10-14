@@ -223,7 +223,7 @@ const PHASES = [
   { id:'r1',     label:'R1 Tip of the tongue', student:true },
   { id:'r2',     label:'R2 How sure?', student:true },
   { id:'pct',    label:'Quick question', student:true },
-  { id:'rv2',    label:'Reveal: confidence', reveal:[['cal','2a · Calibration'],['res','2b · Bias vs resolution']] },
+  { id:'rv2',    label:'Reveal: confidence', reveal:[['cal','2a · Calibration'],['res','2b · Calibration vs resolution']] },
   { id:'r3',     label:'R3 Pass or play', student:true },
   { id:'rv3',    label:'Reveal: recall & passing', reveal:[['fok','1 · Tip of the tongue'],['pp','3 · Pass or play']] },
   { id:'r4',     label:'R4 Team round', student:true },
@@ -369,8 +369,12 @@ function confStats(s, items, key){
   const tr = items.map(it => s[key] && s[key][it.id]).filter(Boolean);
   const confs = tr.map(t => t.conf), acc = mean(tr.map(t => t.ok ? 1 : 0));
   const cR = tr.filter(t => t.ok).map(t => t.conf), cW = tr.filter(t => !t.ok).map(t => t.conf);
-  return { n: tr.length, conf: mean(confs), acc, bias: mean(confs) - acc * 100, gap: (cR.length && cW.length) ? mean(cR) - mean(cW) : NaN };
+  // Lecture 1 definitions: calibration = mean confidence − mean accuracy (points; + is overconfident);
+  // resolution = Goodman–Kruskal gamma between confidence and correctness (Nelson, 1984), undefined without both right and wrong answers or with no untied pairs
+  let C = 0, D = 0; cR.forEach(a => cW.forEach(b => { if (a > b) C++; else if (a < b) D++; }));
+  return { n: tr.length, conf: mean(confs), acc, cal: mean(confs) - acc * 100, gamma: C + D ? (C - D) / (C + D) : NaN };
 }
+const fmtG = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
 function percentiles(list){ // list of {id, score}; returns id -> percentile (0-100) within list
   const out = {}; const n = list.length;
   list.forEach(a => { let lo = 0, eq = 0; list.forEach(b => { if (b.score < a.score) lo++; else if (b.score === a.score) eq++; }); out[a.id] = n > 1 ? 100 * (lo + 0.5 * (eq - 1)) / (n - 1) : 50; });
@@ -528,7 +532,7 @@ function scatter(o){
   if (o.zeroY) g += `<line x1="${f.m.l}" x2="${f.W - f.m.r}" y1="${f.sy(0)}" y2="${f.sy(0)}" stroke="#bbb"/>`;
   (o.labels || []).forEach(l => { g += `<text x="${f.sx(l.x)}" y="${f.sy(l.y)}" text-anchor="${l.anchor || 'middle'}" font-size="14" fill="#888" font-style="italic">${l.text}</text>`; });
   const jr = rng(7);
-  o.pts.forEach(p => { const jx = (o.jitter || 0) * (jr() - .5), jy = (o.jitter || 0) * (jr() - .5); g += `<circle cx="${f.sx(clamp(p.x + jx, o.x0, o.x1))}" cy="${f.sy(clamp(p.y + jy, o.y0, o.y1))}" r="${p.r || 8}" fill="${p.color || COL.accent}" fill-opacity=".75" stroke="#fff" stroke-width="1.5"/>`; });
+  o.pts.forEach(p => { const jx = (o.jitter || 0) * (jr() - .5), jy = (o.jitterY ?? o.jitter ?? 0) * (jr() - .5); g += `<circle cx="${f.sx(clamp(p.x + jx, o.x0, o.x1))}" cy="${f.sy(clamp(p.y + jy, o.y0, o.y1))}" r="${p.r || 8}" fill="${p.color || COL.accent}" fill-opacity=".75" stroke="#fff" stroke-width="1.5"/>`; });
   return `<div class="chart">${g}</svg></div>`;
 }
 const legend = items => `<div class="legend">${items.map(i => `<span><i style="background:${i.color}${i.dash ? ';background:repeating-linear-gradient(90deg,' + i.color + ' 0 5px,transparent 5px 8px)' : ''}"></i>${i.name}</span>`).join('')}</div>`;
@@ -600,8 +604,8 @@ function anaLeaderboard(){
     const mem = students().filter(s => s.team === T); if (!mem.length) return;
     const ind = mean(mem.map(s => R1.filter(it => s.r1 && s.r1[it.id] && s.r1[it.id].ok).length + R2.filter(it => s.r2 && s.r2[it.id] && s.r2[it.id].ok).length + r3Points(s).p));
     const tr = teams[T] && teams[T].r4 ? R4.filter(it => teams[T].r4[it.id] && teams[T].r4[it.id].c === 0).length : 0;
-    const bias = mean(mem.map(s => Math.abs(confStats(s, R2, 'r2').bias)).filter(fin));
-    out.push({ T, n: mem.length, ind, tr, total: ind + 2 * tr, bias });
+    const cal = mean(mem.map(s => Math.abs(confStats(s, R2, 'r2').cal)).filter(fin));
+    out.push({ T, n: mem.length, ind, tr, total: ind + 2 * tr, cal });
   });
   return out;
 }
@@ -872,8 +876,8 @@ function viewPersonal(ph){
   if (cs.n){
     rows += `<div class="stat"><span>Round 2: you were right on</span><b>${pct0(cs.acc)}</b></div>`;
     rows += `<div class="stat"><span>Your average confidence</span><b>${Math.round(cs.conf)}%</b></div>`;
-    rows += `<div class="stat"><span>So you were</span><b>${Math.abs(cs.bias) < 5 ? 'well calibrated' : (cs.bias > 0 ? 'overconfident by ' + Math.round(cs.bias) : 'underconfident by ' + Math.round(-cs.bias)) + (Math.abs(cs.bias) < 5 ? '' : ' pts')}</b></div>`;
-    if (fin(cs.gap)) rows += `<div class="stat"><span>Confidence when right vs wrong</span><b>${cs.gap >= 0 ? '+' : ''}${Math.round(cs.gap)} pts</b></div>`;
+    rows += `<div class="stat"><span>Calibration: so you were</span><b>${Math.abs(cs.cal) < 5 ? 'well calibrated' : (cs.cal > 0 ? 'overconfident by ' + Math.round(cs.cal) : 'underconfident by ' + Math.round(-cs.cal)) + (Math.abs(cs.cal) < 5 ? '' : ' pts')}</b></div>`;
+    rows += `<div class="stat"><span>Resolution (gamma, −1 to +1)</span><b>${fin(cs.gamma) ? fmtG(cs.gamma) : 'undefined'}</b></div>`;
   }
   if (r3.n) rows += `<div class="stat"><span>Pass or play: your score</span><b>${r3.p}</b></div><div class="stat"><span>…if you had played every question</span><b>${r3.all}</b></div>`;
   if (me.r1) rows += `<div class="stat"><span>Round 1: answers recalled</span><b>${rec} / ${R1.length}</b></div>`;
@@ -990,16 +994,17 @@ function stageDebrief(ph){
       ${legend([{ name:'All questions', color:COL.ink }, { name:'Normal questions', color:COL.grey }, { name:'Deceptive questions', color:COL.accent }])}
       ${lineChart({ x0:50, x1:100, y0:0, y1:100, xTicks:CONF, yTicks:tick(0, 100, 25), xFmt:v => v + '%', yFmt:v => v + '%', xLabel:'Confidence', yLabel:'Actually correct', diag:true, showN:false,
         series:[{ name:'Normal', color:COL.grey, pts:line('normal') }, { name:'Deceptive', color:COL.accent, pts:line('deceptive') }, { name:'All', color:COL.ink, pts:line('all') }] })}
-      ${keystats([{ n: Math.round(d.all.conf) + '% / ' + Math.round(d.all.acc) + '%', l:'average confidence / accuracy, all questions' }, { n: Math.round(d.dec.conf) + '% / ' + Math.round(d.dec.acc) + '%', l:'on the deceptive questions' }, { n: (d.all.conf - d.all.acc >= 0 ? '+' : '') + Math.round(d.all.conf - d.all.acc), l:'class over- (+) or underconfidence (−), points' }])}
-      <p class="tiny">Confidence levels used fewer than ${minN} times are not plotted.</p>${tutor('Below the line is overconfidence. Expect the deceptive questions to sit well below it: confidence follows how an answer <em>feels</em>, not whether it is right. Which deceptive question fooled the room most? (Rome is further north than New York.)')}`;
+      ${keystats([{ n: Math.round(d.all.conf) + '% / ' + Math.round(d.all.acc) + '%', l:'average confidence / accuracy, all questions' }, { n: Math.round(d.dec.conf) + '% / ' + Math.round(d.dec.acc) + '%', l:'on the deceptive questions' }, { n: (d.all.conf - d.all.acc >= 0 ? '+' : '') + Math.round(d.all.conf - d.all.acc), l:'class calibration: confidence − accuracy, points (+ over, − under)' }])}
+      <p class="tiny">Confidence levels used fewer than ${minN} times are not plotted.</p>${tutor('Calibration asks whether mean confidence matches mean accuracy (Lecture 1): below the line is overconfidence. Expect the deceptive questions to sit well below it: confidence follows how an answer <em>feels</em>, not whether it is right. Which deceptive question fooled the room most? (Rome is further north than New York.)')}`;
   } else if (t.cur === 'res'){
-    const d = anaCalib(); const pts = d.per.filter(p => fin(p.gap)).map(p => ({ x:clamp(p.bias, -40, 40), y:clamp(p.gap, -20, 45) }));
+    const d = anaCalib(); const pts = d.per.filter(p => fin(p.gamma)).map(p => ({ x:clamp(p.cal, -40, 40), y:p.gamma })), nU = d.per.length - pts.length;
     body = `<div class="label">Reveal 2b</div><h1>Two different ways to be good</h1>
-      <p class="prompt">Each dot is one student. Left–right: over- or underconfidence (bias). Up–down: how much more confident you were when right than when wrong (resolution).</p>${enough(pts.length, 8)}
-      ${scatter({ pts, x0:-40, x1:40, y0:-20, y1:45, xTicks:tick(-40, 40, 20), yTicks:tick(-20, 40, 20), xLabel:'← underconfident     Bias (points)     overconfident →', yLabel:'Resolution: confidence right − wrong', zeroX:true, zeroY:true, jitter:1.5,
-        labels:[{ x:-38, y:41, text:'Underconfident but discerning', anchor:'start' }, { x:38, y:41, text:'Overconfident but discerning', anchor:'end' }, { x:-38, y:-16, text:'Underconfident and undiscerning', anchor:'start' }, { x:38, y:-16, text:'Overconfident and undiscerning', anchor:'end' }] })}
-      ${keystats([{ n: pts.length, l:'students' }, { n: pts.filter(p => p.y > 5).length, l:'were noticeably more confident when right' }, { n: pts.filter(p => Math.abs(p.x) < 5).length, l:'were within 5 points of perfect calibration' }])}
-      ${tutor('Calibration and resolution are separate. Find a dot near the middle of the x-axis but low on the y-axis: perfectly calibrated on average, yet no idea which answers were right. Link to Lecture 1: this is the bias–sensitivity distinction behind meta-d′.')}`;
+      <p class="prompt">Each dot is one student. Left–right: calibration, your average confidence minus your accuracy. Up–down: resolution, the gamma correlation between your confidence and whether you were right (+1: always more confident when right; 0: no relationship).</p>${enough(pts.length, 8)}
+      ${scatter({ pts, x0:-40, x1:40, y0:-1, y1:1, xTicks:tick(-40, 40, 20), yTicks:tick(-1, 1, .5), xLabel:'← underconfident     Calibration (points)     overconfident →', yLabel:'Resolution (gamma)', zeroX:true, zeroY:true, jitter:1.5, jitterY:.04,
+        labels:[{ x:-38, y:.92, text:'Underconfident but discerning', anchor:'start' }, { x:38, y:.92, text:'Overconfident but discerning', anchor:'end' }, { x:-38, y:-.85, text:'Underconfident and undiscerning', anchor:'start' }, { x:38, y:-.85, text:'Overconfident and undiscerning', anchor:'end' }] })}
+      ${keystats([{ n: pts.length, l:'students' }, { n: pts.filter(p => p.y > 0).length, l:'had positive resolution (gamma above 0)' }, { n: pts.filter(p => Math.abs(p.x) < 5).length, l:'were within 5 points of perfect calibration' }])}
+      ${nU ? `<p class="tiny">${nU} student${nU === 1 ? ' has' : 's have'} no gamma (every answer right, every answer wrong, or the same confidence throughout) and ${nU === 1 ? 'is' : 'are'} not plotted.</p>` : ''}
+      ${tutor('Calibration and resolution are separate. Find a dot near the middle of the x-axis but low on the y-axis: perfectly calibrated on average, yet no idea which answers were right. Link to Lecture 1: calibration is a bias question, resolution a sensitivity question. Gamma is undefined for anyone with no errors (or no correct answers) and shifts with accuracy, which is why the field moved to meta-d′.')}`;
   } else if (t.cur === 'pp'){
     const d = anaPass(); const pts = d.per.map(p => ({ x:p.all, y:p.p }));
     const beat = d.per.filter(p => p.p > p.all).length;
@@ -1044,11 +1049,11 @@ function teamReveal(full){
     ${tutor(full && inRv4 ? 'The voting rules show what a purely mechanical vote on members\' private answers would have scored. Did any rule beat your discussion?' : full ? 'The same team-round data, now with three mechanical voting rules applied to members\' private answers. Compare with tab a: does confidence-weighting help on hard questions but not on deceptive ones?' : 'Ask each team how they decided. Did the most confident person win the argument? Teams usually beat their average member, but rarely their best one (Bahrami et al., 2010). On the deceptive questions, discussion cannot fix an intuition everyone shares.')}`;
 }
 function leaderboard(){
-  const lb = anaLeaderboard().sort((a, b) => b.total - a.total), cal = anaLeaderboard().filter(x => fin(x.bias)).sort((a, b) => a.bias - b.bias)[0];
+  const lb = anaLeaderboard().sort((a, b) => b.total - a.total), cal = anaLeaderboard().filter(x => fin(x.cal)).sort((a, b) => a.cal - b.cal)[0];
   return `<div class="label">Results</div><h1>Leaderboard</h1>
     <table class="lb"><tr><th>#</th><th>Team</th><th class="r">Avg member score</th><th class="r">Team round ×2</th><th class="r">Total</th></tr>
     ${lb.map((r, i) => `<tr><td>${i + 1}</td><td>Team ${r.T}</td><td class="r">${fmtNum(r.ind)}</td><td class="r">${r.tr * 2}</td><td class="r">${fmtNum(r.total)}</td></tr>`).join('')}</table>
-    ${cal ? `<div class="card soft" style="margin-top:18px"><div class="label">Best calibrated team</div><h2>Team ${cal.T}</h2><p class="muted">Members' confidence was, on average, within ${Math.round(cal.bias)} points of their accuracy in round 2.</p></div>` : ''}
+    ${cal ? `<div class="card soft" style="margin-top:18px"><div class="label">Best calibrated team</div><h2>Team ${cal.T}</h2><p class="muted">Members' confidence was, on average, within ${Math.round(cal.cal)} points of their accuracy in round 2.</p></div>` : ''}
     ${tutor('Member score = round 1 recalls + round 2 correct + round 3 points, averaged across members so team size doesn\'t matter. Before they leave: one change to how you\'ll prepare for the exam, based on today\'s data.')}`;
 }
 function stageEnd(){
@@ -1079,13 +1084,14 @@ function stageDK(){
       ${dkLines(q)}
       ${tutor('Pure noise plus a better-than-average lean reproduces the "unskilled and unaware" pattern. Regression to the mean and bounded scales do the work (Lecture 2, Dunning–Kruger "handle with care"). So the classic plot cannot, on its own, show that low performers have worse metacognition.')}`;
   } else {
-    const q = d.q; const vals = q ? q.map(g => mean(g.map(x => x.cs.gap).filter(fin))) : [];
-    const bias = q ? q.map(g => mean(g.map(x => x.cs.bias).filter(fin))) : [];
+    const q = d.q; const vals = q ? q.map(g => mean(g.map(x => x.cs.gamma).filter(fin))) : [];
+    const cal = q ? q.map(g => mean(g.map(x => x.cs.cal).filter(fin))) : [];
     body = `<div class="label">Part 1 · Yourself</div><h1>A better test: item by item</h1>
-      <p class="prompt">Instead of one global guess, use the round 2 confidence ratings. Do lower scorers show worse resolution, i.e. less difference between their confidence when right and when wrong?</p>${enough(d.list.length, 12)}
-      ${legend([{ name:'Resolution (confidence right − wrong)', color:COL.accent }, { name:'Bias (confidence − accuracy)', color:COL.grey }])}
-      ${q ? barChart({ groups:qlab, series:[{ name:'Resolution', color:COL.accent, vals }, { name:'Bias', color:COL.grey, vals:bias }], y0:-10, y1:40, yTicks:tick(-10, 40, 10), yLabel:'Points', vFmt:v => (v >= 0 ? '+' : '') + Math.round(v) }) : '<p class="muted">Needs at least four students.</p>'}
-      ${tutor('This is the more nuanced framing from Lecture 2: low performers have less reliable signal to monitor. If the orange bars rise from left to right, there is some real difference in resolution, not just a statistical artefact. Trust policy rule 1: when can self-assessment be trusted, and what should replace it when it can\'t?')}`;
+      <p class="prompt">Instead of one global guess, use the round 2 confidence ratings. Do lower scorers show worse resolution, i.e. a weaker gamma correlation between their confidence and being right?</p>${enough(d.list.length, 12)}
+      ${q ? `<div class="label" style="margin-top:14px">Resolution (gamma)</div>` + barChart({ groups:qlab, series:[{ name:'Resolution', color:COL.accent, vals }], y0:-.25, y1:1, yTicks:tick(-.25, 1, .25), yLabel:'Gamma', vFmt:fmtG })
+        + `<div class="label" style="margin-top:14px">Calibration (confidence − accuracy)</div>` + barChart({ groups:qlab, series:[{ name:'Calibration', color:COL.grey, vals:cal }], y0:-10, y1:40, yTicks:tick(-10, 40, 10), yLabel:'Points', vFmt:v => (v >= 0 ? '+' : '') + Math.round(v) })
+        + `<p class="tiny">Students with no gamma (all right, all wrong, or one confidence level) are left out of the resolution bars.</p>` : '<p class="muted">Needs at least four students.</p>'}
+      ${tutor('This is the more nuanced framing from Lecture 2: low performers have less reliable signal to monitor. If the resolution bars rise from left to right, there is some real difference in resolution, not just a statistical artefact. Trust policy rule 1: when can self-assessment be trusted, and what should replace it when it can\'t?')}`;
   }
   return t.html + body;
 }
