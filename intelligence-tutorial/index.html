@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Is It An Intelligence?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23e64626'/%3E%3C/svg%3E">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --accent:#e64626; --accent-dark:#b8321a; --accent-soft:#fdece7;
+  --ink:#000000; --muted:#414141; --light:#8a8a8a; --line:#d9d9d9; --soft:#f6f6f6; --bg:#ffffff;
+  --serif:'Times New Roman', Times, serif;
+  --mono:ui-monospace,'SF Mono','JetBrains Mono',Consolas,monospace;
+  --sans:Arial,'Helvetica Neue',Helvetica,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.45;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+input{font:inherit}
+.top{border-bottom:1px solid var(--line)}
+.top-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--mono);font-size:13px;color:var(--accent)}
+.brand b{color:var(--muted);font-weight:400}
+.tag{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);padding:4px 10px}
+.wrap{max-width:640px;margin:0 auto;padding:24px 18px 80px}
+.wrap.host{max-width:1280px}
+h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1;margin:0 0 10px}
+h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.15;margin:0 0 8px}
+h3{font-family:var(--serif);font-weight:400;font-size:20px;margin:0 0 6px}
+.label{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.tiny{font-size:12.5px;color:var(--light)}
+.lede{font-size:18px;color:var(--muted);margin-bottom:18px}
+.card{border:1px solid var(--line);padding:20px;margin:0 0 16px;background:#fff}
+.card.soft{background:var(--soft)}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:1px solid var(--accent);padding:12px 18px;font-size:15px;text-decoration:none;text-align:center}
+.btn:hover{background:var(--accent-dark);border-color:var(--accent-dark)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.small{padding:7px 12px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.block{display:block;width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+.prog{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between}
+.bar{height:3px;background:var(--line);margin-bottom:22px}
+.bar i{display:block;height:3px;background:var(--accent)}
+.q{font-family:var(--serif);font-size:26px;line-height:1.2;margin:4px 0 20px}
+.opts{display:grid;gap:10px}
+.opt{border:1px solid var(--line);background:#fff;padding:16px;text-align:left;font-size:17px}
+.opt:hover{border-color:var(--ink)}
+.opt.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.chips{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.chips.five{grid-template-columns:repeat(5,1fr)}
+.chip{border:1px solid var(--line);background:#fff;padding:14px 0;font-family:var(--mono);font-size:15px}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.anch{display:flex;justify-content:space-between;font-size:12px;color:var(--light);margin-top:6px}
+.sub{margin-top:22px}
+.txt{width:100%;font-size:20px;padding:14px;border:1px solid var(--line);outline:none}
+.txt:focus{border-color:var(--accent)}
+.center{text-align:center}
+.big-wait{padding:50px 10px;text-align:center}
+.big-wait h1{margin-bottom:8px}
+.dotpulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);animation:p 1.3s infinite;margin-right:8px;vertical-align:middle}
+@keyframes p{0%{opacity:.25}50%{opacity:1}100%{opacity:.25}}
+.teams{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.teambtn{border:1px solid var(--line);background:#fff;padding:22px 10px;font-family:var(--serif);font-size:24px}
+.teambtn:hover{border-color:var(--accent);color:var(--accent)}
+.stat{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.stat:first-of-type{border-top:0}
+.stat b{font-family:var(--mono);font-weight:400;color:var(--accent);white-space:nowrap}
+.titem{border-top:1px solid var(--line);padding:14px 0}
+.titem .tq{font-family:var(--serif);font-size:19px;margin-bottom:8px}
+.titem .opts{grid-template-columns:1fr 1fr}
+.titem .opt{padding:12px;font-size:15px}
+.adv{border-left:3px solid var(--accent);background:var(--accent-soft);padding:14px 16px;margin:0 0 18px}
+.adv .v{font-family:var(--serif);font-size:30px}
+input[type=range]{width:100%;accent-color:var(--accent);height:34px}
+.readout{font-family:var(--serif);font-size:28px;text-align:center;margin:8px 0}
+.banner{border:1px solid var(--accent);background:var(--accent-soft);padding:12px 14px;margin-bottom:14px;font-size:14px}
+.banner pre{background:#fff;border:1px solid var(--line);padding:8px;margin-top:8px;font-size:12px;overflow:auto}
+
+/* ---------- host ---------- */
+.hostgrid{display:grid;grid-template-columns:1fr;gap:16px}
+.join{display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);padding:14px 18px}
+.join #qr{width:116px;height:116px}
+.join #qr img,.join #qr canvas{width:116px!important;height:116px!important}
+.joinurl{font-family:var(--mono);font-size:17px;word-break:break-all}
+.code{font-family:var(--serif);font-size:44px;line-height:1;color:var(--accent)}
+.nbig{font-family:var(--serif);font-size:44px;line-height:1;text-align:right}
+.phases{display:flex;gap:4px;flex-wrap:wrap}
+.ph{border:1px solid var(--line);background:#fff;padding:6px 10px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.ph.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.ph.done{color:var(--ink);border-color:#bbb}
+.ph.h2{border-style:dashed}
+.stage{border:1px solid var(--line);padding:26px 30px;min-height:520px}
+.stage h1{font-size:40px}
+.prompt{font-family:var(--serif);font-size:23px;color:var(--muted);margin:2px 0 16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1px solid var(--line);background:#fff;padding:7px 12px;font-family:var(--mono);font-size:12px}
+.tab.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:6px 0 4px}
+.legend span i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:middle}
+.keystats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.ks{border-top:2px solid var(--ink);padding-top:8px}
+.ks .n{font-family:var(--serif);font-size:34px;line-height:1.1}
+.ks .l{font-size:13.5px;color:var(--muted)}
+.tutor{margin-top:18px;border-left:3px solid var(--line);padding:8px 14px;font-size:14px;color:var(--muted)}
+.tutor b{font-family:var(--mono);font-weight:400;font-size:11.5px;color:var(--accent);display:block;margin-bottom:2px;text-transform:uppercase}
+.progress-teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+.pt{border:1px solid var(--line);padding:12px}
+.pt .tn{font-family:var(--serif);font-size:22px}
+.pt .bar{margin:8px 0 0}
+.lb{width:100%;border-collapse:collapse;font-size:18px}
+.lb td,.lb th{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}
+.lb th{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--muted)}
+.lb td.r,.lb th.r{text-align:right;font-family:var(--mono)}
+.lb tr:first-child td{font-weight:bold}
+.controls{border-top:1px solid var(--line);padding-top:14px}
+body.present .controls,body.present .tutor{display:none}
+.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media (max-width:700px){
+  .stage{padding:16px}
+  .stage h1{font-size:30px}
+  .prompt{font-size:19px}
+  .code,.nbig{font-size:32px}
+}
+
+/* ---------- intelligence tutorial additions ---------- */
+.likert{display:grid;gap:8px}
+.likert .opt{padding:13px 16px;font-size:16px}
+.sr{border-top:1px solid var(--line);padding:14px 0}
+.sr .st{font-size:17px;margin-bottom:8px}
+.chips.seven{grid-template-columns:repeat(7,1fr)}
+.timer{font-family:var(--mono);font-size:13px;color:var(--accent);border:1px solid var(--accent);padding:3px 8px;white-space:nowrap}
+.timer.low{background:var(--accent);color:#fff}
+.series{font-family:var(--serif);font-size:34px;letter-spacing:.02em;margin:6px 0 18px}
+.rotpair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0 16px}
+.rotpair div{border:1px solid var(--line);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+.rotpair svg{width:80%;height:80%}
+.rotpair .cap{font-family:var(--mono);font-size:11px;color:var(--light);text-align:center;margin-top:4px}
+.autlist{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+.autlist span{border:1px solid var(--line);padding:5px 10px;font-size:14px;background:var(--soft)}
+.brief{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 14px;margin:0 0 16px;font-size:15px}
+.crit{border-top:1px solid var(--line);padding:12px 0}
+.crit .cn{font-family:var(--serif);font-size:19px}
+.crit .cd{font-size:13.5px;color:var(--muted);margin:2px 0 8px}
+.vchips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.vchips .chip{font-family:var(--sans);font-size:13px;padding:10px 0}
+textarea.txt{font-size:16px;min-height:96px;resize:vertical}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+.grid6 .c{border:1px solid var(--line);padding:12px 14px}
+.grid6 .c .n{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.grid6 .c h3{margin:2px 0 4px}
+.grid6 .c p{font-size:14px;color:var(--muted)}
+.vt td{font-size:15px;vertical-align:top}
+.vt .sym{font-family:var(--mono);text-align:center;font-size:17px}
+.sym.meets{color:#1d7a3a}.sym.partly{color:#b07d00}.sym.fails{color:var(--accent)}.sym.unknown{color:var(--light)}
+.oneoff{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.oneoff span{border:1px solid var(--line);padding:6px 10px;font-size:15px}
+.clock{font-family:var(--serif);font-size:56px;line-height:1}
+@media (max-width:900px){ .grid6{grid-template-columns:1fr 1fr} }
+@media (max-width:600px){ .grid6{grid-template-columns:1fr} .vchips .chip{font-size:12px} }
+
+textarea{font:inherit}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand"><span id="course">PSYC2016</span> <b>· Intelligence tutorial</b></div>
+  <div class="tag" id="tag">Tutorial</div>
+</div></header>
+<main id="app"></main>
+
+<script type="module">
+/* =====================================================================
+   CONFIG
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyBaz1nWglmiKv9W_MrbulS__h8aieCPPE8",
+  authDomain: "meetings-b9e5e.firebaseapp.com",
+  projectId: "meetings-b9e5e",
+  storageBucket: "meetings-b9e5e.firebasestorage.app",
+  messagingSenderId: "368747163289",
+  appId: "1:368747163289:web:29719439e3b61126331208"
+};
+const ROOT = 'intel_tutorial';
+const TEAM_NAMES = ['A','B','C','D','E','F','G','H'];
+
+/* =====================================================================
+   ITEMS
+   Correct option is always listed first (display order is shuffled per student).
+   p = rough expected proportion correct (used only for simulated data).
+   ===================================================================== */
+const POLL = 'Emotional intelligence matters more than IQ for success in life.';
+const POLL_OPTS = ['Strongly disagree','Disagree','Unsure','Agree','Strongly agree'];
+
+// Self-report block. rev = reverse-keyed. Trait EI items are written for this demo (not from a published scale).
+const SR = [
+  { id:'te1', scale:'tei', q:'I can usually tell how other people are feeling.' },
+  { id:'te2', scale:'tei', q:'I find it easy to put my feelings into words.' },
+  { id:'te3', scale:'tei', q:'When I\'m upset, I can usually calm myself down.' },
+  { id:'te4', scale:'tei', q:'I\'m good at cheering other people up.' },
+  { id:'te5', scale:'tei', q:'I often can\'t work out why I feel the way I do.', rev:true },
+  { id:'te6', scale:'tei', q:'I handle other people\'s emotions well.' },
+  { id:'es1', scale:'stab', q:'I worry about things a lot.', rev:true },
+  { id:'es2', scale:'stab', q:'I get stressed out easily.', rev:true },
+  { id:'es3', scale:'stab', q:'I am relaxed most of the time.' },
+  { id:'cr1', scale:'cr', q:'I am a creative person.' }
+];
+
+// Gc: vocabulary, fixed order easy to hard, 75 s
+const VOCAB = [
+  { id:'v1', w:'BENEVOLENT', o:['Kind','Wealthy','Ancient','Noisy'], p:.95 },
+  { id:'v2', w:'FRUGAL', o:['Thrifty','Fragile','Fruity','Friendly'], p:.9 },
+  { id:'v3', w:'LOQUACIOUS', o:['Talkative','Quiet','Clever','Lonely'], p:.75 },
+  { id:'v4', w:'EPHEMERAL', o:['Short-lived','Ghostly','Eternal','Delicate'], p:.7 },
+  { id:'v5', w:'LACONIC', o:['Using few words','Lazy','Milky','Emotional'], p:.55 },
+  { id:'v6', w:'SANGUINE', o:['Optimistic','Bloodthirsty','Wise','Sorrowful'], p:.45 },
+  { id:'v7', w:'PERFUNCTORY', o:['Done without care','Essential','Fragrant','Punctual'], p:.45 },
+  { id:'v8', w:'OBDURATE', o:['Stubborn','Obvious','Overweight','Gentle'], p:.4 },
+  { id:'v9', w:'RECONDITE', o:['Obscure','Rebuilt','Forgiving','Recent'], p:.3 },
+  { id:'v10', w:'INSOUCIANT', o:['Carefree','Rude','Insulting','Anxious'], p:.3 }
+];
+// Gf: number series, fixed order easy to hard, 120 s
+const SERIES = [
+  { id:'s1', q:'2, 4, 8, 16', a:32, p:.97 },
+  { id:'s2', q:'3, 7, 11, 15', a:19, p:.95 },
+  { id:'s3', q:'1, 4, 9, 16, 25', a:36, p:.9 },
+  { id:'s4', q:'81, 27, 9, 3', a:1, p:.85 },
+  { id:'s5', q:'1, 1, 2, 3, 5, 8', a:13, p:.8 },
+  { id:'s6', q:'4, 6, 9, 13, 18', a:24, p:.75 },
+  { id:'s7', q:'2, 6, 12, 20, 30', a:42, p:.6 },
+  { id:'s8', q:'2, 3, 5, 9, 17', a:33, p:.55 },
+  { id:'s9', q:'1, 2, 6, 24, 120', a:720, p:.5 },
+  { id:'s10', q:'5, 10, 8, 16, 14', a:28, p:.45 },
+  { id:'s11', q:'7, 10, 16, 25, 37', a:52, p:.4 },
+  { id:'s12', q:'1, 3, 2, 6, 5, 15, 14', a:42, p:.35 }
+];
+// Gv: mental rotation (same or mirror image), 60 s
+const ROT = (() => {
+  const glyphs = ['F','R','G','J','P','L','4','7'], angles = [40,80,120,160,200,240,280,320], r = rng(hash('rotation'));
+  const out = [];
+  for (let i = 0; i < 24; i++) out.push({ id:'r' + (i + 1), g:glyphs[i % 8], ang:angles[Math.floor(r() * 8)], mirror: (i + Math.floor(i / 8)) % 2 === 1 });
+  return shuffle(out, rng(hash('rotorder')));
+})();
+// Ability EI: emotion understanding (written for this demo, in the style of understanding-branch items)
+const EU = [
+  { id:'u1', q:'Maya studied hard for weeks. Her result came back far lower than she expected, and then she learned that a classmate who barely studied did better. She most likely felt…', o:['Disappointed and resentful','Ashamed and guilty','Surprised and relieved','Calm and indifferent'], p:.85 },
+  { id:'u2', q:'Someone you relied on deliberately broke an important promise, and it can\'t be undone. This is most likely to produce…', o:['A sense of betrayal','Embarrassment','Nostalgia','Envy'], p:.85 },
+  { id:'u3', q:'Which pair of emotions combines most closely into contempt?', o:['Anger and disgust','Fear and surprise','Sadness and joy','Trust and anticipation'], p:.6 },
+  { id:'u4', q:'Josh is anxious about a job interview. It is cancelled without explanation and rescheduled for an unknown date. His anxiety will most likely…', o:['Persist or grow: the threat remains and is now less predictable','Turn into joy','Disappear at once','Turn into guilt'], p:.75 },
+  { id:'u5', q:'Kai feels he behaved badly towards a friend and wants to apologise and make it right. He is most likely feeling…', o:['Guilt','Shame','Embarrassment','Jealousy'], p:.55 },
+  { id:'u6', q:'Lena\'s friend cancels plans at the last minute. The first time, Lena is mildly irritated. If it keeps happening, her feeling is most likely to move towards…', o:['Resentment','Gratitude','Fear','Surprise'], p:.85 },
+  { id:'u7', q:'Which emotion most typically involves wanting something that another person has?', o:['Envy','Jealousy','Pity','Pride'], p:.45 },
+  { id:'u8', q:'After a long, tense wait for medical test results, Sam learns everything is fine. The emotion he is most likely to feel first is…', o:['Relief','Pride','Hope','Contentment'], p:.8 },
+  { id:'u9', q:'Sadness is most typically triggered by…', o:['The loss of something valued','The threat of future harm','Someone blocking your goal','Something unexpected'], p:.75 },
+  { id:'u10', q:'Priya is praised in front of the team for a project that was mostly her colleague\'s work. She is most likely to feel…', o:['Uncomfortable: embarrassed and a little guilty','Proud and content','Angry at her boss','Envious of her colleague'], p:.7 }
+];
+const T_LIMIT = { voc:75, ser:120, rot:60, aut:120 };
+
+// Brick uses: keyword categories (checked in order). Anything unmatched is "Other" and counts as a one-off.
+const AUT_CATS = [
+  ['Doorstop', /door/],
+  ['Paperweight', /paper/],
+  ['Weapon', /weapon|throw|hit |hit$|smash|break|window|attack|defen[cs]e|kill|murder|fight|hurt|riot|brick (some|a )/],
+  ['Exercise', /gym|exercis|lift|work ?out|dumbbell|curl|squat|weights?$|weights? (for|to)/],
+  ['Step / height', /step|stand on|stool|booster|taller|reach/],
+  ['Hold something down', /hold .*down|weigh|anchor|tarp|tent|ballast|keep .* from blowing/],
+  ['Garden', /garden|plant|flower|edg|pot\b|lawn|compost/],
+  ['Building', /build|wall|house|construct|chimney|fireplace|oven|bbq|barbe?cue|path|patio|shed|tower|bridge|pillar|foundation|fort|castle/],
+  ['Hammer / tool', /hammer|nail|crush|grind|tool|nut|pound|mash|pestle|sharpen|scrape/],
+  ['Furniture / shelf', /shelf|shelves|book|table|stand|seat|chair|bench|bed\b|raise|prop|leg|furniture|desk/],
+  ['Art / decoration', /art|paint|sculpt|carv|decor|ornament|draw|chalk|pigment|sign|graffiti|statue|colou?r/],
+  ['Car / wheel chock', /\bcar\b|wheel|chock|jack|tyre|tire/],
+  ['Heat / cooking', /heat|warm|cook|grill|press|panini|bake|hot\b|toast|fire/],
+  ['Water / sink', /water|sink|fish|aquarium|toilet|cistern|flush|pond|float|boat|drown/],
+  ['Toy / game', /toy|game|play|domino|lego|jenga|doll|pet\b|pet rock/],
+  ['Measure / marker', /measure|ruler|mark|goal|post\b|boundar/]
+];
+function autCat(text){ const t = ' ' + String(text || '').toLowerCase().trim() + ' '; for (const [name, re] of AUT_CATS){ if (re.test(t.trim())) return name; } return 'Other'; }
+
+// Courtroom candidates, in team order
+const CANDS = [
+  { id:'tei', name:'Trait emotional intelligence', what:'Self-reported emotional skills and dispositions (e.g. TEIQue, Bar-On EQ-i). Today: the six "I can usually tell…" items.', evidence:'Reveal 1c (trait EI vs personality and g) and 1d (did self-ratings predict the task?). Lecture 7.', lecture:'Largely personality repackaged: trait EI correlates around .85 with the general factor of personality, and adds little prediction once neuroticism and extraversion are controlled. A useful summary of emotion-relevant personality facets, not a new intelligence. (Lecture 7)' },
+  { id:'aei', name:'Ability emotional intelligence', what:'Emotional problem-solving with right and wrong answers (e.g. MSCEIT). Today: the ten emotion-understanding questions.', evidence:'Reveal 1c: ability EI vs g and personality. Lecture 7, MacCann et al. (2020).', lecture:'Partially meets the criteria. A modest correlation with g (.10 to .30), small but non-zero incremental validity (about 0.7 to 2.3% of academic-performance variance beyond intelligence and the Big Five). Real, but modest. (Lectures 7 and 8)' },
+  { id:'cre', name:'Creativity', what:'Producing ideas that are both novel and useful. Today: the brick task (divergent thinking).', evidence:'Reveal 2a to 2c: fluency confound, scoring choices, creativity vs g. Lecture 9.', lecture:'The strongest candidate: distinct measurement traditions, an openness-to-experience signature and its own network dynamics (default mode with executive control). But partly dependent on g, and not a single unitary faculty. (Lecture 9)' },
+  { id:'pra', name:'Practical intelligence', what:'Solving ill-defined, real-world problems; Sternberg\'s tacit knowledge ("knowing how").', evidence:'Lecture 8: tacit knowledge inventories, Gottfredson (2003), Carraher et al. (1985).', lecture:'Fails several criteria: measurement problems, unclear discriminant validity (TKIs correlate .20 to .35 with g in larger samples), and conflation with experience and personality. "IQ doesn\'t measure everything" is true; "a distinct practical intelligence" is not established. (Lecture 8)' },
+  { id:'soc', name:'Social cognition (theory of mind)', what:'Attributing mental states to others; understanding that beliefs can differ from your own.', evidence:'Lecture 8: false-belief tasks, lesion and autism dissociations, Baron-Cohen.', lecture:'Meets several criteria: a developmental trajectory, partly distinct neural networks, clinical dissociations. But it may not form one unitary factor: better framed as "social cognitive abilities", plural. (Lecture 8)' },
+  { id:'mus', name:'Musical intelligence', what:'One of Gardner\'s multiple intelligences: pitch, rhythm, musical memory and composition.', evidence:'Lecture 4: Gardner\'s criteria and the psychometric critique.', lecture:'Gardner\'s framework has limited psychometric support: his "intelligences" correlate with each other, consistent with g, and the criteria are subjective. Musical ability is real, but whether it is a separate intelligence, rather than a talent plus g plus practice, is not established. (Lecture 4)' },
+  { id:'aip', name:'"AI-prompting intelligence"', what:'A newly proposed ability to get good results out of AI tools: framing problems, judging outputs, iterating.', evidence:'Not covered in lectures. Apply the six criteria from scratch.', lecture:'No lecture verdict: this one is yours. Most new claims like this fail on structure and incremental validity (is it just g plus Gc plus experience?). Note the Lecture 9 point on human–AI complementarity: knowing when to trust the machine is a metacognitive skill.' },
+  { id:'met', name:'Metacognitive ability', what:'Knowing what you know: how well your confidence tracks your accuracy (e.g. meta-d′, M-ratio).', evidence:'Lectures 1 to 3, and the metacognition tutorial.', lecture:'Measurable with signal-detection methods and only modestly related to task performance, but how domain-general it is (one ability, or many domain-specific ones) is still debated. (Lectures 1 to 3, 9)' }
+];
+const CRIT = [
+  { id:'c1', n:'Structure', d:'Does it form a factor separable from g?' },
+  { id:'c2', n:'Measurement', d:'Can we measure it with right and wrong answers?' },
+  { id:'c3', n:'Incremental validity', d:'Does it predict outcomes beyond g and personality?' },
+  { id:'c4', n:'Development', d:'Does it change in systematic ways across the lifespan?' },
+  { id:'c5', n:'Neural dissociability', d:'Does it depend on partly distinct brain systems?' },
+  { id:'c6', n:'Individual differences', d:'Does it behave like a stable cognitive trait?' }
+];
+const VERD = [['meets','Meets','✓'],['partly','Partly','½'],['fails','Fails','✗'],['unknown','No evidence','?']];
+const OVERALL = [['yes','Yes, an intelligence'],['partly','Partly / unclear'],['no','No: something else']];
+
+const PHASES = [
+  { id:'lobby', label:'Lobby' },
+  { id:'pre',   label:'Hook: EQ vs IQ', student:true },
+  { id:'bat',   label:'The battery', student:true },
+  { id:'rv1',   label:'Reveal: g & EI', reveal:[['pm','1a · The positive manifold'],['mx','1b · Everything'],['ei','1c · Two EIs'],['me','1d · Do you know your EI?']] },
+  { id:'rv2',   label:'Reveal: creativity', reveal:[['flu','2a · More = original?'],['cat','2b · What the room said'],['cg','2c · Creativity and g']] },
+  { id:'court', label:'Scorecard', student:true },
+  { id:'cross', label:'Cross-examination', reveal:[['grid','Scorecards'],['lect','The lectures\' verdicts']] },
+  { id:'post',  label:'Vote again', student:true },
+  { id:'end',   label:'Wrap-up' }
+];
+
+/* =====================================================================
+   UTILITIES
+   ===================================================================== */
+function $(s){ return document.querySelector(s); }
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function mean(a){ return a.length ? a.reduce((s, x) => s + x, 0) / a.length : NaN; }
+function sd(a){ const m = mean(a); return a.length > 1 ? Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)) : NaN; }
+function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
+function fin(x){ return Number.isFinite(x); }
+function hash(s){ let h = 1779033703 ^ s.length; for (let i = 0; i < s.length; i++){ h = Math.imul(h ^ s.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; } return h >>> 0; }
+function rng(seed){ let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, r){ const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function randn(r){ let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const logistic = x => 1 / (1 + Math.exp(-x));
+const logit = p => Math.log(p / (1 - p));
+function norm(s){ return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+function deepMerge(t, s){ const out = Array.isArray(t) ? t.slice() : { ...(t || {}) }; for (const k in s){ const v = s[k]; if (v && typeof v === 'object' && !Array.isArray(v)) out[k] = deepMerge(out[k], v); else out[k] = v; } return out; }
+function fmtNum(x){ if (!fin(x)) return '–'; const ax = Math.abs(x); const d = ax >= 100 ? 0 : ax >= 10 ? 1 : 2; return Number(x.toFixed(d)).toLocaleString('en-AU'); }
+const fmtR = r => fin(r) ? (r < 0 ? '−' : '') + Math.abs(r).toFixed(2).replace(/^0/, '') : '–';
+const pct0 = x => fin(x) ? Math.round(x * 100) + '%' : '–';
+function pearson(xs, ys){
+  const p = []; for (let i = 0; i < xs.length; i++) if (fin(xs[i]) && fin(ys[i])) p.push([xs[i], ys[i]]);
+  if (p.length < 5) return { r:NaN, n:p.length };
+  const mx = mean(p.map(q => q[0])), my = mean(p.map(q => q[1]));
+  let sxy = 0, sxx = 0, syy = 0; p.forEach(([x, y]) => { sxy += (x - mx) * (y - my); sxx += (x - mx) ** 2; syy += (y - my) ** 2; });
+  return { r: sxx && syy ? sxy / Math.sqrt(sxx * syy) : NaN, n:p.length };
+}
+// 95% "noise band": |r| needed for p < .05 with n people (t approximated at 2.05)
+const rCrit = n => n > 3 ? 2.05 / Math.sqrt(2.05 ** 2 + n - 2) : NaN;
+function fmtTime(s){ s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+/* =====================================================================
+   DATA LAYER (Firestore, or localStorage for offline rehearsal)
+   ===================================================================== */
+async function makeFirebaseDB(code){
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+  const fs = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+  const app = initializeApp(firebaseConfig, 'intel');
+  const db = fs.initializeFirestore(app, { experimentalForceLongPolling: true });
+  const sRef = fs.doc(db, ROOT, code);
+  const rCol = fs.collection(db, ROOT, code, 'resp');
+  const tCol = fs.collection(db, ROOT, code, 'teams');
+  const colSnap = cb => snap => { const o = {}; snap.forEach(d => { o[d.id] = d.data(); }); cb(o); };
+  return {
+    setSession: p => fs.setDoc(sRef, p, { merge:true }),
+    onSession: (cb, err) => fs.onSnapshot(sRef, s => cb(s.exists() ? s.data() : null), err),
+    setResp: (id, p) => fs.setDoc(fs.doc(rCol, id), p, { merge:true }),
+    onResps: (cb, err) => fs.onSnapshot(rCol, colSnap(cb), err),
+    setTeam: (id, p) => fs.setDoc(fs.doc(tCol, id), p, { merge:true }),
+    onTeams: (cb, err) => fs.onSnapshot(tCol, colSnap(cb), err),
+    getSession: async () => { const d = await fs.getDoc(sRef); return d.exists() ? d.data() : null; },
+    getTeams: async () => { const snap = await fs.getDocs(tCol); const o = {}; snap.forEach(d => { o[d.id] = d.data(); }); return o; },
+    clear: async () => {
+      for (const col of [rCol, tCol]){ const snap = await fs.getDocs(col); await Promise.all(snap.docs.map(d => fs.deleteDoc(d.ref))); }
+      await fs.deleteDoc(sRef);
+    }
+  };
+}
+function makeLocalDB(code){
+  const KEY = 'int_local_' + code;
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || { session:null, resp:{}, teams:{} }; } catch(e){ return { session:null, resp:{}, teams:{} }; } };
+  const subs = { session:[], resp:[], teams:[] };
+  const emit = () => { const d = read(); subs.session.forEach(f => f(d.session)); subs.resp.forEach(f => f(d.resp || {})); subs.teams.forEach(f => f(d.teams || {})); };
+  window.addEventListener('storage', e => { if (e.key === KEY) emit(); });
+  const write = fn => { const d = read(); fn(d); try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} setTimeout(emit, 0); return Promise.resolve(); };
+  const sub = (k, cb) => { subs[k].push(cb); setTimeout(() => { const d = read(); cb(k === 'session' ? d.session : (d[k] || {})); }, 0); return () => {}; };
+  return {
+    setSession: p => write(d => { d.session = deepMerge(d.session || {}, p); }),
+    onSession: cb => sub('session', cb),
+    setResp: (id, p) => write(d => { d.resp = d.resp || {}; d.resp[id] = deepMerge(d.resp[id] || {}, p); }),
+    onResps: cb => sub('resp', cb),
+    setTeam: (id, p) => write(d => { d.teams = d.teams || {}; d.teams[id] = deepMerge(d.teams[id] || {}, p); }),
+    onTeams: cb => sub('teams', cb),
+    getSession: async () => read().session,
+    getTeams: async () => read().teams || {},
+    clear: () => { try { localStorage.removeItem(KEY); } catch(e){} setTimeout(emit, 0); return Promise.resolve(); }
+  };
+}
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const params = new URLSearchParams(location.search);
+const S = {
+  code: (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10),
+  host: params.get('view') === 'host',
+  local: params.get('local') === '1',
+  pid: null, db: null, session: null, resps: {}, teams: {},
+  me: {}, sim: null, bootAt: Date.now(), lastKey: '', ui: { tab:{}, error:'', sr:{} }, timer: null
+};
+function getPid(){
+  const k = 'int_pid_' + S.code + (S.local ? '_l' : '');
+  let v = null; try { v = sessionStorage.getItem(k) || (S.local ? null : localStorage.getItem(k)); } catch(e){}
+  if (!v){ v = 'p' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
+  try { sessionStorage.setItem(k, v); if (!S.local) localStorage.setItem(k, v); } catch(e){}
+  return v;
+}
+const curPhase = () => (S.session && S.session.phase) || 'lobby';
+function allResps(){ return { ...S.resps, ...(S.sim ? S.sim.resps : {}) }; }
+function allTeams(){ return { ...(S.sim ? S.sim.teams : {}), ...S.teams }; } // a real team's card wins over a simulated one
+function students(){ return Object.entries(allResps()).filter(([, r]) => r && r.team).map(([id, r]) => ({ id, ...r })); }
+function nTeams(){ return (S.session && S.session.nTeams) || 6; }
+function candFor(T){ return CANDS[TEAM_NAMES.indexOf(T) % CANDS.length]; }
+function joinUrl(){ const u = new URL(location.href); u.search = ''; u.searchParams.set('s', S.code); if (S.local) u.searchParams.set('local', '1'); return u.toString(); }
+
+function showError(err){
+  const denied = /permission|insufficient/i.test((err && err.message) || '');
+  S.ui.error = `<div class="banner"><strong>Can't reach the live database.</strong> ${denied ? 'Firestore rejected the request: the security rules need to allow this tutorial\'s collection.' : 'Network or configuration error.'}
+    <div class="tiny">${esc((err && err.message) || err)}</div>
+    ${denied ? `<pre>match /${ROOT}/{session} {\n  allow read, write: if true;\n  match /{rest=**} {\n    allow read, write: if true;\n  }\n}</pre>` : ''}</div>`;
+  render(true);
+}
+
+/* =====================================================================
+   SCORING
+   ===================================================================== */
+function srScore(s, scale){
+  const v = SR.filter(it => it.scale === scale).map(it => { const x = s.sr && s.sr[it.id]; return fin(x) ? (it.rev ? 8 - x : x) : NaN; }).filter(fin);
+  return v.length ? mean(v) : NaN;
+}
+function cnt(o, items, f){ return items.filter(it => o && o[it.id] && f(o[it.id])).length; }
+function rawScores(s){
+  const out = {
+    voc: s.vocEnd ? cnt(s.voc, VOCAB, a => a.ok) : NaN,
+    ser: s.serEnd ? cnt(s.ser, SERIES, a => a.ok) : NaN,
+    rotC: s.rotEnd ? cnt(s.rot, ROT, a => a.ok) : NaN,
+    rotW: s.rotEnd ? cnt(s.rot, ROT, a => !a.ok) : NaN,
+    eu: cnt(s.eu, EU, () => true) === EU.length ? cnt(s.eu, EU, a => a.ok) : NaN,
+    euPred: fin(s.euPred) ? s.euPred : NaN,
+    tei: srScore(s, 'tei'), stab: srScore(s, 'stab'), cr: srScore(s, 'cr'),
+    aut: Array.isArray(s.aut) ? s.aut.filter(x => String(x).trim().length > 1) : null
+  };
+  out.rot = fin(out.rotC) ? out.rotC - out.rotW : NaN; // net correct, corrects for 50/50 guessing
+  out.flu = out.aut && s.autEnd ? out.aut.length : NaN;
+  return out;
+}
+// Class-level table: g composite and creativity scores need the whole class
+function classTable(list){
+  list = list || students();
+  const rows = list.map(s => ({ id:s.id, sim:!!s.sim, ...rawScores(s) }));
+  const z = k => { const v = rows.map(r => r[k]).filter(fin), m = mean(v), d = sd(v); rows.forEach(r => { r['z_' + k] = fin(r[k]) && d > 0 ? (r[k] - m) / d : NaN; }); };
+  ['voc','ser','rot'].forEach(z);
+  rows.forEach(r => { const zs = [r.z_voc, r.z_ser, r.z_rot]; r.g = zs.every(fin) ? mean(zs) : NaN; });
+  // originality (uniqueness weighting): each idea scores 1 minus the share of people who had an idea in the same category.
+  // Ideas that match no category are treated as one-offs. "Rare" = a category used by fewer than 15% of people.
+  const did = rows.filter(r => r.aut && fin(r.flu));
+  const share = {}; did.forEach(r => { new Set(r.aut.map(autCat)).forEach(c => { share[c] = (share[c] || 0) + 1; }); });
+  Object.keys(share).forEach(c => share[c] /= Math.max(1, did.length));
+  rows.forEach(r => {
+    if (!r.aut || !fin(r.flu)){ r.orig = NaN; r.flex = NaN; r.origP = NaN; return; }
+    const cats = r.aut.map(autCat), one = 1 / Math.max(1, did.length);
+    r.orig = cats.reduce((a, c) => a + (1 - (c === 'Other' ? one : share[c])), 0);
+    r.rare = cats.filter(c => c === 'Other' || share[c] < .15).length;
+    r.flex = new Set(cats.filter(c => c !== 'Other')).size + cats.filter(c => c === 'Other').length;
+    r.origP = r.flu ? r.orig / r.flu : NaN;
+  });
+  return { rows, share, nAut: did.length };
+}
+const MEAS = [
+  ['voc','Vocabulary (Gc)'], ['ser','Number series (Gf)'], ['rot','Rotation (Gv)'],
+  ['eu','Emotion understanding (ability EI)'], ['tei','Trait EI (self-report)'], ['stab','Emotional stability (self-report)'],
+  ['flu','Brick uses: fluency'], ['orig','Brick uses: originality'], ['cr','"I am creative" (self-report)']
+];
+function corrOf(rows, a, b){ return pearson(rows.map(r => r[a]), rows.map(r => r[b])); }
+// first principal component of a correlation matrix (power iteration); returns loadings and share of variance
+function firstPC(R){
+  const k = R.length; let v = Array(k).fill(1 / Math.sqrt(k)), lam = 0;
+  for (let it = 0; it < 200; it++){ const w = R.map(row => row.reduce((s, x, j) => s + x * v[j], 0)); lam = Math.sqrt(w.reduce((s, x) => s + x * x, 0)); if (!lam) break; v = w.map(x => x / lam); }
+  if (v.reduce((s, x) => s + x, 0) < 0) v = v.map(x => -x);
+  return { load: v.map(x => x * Math.sqrt(lam)), share: lam / k };
+}
+function doneFor(s, ph){
+  switch (ph){
+    case 'pre': return fin(s.pre);
+    case 'bat': return !!s.autEnd;
+    case 'court': { const t = allTeams()[s.team]; return !!(t && t.done); }
+    case 'post': return fin(s.post);
+    default: return false;
+  }
+}
+
+/* =====================================================================
+   SIMULATED CLASS (never written to the database)
+   ===================================================================== */
+const SIM_AUT = [
+  ['doorstop', 'hold the door open', 'door stopper'], ['build a wall', 'build a house', 'make a pizza oven', 'build a bbq'],
+  ['weapon', 'throw it at someone', 'break a window', 'self defence'], ['paperweight', 'keep papers from flying away'],
+  ['gym weights', 'dumbbell', 'workout weight'], ['garden edging', 'plant pot', 'border for a flower bed'],
+  ['hammer', 'crack nuts', 'hammer in a nail'], ['step to reach a high shelf', 'stand on it to look taller'],
+  ['bookend', 'bookshelf with planks', 'prop up a wobbly table'], ['paint it as art', 'sculpture', 'draw with it like chalk'],
+  ['weigh down a tarp', 'anchor for a tent'], ['wheel chock for a car'], ['heat it up as a bed warmer', 'press a panini'],
+  ['save water in the toilet cistern', 'sink a fishing line'], ['pet rock', 'toy for a kid'], ['goal posts', 'mark a boundary'],
+  ['time capsule', 'pendulum', 'sound-proofing', 'exfoliate your feet', 'bury it for future archaeologists', 'pillow for a very stoic person', 'smuggle a note inside it', 'tiny podium for a hamster', 'keep a secret key under it', 'echo-location practice', 'test the strength of a trampoline', 'bribe for a gnome', 'teach a physics lesson on gravity', 'emergency hot water bottle', 'sense of humour test', 'ice-breaker at parties', 'symbol in a protest', 'save as a souvenir from a demolished house']
+];
+const SIM_PREV = [.7, .75, .55, .55, .3, .3, .3, .25, .3, .2, .2, .12, .1, .1, .08, .08, .3];
+const SIM_STUDY = [
+  'Give 300 people this test, an IQ battery and a Big Five measure, then see whether it predicts grades one year later after controlling for both.',
+  'Factor-analyse it with a broad CHC battery: does it form its own factor or load on g?',
+  'Test patients with focal brain lesions: can it be impaired while IQ is intact, and vice versa?',
+  'Follow children from 5 to 18 and check whether it develops on a different trajectory from fluid intelligence.',
+  'Check test–retest reliability over six months, and whether expert and consensus scoring agree.'
+];
+const SIM_SEED = 'sim-60'; // fixed so rehearsals show the same, representative class
+function simulateClass(n, nT){
+  const r = rng(hash(SIM_SEED));
+  const resps = {}, teams = {};
+  for (let i = 0; i < n; i++){
+    const g = randn(r), P = randn(r), O = randn(r), E = randn(r), spd = randn(r);
+    const s = { team: TEAM_NAMES[i % nT], sim:true, sr:{}, voc:{}, ser:{}, rot:{}, eu:{}, vocEnd:true, serEnd:true, rotEnd:true, autEnd:true };
+    // latent task abilities: each loads on g (positive manifold) plus a specific part
+    const tV = .85 * g + .53 * randn(r), tS = .85 * g + .53 * randn(r), tR = .75 * g + .66 * randn(r);
+    VOCAB.forEach(it => { const ok = r() < logistic(logit(it.p) + 1.3 * tV); s.voc[it.id] = { c: ok ? 0 : 1 + Math.floor(r() * 3), ok }; });
+    const nS = clamp(Math.round(9 + 2 * tS + .5 * spd + .6 * randn(r)), 4, SERIES.length);
+    SERIES.slice(0, nS).forEach(it => { const ok = r() < logistic(logit(it.p) + 1.4 * tS); s.ser[it.id] = { v: ok ? it.a : it.a + 1, ok }; });
+    const nR = clamp(Math.round(15 + 3.5 * tR + 1.5 * spd + randn(r)), 6, ROT.length);
+    ROT.slice(0, nR).forEach(it => { s.rot[it.id] = { c: 0, ok: r() < clamp(logistic(1.3 + 1.1 * tR), .5, .99) }; });
+    // ability EI: modest g link, weak personality link; trait EI: mostly personality
+    const tEU = .4 * g + .05 * P + .9 * E;
+    EU.forEach(it => { const ok = r() < logistic(logit(it.p) + .9 * tEU); s.eu[it.id] = { c: ok ? 0 : 1 + Math.floor(r() * 3), ok }; });
+    const tTEI = .8 * P + .15 * E + .1 * g + .55 * randn(r);
+    SR.forEach(it => {
+      const lat = it.scale === 'tei' ? tTEI : it.scale === 'stab' ? .85 * P + .5 * randn(r) : .7 * O + .7 * randn(r);
+      const base = it.scale === 'stab' ? 4.1 : 4.8; let v = clamp(Math.round(base + 1.1 * lat + .7 * randn(r)), 1, 7);
+      s.sr[it.id] = it.rev ? 8 - v : v;
+    });
+    const actual = EU.filter(it => s.eu[it.id].ok).length;
+    s.euPred = clamp(Math.round(6.5 + .9 * tTEI + .15 * (actual - 7) + 1.2 * randn(r)), 0, 10);
+    // brick uses: fluency from openness (and a little g); rarer ideas more likely with high openness
+    const flu = clamp(Math.round(7 + 2.3 * (.55 * O + .35 * g + .55 * randn(r))), 2, 18);
+    const used = new Set(), list = [];
+    let guard = 0;
+    while (list.length < flu && guard++ < 200){
+      const w = SIM_PREV.map(p => Math.pow(p, clamp(1 - .35 * O, .35, 1.6)));
+      let u = r() * w.reduce((a, b) => a + b, 0), k = 0; while (u > w[k]){ u -= w[k]; k++; }
+      const opts = SIM_AUT[Math.min(k, SIM_AUT.length - 1)], t = opts[Math.floor(r() * opts.length)];
+      if (!used.has(t)){ used.add(t); list.push(t); }
+    }
+    s.aut = list;
+    s.pre = clamp(Math.round(3.6 + .6 * tTEI * .5 + randn(r) * .9), 1, 5);
+    s.post = clamp(Math.round(s.pre - .3 - r() * 1.1), 1, 5);
+    resps['sim' + i] = s;
+  }
+  for (let t = 0; t < nT; t++){
+    const T = TEAM_NAMES[t], c = candFor(T), card = {};
+    const bias = { tei:[3,0,2,3,3,0], aei:[1,0,1,3,3,1], cre:[1,1,1,0,0,0], pra:[2,2,2,3,3,3], soc:[1,1,3,0,0,1], mus:[2,1,3,0,1,0], aip:[3,1,3,3,3,3], met:[1,0,3,3,1,1] }[c.id];
+    CRIT.forEach((cr, j) => { const b = bias[j], k = r() < .7 ? b : Math.floor(r() * 4); card[cr.id] = VERD[k][0]; });
+    card.overall = { tei:'no', aei:'partly', cre:'partly', pra:'no', soc:'partly', mus:'partly', aip:'no', met:'partly' }[c.id];
+    card.study = SIM_STUDY[t % SIM_STUDY.length];
+    teams[T] = { card, done:true };
+  }
+  return { resps, teams };
+}
+
+/* =====================================================================
+   CHARTS (plain SVG)
+   ===================================================================== */
+const COL = { accent:'#e64626', ink:'#111111', grey:'#9a9a9a', light:'#f3a48f', dark:'#555555', pale:'#d9d9d9', neg:'#3d5a80' };
+function frame(o){
+  const W = o.W || 900, H = o.H || 440, m = { l:70, r:24, t:18, b:62, ...(o.m || {}) };
+  const sx = x => m.l + (x - o.x0) / (o.x1 - o.x0) * (W - m.l - m.r);
+  const sy = y => H - m.b - (y - o.y0) / (o.y1 - o.y0) * (H - m.t - m.b);
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" font-family="Arial, Helvetica, sans-serif">`;
+  (o.yTicks || []).forEach(t => { g += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(t)}" y2="${sy(t)}" stroke="#ececec"/><text x="${m.l - 10}" y="${sy(t) + 5}" text-anchor="end" font-size="15" fill="#555">${o.yFmt ? o.yFmt(t) : t}</text>`; });
+  (o.xTicks || []).forEach(t => { g += `<text x="${sx(t)}" y="${H - m.b + 24}" text-anchor="middle" font-size="15" fill="#555">${o.xFmt ? o.xFmt(t) : t}</text>`; });
+  g += `<line x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}" stroke="#111"/>`;
+  if (o.xLabel) g += `<text x="${(m.l + W - m.r) / 2}" y="${H - 12}" text-anchor="middle" font-size="15" fill="#111">${o.xLabel}</text>`;
+  if (o.yLabel) g += `<text transform="translate(18 ${(m.t + H - m.b) / 2}) rotate(-90)" text-anchor="middle" font-size="15" fill="#111">${o.yLabel}</text>`;
+  return { W, H, m, sx, sy, g };
+}
+function barChart(o){
+  const groups = o.groups, ns = o.series.length;
+  const f = frame({ ...o, x0:0, x1:groups.length, xTicks:[] }); let g = f.g;
+  const gw = (f.W - f.m.l - f.m.r) / groups.length, pad = gw * .16, bw = (gw - 2 * pad) / ns;
+  (o.bands || []).forEach(b => { g += `<rect x="${f.m.l}" width="${f.W - f.m.l - f.m.r}" y="${f.sy(b.hi)}" height="${f.sy(b.lo) - f.sy(b.hi)}" fill="#000" fill-opacity=".05"/><text x="${f.m.l + 8}" y="${f.sy(b.lo) - 8}" font-size="12.5" fill="#777">${b.label}</text>`; });
+  groups.forEach((lab, gi) => {
+    g += `<text x="${f.m.l + gw * (gi + .5)}" y="${f.H - f.m.b + 24}" text-anchor="middle" font-size="15" fill="#111">${lab}</text>`;
+    if (o.groupSub && o.groupSub[gi]) g += `<text x="${f.m.l + gw * (gi + .5)}" y="${f.H - f.m.b + 42}" text-anchor="middle" font-size="12" fill="#777">${o.groupSub[gi]}</text>`;
+    o.series.forEach((s, si) => {
+      const v = s.vals[gi]; if (!fin(v)) return;
+      const base = (o.y0 < 0 && o.y1 > 0) ? 0 : o.y0, vv = clamp(v, o.y0, o.y1);
+      const x = f.m.l + gw * gi + pad + bw * si, yTop = f.sy(Math.max(vv, base)), yBot = f.sy(Math.min(vv, base));
+      g += `<rect x="${x + 2}" y="${yTop}" width="${bw - 4}" height="${Math.max(0, yBot - yTop)}" fill="${s.color}"/>`;
+      const y = vv >= base ? yTop : yBot + 22;
+      g += `<text x="${x + bw / 2}" y="${y - 7}" text-anchor="middle" font-size="14" fill="#111">${o.vFmt ? o.vFmt(v) : fmtNum(v)}</text>`;
+    });
+  });
+  if (o.y0 < 0 && o.y1 > 0) g += `<line x1="${f.m.l}" x2="${f.W - f.m.r}" y1="${f.sy(0)}" y2="${f.sy(0)}" stroke="#111"/>`;
+  return `<div class="chart">${g}</svg></div>`;
+}
+function hbar(o){ // horizontal bars: o.rows [{label, v, color}]
+  const n = o.rows.length, rowH = 34, L = o.L || 220, W = o.W || 900, H = 20 + n * rowH + 30, max = o.max || Math.max(...o.rows.map(r => r.v), .01);
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" font-family="Arial, Helvetica, sans-serif">`;
+  o.rows.forEach((r, i) => {
+    const y = 14 + i * rowH, w = (W - L - 80) * r.v / max;
+    g += `<text x="${L - 10}" y="${y + 17}" text-anchor="end" font-size="15" fill="#111">${esc(r.label)}</text><rect x="${L}" y="${y + 2}" width="${Math.max(0, w)}" height="${rowH - 10}" fill="${r.color || COL.accent}"/><text x="${L + w + 8}" y="${y + 18}" font-size="14" fill="#111">${o.vFmt ? o.vFmt(r.v) : fmtNum(r.v)}</text>`;
+  });
+  return `<div class="chart">${g}</svg></div>`;
+}
+function scatter(o){
+  const f = frame(o); let g = f.g;
+  if (o.diag) g += `<line x1="${f.sx(Math.max(o.x0, o.y0))}" y1="${f.sy(Math.max(o.x0, o.y0))}" x2="${f.sx(Math.min(o.x1, o.y1))}" y2="${f.sy(Math.min(o.x1, o.y1))}" stroke="#999" stroke-dasharray="6 5"/>`;
+  if (o.fit){
+    const p = o.pts.filter(q => fin(q.x) && fin(q.y));
+    if (p.length >= 5){ const mx = mean(p.map(q => q.x)), my = mean(p.map(q => q.y)); let sxy = 0, sxx = 0; p.forEach(q => { sxy += (q.x - mx) * (q.y - my); sxx += (q.x - mx) ** 2; });
+      if (sxx){ const b = sxy / sxx, a = my - b * mx; const xa = o.x0, xb = o.x1; g += `<line x1="${f.sx(xa)}" y1="${f.sy(clamp(a + b * xa, o.y0, o.y1))}" x2="${f.sx(xb)}" y2="${f.sy(clamp(a + b * xb, o.y0, o.y1))}" stroke="${COL.ink}" stroke-width="2.5" stroke-opacity=".7"/>`; } }
+  }
+  const jr = rng(7);
+  o.pts.forEach(p => { if (!fin(p.x) || !fin(p.y)) return; const jx = (o.jitter || 0) * (jr() - .5), jy = (o.jitterY ?? o.jitter ?? 0) * (jr() - .5); g += `<circle cx="${f.sx(clamp(p.x + jx, o.x0, o.x1))}" cy="${f.sy(clamp(p.y + jy, o.y0, o.y1))}" r="${p.r || 8}" fill="${p.color || COL.accent}" fill-opacity=".75" stroke="#fff" stroke-width="1.5"/>`; });
+  return `<div class="chart">${g}</svg></div>`;
+}
+function heatColor(r){
+  if (!fin(r)) return ['#f6f6f6', '#999'];
+  const t = Math.min(1, Math.abs(r)), c = r >= 0 ? [230,70,38] : [61,90,128];
+  const mix = c.map(x => Math.round(255 + (x - 255) * t));
+  return [`rgb(${mix.join(',')})`, t > .55 ? '#fff' : '#111'];
+}
+function heatmap(labels, M, o = {}){ // lower triangle, without the diagonal
+  const n = labels.length, cell = o.cell || 78, L = o.L || 290, T = 10, B = o.B || 150;
+  const W = L + (n - 1) * cell + 20, H = T + (n - 1) * cell + B;
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" font-family="Arial, Helvetica, sans-serif">`;
+  for (let i = 1; i < n; i++){
+    g += `<text x="${L - 10}" y="${T + (i - 1) * cell + cell / 2 + 5}" text-anchor="end" font-size="15" fill="#111">${esc(labels[i])}</text>`;
+    for (let j = 0; j < i; j++){
+      const [bg, fg] = heatColor(M[i][j]), x = L + j * cell, y = T + (i - 1) * cell;
+      g += `<rect x="${x + 1}" y="${y + 1}" width="${cell - 2}" height="${cell - 2}" fill="${bg}"/><text x="${x + cell / 2}" y="${y + cell / 2 + 6}" text-anchor="middle" font-size="17" fill="${fg}">${fmtR(M[i][j])}</text>`;
+    }
+  }
+  for (let j = 0; j < n - 1; j++){ const x = L + j * cell + cell / 2, y = T + (n - 1) * cell + 12; g += `<text transform="translate(${x} ${y}) rotate(-35)" text-anchor="end" font-size="14" fill="#111">${esc(labels[j])}</text>`; }
+  return `<div class="chart">${g}</svg></div>`;
+}
+const legend = items => `<div class="legend">${items.map(i => `<span><i style="background:${i.color}"></i>${i.name}</span>`).join('')}</div>`;
+const keystats = items => `<div class="keystats">${items.map(i => `<div class="ks"><div class="n">${i.n}</div><div class="l">${i.l}</div></div>`).join('')}</div>`;
+const tutor = t => `<div class="tutor"><b>Tutor prompt</b>${t}</div>`;
+const tick = (a, b, s) => { const o = []; for (let x = a; x <= b + 1e-9; x += s) o.push(Math.round(x * 100) / 100); return o; };
+const enough = (n, k) => n >= k ? '' : `<p class="banner">Only ${n} complete response${n === 1 ? '' : 's'} so far. The pattern will be noisy; consider loading the simulated class.</p>`;
+function rotSVG(g, ang, mirror){
+  const tf = `rotate(${ang} 60 60)` + (mirror ? ' translate(120 0) scale(-1 1)' : '');
+  return `<svg viewBox="0 0 120 120"><text x="60" y="62" font-size="84" font-weight="700" font-family="Arial, Helvetica, sans-serif" text-anchor="middle" dominant-baseline="central" fill="#111" transform="${tf}">${g}</text></svg>`;
+}
+
+/* =====================================================================
+   RENDER: entry
+   ===================================================================== */
+function render(force){
+  if (!S.code) return renderLanding();
+  if (S.host) return renderHost();
+  return renderStudent(force);
+}
+function renderLanding(){
+  $('#app').innerHTML = `<div class="wrap">
+    <div class="label">Intelligence tutorial</div>
+    <h1>Is it an intelligence?</h1>
+    <p class="lede">A short battery, your class's data on the big screen, then you put a candidate intelligence on trial. Enter the code on the screen at the front of the room.</p>
+    <div class="card">
+      <input class="txt" id="codeIn" placeholder="Session code" autocomplete="off" style="text-transform:uppercase">
+      <div class="sub"><button class="btn block" id="go">Join</button></div>
+    </div>
+    <div class="card soft">
+      <div class="label" style="margin-bottom:6px">For tutors</div>
+      <p class="muted" style="margin-bottom:12px">Start a session on the room's computer and project it. Students join with the QR code.</p>
+      <div class="row">
+        <button class="btn small" id="newS">Start a session</button>
+        <button class="btn small ghost" id="newL">Rehearse offline</button>
+      </div>
+      <p class="tiny" style="margin-top:10px">Offline rehearsal keeps everything in this browser: open student tabs from the join link on the same computer.</p>
+    </div></div>`;
+  const go = () => { const c = norm($('#codeIn').value).toUpperCase(); if (c) location.search = '?s=' + c; };
+  $('#go').onclick = go; $('#codeIn').onkeydown = e => { if (e.key === 'Enter') go(); };
+  const mk = extra => { const c = Array.from({ length:4 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join(''); location.search = `?s=${c}&view=host${extra}`; };
+  $('#newS').onclick = () => mk(''); $('#newL').onclick = () => mk('&local=1');
+}
+
+/* =====================================================================
+   RENDER: student
+   ===================================================================== */
+function saveMe(patch){ S.me = deepMerge(S.me, patch); S.db.setResp(S.pid, patch).catch(showError); render(true); }
+function order(round, items){ return shuffle(items, rng(hash(S.pid + round))); }
+function optOrder(id, k){ return shuffle([...Array(k).keys()], rng(hash(S.pid + id))); }
+
+function renderStudent(force){
+  const ph = curPhase();
+  const view = studentView(ph);
+  if (!force && view.key === S.lastKey) return;
+  // keep focus and caret in a text box that is being typed into when a teammate's change re-renders the page
+  const act = document.activeElement, keep = act && act.id && (act.tagName === 'TEXTAREA' || act.tagName === 'INPUT') ? { id:act.id, v:act.value, a:act.selectionStart, b:act.selectionEnd } : null;
+  S.lastKey = view.key;
+  S.timer = view.timer || null;
+  $('#app').innerHTML = `<div class="wrap">${S.ui.error}${view.html}</div>`;
+  if (view.bind) view.bind();
+  if (keep){ const el = document.getElementById(keep.id); if (el){ el.value = keep.v; el.focus(); try { el.setSelectionRange(keep.a, keep.b); } catch(e){} } }
+  tickTimer();
+}
+function tickTimer(){
+  const t = S.timer; if (!t) return;
+  const left = t.end - Date.now(), el = $('#timer');
+  if (el){ el.textContent = fmtTime(left / 1000); el.classList.toggle('low', left < 10000); }
+  if (left <= 0 && !t.fired){ t.fired = true; setTimeout(() => { if (!S.me[t.endKey]) saveMe({ [t.endKey]: true }); }, 0); }
+}
+function wait(title, sub){ return { key:'wait:' + title, html:`<div class="big-wait"><div class="label"><span class="dotpulse"></span>${S.me.team ? 'Team ' + S.me.team : ''}</div><h1>${title}</h1><p class="lede">${sub || ''}</p></div>` }; }
+function header(label, i, n, timer){ return `<div class="prog"><span>${label}</span><span class="row" style="gap:10px">${timer ? '<span class="timer" id="timer"></span>' : ''}<span>${Math.min(i + 1, n)} / ${n}</span></span></div><div class="bar"><i style="width:${100 * i / n}%"></i></div>`; }
+
+function studentView(ph){
+  if (!S.session){
+    const late = Date.now() - S.bootAt > 8000;
+    return { key:'nosess' + late, html:`<div class="big-wait"><div class="label"><span class="dotpulse"></span>Session ${S.code}</div><h1>Waiting for your tutor</h1><p class="lede">The session has not started yet. Keep this page open.</p>
+      ${late ? `<p class="tiny">Still waiting? Check the code on the screen matches <strong>${S.code}</strong>.${S.local ? '' : ' If your tutor is rehearsing offline, the link needs <code>&amp;local=1</code> and must be opened in the same browser.'}</p>` : ''}</div>` };
+  }
+  if (!S.me.team) return teamPicker();
+  switch (ph){
+    case 'lobby': return wait(`You're in Team ${S.me.team}`, 'Find your teammates. This is a class demonstration, not an IQ test: nobody sees individual answers, and a few minutes of items can\'t say anything meaningful about you.');
+    case 'pre': return viewPoll('pre', 'Before we start');
+    case 'bat': return viewBattery();
+    case 'court': return viewCourt();
+    case 'post': return viewPoll('post', 'One more time');
+    default: return viewPersonal(ph);
+  }
+}
+function teamPicker(){
+  const n = nTeams();
+  return { key:'team' + n, html:`<div class="label">Welcome</div><h1>Pick your team</h1><p class="lede">Sit with your team. Your answers are anonymous: nobody sees individual responses.</p>
+    <div class="teams">${TEAM_NAMES.slice(0, n).map(t => `<button class="teambtn" data-t="${t}">Team ${t}</button>`).join('')}</div>`,
+    bind: () => document.querySelectorAll('.teambtn').forEach(b => b.onclick = () => saveMe({ team:b.dataset.t, joined:Date.now() })) };
+}
+function viewPoll(field, label){
+  if (fin(S.me[field])) return wait('Vote in', field === 'pre' ? 'Eyes on the screen.' : 'Eyes on the screen for the final result.');
+  return { key:'poll' + field, html:`<div class="label">${label}</div><h2>How much do you agree?</h2><div class="q">"${POLL}"</div>
+    <div class="likert">${POLL_OPTS.map((o, i) => `<button class="opt" data-v="${i + 1}">${o}</button>`).join('')}</div>`,
+    bind: () => document.querySelectorAll('.likert .opt').forEach(b => b.onclick = () => saveMe({ [field]: Number(b.dataset.v) })) };
+}
+
+/* ---------- the battery ---------- */
+function viewBattery(){
+  const me = S.me;
+  if (!me.sr || SR.some(it => !fin(me.sr[it.id]))) return viewSR();
+  if (!me.vocEnd) return timedTask('voc');
+  if (!me.serEnd) return timedTask('ser');
+  if (!me.rotEnd) return timedTask('rot');
+  if (EU.some(it => !(me.eu && me.eu[it.id]))) return viewEU();
+  if (!fin(me.euPred)) return viewPred();
+  if (!me.autEnd) return timedTask('aut');
+  return wait('All done', 'Thanks. Eyes on the big screen for the class results.');
+}
+const STEP = { sr:'1 of 6', voc:'2 of 6', ser:'3 of 6', rot:'4 of 6', eu:'5 of 6', aut:'6 of 6' };
+function viewSR(){
+  const sel = { ...(S.me.sr || {}), ...S.ui.sr };
+  const all = () => SR.every(it => fin({ ...(S.me.sr || {}), ...S.ui.sr }[it.id]));
+  return { key:'sr', html:`<div class="label">Part ${STEP.sr} · About you</div><h2>How well does each statement describe you?</h2><p class="muted">1 = not at all, 7 = completely. Go with your first reaction.</p>
+    ${SR.map(it => `<div class="sr"><div class="st">${it.q}</div><div class="chips seven">${[1,2,3,4,5,6,7].map(v => `<button class="chip ${sel[it.id] === v ? 'on' : ''}" data-id="${it.id}" data-v="${v}">${v}</button>`).join('')}</div></div>`).join('')}
+    <div class="sub"><button class="btn block" id="srgo" ${all() ? '' : 'disabled'}>Next</button></div>`,
+    bind: () => {
+      document.querySelectorAll('.sr .chip').forEach(b => b.onclick = () => {
+        S.ui.sr[b.dataset.id] = Number(b.dataset.v);
+        b.parentNode.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b));
+        $('#srgo').disabled = !all();
+      });
+      $('#srgo').onclick = () => saveMe({ sr: { ...(S.me.sr || {}), ...S.ui.sr } });
+    } };
+}
+const TASKS = {
+  voc: { title:'Word meanings', intro:'Pick the word or phrase closest in meaning to the word in capitals. Go as fast as you can without guessing wildly.', items:VOCAB },
+  ser: { title:'Number series', intro:'Type the number that comes next in each series. If you\'re stuck, skip it: the clock keeps running.', items:SERIES },
+  rot: { title:'Same or mirror?', intro:'The right-hand shape is the left-hand one rotated. Is it the same shape, or a mirror image? Wrong answers count against you, so don\'t just tap randomly.', items:ROT },
+  aut: { title:'Uses for a brick', intro:'List as many different uses for a brick as you can. Common or unusual, practical or silly: anything goes. Add one idea at a time.', items:[] }
+};
+function timedTask(k){
+  const me = S.me, T = TASKS[k], t0 = me[k + 'T0'];
+  if (!t0){
+    const ex = k === 'rot' ? `<div class="rotpair" style="max-width:340px"><div>${rotSVG('R', 0, false)}</div><div>${rotSVG('R', 120, true)}</div></div><p class="tiny" style="margin:-8px 0 12px">Example: this pair is a <strong>mirror</strong> image.</p>` : '';
+    return { key:'intro' + k, html:`<div class="label">Part ${STEP[k]}</div><h1>${T.title}</h1><p class="lede">${T.intro}</p>${ex}
+      <div class="card soft"><div class="stat" style="border:0"><span>Time limit</span><b>${fmtTime(T_LIMIT[k])}</b></div></div>
+      <div class="sub"><button class="btn block" id="start">Start the clock</button></div>`,
+      bind: () => { $('#start').onclick = () => saveMe({ [k + 'T0']: Date.now() }); } };
+  }
+  const timer = { end: t0 + T_LIMIT[k] * 1000, endKey: k + 'End' };
+  if (Date.now() >= timer.end){ setTimeout(() => { if (!S.me[k + 'End']) saveMe({ [k + 'End']: true }); }, 0); return wait('Time\'s up', ''); }
+  if (k === 'aut') return viewAUT(timer);
+  const done = me[k] || {}, items = T.items;
+  const i = items.findIndex(it => !done[it.id]);
+  if (i < 0){ setTimeout(() => { if (!S.me[k + 'End']) saveMe({ [k + 'End']: true }); }, 0); return wait('Nice, all done', 'Next task coming up…'); }
+  const it = items[i], lab = `Part ${STEP[k]} · ${T.title}`;
+  if (k === 'voc'){
+    const oo = optOrder(it.id, 4);
+    return { key:'voc:' + it.id, timer, html: header(lab, i, items.length, true) + `<div class="q" style="font-family:var(--mono);font-size:24px;letter-spacing:.06em">${it.w}</div>
+      <div class="opts">${oo.map(j => `<button class="opt" data-j="${j}">${it.o[j]}</button>`).join('')}</div>`,
+      bind: () => document.querySelectorAll('.opt').forEach(b => b.onclick = () => { const j = Number(b.dataset.j); saveMe({ voc:{ [it.id]:{ c:j, ok:j === 0 } } }); }) };
+  }
+  if (k === 'ser'){
+    return { key:'ser:' + it.id, timer, html: header(lab, i, items.length, true) + `<div class="series">${it.q}, ?</div>
+      <input class="txt" id="sv" inputmode="numeric" placeholder="Next number" autocomplete="off">
+      <div class="sub row"><button class="btn" id="sgo" style="flex:1">Submit</button><button class="btn ghost" id="sskip">Skip</button></div>`,
+      bind: () => {
+        const send = raw => { const v = parseFloat(String(raw).replace(/[, ]/g, '')); saveMe({ ser:{ [it.id]:{ v: fin(v) ? v : null, ok: v === it.a } } }); };
+        $('#sv').focus(); $('#sgo').onclick = () => { if ($('#sv').value.trim()) send($('#sv').value); else $('#sv').focus(); };
+        $('#sv').onkeydown = e => { if (e.key === 'Enter' && $('#sv').value.trim()) send($('#sv').value); };
+        $('#sskip').onclick = () => send('');
+      } };
+  }
+  // rotation
+  return { key:'rot:' + it.id, timer, html: header(lab, i, items.length, true) + `<div class="rotpair"><div>${rotSVG(it.g, 0, false)}</div><div>${rotSVG(it.g, it.ang, it.mirror)}</div></div>
+    <div class="row"><button class="btn ghost" id="same" style="flex:1;padding:16px">Same</button><button class="btn ghost" id="mirr" style="flex:1;padding:16px">Mirror</button></div>`,
+    bind: () => { const send = m => saveMe({ rot:{ [it.id]:{ c: m ? 1 : 0, ok: m === it.mirror } } }); $('#same').onclick = () => send(false); $('#mirr').onclick = () => send(true); } };
+}
+function viewEU(){
+  const items = order('eu', EU), done = S.me.eu || {};
+  const i = items.findIndex(it => !done[it.id]), it = items[i], oo = optOrder(it.id, 4);
+  return { key:'eu:' + it.id, html: header(`Part ${STEP.eu} · Understanding emotions`, i, items.length) + `<div class="q" style="font-size:22px">${it.q}</div>
+    <div class="opts">${oo.map(j => `<button class="opt" data-j="${j}">${it.o[j]}</button>`).join('')}</div><p class="tiny" style="margin-top:12px">No time limit. Pick the best answer.</p>`,
+    bind: () => document.querySelectorAll('.opt').forEach(b => b.onclick = () => { const j = Number(b.dataset.j); saveMe({ eu:{ [it.id]:{ c:j, ok:j === 0 } } }); }) };
+}
+function viewPred(){
+  const v = S.ui.predV ?? 5;
+  return { key:'pred', html:`<div class="label">Part ${STEP.eu} · Quick question</div><h2>How many of the ${EU.length} emotion questions do you think you got right?</h2>
+    <div class="readout" id="pv">${v} out of ${EU.length}</div>
+    <input type="range" min="0" max="${EU.length}" step="1" value="${v}" id="pr">
+    <div class="sub"><button class="btn block" id="ps">Submit</button></div>`,
+    bind: () => { $('#pr').oninput = e => { S.ui.predV = Number(e.target.value); $('#pv').textContent = `${S.ui.predV} out of ${EU.length}`; }; $('#ps').onclick = () => saveMe({ euPred: S.ui.predV ?? 5 }); } };
+}
+function viewAUT(timer){
+  const list = Array.isArray(S.me.aut) ? S.me.aut : [];
+  return { key:'aut:' + list.length, timer, html:`<div class="prog"><span>Part ${STEP.aut} · Uses for a brick</span><span class="timer" id="timer"></span></div><div class="bar"><i style="width:100%"></i></div>
+    <div class="q">What could you use a brick for?</div>
+    <div class="row"><input class="txt" id="ai" placeholder="One idea" autocomplete="off" maxlength="80" style="flex:1"><button class="btn" id="aadd">Add</button></div>
+    <div class="prog" style="margin-top:14px"><span>${list.length} idea${list.length === 1 ? '' : 's'}</span><span></span></div>
+    <div class="autlist">${list.slice().reverse().map(x => `<span>${esc(x)}</span>`).join('')}</div>
+    <div class="sub"><button class="btn ghost small" id="adone">I'm out of ideas: finish early</button></div>`,
+    bind: () => {
+      const add = () => { const v = $('#ai').value.trim(); if (v.length > 1) saveMe({ aut: list.concat(v) }); $('#ai').value = ''; $('#ai').focus(); };
+      $('#ai').focus(); $('#aadd').onclick = add; $('#ai').onkeydown = e => { if (e.key === 'Enter') add(); };
+      $('#adone').onclick = () => saveMe({ autEnd:true });
+    } };
+}
+
+/* ---------- courtroom ---------- */
+function viewCourt(){
+  const T = S.me.team, c = candFor(T), tdoc = S.teams[T] || {}, card = tdoc.card || {};
+  if (tdoc.done) return wait('Verdict submitted', `Get ready to defend it. Another team will cross-examine your case for <em>${c.name}</em>.`);
+  const set = patch => { S.teams = deepMerge(S.teams, { [T]:{ card:patch } }); S.db.setTeam(T, { card:patch }).catch(showError); };
+  const complete = CRIT.every(cr => card[cr.id]) && card.overall;
+  return { key:'court:' + JSON.stringify({ ...card, study:'' }), html:`<div class="label">Team ${T} · The scorecard</div><h2>${c.name}</h2><p class="lede" style="margin-bottom:12px">Does it earn the name "intelligence"?</p>
+    <div class="brief"><strong>What it is.</strong> ${c.what}<br><strong>Where to look.</strong> ${c.evidence}</div>
+    <p class="muted" style="margin-bottom:6px">Score it against each criterion as a team. Anyone can tap; it syncs to all your phones.</p>
+    ${CRIT.map(cr => `<div class="crit"><div class="cn">${cr.n}</div><div class="cd">${cr.d}</div><div class="vchips">${VERD.map(([k, l]) => `<button class="chip ${card[cr.id] === k ? 'on' : ''}" data-c="${cr.id}" data-v="${k}">${l}</button>`).join('')}</div></div>`).join('')}
+    <div class="crit"><div class="cn">The one study that would convince a sceptic</div><div class="cd">Design it in a sentence or two: who, what you'd measure, and what result would settle it.</div>
+      <textarea class="txt" id="study" maxlength="400" placeholder="We would…">${esc(card.study || '')}</textarea></div>
+    <div class="crit"><div class="cn">Your verdict</div><div class="cd">Does it earn the name "intelligence"?</div>
+      <div class="opts">${OVERALL.map(([k, l]) => `<button class="opt ${card.overall === k ? 'on' : ''}" data-o="${k}">${l}</button>`).join('')}</div></div>
+    <div class="sub"><button class="btn block" id="cdone" ${complete ? '' : 'disabled'}>Submit our verdict</button></div>`,
+    bind: () => {
+      document.querySelectorAll('.vchips .chip').forEach(b => b.onclick = () => { set({ [b.dataset.c]: b.dataset.v }); render(true); });
+      document.querySelectorAll('[data-o]').forEach(b => b.onclick = () => { set({ overall: b.dataset.o }); render(true); });
+      let tm = null; $('#study').oninput = e => { clearTimeout(tm); const v = e.target.value; tm = setTimeout(() => set({ study: v }), 600); };
+      $('#study').onblur = e => set({ study: e.target.value });
+      $('#cdone').onclick = () => { set({ study: $('#study').value }); S.db.setTeam(T, { done:true }).catch(showError); S.teams = deepMerge(S.teams, { [T]:{ done:true } }); render(true); };
+    } };
+}
+
+/* ---------- personal summary ---------- */
+function viewPersonal(ph){
+  const me = S.me, s = rawScores(me);
+  let rows = '';
+  if (fin(me.pre)) rows += `<div class="stat"><span>"EQ matters more than IQ": you said</span><b>${POLL_OPTS[me.pre - 1]}${fin(me.post) ? ' → ' + POLL_OPTS[me.post - 1] : ''}</b></div>`;
+  if (fin(s.eu)) rows += `<div class="stat"><span>Emotion questions right</span><b>${s.eu} / ${EU.length}</b></div>`;
+  if (fin(s.euPred)) rows += `<div class="stat"><span>…you predicted</span><b>${s.euPred} / ${EU.length}</b></div>`;
+  if (fin(s.tei)) rows += `<div class="stat"><span>Your self-rated (trait) EI</span><b>${s.tei.toFixed(1)} / 7</b></div>`;
+  if (fin(s.flu)){
+    const ct = classTable(Object.entries(S.resps).filter(([, r]) => r.team).map(([id, r]) => ({ id, ...r }))), mine = ct.rows.find(r => r.id === S.pid);
+    rows += `<div class="stat"><span>Brick uses</span><b>${s.flu} idea${s.flu === 1 ? '' : 's'}${mine && fin(mine.rare) ? ', ' + mine.rare + ' rare' : ''}</b></div>`;
+  }
+  if (fin(s.voc)) rows += `<div class="stat"><span>Word meanings</span><b>${s.voc} / ${VOCAB.length}</b></div>`;
+  if (fin(s.ser)) rows += `<div class="stat"><span>Number series</span><b>${s.ser} / ${SERIES.length}</b></div>`;
+  if (fin(s.rotC)) rows += `<div class="stat"><span>Same or mirror</span><b>${s.rotC} right, ${s.rotW} wrong</b></div>`;
+  const title = ph === 'end' ? 'Thanks for taking part' : 'Eyes on the big screen';
+  return { key:'pers:' + ph + ':' + rows.length, html:`<div class="big-wait" style="padding:30px 0 10px"><div class="label">Team ${me.team}</div><h1>${title}</h1></div>
+    ${rows ? `<div class="card"><div class="label" style="margin-bottom:6px">Just for you</div>${rows}</div><p class="tiny">Only you can see this. A minute or two per task is far too short to say anything about you: these are class demonstrations, not tests.</p>` : ''}` };
+}
+
+/* =====================================================================
+   RENDER: host
+   ===================================================================== */
+function renderHost(){
+  const ph = curPhase(), vis = PHASES, ci = vis.findIndex(p => p.id === ph);
+  const st = students();
+  const P = PHASES.find(p => p.id === ph);
+  const nDone = P && P.student ? st.filter(s => doneFor(s, ph)).length : null;
+  const scrollY = window.scrollY;
+  $('#app').innerHTML = `<div class="wrap host">${S.ui.error}
+    <div class="hostgrid">
+      <div class="join">
+        <div id="qr"></div>
+        <div style="flex:1;min-width:240px"><div class="label">Join at</div><div class="joinurl">${esc(joinUrl().replace(/^https?:\/\//, ''))}</div>
+          <div class="tiny" style="margin-top:4px">${S.local ? 'Offline rehearsal: data stays in this browser.' : 'Anonymous · live'}${S.sim ? ' · simulated class loaded' : ''}</div></div>
+        <div><div class="label">Code</div><div class="code">${S.code}</div></div>
+        <div style="min-width:110px"><div class="label" style="text-align:right">${nDone == null ? 'Joined' : 'Finished'}</div><div class="nbig">${nDone == null ? st.length : nDone + '<span style="font-size:24px;color:var(--light)">/' + st.length + '</span>'}</div></div>
+      </div>
+      <div class="nav controls">
+        <button class="btn small ghost" id="prev" ${ci <= 0 ? 'disabled' : ''}>← Back</button>
+        <div class="phases">${vis.map((p, i) => `<button class="ph ${i === ci ? 'on' : i < ci ? 'done' : ''}" data-ph="${p.id}">${p.label}</button>`).join('')}</div>
+        <button class="btn small" id="next" ${ci >= vis.length - 1 ? 'disabled' : ''}>Next →</button>
+      </div>
+      <div class="stage" id="stage">${hostStage(ph)}</div>
+      <div class="controls row">
+        <button class="btn small ghost" id="present">Hide tutor controls (P)</button>
+        ${ph === 'lobby' ? `<label class="tiny">Teams <select id="nT">${[2,3,4,5,6,7,8].map(n => `<option ${nTeams() === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` : ''}
+        <span class="spacer"></span>
+        <button class="btn small ghost" id="simB">${S.sim ? 'Remove simulated class' : 'Load simulated class (25)'}</button>
+        <button class="btn small ghost" id="clr">Clear session data</button>
+      </div>
+      <p class="tiny controls">Simulated students exist on this screen only and are never saved. Use them to rehearse, or if too few students are in the room for the plots to work. Students' phones never show simulated data.</p>
+    </div></div>`;
+  window.scrollTo(0, scrollY);
+  try {
+    if (!S.qrNode && window.QRCode){ S.qrNode = document.createElement('div'); new QRCode(S.qrNode, { text: joinUrl(), width:232, height:232, correctLevel: QRCode.CorrectLevel.M }); }
+    if (S.qrNode) $('#qr').appendChild(S.qrNode);
+  } catch(e){}
+  const go = id => S.db.setSession({ phase:id }).catch(showError);
+  $('#prev').onclick = () => go(vis[ci - 1].id); $('#next').onclick = () => go(vis[ci + 1].id);
+  document.querySelectorAll('.ph').forEach(b => b.onclick = () => go(b.dataset.ph));
+  $('#present').onclick = () => document.body.classList.toggle('present');
+  if ($('#nT')) $('#nT').onchange = e => S.db.setSession({ nTeams:Number(e.target.value) }).catch(showError);
+  $('#simB').onclick = () => { S.sim = S.sim ? null : simulateClass(25, nTeams()); render(); };
+  $('#clr').onclick = async () => { if (!confirm(`Permanently delete every real response in session ${S.code}?`)) return; await S.db.clear().catch(showError); S.resps = {}; S.teams = {}; await S.db.setSession({ phase:'lobby', nTeams:nTeams() }); };
+  document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { S.ui.tab[ph] = b.dataset.tab; render(); });
+  if ($('#oneoff')) $('#oneoff').onclick = () => { S.ui.oneoff = !S.ui.oneoff; render(); };
+  if ($('#clockGo')) $('#clockGo').onclick = () => { S.ui.clock = S.ui.clock ? null : Date.now() + 10 * 60000; render(); };
+}
+function tabs(ph, list){ const cur = S.ui.tab[ph] || list[0][0]; return { cur, html:`<div class="tabs controls">${list.map(([k, l]) => `<button class="tab ${k === cur ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>` }; }
+function progressTeams(ph){
+  return `<div class="progress-teams">${TEAM_NAMES.slice(0, nTeams()).map(T => { const mem = students().filter(s => s.team === T); const d = mem.filter(s => doneFor(s, ph)).length; return `<div class="pt"><div class="tn">Team ${T}</div><div class="tiny">${ph === 'lobby' ? mem.length + ' joined' : d + ' / ' + mem.length + ' finished'}</div><div class="bar"><i style="width:${mem.length ? 100 * (ph === 'lobby' ? 1 : d / mem.length) : 0}%"></i></div></div>`; }).join('')}</div>`;
+}
+function roundStage(lab, title, prompt, ph, note){ return `<div class="label">${lab}</div><h1>${title}</h1><p class="prompt">${prompt}</p>${progressTeams(ph)}${tutor(note)}`; }
+
+function hostStage(ph){
+  switch (ph){
+    case 'lobby': return `<div class="label">Intelligence tutorial</div><h1>Is it an intelligence?</h1>
+      <p class="prompt">Scan the code, pick your team, and sit together. This is a class demonstration, not an IQ test: everything is anonymous, and nobody sees individual answers.</p>${progressTeams('lobby')}
+      ${tutor('Aim for 6 teams of about 5 (one candidate intelligence per team later). Say the framing line out loud: "this is a demo of how psychologists measure abilities, not a test of you." It matters for the reasons in Lecture 6 (stereotype threat: framing a test as diagnostic can change scores).')}`;
+    case 'pre': return pollStage('pre');
+    case 'bat': return roundStage('The battery · about 12 minutes', 'Six short tasks', 'Work through at your own pace. Four of them have a clock. Then wait for the class results.', 'bat',
+      'Order: self-report (trait EI, emotional stability, "I am creative"), word meanings (Gc, 75 s), number series (Gf, 2 min), same-or-mirror rotation (Gv, 1 min), ten emotion-understanding questions (ability EI, untimed) plus a prediction of their own score, then uses for a brick (2 min). Move on when about 80% are finished: the reveals work with whoever is done.');
+    case 'rv1': return stageRV1();
+    case 'rv2': return stageRV2();
+    case 'court': return stageCourt();
+    case 'cross': return stageCross();
+    case 'post': return pollStage('post');
+    case 'end': return stageEnd();
+  }
+  return '';
+}
+function pollHist(){
+  const st = students(), pre = st.map(s => s.pre).filter(fin), post = st.map(s => s.post).filter(fin);
+  const share = (a, v) => a.length ? 100 * a.filter(x => x === v).length / a.length : NaN;
+  const series = [{ name:'Before', color:COL.grey, vals:[1,2,3,4,5].map(v => share(pre, v)) }];
+  if (post.length) series.push({ name:'After', color:COL.accent, vals:[1,2,3,4,5].map(v => share(post, v)) });
+  return { pre, post, html: legend(series.map(s => ({ name:s.name + ' (n = ' + (s.name === 'Before' ? pre.length : post.length) + ')', color:s.color }))) + barChart({ groups:POLL_OPTS, series, y0:0, y1:100, yTicks:tick(0, 100, 25), yFmt:v => v + '%', yLabel:'Share of the class', vFmt:v => Math.round(v) + '%', H:380 }) };
+}
+function pollStage(field){
+  const h = pollHist();
+  if (field === 'pre') return `<div class="label">Before we start</div><h1>"${POLL}"</h1>
+    <p class="prompt">Goleman's 1995 book sold over five million copies on this claim. Vote on your phone.</p>${h.html}
+    ${keystats([{ n:h.pre.length, l:'votes' }, { n: h.pre.length ? pct0(h.pre.filter(x => x >= 4).length / h.pre.length) : '–', l:'agree or strongly agree' }])}
+    ${tutor('Take a quick show of reasons from one "agree" and one "disagree". Then: what would the evidence have to look like to settle it? (Lecture 7 opener.) Keep it under 5 minutes.')}`;
+  return `<div class="label">One more time</div><h1>"${POLL}"</h1><p class="prompt">Same statement, same scale. Vote again on your phone.</p>${h.html}
+    ${keystats([{ n:h.post.length + ' / ' + h.pre.length, l:'have voted again' }, { n: fin(mean(h.post)) ? (mean(h.post) - mean(h.pre) >= 0 ? '+' : '−') + Math.abs(mean(h.post) - mean(h.pre)).toFixed(1) : '–', l:'change in the average (1 to 5 scale)' }])}
+    ${tutor('Ask one person who changed their vote what changed their mind. If nobody moved: is that a good or a bad sign for the evidence?')}`;
+}
+
+/* ---------- Reveal 1: g and EI ---------- */
+function stageRV1(){
+  const t = tabs('rv1', PHASES.find(p => p.id === 'rv1').reveal);
+  const ct = classTable(), R = ct.rows, body = [];
+  if (t.cur === 'pm'){
+    const keys = ['voc','ser','rot'], labs = ['Vocabulary (Gc)','Number series (Gf)','Rotation (Gv)'];
+    const full = R.filter(r => keys.every(k => fin(r[k])));
+    const M = keys.map(a => keys.map(b => a === b ? 1 : corrOf(full, a, b).r));
+    const ok = M.flat().every(fin), pc = ok ? firstPC(M) : null;
+    const offd = [M[1][0], M[2][0], M[2][1]], rc = rCrit(full.length);
+    body.push(`<div class="label">Reveal 1a</div><h1>Do the thinking tasks hang together?</h1>
+      <p class="prompt">Correlations between your class's scores on three very different tasks: word knowledge, number reasoning and mental rotation.</p>${enough(full.length, 12)}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center">
+        ${heatmap(labs, M, { cell:110, L:200, B:140 })}
+        ${pc ? `<div><div class="label" style="margin-bottom:4px">Loadings on the first factor ("g")</div>${hbar({ rows: labs.map((l, i) => ({ label:l, v:pc.load[i] })), max:1, L:190, W:560, vFmt:v => fmtR(v) })}</div>` : '<p class="muted">Needs at least five people who finished all three tasks.</p>'}
+      </div>
+      ${keystats([{ n: fmtR(mean(offd.filter(fin))), l:'average correlation between tasks' }, { n: pc ? pct0(pc.share) : '–', l:'of the variance captured by one general factor' }, { n: fin(rc) ? '±' + fmtR(rc).replace('−', '') : '–', l:`noise band: with n = ${full.length}, smaller correlations could easily be chance` }])}
+      ${tutor('The positive manifold, live (Lecture 4). If all three correlations are positive, ask: why should knowing what "laconic" means predict how fast you can rotate a letter? Spearman\'s answer was g; stress that g is a statistical extraction (what is common to the tasks), not a thing in the head. With 30 people, expect wobble: one correlation may come out near zero. That is a sample-size lesson, not a refutation (Carroll used 460+ data sets).')}`);
+  } else if (t.cur === 'mx'){
+    const M = MEAS.map(([a]) => MEAS.map(([b]) => a === b ? 1 : corrOf(R, a, b).r));
+    const n = R.filter(r => fin(r.g) && fin(r.eu) && fin(r.tei)).length;
+    body.push(`<div class="label">Reveal 1b</div><h1>Everything we measured</h1>
+      <p class="prompt">Orange = positive correlation, blue = negative. Darker = stronger. Look for clusters.</p>${enough(n, 12)}
+      ${heatmap(MEAS.map(m => m[1]), M, { cell:76, L:300, B:200 })}
+      ${tutor('Three clusters to look for: (1) the thinking tasks with each other; (2) trait EI with emotional stability: two self-reports, both personality-flavoured; (3) brick fluency with originality. Then ask: which measure sits where you\'d expect an "intelligence" to sit? Construct vs measure: every cell here is a correlation between <em>measures</em>, and each measure is a narrow window on its construct.')}`);
+  } else if (t.cur === 'ei'){
+    const c = (a, b) => corrOf(R, a, b);
+    const A = [c('eu', 'g'), c('eu', 'stab')], T = [c('tei', 'g'), c('tei', 'stab')], AT = c('eu', 'tei');
+    const nMin = Math.min(...A.concat(T).map(x => x.n)), rc = rCrit(nMin);
+    body.push(`<div class="label">Reveal 1c</div><h1>Two kinds of "emotional intelligence"</h1>
+      <p class="prompt">Ability EI: the emotion questions with right answers. Trait EI: how good you <em>said</em> you are with emotions. How does each relate to the thinking tasks (g) and to personality (emotional stability)?</p>${enough(nMin, 12)}
+      ${legend([{ name:'Ability EI (emotion questions)', color:COL.accent }, { name:'Trait EI (self-report)', color:COL.ink }])}
+      ${barChart({ groups:['Correlation with g (thinking tasks)','Correlation with emotional stability'], series:[{ name:'Ability', color:COL.accent, vals:A.map(x => x.r) }, { name:'Trait', color:COL.ink, vals:T.map(x => x.r) }], y0:-.5, y1:1, yTicks:tick(-.5, 1, .25), yFmt:fmtR, yLabel:'Correlation (r)', vFmt:fmtR, bands: fin(rc) ? [{ lo:-rc, hi:rc, label:'Shaded: noise band for n = ' + nMin + ' (bars inside it could be chance)' }] : [] })}
+      ${keystats([{ n: fmtR(AT.r), l:'ability EI with trait EI: do the two "EIs" even agree?' }, { n:'.10 to .30', l:'ability EI with g in the literature' }, { n:'≈ .85', l:'trait EI with the general factor of personality (meta-analytic)' }])}
+      ${tutor('Lecture 7, slide "The measure determines the conclusion". Expected pattern: ability EI correlates modestly with g and weakly with personality; trait EI barely with g but clearly with emotional stability. So whether "EI" is a new intelligence or relabelled personality depends on which measure you pick. Ask: if you only had the trait measure, what would you conclude about EI?')}`);
+  } else {
+    const pts = R.filter(r => fin(r.eu) && fin(r.euPred)), pts2 = R.filter(r => fin(r.eu) && fin(r.tei));
+    const rp = corrOf(R, 'euPred', 'eu'), rt = corrOf(R, 'tei', 'eu');
+    body.push(`<div class="label">Reveal 1d</div><h1>Do you know how good you are with emotions?</h1>
+      <p class="prompt">Left: your predicted score on the emotion questions against your actual score. Right: your self-rated (trait) EI against the same actual score.</p>${enough(pts.length, 12)}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        ${scatter({ W:560, H:460, pts: pts.map(r => ({ x:r.euPred, y:r.eu })), x0:0, x1:10, y0:0, y1:10, xTicks:tick(0, 10, 2), yTicks:tick(0, 10, 2), xLabel:'Predicted score', yLabel:'Actual score', diag:true, jitter:.5, fit:true })}
+        ${scatter({ W:560, H:460, pts: pts2.map(r => ({ x:r.tei, y:r.eu, color:COL.ink })), x0:1, x1:7, y0:0, y1:10, xTicks:tick(1, 7, 1), yTicks:tick(0, 10, 2), xLabel:'Self-rated EI (1–7)', yLabel:'Actual score', jitter:.3, fit:true })}
+      </div>
+      ${keystats([{ n: fmtNum(mean(pts.map(r => r.euPred))) + ' / ' + fmtNum(mean(pts.map(r => r.eu))), l:'average predicted / actual score' }, { n: fmtR(rp.r), l:'prediction with actual score (resolution across people)' }, { n: fmtR(rt.r), l:'self-rated EI with actual score' }])}
+      ${tutor('"Self-reported ability is not actual ability" (Lecture 7). Points above the dashed line did better than they predicted. Link to Lectures 1–3: this is a metacognitive judgement about an emotional skill. A weak correlation on the right is the core problem with trait EI as a measure of <em>ability</em>; it may still measure something useful (emotional self-efficacy).')}`);
+  }
+  return t.html + body.join('');
+}
+
+/* ---------- Reveal 2: creativity ---------- */
+function stageRV2(){
+  const t = tabs('rv2', PHASES.find(p => p.id === 'rv2').reveal);
+  const ct = classTable(), R = ct.rows.filter(r => fin(r.flu)), body = [];
+  if (t.cur === 'flu'){
+    const r1 = corrOf(R, 'flu', 'orig'), r2 = corrOf(R, 'flu', 'origP');
+    const mx = Math.max(10, ...R.map(r => r.flu)) + 1;
+    body.push(`<div class="label">Reveal 2a</div><h1>More ideas = more original?</h1>
+      <p class="prompt">Each idea scores for rarity: 1 minus the share of the class who had a similar idea (a doorstop scores low, a one-off scores close to 1). Left: your total originality score. Right: your <em>average</em> originality per idea.</p>${enough(R.length, 12)}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        ${scatter({ W:560, H:440, pts: R.map(r => ({ x:r.flu, y:r.orig })), x0:0, x1:mx, y0:0, y1:Math.max(6, ...R.map(r => r.orig)) + 1, xTicks:tick(0, mx, 4), yTicks:tick(0, 20, 2), xLabel:'Fluency (number of ideas)', yLabel:'Originality: total score', jitter:.4, fit:true })}
+        ${scatter({ W:560, H:440, pts: R.map(r => ({ x:r.flu, y:r.origP, color:COL.ink })), x0:0, x1:mx, y0:0, y1:1, xTicks:tick(0, mx, 4), yTicks:tick(0, 1, .25), yFmt:v => v.toFixed(2), xLabel:'Fluency (number of ideas)', yLabel:'Originality: average per idea', jitter:.4, fit:true })}
+      </div>
+      ${keystats([{ n: fmtR(r1.r), l:'fluency with total originality' }, { n: fmtR(r2.r), l:'fluency with average originality' }, { n: fmtNum(mean(R.map(r => r.flu))), l:'average number of ideas' }])}
+      ${tutor('The fluency confound (Lecture 9): a total originality score rises just because you produced more ideas. Switch to the average per idea and most of the relationship goes. Same people, same answers, a different scoring rule, a different conclusion about who is "creative". Ask: which scoring rule would you defend, and why?')}`);
+  } else if (t.cur === 'cat'){
+    const rows = Object.entries(ct.share).filter(([c]) => c !== 'Other').sort((a, b) => b[1] - a[1]).slice(0, 12).map(([c, v]) => ({ label:c, v, color: v < .15 ? COL.light : COL.accent }));
+    const others = [...new Set(R.flatMap(r => r.aut.filter(x => autCat(x) === 'Other').map(x => x.trim())))];
+    const nResp = R.reduce((a, r) => a + r.flu, 0);
+    body.push(`<div class="label">Reveal 2b</div><h1>What the room said</h1>
+      <p class="prompt">Share of people who gave at least one idea in each category. Pale bars: fewer than 15% thought of it, so it counts as rare.</p>${enough(R.length, 12)}
+      ${rows.length ? hbar({ rows, max:1, vFmt:v => Math.round(v * 100) + '%' }) : ''}
+      ${keystats([{ n: nResp, l:'ideas in total' }, { n: others.length, l:'different ideas that fit no category' }, { n: ct.share['Doorstop'] ? pct0(ct.share['Doorstop']) : '–', l:'said "doorstop" (or similar)' }])}
+      <div class="controls" style="margin-top:12px"><button class="btn small ghost" id="oneoff">${S.ui.oneoff ? 'Hide' : 'Show'} some one-off answers</button> <span class="tiny">Check them on your own screen before projecting.</span></div>
+      ${S.ui.oneoff ? `<div class="oneoff">${shuffle(others, rng(3)).slice(0, 14).map(x => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
+      ${tutor('Statistical rarity depends on who is in the sample: "pizza oven" might be rare in one tutorial and common in another, so the same answer scores differently. And the categories here were decided by a keyword list someone wrote. Ask: is "throw it through a window" creative? Novel, maybe, but useful? (Creativity needs both, Lecture 9.) Who should judge? That is Amabile\'s consensual assessment.')}`);
+  } else {
+    const R2 = ct.rows.filter(r => fin(r.g) && fin(r.orig));
+    const a = corrOf(ct.rows, 'g', 'orig'), b = corrOf(ct.rows, 'g', 'flu'), c = corrOf(ct.rows, 'cr', 'orig');
+    body.push(`<div class="label">Reveal 2c</div><h1>Is creativity separate from g?</h1>
+      <p class="prompt">Your thinking-task composite (g) against your total originality score on the brick task.</p>${enough(R2.length, 12)}
+      ${scatter({ W:900, H:420, pts: R2.map(r => ({ x:r.g, y:r.orig })), x0:-2.5, x1:2.5, y0:0, y1:Math.max(6, ...R2.map(r => r.orig)) + 1, xTicks:tick(-2, 2, 1), yTicks:tick(0, 20, 2), xLabel:'g composite (average z-score on the three thinking tasks)', yLabel:'Originality: total score', jitter:.05, fit:true })}
+      ${keystats([{ n: fmtR(a.r), l:'g with originality' }, { n: fmtR(b.r), l:'g with fluency' }, { n: fmtR(c.r), l:'"I am creative" with originality' }])}
+      ${tutor('Lecture 9: creativity is partly dependent on g, but not reducible to it, and personality (openness) is its strongest trait correlate. The threshold hypothesis (below about IQ 120 the link is stronger) cannot be tested here: we have 30 people and no real IQ scores. Ask: what sample would you need? Also note whether self-rated creativity tracked actual output, an echo of reveal 1d.')}`);
+  }
+  return t.html + body.join('');
+}
+
+/* ---------- Courtroom ---------- */
+function stageCourt(){
+  const teams = allTeams(), n = nTeams();
+  const left = S.ui.clock ? S.ui.clock - Date.now() : null;
+  return `<div class="label">The scorecard · about 10 minutes</div><h1>Put a candidate on trial</h1>
+    <p class="prompt">Each team scores one candidate against the six criteria from Lectures 7 to 9, and designs the one study that would convince a sceptic. Use today's data where you can.</p>
+    <table class="lb" style="font-size:16px"><tr><th>Team</th><th>Candidate</th><th class="r">Status</th></tr>
+      ${TEAM_NAMES.slice(0, n).map(T => `<tr><td>Team ${T}</td><td>${candFor(T).name}</td><td class="r">${teams[T] && teams[T].done ? 'submitted' : teams[T] && teams[T].card ? 'working…' : '–'}</td></tr>`).join('')}</table>
+    <div class="grid6">${CRIT.map((c, i) => `<div class="c"><div class="n">0${i + 1}</div><h3>${c.n}</h3><p>${c.d}</p></div>`).join('')}</div>
+    <div class="row" style="margin-top:16px;align-items:center"><div class="clock" id="clock">${left == null ? '10:00' : fmtTime(left / 1000)}</div><button class="btn small ghost controls" id="clockGo" style="border-top:1px solid var(--line)">${S.ui.clock ? 'Reset timer' : 'Start 10-minute timer'}</button></div>
+    ${tutor('Circulate. Push teams on "No evidence" versus "Fails": absence of evidence is not evidence of absence. Teams with trait EI, ability EI and creativity should cite the reveals. For incremental validity, ask "beyond g <em>and</em> personality?" The AI-prompting team has no lecture to lean on; that is the point.')}`;
+}
+function stageCross(){
+  const t = tabs('cross', PHASES.find(p => p.id === 'cross').reveal);
+  const teams = allTeams(), list = TEAM_NAMES.slice(0, nTeams());
+  if (t.cur === 'lect'){
+    return t.html + `<div class="label">For comparison</div><h1>What the lectures concluded</h1>
+      <table class="lb vt"><tr><th>Candidate</th><th>Lecture verdict</th></tr>
+      ${list.map(T => { const c = candFor(T); return `<tr><td style="width:24%"><strong>${c.name}</strong><div class="tiny">Team ${T}</div></td><td>${c.lecture}</td></tr>`; }).join('')}</table>
+      ${tutor('Where did a team disagree with the lecture? Disagreement backed by a good argument is a better outcome than agreement by recall. Close with the transferable skill from Lecture 8: this scorecard works for any new construct claim, from "grit" to "AI literacy".')}`;
+  }
+  const sym = v => { const x = VERD.find(q => q[0] === v); return x ? `<span class="sym ${v}">${x[2]}</span>` : '<span class="sym unknown">·</span>'; };
+  const ov = v => { const x = OVERALL.find(q => q[0] === v); return x ? x[1] : '–'; };
+  const pair = list.map((T, i) => `Team ${list[(i + 1) % list.length]} questions Team ${T}`).join(' · ');
+  return t.html + `<div class="label">Cross-examination</div><h1>Defend your verdict</h1>
+    <p class="prompt">Each team has 60 seconds to present its case. The next team gets one question to attack it. ${list.length > 1 ? `<br><span class="tiny">${pair}</span>` : ''}</p>
+    <table class="lb vt"><tr><th>Candidate</th>${CRIT.map(c => `<th class="r" style="text-align:center">${c.n}</th>`).join('')}<th>Verdict</th></tr>
+    ${list.map(T => { const c = candFor(T), card = (teams[T] && teams[T].card) || {}; return `<tr><td><strong>${c.name}</strong><div class="tiny">Team ${T}</div></td>${CRIT.map(cr => `<td class="sym">${sym(card[cr.id])}</td>`).join('')}<td>${ov(card.overall)}</td></tr>
+      ${card.study ? `<tr><td></td><td colspan="${CRIT.length + 1}" class="tiny" style="color:var(--muted);font-size:14px">Study: ${esc(card.study)}</td></tr>` : ''}`; }).join('')}</table>
+    <p class="tiny" style="margin-top:8px">${VERD.map(([k, l, s]) => s + ' ' + l).join(' · ')}</p>
+    ${tutor('Good cross-examination questions: "Is that a factor separate from g, or just g applied to new content?" "Beyond g <em>and</em> personality?" "Would your study tell apart an intelligence from expertise?" Keep it moving: about 8 minutes for six teams. Then switch to the lecture verdicts tab.')}`;
+}
+function stageEnd(){
+  const h = pollHist();
+  return `<div class="label">Wrap-up</div><h1>Smart at what, measured how, and how do we know?</h1>
+    <p class="prompt">Today the same people gave different answers about "emotional intelligence" and "creativity" depending on how we measured them. The measure shapes the conclusion.</p>
+    ${h.html}
+    ${tutor('Three take-homes: (1) the positive manifold showed up even in a few minutes of tasks; (2) ability and trait EI are different constructs with different profiles, and self-ratings are not abilities; (3) scoring choices (count vs proportion) changed who looked creative. Exam tip: when you meet any claim of a new intelligence, run the six criteria.')}`;
+}
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+async function boot(){
+  if (!S.code){ render(); return; }
+  $('#tag').textContent = 'Session ' + S.code + (S.local ? ' · offline' : '');
+  S.pid = S.host ? 'host' : getPid();
+  try { S.db = S.local ? makeLocalDB(S.code) : await makeFirebaseDB(S.code); }
+  catch(e){ showError(e); return; }
+  let first = true;
+  S.db.onSession(s => {
+    S.session = s;
+    if (S.host && !s && first){ S.db.setSession({ phase:'lobby', nTeams:6, created:Date.now() }).catch(showError); }
+    first = false; render();
+  }, showError);
+  S.db.onResps(o => {
+    S.resps = o || {};
+    if (!S.host){ const mine = S.resps[S.pid]; if (mine) S.me = deepMerge(mine, S.me); }
+    render();
+  }, showError);
+  S.db.onTeams(o => { S.teams = o || {}; render(); }, showError);
+  const resync = async () => {
+    try {
+      const s = await S.db.getSession();
+      if (s && JSON.stringify(s) !== JSON.stringify(S.session)){ S.session = s; render(); }
+      if (curPhase() === 'court'){ const t = await S.db.getTeams(); if (JSON.stringify(t) !== JSON.stringify(S.teams)){ S.teams = t; render(); } }
+    } catch(e){}
+  };
+  if (!S.host){ setInterval(() => { if (!document.hidden) resync(); }, 5000); setTimeout(() => render(), 8500); setInterval(tickTimer, 250); }
+  else setInterval(() => { const el = $('#clock'); if (el && S.ui.clock){ const left = S.ui.clock - Date.now(); el.textContent = fmtTime(left / 1000); el.style.color = left <= 0 ? 'var(--accent)' : ''; } }, 500);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) resync(); });
+  window.addEventListener('focus', resync);
+  if (S.host) document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'p' || e.key === 'P') document.body.classList.toggle('present');
+    if (/^[1-9]$/.test(e.key)){ const t = document.querySelectorAll('[data-tab]')[Number(e.key) - 1]; if (t) t.click(); }
+    const ci = PHASES.findIndex(p => p.id === curPhase());
+    if (e.key === 'ArrowRight' && ci < PHASES.length - 1) S.db.setSession({ phase:PHASES[ci + 1].id });
+    if (e.key === 'ArrowLeft' && ci > 0) S.db.setSession({ phase:PHASES[ci - 1].id });
+  });
+}
+boot();
+</script>
+</body>
+</html>
