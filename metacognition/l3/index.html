@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Track Your Learning</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f6f5f2;
+    --ink: #1d1d1b;
+    --muted: #6b6a66;
+    --line: #dddbd5;
+    --accent: #c4501f;
+    --accent-ink: #ffffff;
+    --good: #2f7d4f;
+    --bad: #b23a3a;
+    --imm: #c4501f;
+    --del: #2a5d8f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 18px 16px 28px; }
+  h1 { font-size: 20px; margin: 0 0 2px; letter-spacing: -0.01em; }
+  h2 { font-size: 16px; margin: 0 0 6px; }
+  p { margin: 0 0 10px; }
+  .sub { color: var(--muted); font-size: 13.5px; }
+  .steps { display: flex; gap: 6px; margin: 14px 0 16px; flex-wrap: wrap; }
+  .step { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .step.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .step.done { color: var(--good); border-color: var(--good); }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; background: var(--bg); }
+  .card.locked { background: var(--panel); }
+  .card .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .num { font-size: 12px; color: var(--muted); min-width: 22px; }
+  .cname { font-weight: 600; flex: 1 1 220px; }
+  .slider { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+  input[type=range] { flex: 1 1 220px; accent-color: var(--accent); }
+  .val { font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; font-weight: 600; }
+  .scale { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  button { font: inherit; border-radius: 8px; border: 1px solid var(--ink); background: var(--ink); color: #fff;
+    padding: 7px 14px; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--ink); }
+  button.accent { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  .saved { font-size: 13px; color: var(--muted); }
+  .saved b { color: var(--ink); }
+  .big { border: 1px solid var(--line); border-radius: 12px; padding: 22px 18px; background: var(--panel); }
+  .bigname { font-size: 22px; font-weight: 650; margin: 6px 0 4px; }
+  .prompt { color: var(--muted); font-size: 13.5px; margin-bottom: 14px; }
+  .opts { display: grid; gap: 8px; margin: 12px 0 16px; }
+  .opt { text-align: left; background: var(--bg); color: var(--ink); border: 1px solid var(--line); padding: 10px 12px; }
+  .opt.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 6px; }
+  .count { font-size: 12.5px; color: var(--muted); }
+  .note { font-size: 13px; color: var(--muted); background: var(--panel); border-radius: 8px; padding: 10px 12px; margin: 10px 0; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0 14px; }
+  .stat { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat .k { font-size: 12px; color: var(--muted); }
+  .stat .v { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .stat.imm .v { color: var(--imm); } .stat.del .v { color: var(--del); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 6px 0 12px; }
+  th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 12px; color: var(--muted); font-weight: 500; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; width: 64px; }
+  .ok { color: var(--good); font-weight: 600; } .no { color: var(--bad); font-weight: 600; }
+  .dots { position: relative; height: 20px; min-width: 120px; }
+  .dots .track { position: absolute; left: 0; right: 0; top: 9px; height: 2px; background: var(--line); }
+  .dots .d { position: absolute; top: 4px; width: 12px; height: 12px; border-radius: 50%; transform: translateX(-6px); }
+  .legend { font-size: 12px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+  .takeaway { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; margin: 12px 0; }
+  .foot { margin-top: 18px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .link { background: none; border: none; color: var(--muted); padding: 0; text-decoration: underline; font-size: 12.5px; }
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr; }
+    .hide-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Track your learning</h1>
+  <p class="sub">Lecture 3 · Functions of Metacognition. Your responses stay in this browser and are anonymous.</p>
+  <div class="steps" id="steps"></div>
+  <div id="app"></div>
+  <div class="foot">
+    <span class="sub" id="saveNote"></span>
+    <button class="link" id="resetBtn">Start over</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG. Edit concepts and questions here.
+   Order = the order concepts appear in the video.
+   ============================================================ */
+const CONCEPTS = [
+  { name: "Discrepancy reduction",
+    q: "According to the discrepancy-reduction model, which items should a learner prioritise?",
+    opts: ["Items currently judged least well learned",
+           "Items that are partially known, neither too easy nor too hard",
+           "Items that were most recently forgotten",
+           "Items that are easiest to learn"],
+    a: 0 },
+  { name: "Region of proximal learning",
+    q: "The region of proximal learning model says learners should prioritise items that are…",
+    opts: ["Currently judged least well learned",
+           "Partially known, neither too easy nor too hard",
+           "Already well learned, to consolidate them",
+           "Studied least recently"],
+    a: 1 },
+  { name: "The delayed-JOL effect",
+    q: "Delayed JOLs tend to be more accurate than immediate JOLs because they are based on…",
+    opts: ["Processing fluency during study",
+           "A longer total study time",
+           "Attempts to retrieve the answer",
+           "Lower overall confidence"],
+    a: 2 },
+  { name: "Illusions of competence (font size)",
+    q: "Presenting study items in a large font…",
+    opts: ["Improves recall but not JOLs",
+           "Improves both recall and JOLs",
+           "Has no effect on either",
+           "Inflates JOLs without improving recall"],
+    a: 3 },
+  { name: "Confidence and decision quality",
+    q: "In sequential decision-making, overconfidence tends to lead to…",
+    opts: ["Premature commitment",
+           "Excessive information-seeking",
+           "More exploration of new strategies",
+           "Better-calibrated group decisions"],
+    a: 0 },
+  { name: "Two heads are better than one",
+    q: "Bahrami et al. (2010) found that pairs outperform individuals on a perceptual task when…",
+    opts: ["The more confident member makes the final call",
+           "They share confidence effectively",
+           "They decide without discussing",
+           "They simply average their answers"],
+    a: 1 },
+  { name: "Egocentric discounting",
+    q: "Egocentric discounting refers to people tending to…",
+    opts: ["Over-weight advice relative to their own opinion",
+           "Ignore their own opinion when given advice",
+           "Under-weight advice relative to their own opinion",
+           "Weight advice and their own opinion equally"],
+    a: 2 },
+  { name: "Wells's metacognitive beliefs",
+    q: "In Wells's account, psychological disorders such as anxiety are maintained mainly by…",
+    opts: ["The content of the anxious thoughts themselves",
+           "Low working-memory capacity",
+           "Poor perceptual discrimination",
+           "Beliefs about one's own thinking processes"],
+    a: 3 }
+];
+
+/* Optional: an endpoint that accepts a JSON POST of each completed record.
+   Leave empty to keep everything in the student's browser only. */
+const SUBMIT_URL = "";
+
+/* ============================================================ */
+const params = new URLSearchParams(location.search);
+const SESSION = params.get("s") || "PSYC2016-L3";
+const KEY = "jolDemo:" + SESSION;
+
+let memoryStore = null;
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) return JSON.parse(raw); } catch (e) {}
+  return memoryStore;
+}
+function save() {
+  memoryStore = state;
+  let ok = true;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { ok = false; }
+  document.getElementById("saveNote").textContent = ok
+    ? "Progress saved in this browser."
+    : "Your browser is blocking storage, so keep this page open until you finish.";
+}
+function fresh() {
+  return { id: Math.random().toString(36).slice(2, 10), phase: "watch",
+           imm: {}, immT: {}, del: {}, delT: {}, ans: {}, delIdx: 0, quizIdx: 0,
+           started: Date.now(), submitted: false };
+}
+let state = load() || fresh();
+
+const STEPS = [["watch", "1 · While you watch"], ["delayed", "2 · After the video"],
+               ["quiz", "3 · Quick quiz"], ["results", "4 · Your results"]];
+function renderSteps() {
+  const order = STEPS.map(s => s[0]);
+  const cur = order.indexOf(state.phase);
+  document.getElementById("steps").innerHTML = STEPS.map(([k, label], i) =>
+    `<span class="step ${i === cur ? "on" : i < cur ? "done" : ""}">${label}</span>`).join("");
+}
+
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function sliderHTML(id, v) {
+  return `<div class="slider">
+      <input type="range" min="0" max="100" step="1" value="${v}" id="${id}" aria-label="Judgement of learning, 0 to 100">
+      <span class="val" id="${id}-v">${v}</span>
+    </div>
+    <div class="scale"><span>0 · Definitely couldn't</span><span>100 · Definitely could</span></div>`;
+}
+function wireSlider(id) {
+  const el = document.getElementById(id);
+  const out = document.getElementById(id + "-v");
+  el.addEventListener("input", () => { out.textContent = el.value; el.dataset.touched = "1"; });
+  return el;
+}
+
+/* ---------- Phase 1: immediate JOLs ---------- */
+function renderWatch() {
+  const done = Object.keys(state.imm).length;
+  let html = `<p>When the video pauses after each concept, come back here and rate it.
+    <b>How well could you answer an exam question on this concept?</b> Rate each one as soon as it's covered, not later.</p>`;
+  CONCEPTS.forEach((c, i) => {
+    if (state.imm[i] !== undefined) {
+      html += `<div class="card locked"><div class="row"><span class="num">${i + 1}</span>
+        <span class="cname">${esc(c.name)}</span><span class="saved">Rated <b>${state.imm[i]}</b></span></div></div>`;
+    } else {
+      const next = Object.keys(state.imm).length === i;
+      html += `<div class="card"><div class="row"><span class="num">${i + 1}</span>
+        <span class="cname">${esc(c.name)}</span>
+        ${next ? "" : `<span class="saved hide-sm">Not covered yet</span>`}</div>
+        ${next ? sliderHTML("s" + i, 50) + `<div class="bar"><span></span><button class="accent" id="b${i}">Save rating</button></div>` : ""}
+      </div>`;
+    }
+  });
+  html += `<div class="bar" style="margin-top:14px"><span class="count">${done} of ${CONCEPTS.length} rated</span>
+    <button id="toDelayed" ${done < CONCEPTS.length ? "disabled" : ""}>I've finished the video</button></div>`;
+  app.innerHTML = html;
+
+  const i = Object.keys(state.imm).length;
+  if (i < CONCEPTS.length) {
+    const s = wireSlider("s" + i);
+    document.getElementById("b" + i).onclick = () => {
+      state.imm[i] = +s.value; state.immT[i] = Date.now(); save(); render();
+    };
+  }
+  document.getElementById("toDelayed").onclick = () => { state.phase = "delayed"; save(); render(); };
+}
+
+/* ---------- Phase 2: delayed, cue-only JOLs ---------- */
+function renderDelayed() {
+  const i = state.delIdx;
+  if (i >= CONCEPTS.length) { state.phase = "quiz"; save(); return render(); }
+  app.innerHTML = `
+    <p>Now rate each concept again. You'll see only its name.</p>
+    <div class="big">
+      <div class="count">Concept ${i + 1} of ${CONCEPTS.length}</div>
+      <div class="bigname">${esc(CONCEPTS[i].name)}</div>
+      <div class="prompt">First, try to recall what this means and explain it to yourself in your head. <b>Then</b> rate: how well could you answer an exam question on it?</div>
+      ${sliderHTML("d", 50)}
+      <div class="bar"><span class="count" id="hint">Take a few seconds to recall first.</span>
+        <button class="accent" id="next" disabled>Save rating</button></div>
+    </div>`;
+  const s = wireSlider("d");
+  const btn = document.getElementById("next");
+  // Short pause before saving is allowed, to encourage a retrieval attempt
+  setTimeout(() => { btn.disabled = false; document.getElementById("hint").textContent = ""; }, 3000);
+  btn.onclick = () => {
+    state.del[i] = +s.value; state.delT[i] = Date.now(); state.delIdx++; save(); render();
+  };
+}
+
+/* ---------- Phase 3: quiz ---------- */
+function renderQuiz() {
+  const i = state.quizIdx;
+  if (i >= CONCEPTS.length) { state.phase = "results"; save(); return render(); }
+  const c = CONCEPTS[i];
+  let picked = null;
+  state.order = state.order || {};
+  if (!state.order[i]) {
+    const o = c.opts.map((_, k) => k);
+    for (let j = o.length - 1; j > 0; j--) { const r = Math.floor(Math.random() * (j + 1)); [o[j], o[r]] = [o[r], o[j]]; }
+    state.order[i] = o; save();
+  }
+  app.innerHTML = `
+    <p>One question per concept. You'll see your answers at the end.</p>
+    <div class="big">
+      <div class="count">Question ${i + 1} of ${CONCEPTS.length}</div>
+      <p style="font-weight:600;margin-top:6px">${esc(c.q)}</p>
+      <div class="opts">${state.order[i].map(k => `<button class="opt" data-k="${k}">${esc(c.opts[k])}</button>`).join("")}</div>
+      <div class="bar"><span></span><button class="accent" id="next" disabled>${i === CONCEPTS.length - 1 ? "See my results" : "Next"}</button></div>
+    </div>`;
+  const btns = [...app.querySelectorAll(".opt")];
+  btns.forEach(b => b.onclick = () => {
+    btns.forEach(x => x.classList.remove("sel")); b.classList.add("sel");
+    picked = +b.dataset.k; document.getElementById("next").disabled = false;
+  });
+  document.getElementById("next").onclick = () => {
+    state.ans[i] = picked; state.quizIdx++; save(); render();
+  };
+}
+
+/* ---------- Phase 4: results ---------- */
+const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN;
+function resolution(jols, correct) {
+  const c = jols.filter((_, i) => correct[i]), w = jols.filter((_, i) => !correct[i]);
+  if (!c.length || !w.length) return null;
+  return mean(c) - mean(w);
+}
+function renderResults() {
+  const n = CONCEPTS.length;
+  const correct = CONCEPTS.map((c, i) => state.ans[i] === c.a);
+  const imm = CONCEPTS.map((_, i) => state.imm[i]);
+  const del = CONCEPTS.map((_, i) => state.del[i]);
+  const acc = 100 * correct.filter(Boolean).length / n;
+  const mi = mean(imm), md = mean(del);
+  const ri = resolution(imm, correct), rd = resolution(del, correct);
+
+  const fmt = v => Math.round(v);
+  const signed = v => (v > 0 ? "+" : "") + Math.round(v);
+
+  let rows = CONCEPTS.map((c, i) => `<tr>
+      <td>${esc(c.name)}</td>
+      <td class="hide-sm"><div class="dots"><div class="track"></div>
+        <span class="d" style="left:${imm[i]}%;background:var(--imm)" title="Immediate ${imm[i]}"></span>
+        <span class="d" style="left:${del[i]}%;background:var(--del);opacity:.9" title="Delayed ${del[i]}"></span></div></td>
+      <td class="n">${imm[i]}</td><td class="n">${del[i]}</td>
+      <td class="n">${correct[i] ? '<span class="ok">✓</span>' : '<span class="no">✗</span>'}</td>
+    </tr>`).join("");
+
+  // Takeaway text
+  const lines = [];
+  if (mi - acc > 10) lines.push(`Straight after each explanation, your ratings averaged <b>${fmt(mi)}</b>, but you scored <b>${fmt(acc)}%</b>. A clear explanation makes material feel more learned than it is.`);
+  else if (acc - mi > 10) lines.push(`You were underconfident straight after each explanation: ratings averaged <b>${fmt(mi)}</b>, and you scored <b>${fmt(acc)}%</b>.`);
+  else lines.push(`Your immediate ratings (average <b>${fmt(mi)}</b>) were close to your score (<b>${fmt(acc)}%</b>).`);
+  if (md < mi - 5) lines.push(`Your ratings dropped to <b>${fmt(md)}</b> when you had to recall each concept from its name alone. Trying to retrieve something gives a more honest signal than how fluent it felt.`);
+  else if (md > mi + 5) lines.push(`Your ratings rose to <b>${fmt(md)}</b> when you rated from the name alone.`);
+  else lines.push(`Your delayed ratings (<b>${fmt(md)}</b>) were similar on average to your immediate ones.`);
+  if (ri !== null && rd !== null) {
+    lines.push(rd > ri
+      ? `Your delayed ratings also did a better job of telling apart the concepts you knew from those you didn't (gap of <b>${signed(rd)}</b> points vs <b>${signed(ri)}</b>). That's the delayed-JOL effect.`
+      : `Here, your immediate ratings separated the concepts you knew from those you didn't at least as well as your delayed ones (gap of <b>${signed(ri)}</b> vs <b>${signed(rd)}</b> points). With only ${n} concepts, one person's result is noisy, so the class result is the one to watch.`);
+  } else {
+    lines.push(`You got ${correct.every(Boolean) ? "every question right" : "no questions right"}, so we can't check whether your ratings separated known from unknown concepts.`);
+  }
+
+  const resCell = (r) => r === null ? "–" : signed(r);
+
+  app.innerHTML = `
+    <div class="stats">
+      <div class="stat imm"><div class="k">Average immediate rating</div><div class="v">${fmt(mi)}</div></div>
+      <div class="stat del"><div class="k">Average delayed rating</div><div class="v">${fmt(md)}</div></div>
+      <div class="stat"><div class="k">Quiz score</div><div class="v">${fmt(acc)}%</div></div>
+    </div>
+    <div class="takeaway">${lines.map(l => `<p>${l}</p>`).join("")}</div>
+    <h2 style="margin-top:16px">Concept by concept</h2>
+    <div class="legend"><span><span class="sw" style="background:var(--imm)"></span>Immediate</span>
+      <span><span class="sw" style="background:var(--del)"></span>Delayed</span></div>
+    <table>
+      <thead><tr><th>Concept</th><th class="hide-sm">0 to 100</th><th class="n">Imm.</th><th class="n">Del.</th><th class="n">Quiz</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="note"><b>Telling known from unknown</b>: the average rating for concepts you got right minus the average for those you got wrong.
+      Bigger is better. Immediate: <b>${resCell(ri)}</b> · Delayed: <b>${resCell(rd)}</b></div>
+    <h2 style="margin-top:16px">Answers</h2>
+    ${CONCEPTS.map((c, i) => `<p style="font-size:13.5px"><b>${i + 1}. ${esc(c.q)}</b><br>
+      ${correct[i] ? '<span class="ok">✓</span>' : '<span class="no">✗</span> You chose: ' + esc(c.opts[state.ans[i]]) + '<br>'}
+      Answer: ${esc(c.opts[c.a])}</p>`).join("")}
+  `;
+
+  if (SUBMIT_URL && !state.submitted) {
+    const rec = { session: SESSION, id: state.id, started: state.started,
+      items: CONCEPTS.map((c, i) => ({ concept: c.name, imm: imm[i], immT: state.immT[i],
+        del: del[i], delT: state.delT[i], answer: state.ans[i], correct: correct[i] })) };
+    fetch(SUBMIT_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(rec) })
+      .then(r => { if (r.ok) { state.submitted = true; save(); } }).catch(() => {});
+  }
+}
+
+function render() {
+  renderSteps();
+  ({ watch: renderWatch, delayed: renderDelayed, quiz: renderQuiz, results: renderResults })[state.phase]();
+  try { window.scrollTo(0, 0); } catch (e) {}
+}
+
+const resetBtn = document.getElementById("resetBtn");
+let resetArmed = false;
+resetBtn.onclick = () => {
+  if (!resetArmed) { resetArmed = true; resetBtn.textContent = "Click again to erase your answers";
+    setTimeout(() => { resetArmed = false; resetBtn.textContent = "Start over"; }, 4000); return; }
+  resetArmed = false; resetBtn.textContent = "Start over";
+  state = fresh(); save(); render();
+};
+
+save(); render();
+</script>
+</body>
+</html>
