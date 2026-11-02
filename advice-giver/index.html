@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="../gate.js"></script>
+<title>Advice-giver paradigm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-bg:        #fcf6ef;
+  --color-bg-warm:   #f6f0e9;
+  --color-bg-card:   #f0e8dd;
+  --color-bg-dark:   #2b180a;
+  --color-text:      #2b180a;
+  --color-text-muted:#6b5a4a;
+  --color-text-light:#9a8a7a;
+  --color-accent:    #c8956c;
+  --color-accent-h:  #b07a52;
+  --color-border:    #e0d4c6;
+  --font-display:    'Playfair Display', Georgia, serif;
+  --font-body:       'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ease:            cubic-bezier(0.16, 1, 0.3, 1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--color-bg); }
+body { font-family: var(--font-body); color: var(--color-text); -webkit-font-smoothing: antialiased; overflow: hidden; }
+
+.wrap { position: absolute; inset: 0; min-height: 300px; overflow: hidden; background: var(--color-bg); }
+#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* top-left: title and controls */
+.top-left { position: absolute; top: 14px; left: 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; z-index: 3; }
+.title { font-family: var(--font-display); font-size: 19px; font-weight: 500; letter-spacing: .005em; }
+.ctrl { display: flex; gap: 6px; align-items: center; }
+.ib, .speed {
+  height: 34px; min-width: 34px; border-radius: 999px; border: 1px solid var(--color-border);
+  background: rgba(252, 246, 239, .92); color: var(--color-text); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font: 500 12px var(--font-body); transition: background .25s var(--ease), border-color .25s var(--ease);
+}
+.ib:hover, .speed:hover { background: var(--color-bg-card); border-color: var(--color-accent); }
+.ib:focus-visible, .speed:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.speed { padding: 0 12px; }
+.ib svg { width: 14px; height: 14px; fill: currentColor; }
+
+/* room labels */
+.label {
+  position: absolute; transform: translate(-50%, -100%); z-index: 2; pointer-events: none;
+  background: rgba(252, 246, 239, .92); border: 1px solid var(--color-border); border-radius: 999px;
+  padding: 5px 12px; font-size: 12px; font-weight: 500; color: var(--color-text-muted); white-space: nowrap;
+  transition: opacity .5s var(--ease), color .5s var(--ease);
+}
+.label b { color: var(--color-text); font-weight: 600; }
+.label .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+
+/* small clock shown while the trials repeat */
+.ffclock { position: absolute; top: 12px; right: 14px; z-index: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; opacity: 0; pointer-events: none; }
+.ffclock svg { width: 64px; height: 64px; display: block; filter: drop-shadow(0 4px 10px rgba(43, 24, 10, .12)); }
+.ffclock span { font: 500 11.5px var(--font-body); color: var(--color-text-muted); background: rgba(252, 246, 239, .92); border: 1px solid var(--color-border); border-radius: 999px; padding: 3px 10px; }
+
+/* caption */
+.caption {
+  position: absolute; left: 16px; bottom: 16px; z-index: 3; width: min(450px, calc(100% - 32px));
+  background: rgba(252, 246, 239, .95); border: 1px solid var(--color-border); border-radius: 14px;
+  padding: 14px 18px 16px; box-shadow: 0 10px 34px rgba(43, 24, 10, .08);
+}
+.caption .tag { font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--color-accent-h); margin-bottom: 4px; }
+.caption h2 { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.2; margin-bottom: 6px; }
+.caption p { font-size: 13.5px; line-height: 1.55; color: var(--color-text-muted); }
+.caption .in { animation: up .5s var(--ease); }
+@keyframes up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.fail { position: absolute; inset: 0; display: none; place-items: center; text-align: center; padding: 24px; color: var(--color-text-muted); font-size: 14px; }
+
+@media (max-width: 620px) {
+  .ffclock svg { width: 60px; height: 60px; }
+  .title { display: none; }
+  .caption { left: 10px; bottom: 10px; width: calc(100% - 20px); padding: 11px 14px 13px; }
+  .caption h2 { font-size: 18px; }
+  .caption p { font-size: 12.5px; }
+  .top-left { left: 10px; top: 10px; }
+  .label { font-size: 11px; padding: 4px 9px; }
+}
+@media (prefers-reduced-motion: reduce) { .caption .in { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <canvas id="gl" aria-label="Animation of the advice-giver paradigm" role="img"></canvas>
+
+  <div class="top-left">
+    <div class="title">Advice-giver paradigm</div>
+    <div class="ctrl">
+      <button class="ib" id="bRestart" aria-label="Restart" title="Restart"><svg viewBox="0 0 16 16"><path d="M8 2.5a5.5 5.5 0 1 0 5.2 7.3h-1.7A3.9 3.9 0 1 1 8 4.1c1 0 1.8.4 2.5 1L8.8 6.8H14V1.6l-2 2A5.5 5.5 0 0 0 8 2.5z"/></svg></button>
+      <button class="ib" id="bPlay" aria-label="Pause" title="Pause (space)"></button>
+      <button class="speed" id="bSpeed" aria-label="Playback speed" title="Playback speed">1x</button>
+    </div>
+  </div>
+
+  <div class="label" id="lblL"><span class="dot" style="background:#c8956c"></span><b>You</b> &middot; regulator</div>
+  <div class="label" id="lblR"><span class="dot" style="background:#2b180a"></span><b>Partner</b> &middot; target</div>
+
+  <div class="ffclock" id="ffClock" aria-hidden="true">
+    <svg viewBox="-50 -50 100 100">
+      <circle r="46" fill="#fcf6ef" stroke="#c8956c" stroke-width="4"/>
+      <g id="ffTicks"></g>
+      <line id="ffHour" x1="0" y1="0" x2="0" y2="-22" stroke="#2b180a" stroke-width="4.5" stroke-linecap="round"/>
+      <line id="ffMin" x1="0" y1="0" x2="0" y2="-34" stroke="#b07a52" stroke-width="3" stroke-linecap="round"/>
+      <circle r="4" fill="#2b180a"/>
+    </svg>
+    <span>and so on for every image</span>
+  </div>
+
+  <div class="caption" aria-live="polite">
+    <div class="tag" id="cTag"></div>
+    <h2 id="cTitle"></h2>
+    <p id="cText"></p>
+  </div>
+
+  <div class="fail" id="fail">The 3D library could not be loaded. Check your connection and reload.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+'use strict';
+if (typeof THREE === 'undefined') { document.getElementById('fail').style.display = 'grid'; return; }
+
+/* ---------- palette (matches usyd-meta-lab.github.io) ---------- */
+const C = {
+  text: '#2b180a', bg: '#fcf6ef', warm: '#f6f0e9', card: '#f0e8dd', dark: '#2b180a', muted: '#6b5a4a', light: '#9a8a7a',
+  accent: '#c8956c', accentH: '#b07a52', border: '#e0d4c6', red: '#b03a2e', green: '#2e9e4f'
+};
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const backOut = t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const smooth = (t, a, b) => { const u = prog(t, a, b); return u * u * (3 - 2 * u); };
+
+/* ---------- timeline ---------- */
+let cur = 0;
+const mk = (id, d, props) => { const s = Object.assign({ id, a: cur, b: cur + d }, props); cur += d; return s; };
+const SEGS = [
+  mk('cover', 9, { g: 0 }),               // 0
+  mk('match', 5, { g: 0 }),               // 1
+  mk('advice', 10, { g: 1, trial: 1 }),   // 2
+  mk('wait', 7, { g: 1, trial: 1 }),      // 3
+  mk('fb', 4, { g: 1, trial: 1 }),        // 4
+  mk('obs', 4.5, { g: 1, trial: 2 }),     // 5
+  mk('wait', 5, { g: 1, trial: 2 }),      // 6
+  mk('fb', 3, { g: 1, trial: 2 }),        // 7
+  mk('ff', 4, { g: 1 }),                  // 8
+  mk('eff', 7, { g: 2 }),                 // 9
+  mk('probe', 9, { g: 3 }),               // 10
+  mk('debrief', 3.2, { g: 4 }),           // 11
+  mk('reveal', 6.6, { g: 4 })             // 12
+];
+const END = cur;
+const segAt = t => { for (let i = 0; i < SEGS.length; i++) if (t < SEGS[i].b) return SEGS[i]; return SEGS[SEGS.length - 1]; };
+
+const T1 = { kind: 'help', n: 1, score: 6, A: SEGS[2].a, W: SEGS[3].a, F: SEGS[4].a };
+Object.assign(T1, { typeA: T1.A + 1.2, typeB: T1.A + 6.2, subm: T1.A + 6.9, send: T1.A + 7.2, arrive: T1.A + 9.0,
+  imgOn: T1.W + 0.9, imgOff: T1.F, rateA: T1.F + 0.15, rateB: T1.F + 1.1, sub: T1.F + 1.25, send2: T1.F + 1.35, arrive2: T1.F + 2.6 });
+const T2 = { kind: 'observe', n: 2, score: 4, O: SEGS[5].a, W: SEGS[6].a, F: SEGS[7].a };
+Object.assign(T2, { imgOn: T2.W + 0.5, imgOff: T2.F, rateA: T2.F + 0.1, rateB: T2.F + 0.8, sub: T2.F + 0.9, send2: T2.F + 0.95, arrive2: T2.F + 2.0 });
+const TRI = { 1: T1, 2: T2 };
+const FF = SEGS[8], EFF = SEGS[9], PRB = SEGS[10], DEB = SEGS[11], REV = SEGS[12];
+const D0 = REV.a + 0.5;           // dissolve begins
+const ADVICE_TEXT = 'Try to remember it is only a picture, and the feeling will pass quickly.';
+
+/* ---------- captions ---------- */
+const CAP = {
+  cover:   ['Cover story', 'Participants are told the study is about how people help each other deal with negative emotions. One person is the regulator (the advice giver) and the other is the target, who views negative images. They sit in separate rooms and can only send short text messages.'],
+  match:   ['Matching', 'A "Matching you with a partner" screen turns into "Matched!". From here on the participant believes a real person is on the other side of the wall.'],
+  advice:  ['Advice', 'On Help trials the regulator has 40 seconds to type advice for their partner, who is about to see a negative image. The message is sent across to the partner.'],
+  obs:     ['Observation', 'On Observe trials advice is locked. The regulator can only watch what happens after their partner sees the image.'],
+  wait:    ['Waiting for the partner', 'The partner views the image for a random 4 to 10 seconds while the regulator waits.'],
+  fb:      ['Feedback', 'The partner rates how they feel on a 10-point scale, and the regulator sees that rating after each image.'],
+  ff:      ['The cycle repeats', 'Advice (or observation), waiting and feedback repeat across the whole set of images.'],
+  eff:     ['Efficacy rating', 'The regulator rates how effective their advice was, from "I made them feel a lot worse" to "I made them feel a lot better".'],
+  probe:   ['Suspicion probes', 'Open questions check what participants thought the study was about, and whether anything seemed odd.'],
+  debrief: ['Debrief', 'Participants are told how the study really worked.'],
+  reveal:  ['There was no other person', 'The partner, their room and the feedback were never real. The feedback was generated by the experimenter.']
+};
+function tagFor(s) {
+  if (s.trial) return 'Trial ' + s.trial + ' of 30 · ' + (TRI[s.trial].kind === 'help' ? 'Help trial' : 'Observe trial');
+  switch (s.id) {
+    case 'cover': case 'match': return 'Setup';
+    case 'ff': return 'Trials 3 to 30';
+    case 'eff': case 'probe': return 'After the trials';
+    default: return 'Debrief';
+  }
+}
+
+/* ---------- renderer / scene ---------- */
+const wrap = document.getElementById('wrap');
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 16 / 9, 0.1, 100);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.76));
+const sun = new THREE.DirectionalLight(0xffffff, 0.34);
+sun.position.set(-5, 10, 9); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -11, right: 11, top: 9, bottom: -5, near: 1, far: 34 });
+sun.shadow.bias = -0.0008; sun.shadow.normalBias = 0.04;
+scene.add(sun);
+const redLight = new THREE.PointLight(0xb03a2e, 0, 4.6, 1.6);
+redLight.position.set(3.0, 2.0, 0.6);
+scene.add(redLight);
+
+const mat = (col, fade) => new THREE.MeshLambertMaterial({ color: col });
+const box = (w, h, d, col) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(col)); m.castShadow = true; m.receiveShadow = true; return m; };
+const cyl = (rt, rb, h, col, seg = 20) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat(col)); m.castShadow = true; m.receiveShadow = true; return m; };
+const ball = (r, col) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 22, 16), mat(col)); m.castShadow = true; return m; };
+const at = (o, x, y, z) => { o.position.set(x, y, z); return o; };
+
+/* ground shadow catcher */
+{
+  const g = new THREE.Mesh(new THREE.PlaneGeometry(60, 40), new THREE.ShadowMaterial({ opacity: 0.1 }));
+  g.rotation.x = -Math.PI / 2; g.position.y = -0.21; g.receiveShadow = true; scene.add(g);
+}
+
+/* rooms */
+const ROOM_W = 6.4, ROOM_D = 4.4, ROOM_H = 3.2;
+[-1, 1].forEach(s => {
+  const cx = s * 3.4;
+  scene.add(at(box(ROOM_W, 0.2, ROOM_D, '#f0e8dd'), cx, -0.1, 0));
+  scene.add(at(box(ROOM_W, 0.2, 0.05, s < 0 ? '#c8956c' : '#6b5a4a'), cx, -0.1, ROOM_D / 2 + 0.02));
+  scene.add(at(box(ROOM_W, ROOM_H, 0.15, '#f6f0e9'), cx, ROOM_H / 2, -ROOM_D / 2 + 0.075));
+  scene.add(at(box(ROOM_W, 0.16, 0.18, '#e0d4c6'), cx, 0.08, -ROOM_D / 2 + 0.16));        // skirting
+  // window
+  const wx = s * 5.5;
+  scene.add(at(box(1.3, 1.3, 0.06, '#d9c6ad'), wx, 2.0, -ROOM_D / 2 + 0.17));
+  scene.add(at(box(1.12, 1.12, 0.05, '#fffaf2'), wx, 2.0, -ROOM_D / 2 + 0.2));
+  scene.add(at(box(0.03, 1.12, 0.06, '#d9c6ad'), wx, 2.0, -ROOM_D / 2 + 0.22));
+  scene.add(at(box(1.12, 0.03, 0.06, '#d9c6ad'), wx, 2.0, -ROOM_D / 2 + 0.22));
+  // desk
+  scene.add(at(box(3.25, 0.08, 1.4, '#d9c6ad'), s * 2.925, 0.92, -1.4));
+  scene.add(at(box(3.2, 0.7, 0.04, '#c9b49b'), s * 2.925, 0.55, -2.05));
+  scene.add(at(box(0.08, 0.9, 1.3, '#c9b49b'), s * 1.38, 0.45, -1.4));
+});
+/* the wall between the rooms */
+scene.add(at(box(0.4, 3.4, ROOM_D, '#cdb9a2'), 0, 1.7, 0));
+scene.add(at(box(0.42, 0.05, ROOM_D + 0.02, '#b39d85'), 0, 3.42, 0));
+
+/* ---------- canvas screens ---------- */
+const W = 800, H = 500;
+const SANS = 'Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif';
+const SERIF = '"Playfair Display", Georgia, serif';
+const F = (w, s, fam = SANS) => w + ' ' + s + 'px ' + fam;
+function makeScreen() {
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const tex = new THREE.CanvasTexture(c); tex.minFilter = THREE.LinearFilter; tex.anisotropy = 8;
+  return { c, ctx: c.getContext('2d'), tex };
+}
+const scrL = makeScreen(), scrR = makeScreen();
+
+const fadeItems = [];   // meshes that dissolve at the reveal
+function trackFade(group) {
+  group.updateMatrixWorld(true);
+  const p = new THREE.Vector3();
+  group.traverse(o => {
+    if (o.isMesh) { o.material.transparent = true; o.getWorldPosition(p); fadeItems.push({ mesh: o, y: p.y }); }
+  });
+}
+
+function makeMonitor(side, screen) {
+  const g = new THREE.Group();
+  g.position.set(side * 2.9, 0.96, -1.3);
+  g.rotation.y = side * 0.4;
+  g.add(at(box(2.56, 1.66, 0.09, '#2b180a'), 0, 1.09, 0));
+  g.add(at(box(0.12, 0.28, 0.1, '#2b180a'), 0, 0.14, -0.02));
+  g.add(at(box(0.62, 0.04, 0.36, '#2b180a'), 0, 0.02, 0));
+  const scr = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.5), new THREE.MeshBasicMaterial({ map: screen.tex }));
+  scr.position.set(0, 1.09, 0.047);
+  g.add(scr);
+  return g;
+}
+const monL = makeMonitor(-1, scrL), monR = makeMonitor(1, scrR);
+scene.add(monL, monR);
+
+/* keyboards */
+const kbL = at(box(0.9, 0.04, 0.28, '#e8dcc9'), -4.0, 0.98, -1.0);
+const kbR = at(box(0.9, 0.04, 0.28, '#e8dcc9'), 4.0, 0.98, -1.0);
+scene.add(kbL, kbR);
+
+/* people */
+function buildPerson(side, shirt, hair, skin) {
+  const root = new THREE.Group();
+  root.position.set(side * 4.9, 0, -1.0);
+  root.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
+  const trousers = '#6b5a4a';
+  [-0.13, 0.13].forEach(sx => {
+    root.add(at(box(0.2, 0.2, 0.62, trousers), sx, 0.66, 0.28));
+    root.add(at(box(0.18, 0.6, 0.18, trousers), sx, 0.3, 0.58));
+    root.add(at(box(0.2, 0.08, 0.32, '#2b180a'), sx, 0.04, 0.66));
+  });
+  root.add(at(box(0.5, 0.2, 0.34, trousers), 0, 0.66, 0));
+  const torso = new THREE.Group(); torso.position.set(0, 0.74, 0); root.add(torso);
+  torso.add(at(cyl(0.23, 0.27, 0.7, shirt), 0, 0.35, 0));
+  const head = new THREE.Group(); head.position.set(0, 0.78, 0); torso.add(head);
+  head.add(at(cyl(0.07, 0.08, 0.12, skin), 0, 0.0, 0));
+  head.add(at(ball(0.2, skin), 0, 0.2, 0));
+  const hairM = new THREE.Mesh(new THREE.SphereGeometry(0.226, 24, 12, 0, Math.PI * 2, 0, Math.PI * 0.5), mat(hair));
+  hairM.position.set(0, 0.215, -0.03); hairM.rotation.x = -0.45; hairM.castShadow = false; head.add(hairM);
+  [-0.075, 0.075].forEach(ex => head.add(at(ball(0.026, '#2b180a'), ex, 0.22, 0.185)));
+  const shoulders = [], elbows = [];
+  [-1, 1].forEach(sx => {
+    const sh = new THREE.Group(); sh.position.set(sx * 0.3, 0.62, 0); sh.rotation.x = -0.9; torso.add(sh);
+    sh.add(ball(0.1, shirt));
+    sh.add(at(cyl(0.07, 0.065, 0.4, shirt), 0, -0.2, 0));
+    const el = new THREE.Group(); el.position.set(0, -0.4, 0); el.rotation.x = -0.55; sh.add(el);
+    el.add(at(cyl(0.06, 0.055, 0.36, shirt), 0, -0.18, 0));
+    el.add(at(ball(0.065, skin), 0, -0.38, 0));
+    shoulders.push(sh); elbows.push(el);
+  });
+  return { root, torso, head, shoulders, elbows };
+}
+function buildChair(side) {
+  const g = new THREE.Group();
+  g.position.set(side * 4.9, 0, -1.0);
+  g.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
+  g.add(at(box(0.64, 0.08, 0.64, '#9a8a7a'), 0, 0.5, -0.02));
+  g.add(at(box(0.64, 0.62, 0.07, '#9a8a7a'), 0, 0.86, -0.34));
+  g.add(at(cyl(0.04, 0.04, 0.46, '#6b5a4a', 10), 0, 0.25, -0.02));
+  g.add(at(cyl(0.34, 0.34, 0.05, '#6b5a4a', 24), 0, 0.03, -0.02));
+  return g;
+}
+const pL = buildPerson(-1, '#c8956c', '#2b180a', '#e7c7a6');
+const pR = buildPerson(1, '#2b180a', '#6b5a4a', '#cfa07c');
+scene.add(pL.root, pR.root, buildChair(-1), buildChair(1));
+
+/* everything on the partner's side that dissolves in the reveal (the chair stays) */
+[pR.root, monR, kbR].forEach(trackFade);
+// the partner's desk pieces are the last three scene children of each desk set; register by position
+scene.children.forEach(o => {
+  if (o.isMesh && o.position.x > 1.2 && o.position.x < 4.9 && o.position.z < -0.9 && o.position.y > 0.4 && o.position.y < 1.0) trackFade(o);
+});
+
+/* channel arc between the two monitors */
+const PL = new THREE.Vector3(-2.9, 2.95, -1.3), PR = new THREE.Vector3(2.9, 2.95, -1.3), PC = new THREE.Vector3(0, 5.2, -0.7);
+function bez(u, out, rev) {
+  const a = rev ? PR : PL, b = rev ? PL : PR, m = 1 - u;
+  return out.set(m * m * a.x + 2 * m * u * PC.x + u * u * b.x, m * m * a.y + 2 * m * u * PC.y + u * u * b.y, m * m * a.z + 2 * m * u * PC.z + u * u * b.z);
+}
+const LN = 60;
+const lineGeo = new THREE.BufferGeometry();
+{
+  const pos = new Float32Array((LN + 1) * 3), v = new THREE.Vector3();
+  for (let i = 0; i <= LN; i++) { bez(i / LN, v, false); pos.set([v.x, v.y, v.z], i * 3); }
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+}
+const lineMat = new THREE.LineDashedMaterial({ color: 0xc8956c, dashSize: 0.16, gapSize: 0.13, transparent: true, opacity: 0.9 });
+const channel = new THREE.Line(lineGeo, lineMat);
+channel.computeLineDistances();
+scene.add(channel);
+
+/* padlock that blocks the channel on Observe trials */
+const lock = new THREE.Group();
+{
+  const body = box(0.5, 0.4, 0.24, '#2b180a'); body.position.y = 0;
+  const shackle = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.045, 10, 24, Math.PI), mat('#6b5a4a'));
+  shackle.position.y = 0.2; shackle.castShadow = true;
+  const key = cyl(0.045, 0.045, 0.26, '#c8956c', 12); key.rotation.x = Math.PI / 2; key.position.z = 0.0;
+  const hole = ball(0.05, '#c8956c'); hole.position.set(0, 0.03, 0.125);
+  lock.add(body, shackle, hole);
+  lock.position.set(0, 4.1, -1.1);
+  lock.visible = false;
+  scene.add(lock);
+}
+
+/* ---------- sprites: message packets ---------- */
+function glowTex() {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const x = c.getContext('2d'), g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, 'rgba(200,149,108,.95)'); g.addColorStop(.35, 'rgba(200,149,108,.35)'); g.addColorStop(1, 'rgba(200,149,108,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function faceFill(score) {
+  const k = clamp((score - 1) / 9), A = [217, 139, 122], B = [236, 205, 150], D = [159, 192, 138];
+  const m = (p, q, u) => p.map((v, i) => Math.round(lerp(v, q[i], u)));
+  const c = k < .5 ? m(A, B, k * 2) : m(B, D, (k - .5) * 2);
+  return 'rgb(' + c.join(',') + ')';
+}
+function drawFace(ctx, cx, cy, r, score) {
+  ctx.save();
+  ctx.fillStyle = faceFill(score); ctx.strokeStyle = C.dark; ctx.lineWidth = Math.max(1.5, r * .07);
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = C.dark;
+  [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * r * .34, cy - r * .2, r * .085, 0, Math.PI * 2); ctx.fill(); });
+  const curve = (score - 5.5) / 4.5;
+  ctx.lineCap = 'round'; ctx.lineWidth = Math.max(2, r * .09);
+  ctx.beginPath(); ctx.moveTo(cx - r * .42, cy + r * .36);
+  ctx.quadraticCurveTo(cx, cy + r * .36 + curve * r * .5, cx + r * .42, cy + r * .36); ctx.stroke();
+  ctx.restore();
+}
+function bubbleTex(kind, score) {
+  const c = document.createElement('canvas'); c.width = 160; c.height = 140;
+  const x = c.getContext('2d');
+  x.shadowColor = 'rgba(43,24,10,.25)'; x.shadowBlur = 10; x.shadowOffsetY = 4;
+  x.fillStyle = kind === 'advice' ? C.accent : '#ffffff';
+  rr(x, 14, 10, 132, 96, 28); x.fill();
+  x.beginPath(); x.moveTo(40, 100); x.lineTo(34, 128); x.lineTo(68, 104); x.closePath(); x.fill();
+  x.shadowColor = 'transparent';
+  if (kind === 'advice') {
+    x.fillStyle = '#fff';
+    [52, 80, 108].forEach(px => { x.beginPath(); x.arc(px, 58, 9, 0, Math.PI * 2); x.fill(); });
+  } else {
+    x.strokeStyle = C.accent; x.lineWidth = 4; rr(x, 14, 10, 132, 96, 28); x.stroke();
+    drawFace(x, 80, 58, 34, score);
+  }
+  return new THREE.CanvasTexture(c);
+}
+const glow = glowTex();
+const bubbleTexs = { advice: bubbleTex('advice') };
+const bubbleFor = (kind, score) => {
+  const k = kind === 'advice' ? 'advice' : 'f' + score;
+  return bubbleTexs[k] || (bubbleTexs[k] = bubbleTex('face', score));
+};
+const TRAIL = 9;
+const pool = [0, 1, 2].map(() => {
+  const bub = new THREE.Sprite(new THREE.SpriteMaterial({ map: bubbleTexs.advice, transparent: true, depthTest: false }));
+  bub.scale.set(0.62, 0.54, 1); bub.renderOrder = 12; bub.visible = false; scene.add(bub);
+  const trail = [];
+  for (let i = 0; i < TRAIL; i++) {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, transparent: true, depthTest: false, opacity: 0 }));
+    s.renderOrder = 11; s.visible = false; scene.add(s); trail.push(s);
+  }
+  const ping = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, transparent: true, depthTest: false, opacity: 0 }));
+  ping.renderOrder = 11; ping.visible = false; scene.add(ping);
+  return { bub, trail, ping };
+});
+const PK = [
+  { from: 'L', a: T1.send, b: T1.arrive, kind: 'advice' },
+  { from: 'R', a: T1.send2, b: T1.arrive2, kind: 'face', score: T1.score },
+  { from: 'R', a: T2.send2, b: T2.arrive2, kind: 'face', score: T2.score }
+];
+for (let k = 0; k < 6; k++) {
+  const a = FF.a + 0.2 + k * 0.55;
+  PK.push({ from: k % 2 ? 'R' : 'L', a, b: a + 0.9, kind: k % 2 ? 'face' : 'advice', score: [3, 5, 7, 4, 6, 5][k] });
+}
+const tmpV = new THREE.Vector3();
+function updatePackets(t) {
+  pool.forEach(p => { p.bub.visible = false; p.ping.visible = false; p.trail.forEach(s => s.visible = false); });
+  let n = 0;
+  PK.forEach(pk => {
+    if (n >= pool.length) return;
+    const rev = pk.from === 'R';
+    const end = rev ? PL : PR;
+    if (t >= pk.a && t <= pk.b) {
+      const p = pool[n++], u = ease(prog(t, pk.a, pk.b));
+      p.bub.material.map = bubbleFor(pk.kind, pk.score); p.bub.material.needsUpdate = true;
+      bez(u, tmpV, rev); p.bub.position.copy(tmpV); p.bub.visible = true;
+      const pop = 1 + 0.12 * Math.sin(u * Math.PI);
+      p.bub.scale.set(0.62 * pop, 0.54 * pop, 1);
+      for (let i = 0; i < TRAIL; i++) {
+        const uu = Math.max(0, u - (i + 1) * 0.03);
+        bez(uu, tmpV, rev); const s = p.trail[i];
+        s.position.copy(tmpV); s.visible = u > 0.02; s.material.opacity = 0.55 * (1 - i / TRAIL); s.scale.setScalar(0.5 * (1 - i / (TRAIL + 2)));
+      }
+    } else if (t > pk.b && t < pk.b + 0.7) {
+      const p = pool[n++], u = prog(t, pk.b, pk.b + 0.7);
+      p.ping.position.set(end.x, end.y - 0.15, end.z + 0.2); p.ping.visible = true;
+      p.ping.scale.setScalar(0.4 + 1.6 * easeOut(u)); p.ping.material.opacity = 0.8 * (1 - u);
+    }
+  });
+}
+
+/* ---------- dissolve particles ---------- */
+const NP = 460;
+const pData = [];
+{
+  const rnd = (() => { let s = 98765; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; })();
+  const regions = [
+    { n: 190, x: [5.0, 5.75], y: [0.1, 1.95], z: [-1.4, -0.6] },   // partner
+    { n: 190, x: [1.6, 4.2], y: [1.0, 2.9], z: [-1.6, -1.1] },     // monitor
+    { n: 80, x: [1.3, 4.5], y: [0.85, 1.0], z: [-2.0, -0.8] }      // desk and keyboard
+  ];
+  const cols = ['#c8956c', '#2b180a', '#6b5a4a', '#e0d4c6', '#d9c6ad', '#b07a52'].map(c => new THREE.Color(c));
+  regions.forEach(r => {
+    for (let i = 0; i < r.n; i++) {
+      const p = { x: lerp(r.x[0], r.x[1], rnd()), y: lerp(r.y[0], r.y[1], rnd()), z: lerp(r.z[0], r.z[1], rnd()) };
+      p.delay = (2.9 - p.y) * 0.42 + rnd() * 0.35;
+      p.vx = (rnd() - .5) * 0.5; p.vy = 0.3 + rnd() * 0.7; p.vz = (rnd() - .4) * 0.5;
+      p.sw = rnd() * 6; p.col = cols[Math.floor(rnd() * cols.length)];
+      pData.push(p);
+    }
+  });
+}
+const ptGeo = new THREE.BufferGeometry();
+const ptPos = new Float32Array(pData.length * 3), ptCol = new Float32Array(pData.length * 3);
+ptGeo.setAttribute('position', new THREE.BufferAttribute(ptPos, 3));
+ptGeo.setAttribute('color', new THREE.BufferAttribute(ptCol, 3));
+function dotTex() {
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.beginPath(); x.arc(32, 32, 28, 0, Math.PI * 2); x.fill();
+  return new THREE.CanvasTexture(c);
+}
+const points = new THREE.Points(ptGeo, new THREE.PointsMaterial({ size: 0.13, vertexColors: true, map: dotTex(), transparent: true, alphaTest: 0.3, depthWrite: false }));
+points.frustumCulled = false; points.visible = false; scene.add(points);
+const bgCol = new THREE.Color(C.bg), tmpC = new THREE.Color();
+function updateDissolve(t) {
+  const on = t > D0;
+  points.visible = on;
+  fadeItems.forEach(f => {
+    const fd = on ? clamp((t - (D0 + (2.9 - f.y) * 0.42)) / 1.2) : 0;
+    f.mesh.material.opacity = 1 - fd;
+    f.mesh.visible = fd < 1;
+  });
+  if (!on) return;
+  pData.forEach((p, i) => {
+    const tau = t - D0 - p.delay;
+    if (tau < 0) { ptPos[i * 3] = 0; ptPos[i * 3 + 1] = -50; ptPos[i * 3 + 2] = 0; return; }
+    const sw = Math.sin(tau * 1.6 + p.sw) * 0.18;
+    ptPos[i * 3] = p.x + p.vx * tau + sw;
+    ptPos[i * 3 + 1] = p.y + p.vy * tau;
+    ptPos[i * 3 + 2] = p.z + p.vz * tau;
+    const fade = clamp(tau / 2.6);
+    tmpC.copy(p.col).lerp(bgCol, fade * fade);
+    ptCol[i * 3] = tmpC.r; ptCol[i * 3 + 1] = tmpC.g; ptCol[i * 3 + 2] = tmpC.b;
+    if (fade >= 0.999) ptPos[i * 3 + 1] = -50;
+  });
+  ptGeo.attributes.position.needsUpdate = true; ptGeo.attributes.color.needsUpdate = true;
+}
+
+/* ---------- screen drawing helpers ---------- */
+function base(ctx, label, accent) {
+  ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = C.card; ctx.fillRect(0, 0, W, 40);
+  ctx.fillStyle = C.border; ctx.fillRect(0, 40, W, 2);
+  ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(24, 21, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = C.muted; ctx.font = F(600, 15); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, 40, 22);
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'center';
+}
+function text(ctx, s, x, y, font, color, align) {
+  ctx.font = font; ctx.fillStyle = color || C.text; ctx.textAlign = align || 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y);
+}
+function para(ctx, s, x, y, maxW, lh, font, color, align) {
+  ctx.font = font; ctx.fillStyle = color || C.text; ctx.textAlign = align || 'center'; ctx.textBaseline = 'alphabetic';
+  const words = s.split(' '); let line = '', yy = y;
+  words.forEach(w => {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxW && line) { ctx.fillText(line, x, yy); line = w; yy += lh; } else line = test;
+  });
+  if (line) { ctx.fillText(line, x, yy); yy += lh; }
+  return yy;
+}
+function button(ctx, label, cx, cy, w, pressed) {
+  ctx.save();
+  const sc = pressed ? 0.94 : 1;
+  ctx.translate(cx, cy); ctx.scale(sc, sc);
+  ctx.fillStyle = pressed ? C.accentH : C.dark;
+  rr(ctx, -w / 2, -21, w, 42, 9); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = F(500, 18); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, 0, 1);
+  ctx.restore(); ctx.textBaseline = 'alphabetic';
+}
+function spinner(ctx, cx, cy, r, t, col, speed) {
+  ctx.save(); ctx.lineWidth = 8; ctx.lineCap = 'round';
+  ctx.strokeStyle = C.border; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = col; const a = t * (speed || 5.5); ctx.beginPath(); ctx.arc(cx, cy, r, a, a + 1.9); ctx.stroke();
+  ctx.restore();
+}
+function drawTick(ctx, cx, cy, s, p, col) {
+  const pts = [[-0.45, 0.02], [-0.12, 0.36], [0.5, -0.32]];
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(cx + pts[0][0] * s, cy + pts[0][1] * s);
+  const p1 = clamp(p * 2), p2 = clamp(p * 2 - 1);
+  ctx.lineTo(cx + lerp(pts[0][0], pts[1][0], p1) * s, cy + lerp(pts[0][1], pts[1][1], p1) * s);
+  if (p2 > 0) ctx.lineTo(cx + lerp(pts[1][0], pts[2][0], p2) * s, cy + lerp(pts[1][1], pts[2][1], p2) * s);
+  ctx.stroke(); ctx.restore();
+}
+function lockIcon(ctx, cx, cy, s, col) {
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s);
+  ctx.strokeStyle = col; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(0, -8, 14, Math.PI, 0); ctx.stroke();
+  ctx.fillStyle = col; rr(ctx, -20, -8, 40, 32, 6); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, 8, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function typed(str, t, a, b) { return str.slice(0, Math.floor(str.length * prog(t, a, b))); }
+function textbox(ctx, x, y, w, h, content, t, active, disabled) {
+  ctx.save();
+  ctx.fillStyle = disabled ? C.card : '#ffffff'; ctx.strokeStyle = active ? C.accent : C.border; ctx.lineWidth = active ? 3 : 2;
+  rr(ctx, x, y, w, h, 10); ctx.fill(); ctx.stroke();
+  ctx.restore();
+  if (content) para(ctx, content + (active && Math.floor(t * 2.6) % 2 === 0 ? '|' : ''), x + 18, y + 36, w - 36, 30, F(400, 22), C.text, 'left');
+  else if (active && Math.floor(t * 2.6) % 2 === 0) text(ctx, '|', x + 18, y + 36, F(400, 22), C.text, 'left');
+}
+function rngSeed(s) { return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+function negImage(ctx, x, y, w, h, seed, t) {
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  const g = ctx.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, '#2a1311'); g.addColorStop(1, '#4a1a14');
+  ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  const r = rngSeed(seed * 7919 + 13), hues = ['176,58,46', '90,28,30', '224,140,96', '40,18,20', '120,40,50'];
+  for (let i = 0; i < 9; i++) {
+    const bx = x + r() * w, by = y + r() * h, br = 70 + r() * 130, dx = Math.sin(t * 0.3 + i) * 14, dy = Math.cos(t * 0.25 + i * 1.7) * 10;
+    const hue = hues[Math.floor(r() * hues.length)], al = 0.25 + r() * 0.35;
+    const rg = ctx.createRadialGradient(bx + dx, by + dy, 0, bx + dx, by + dy, br);
+    rg.addColorStop(0, 'rgba(' + hue + ',' + al + ')'); rg.addColorStop(1, 'rgba(' + hue + ',0)');
+    ctx.fillStyle = rg; ctx.fillRect(x, y, w, h);
+  }
+  const vg = ctx.createRadialGradient(x + w / 2, y + h / 2, h * 0.25, x + w / 2, y + h / 2, h * 0.85);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.55)');
+  ctx.fillStyle = vg; ctx.fillRect(x, y, w, h);
+  ctx.restore();
+}
+function dots(ctx, cx, cy, t) {
+  for (let i = 0; i < 3; i++) {
+    const k = 0.5 + 0.5 * Math.sin(t * 5 - i * 0.9);
+    ctx.fillStyle = C.accent; ctx.globalAlpha = 0.35 + 0.65 * k;
+    ctx.beginPath(); ctx.arc(cx + (i - 1) * 26, cy - k * 6, 8, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- screen content ---------- */
+function coverPage(ctx, t, who) {
+  const local = t - SEGS[0].a, pg = Math.min(2, Math.floor(local / 3)), pt = local - pg * 3;
+  const al = Math.min(prog(pt, 0, 0.3), 1 - prog(pt, 2.7, 3));
+  ctx.save(); ctx.globalAlpha = clamp(al);
+  const body = F(400, 24), mute = F(400, 21);
+  if (pg === 0) {
+    text(ctx, 'Welcome to the experiment!', 400, 170, F(500, 42, SERIF));
+    para(ctx, 'In this study we are interested in how people help each other deal with negative emotions, and which strategies typically work.', 400, 232, 600, 34, body, C.text);
+    para(ctx, 'You will be matched with another person. One of you will be the regulator and the other will be the target.', 400, 354, 600, 30, mute, C.muted);
+  } else if (pg === 1) {
+    text(ctx, 'Two separate rooms', 400, 170, F(500, 42, SERIF));
+    para(ctx, 'The target will view a series of negative images. The regulator will not see them, but can send short text advice to help.', 400, 232, 600, 34, body, C.text);
+    para(ctx, 'You and your partner are in different rooms and can only communicate through short messages.', 400, 354, 600, 30, mute, C.muted);
+  } else if (who === 'L') {
+    text(ctx, 'You are the regulator', 400, 170, F(500, 42, SERIF), C.accentH);
+    para(ctx, 'You will give advice to help your partner deal with the negative images. After each image your partner will rate how they feel.', 400, 232, 600, 34, body, C.text);
+  } else {
+    text(ctx, 'You are the target', 400, 170, F(500, 42, SERIF), C.text);
+    para(ctx, 'You will view a series of negative images. Your partner may send you advice to help you cope.', 400, 232, 600, 34, body, C.text);
+  }
+  button(ctx, 'Next', 400, 440, 130, pt > 2.55 && pt < 2.85);
+  ctx.restore();
+}
+function matchScreen(ctx, t) {
+  const m = SEGS[1].a + 3.2, done = t >= m;
+  const grow = smooth(t, m, m + 0.5);
+  if (!done) {
+    spinner(ctx, 400, 200, 46, t, C.accent, 5.5);
+    text(ctx, 'Matching you with a partner...', 400, 318, F(400, 26), C.muted);
+    text(ctx, 'Please wait, this may take up to a minute', 400, 354, F(400, 18), C.light);
+  } else {
+    ctx.strokeStyle = C.green; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(400, 200, 46, 0, Math.PI * 2); ctx.stroke();
+    drawTick(ctx, 400, 200, 46, prog(t, m, m + 0.5), C.green);
+    ctx.save(); ctx.globalAlpha = grow;
+    text(ctx, 'Matched!', 400, 322, F(600, 36), C.green);
+    ctx.restore();
+  }
+}
+function leftAdvice(ctx, t) {
+  const tr = T1, sent = t >= tr.subm + 0.25;
+  text(ctx, 'Help your partner', 400, 96, F(600, 30), C.text);
+  text(ctx, 'Your partner is about to see a negative image.', 400, 134, F(400, 20), C.muted);
+  text(ctx, 'Use the textbox below to provide advice:', 400, 162, F(400, 20), C.muted);
+  const str = typed(ADVICE_TEXT, t, tr.typeA, tr.typeB);
+  ctx.save(); ctx.globalAlpha = sent ? 0.55 : 1;
+  textbox(ctx, 100, 186, 600, 124, str, t, t >= tr.typeA - 0.3 && t < tr.subm, sent);
+  ctx.restore();
+  if (!sent) {
+    button(ctx, 'Submit', 400, 352, 150, t >= tr.subm && t < tr.subm + 0.25);
+    const rem = Math.round(lerp(40, 14, prog(t, tr.A, tr.subm)));
+    text(ctx, 'Time remaining to submit: ', 330, 414, F(400, 18), C.light, 'right');
+    text(ctx, String(rem), 335, 418, F(700, 26), rem <= 16 ? C.red : C.accent, 'left');
+    text(ctx, 'seconds', 335 + (rem >= 10 ? 36 : 20), 414, F(400, 18), C.light, 'left');
+  } else {
+    drawTick(ctx, 382, 348, 24, prog(t, tr.subm + 0.25, tr.subm + 0.7), C.green);
+    ctx.save(); ctx.globalAlpha = prog(t, tr.subm + 0.4, tr.subm + 0.9);
+    text(ctx, 'Advice sent', 410, 356, F(500, 22), C.green, 'left');
+    ctx.restore();
+  }
+}
+function leftObserve(ctx, t) {
+  text(ctx, 'Observation', 400, 100, F(600, 30), C.text);
+  text(ctx, 'Your partner is about to see a negative image.', 400, 142, F(400, 21), C.muted);
+  para(ctx, 'On this trial you are unable to provide advice.', 400, 176, 640, 30, F(600, 21), C.text);
+  ctx.save(); ctx.globalAlpha = 0.9;
+  ctx.fillStyle = C.card; ctx.strokeStyle = C.border; ctx.lineWidth = 2; rr(ctx, 100, 214, 600, 112, 10); ctx.fill(); ctx.stroke();
+  ctx.restore();
+  const k = backOut(prog(t, T2.O + 0.3, T2.O + 0.8));
+  lockIcon(ctx, 400, 262, 1.5 * k, C.light);
+  button(ctx, 'Continue', 400, 390, 160, t > T2.O + 3.5 && t < T2.O + 3.8);
+}
+function leftWaitFb(ctx, t, s) {
+  const tr = TRI[s.trial];
+  if (t >= tr.arrive2) {
+    const k = backOut(prog(t, tr.arrive2, tr.arrive2 + 0.35));
+    ctx.save(); ctx.translate(400, 210); ctx.scale(k, k); ctx.translate(-400, -210);
+    drawFace(ctx, 400, 210, 92, tr.score);
+    ctx.restore();
+    text(ctx, 'This is how your partner indicated feeling', 400, 360, F(400, 22), C.light);
+  } else {
+    spinner(ctx, 400, 190, 46, t, C.light, 5.5);
+    text(ctx, 'Your partner is viewing the image...', 400, 306, F(400, 26), C.muted);
+  }
+}
+function leftFF(ctx, t) {
+  const n = 3 + Math.floor(27 * prog(t, FF.a + 0.2, FF.b - 0.3));
+  spinner(ctx, 400, 168, 42, t, C.accent, 14);
+  text(ctx, 'Trial ' + n + ' of 30', 400, 280, F(500, 44, SERIF), C.text);
+  ctx.fillStyle = C.border; rr(ctx, 200, 322, 400, 12, 6); ctx.fill();
+  ctx.fillStyle = C.accent; rr(ctx, 200, 322, Math.max(12, 400 * n / 30), 12, 6); ctx.fill();
+  text(ctx, (n % 2 ? 'Help' : 'Observe') + ' trial', 400, 380, F(400, 20), C.light);
+}
+function leftEff(ctx, t) {
+  const a = EFF.a;
+  text(ctx, 'How effective was your advice?', 400, 96, F(600, 30), C.text);
+  para(ctx, 'Rate how effective you think you were at making your partner feel better, compared to doing nothing.', 400, 140, 620, 28, F(400, 20), C.muted);
+  const x0 = 130, x1 = 670, xm = 400, y = 290;
+  const v = 45 * backOut(prog(t, a + 1.2, a + 3.2));
+  const tx = lerp(x0, x1, (v + 100) / 200);
+  ctx.fillStyle = C.border; rr(ctx, x0, y - 5, x1 - x0, 10, 5); ctx.fill();
+  ctx.fillStyle = v >= 0 ? C.green : C.red; ctx.globalAlpha = 0.6 * clamp(Math.abs(v) / 25);
+  ctx.fillRect(Math.min(xm, tx), y - 5, Math.abs(tx - xm), 10); ctx.globalAlpha = 1;
+  ctx.fillStyle = C.muted; ctx.fillRect(xm - 1.5, y - 14, 3, 28);
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = C.dark; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(tx, y, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  const vv = Math.round(v);
+  ctx.save(); ctx.globalAlpha = prog(t, a + 1.0, a + 1.5);
+  text(ctx, (vv > 0 ? '+' : '') + vv, tx, y - 30, F(600, 24), v > 3 ? C.green : v < -3 ? C.red : C.muted);
+  ctx.restore();
+  para(ctx, 'I made them feel a lot worse', 170, 342, 190, 22, F(400, 16), C.muted);
+  para(ctx, 'I had no effect on how they felt', 400, 342, 190, 22, F(400, 16), C.muted);
+  para(ctx, 'I made them feel a lot better', 630, 342, 190, 22, F(400, 16), C.muted);
+  button(ctx, 'Continue', 400, 440, 160, t > a + 5.6 && t < a + 5.95);
+}
+function leftProbe(ctx, t) {
+  const p = PRB.a, q2 = t >= p + 4.6;
+  const al = q2 ? prog(t, p + 4.6, p + 4.9) : Math.min(prog(t, p, p + 0.3), 1 - prog(t, p + 4.3, p + 4.6));
+  ctx.save(); ctx.globalAlpha = clamp(al);
+  if (!q2) {
+    text(ctx, 'Question 1 of 2', 400, 90, F(500, 16), C.light);
+    para(ctx, 'What did you think this study was about?', 400, 140, 620, 36, F(600, 30), C.text);
+    textbox(ctx, 100, 196, 600, 120, typed('How people help each other feel better.', t, p + 0.7, p + 3.2), t, t < p + 4, false);
+    button(ctx, 'Next', 400, 380, 130, t > p + 3.9 && t < p + 4.2);
+  } else {
+    text(ctx, 'Question 2 of 2', 400, 90, F(500, 16), C.light);
+    para(ctx, 'Did you notice anything odd in this study? If so, please describe it below.', 400, 138, 640, 34, F(600, 28), C.text);
+    textbox(ctx, 100, 214, 600, 120, typed('Nothing in particular.', t, p + 5.2, p + 7.0), t, t < p + 8.3, false);
+    button(ctx, 'Next', 400, 396, 130, t > p + 8.2 && t < p + 8.5);
+  }
+  ctx.restore();
+}
+function leftDebrief(ctx, t) {
+  const d = DEB.a;
+  text(ctx, 'Debrief', 400, 110, F(500, 46, SERIF), C.text);
+  ctx.save(); ctx.globalAlpha = smooth(t, d + 0.2, d + 0.7);
+  para(ctx, 'Thank you for taking part. You were told you were paired with another person who was viewing negative images.', 400, 170, 640, 32, F(400, 22), C.muted);
+  ctx.restore();
+  ctx.save(); ctx.globalAlpha = smooth(t, d + 1.4, d + 2.0);
+  para(ctx, 'In fact, there was no other person. The feedback you saw was generated by the experimenter.', 400, 300, 640, 36, F(600, 26), C.accentH);
+  ctx.restore();
+}
+function ratingRow(ctx, sel, t, y) {
+  for (let i = 0; i < 10; i++) {
+    const x = 400 + (i - 4.5) * 68, d = Math.abs(i + 1 - sel), sc = 1 + 0.28 * clamp(1 - d);
+    drawFace(ctx, x, y, 27 * sc, i + 1);
+    text(ctx, String(i + 1), x, y + 56, F(500, 15), C.light);
+  }
+  const sx = 400 + (sel - 1 - 4.5) * 68;
+  ctx.strokeStyle = C.accent; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(sx, y, 27 * 1.28 + 8, 0, Math.PI * 2); ctx.stroke();
+}
+function rightPre(ctx, t, s) {
+  const tr = TRI[s.trial];
+  if (tr.kind === 'help') {
+    if (t < tr.arrive) {
+      text(ctx, 'Your partner is writing advice for you...', 400, 210, F(400, 26), C.muted);
+      dots(ctx, 400, 270, t);
+    } else {
+      const k = backOut(prog(t, tr.arrive, tr.arrive + 0.4));
+      ctx.save(); ctx.translate(400, 230); ctx.scale(k, k); ctx.translate(-400, -230);
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = C.accent; ctx.lineWidth = 3; rr(ctx, 100, 130, 600, 200, 16); ctx.fill(); ctx.stroke();
+      text(ctx, 'Advice from your partner', 130, 178, F(600, 18), C.accentH, 'left');
+      para(ctx, ADVICE_TEXT, 130, 224, 540, 34, F(400, 26), C.text, 'left');
+      ctx.restore();
+    }
+  } else {
+    text(ctx, 'Get ready for the next image...', 400, 230, F(400, 28), C.muted);
+    dots(ctx, 400, 290, t);
+  }
+}
+function rightWait(ctx, t, s) {
+  const tr = TRI[s.trial];
+  if (t < tr.imgOn) { rightPre(ctx, t, s); return; }
+  negImage(ctx, 0, 42, W, H - 42, 10 + s.trial, t);
+  ctx.save(); ctx.globalAlpha = 1 - smooth(t, tr.imgOn, tr.imgOn + 0.35);
+  ctx.fillStyle = C.bg; ctx.fillRect(0, 42, W, H - 42);
+  ctx.restore();
+  ctx.save(); ctx.globalAlpha = 0.85; ctx.fillStyle = 'rgba(43,24,10,.7)'; rr(ctx, 230, 446, 340, 32, 16); ctx.fill();
+  ctx.globalAlpha = 1; text(ctx, 'Placeholder, not a real stimulus', 400, 467, F(500, 15), '#f0e8dd');
+  ctx.restore();
+}
+function rightRate(ctx, t, s) {
+  const tr = TRI[s.trial];
+  if (t >= tr.sub + 0.3) {
+    text(ctx, 'Thank you. Waiting for the next trial...', 400, 230, F(400, 26), C.muted);
+    dots(ctx, 400, 290, t);
+    return;
+  }
+  text(ctx, 'How are you feeling now?', 400, 100, F(600, 30), C.text);
+  const sel = lerp(5, tr.score, ease(prog(t, tr.rateA, tr.rateB)));
+  ratingRow(ctx, sel, t, 220);
+  text(ctx, 'Feeling worse', 94, 336, F(400, 17), C.light, 'center');
+  text(ctx, 'Feeling better', 706, 336, F(400, 17), C.light, 'center');
+  button(ctx, 'Submit', 400, 410, 150, t >= tr.sub && t < tr.sub + 0.3);
+}
+function rightFF(ctx, t) {
+  const k = Math.floor((t - FF.a) * 5);
+  if (k % 3 === 0) negImage(ctx, 0, 42, W, H - 42, k, t);
+  else if (k % 3 === 1) { text(ctx, 'How are you feeling now?', 400, 100, F(600, 30), C.text); ratingRow(ctx, 1 + (k * 7) % 10, t, 220); }
+  else { text(ctx, 'Get ready for the next image...', 400, 240, F(400, 28), C.muted); dots(ctx, 400, 300, t); }
+}
+function rightIdle(ctx, t) {
+  spinner(ctx, 400, 200, 42, t, C.light, 5);
+  text(ctx, 'Please wait...', 400, 306, F(400, 26), C.muted);
+}
+
+function drawLeft(ctx, t) {
+  base(ctx, 'REGULATOR (YOU)', C.accent);
+  const s = segAt(t), id = s.id;
+  if (id === 'cover') coverPage(ctx, t, 'L');
+  else if (id === 'match') matchScreen(ctx, t);
+  else if (id === 'advice') leftAdvice(ctx, t);
+  else if (id === 'obs') leftObserve(ctx, t);
+  else if (id === 'wait' || id === 'fb') leftWaitFb(ctx, t, s);
+  else if (id === 'ff') leftFF(ctx, t);
+  else if (id === 'eff') leftEff(ctx, t);
+  else if (id === 'probe') leftProbe(ctx, t);
+  else leftDebrief(ctx, t);
+}
+function drawRight(ctx, t) {
+  base(ctx, 'TARGET (PARTNER)', C.dark);
+  const s = segAt(t), id = s.id;
+  if (id === 'cover') coverPage(ctx, t, 'R');
+  else if (id === 'match') matchScreen(ctx, t);
+  else if (id === 'advice' || id === 'obs') rightPre(ctx, t, s);
+  else if (id === 'wait') rightWait(ctx, t, s);
+  else if (id === 'fb') rightRate(ctx, t, s);
+  else if (id === 'ff') rightFF(ctx, t);
+  else rightIdle(ctx, t);
+}
+
+/* ---------- people animation ---------- */
+function imageIntensity(t) {
+  let d = 0;
+  [T1, T2].forEach(tr => {
+    const on = smooth(t, tr.imgOn, tr.imgOn + 0.6), off = 1 - smooth(t, tr.imgOff + 0.2, tr.imgOff + 1.6);
+    d = Math.max(d, on * off);
+  });
+  if (t >= FF.a && t < FF.b) d = Math.max(d, 0.55 + 0.25 * Math.sin((t - FF.a) * 9)) * smooth(t, FF.a, FF.a + 0.3) * (1 - smooth(t, FF.b - 0.4, FF.b));
+  return d;
+}
+const typingWindows = [[T1.typeA, T1.typeB], [PRB.a + 0.7, PRB.a + 3.2], [PRB.a + 5.2, PRB.a + 7.0]];
+function animatePeople(t, amb) {
+  const typing = typingWindows.some(w => t >= w[0] && t < w[1]);
+  const waiting = (t >= T1.subm && t < T1.arrive2) || (t >= T2.W && t < T2.arrive2) || (t >= FF.a && t < FF.b);
+  const nod = (t >= T1.arrive2 && t < T1.arrive2 + 1.2) || (t >= T2.arrive2 && t < T2.arrive2 + 1.0) ? Math.sin((t - (t < 40 ? T1.arrive2 : T2.arrive2)) * 7) * 0.06 : 0;
+  const breathe = Math.sin(amb * 1.7) * 0.012;
+  // regulator
+  pL.torso.scale.y = 1 + breathe;
+  pL.torso.rotation.x = 0.04 + (waiting ? 0.08 : 0) + nod * 0.6;
+  pL.head.rotation.x = 0.03 + (typing ? 0.12 : 0) + nod;
+  pL.head.rotation.z = waiting ? Math.sin(amb * 0.8) * 0.04 : 0;
+  pL.elbows.forEach((e, i) => { e.rotation.x = -0.55 + (typing ? 0.09 * Math.sin(amb * 14 + i * 1.9) : 0); });
+  // target
+  const d = imageIntensity(t);
+  pR.torso.scale.y = 1 + breathe * 1.4 + d * 0.01 * Math.sin(amb * 9);
+  pR.torso.rotation.x = 0.03 - 0.16 * d;
+  pR.head.rotation.x = 0.04 + 0.32 * d;
+  pR.head.rotation.z = d * 0.03 * Math.sin(amb * 26);
+  pR.shoulders.forEach(s => { s.rotation.x = -0.9 + 0.3 * d; });
+  pR.elbows.forEach(e => { e.rotation.x = -0.55 + 0.25 * d; });
+  return d;
+}
+
+/* ---------- camera ---------- */
+const SHOT = {
+  wide:       { p: [0, 5.3, 15.6], l: [0, 1.15, 0] },
+  wall:       { p: [0, 4.8, 13.4], l: [0, 1.7, 0] },
+  leftClose:  { p: [-4.3, 2.4, 3.9], l: [-2.9, 2.05, -1.3] },
+  rightClose: { p: [4.3, 2.4, 3.9], l: [2.9, 2.05, -1.3] },
+  rightRoom:  { p: [3.4, 3.3, 10.2], l: [3.5, 1.2, 0] }
+};
+const CAM = [
+  [0, 'wide'],
+  [T1.A, 'leftClose'], [T1.send - 0.1, 'wide'], [T1.arrive - 0.4, 'rightClose'], [T1.imgOn + 3.2, 'wide'],
+  [T1.rateA - 0.05, 'rightClose'], [T1.send2 - 0.05, 'wide'], [T1.arrive2 - 0.35, 'leftClose'],
+  [T2.O, 'wall'], [T2.W, 'wide'], [T2.rateA - 0.05, 'rightClose'], [T2.send2 - 0.05, 'wide'], [T2.arrive2 - 0.35, 'leftClose'],
+  [FF.a, 'wide'], [EFF.a, 'leftClose'], [PRB.a, 'leftClose'], [DEB.a, 'leftClose'],
+  [REV.a, 'rightRoom'], [REV.a + 4.4, 'wide']
+];
+function shotAt(t) { let s = CAM[0][1]; for (let i = 0; i < CAM.length; i++) if (t >= CAM[i][0]) s = CAM[i][1]; return s; }
+const camPos = new THREE.Vector3(0, 5.3, 15.6), camLook = new THREE.Vector3(0, 1.15, 0);
+let camDist = 20;
+function applyCamera(t, dt, snap) {
+  const sh = SHOT[shotAt(t)];
+  const f = Math.max(1, (16 / 9) / camera.aspect);
+  const l = new THREE.Vector3(...sh.l), p = new THREE.Vector3(...sh.p);
+  p.sub(l).multiplyScalar(f).add(l);
+  const k = snap ? 1 : 1 - Math.exp(-dt * 2.4);
+  camPos.lerp(p, k); camLook.lerp(l, k);
+  camera.position.copy(camPos); camera.lookAt(camLook);
+  camDist = camPos.distanceTo(camLook);
+}
+
+/* ---------- HUD ---------- */
+const $ = id => document.getElementById(id);
+const lblL = $('lblL'), lblR = $('lblR'), cTag = $('cTag'), cTitle = $('cTitle'), cText = $('cText');
+const v3 = new THREE.Vector3();
+function placeLabel(el, x, y, z, show) {
+  v3.set(x, y, z).project(camera);
+  el.style.left = ((v3.x * .5 + .5) * wrap.clientWidth) + 'px';
+  el.style.top = ((-v3.y * .5 + .5) * wrap.clientHeight) + 'px';
+  el.style.opacity = show ? 1 : 0;
+}
+// small clock shown while the trials repeat
+const ffClock = $('ffClock'), ffHour = $('ffHour'), ffMin = $('ffMin');
+{
+  const g = $('ffTicks');
+  for (let i = 0; i < 12; i++) {
+    const a = i * Math.PI / 6, l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', 38 * Math.sin(a)); l.setAttribute('y1', -38 * Math.cos(a));
+    l.setAttribute('x2', 42 * Math.sin(a)); l.setAttribute('y2', -42 * Math.cos(a));
+    l.setAttribute('stroke', '#9a8a7a'); l.setAttribute('stroke-width', 2); g.appendChild(l);
+  }
+}
+
+/* ---------- state / loop ---------- */
+let t = 0, playing = true, speed = 1, holdEnd = 0, onScreen = true, drawnT = -1, forceDraw = true, last = performance.now(), amb = 0;
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (reduce) playing = false;
+let capKey = '', gIdx = -1;
+
+function setCaption(s) {
+  const key = s.id + (s.trial || '');
+  if (key === capKey) return;
+  capKey = key;
+  const c = CAP[s.id];
+  cTag.textContent = tagFor(s); cTitle.textContent = c[0]; cText.textContent = c[1];
+  [cTag, cTitle, cText].forEach(e => { e.classList.remove('in'); void e.offsetWidth; e.classList.add('in'); });
+}
+function updateHud(s) {
+  setCaption(s);
+  const on = smooth(t, FF.a, FF.a + 0.45) * (1 - smooth(t, FF.b - 0.5, FF.b));
+  ffClock.style.opacity = on;
+  const u = prog(t, FF.a, FF.b);
+  ffMin.setAttribute('transform', 'rotate(' + (u * u * 1500 + u * 300) + ')');
+  ffHour.setAttribute('transform', 'rotate(' + ((u * u * 1500 + u * 300) / 12) + ')');
+  const wide = camDist > 12.5;
+  placeLabel(lblL, -3.4, 3.65, -1.0, wide);
+  const gone = t > D0 + 2.4;
+  if (gone && !lblR.dataset.gone) { lblR.dataset.gone = 1; lblR.innerHTML = '<span class="dot" style="background:#e0d4c6"></span><b>No partner</b>'; }
+  if (!gone && lblR.dataset.gone) { delete lblR.dataset.gone; lblR.innerHTML = '<span class="dot" style="background:#2b180a"></span><b>Partner</b> &middot; target'; }
+  placeLabel(lblR, 3.4, 3.65, -1.0, wide);
+}
+
+function resize() {
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(wrap);
+resize();
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - last) / 1000); last = now; amb = now / 1000;
+  if (playing && onScreen) {
+    if (t >= END) { holdEnd += dt; if (holdEnd > 2.2) { t = 0; holdEnd = 0; capKey = ''; } }
+    else t = Math.min(END, t + dt * speed);
+  }
+  if (!onScreen) return;
+  const s = segAt(t);
+  if (t !== drawnT || forceDraw) {
+    drawLeft(scrL.ctx, t); drawRight(scrR.ctx, t);
+    scrL.tex.needsUpdate = true; scrR.tex.needsUpdate = true;
+    drawnT = t; forceDraw = false;
+  }
+  const d = animatePeople(t, amb);
+  redLight.intensity = d * 0.9;
+  updatePackets(t);
+  updateDissolve(t);
+  // channel line and padlock
+  const link = smooth(t, SEGS[1].a + 3.3, SEGS[1].a + 4.5);
+  channel.geometry.setDrawRange(0, Math.max(0, Math.floor((LN + 1) * link)));
+  const lockOn = t >= T2.O + 0.2 && t < T2.O + 4.5 + 0.3;
+  const lk = lockOn ? backOut(prog(t, T2.O + 0.2, T2.O + 0.7)) * (1 - smooth(t, T2.O + 4.4, T2.O + 4.8)) : 0;
+  lock.visible = lk > 0.01; lock.scale.setScalar(Math.max(0.001, lk)); lock.position.y = 4.1 + Math.sin(amb * 2) * 0.03;
+  lineMat.color.set(lockOn ? C.light : C.accent);
+  lineMat.opacity = t > D0 + 0.5 ? 0.9 * (1 - smooth(t, D0 + 0.5, D0 + 1.5)) : 0.9;
+  applyCamera(t, dt, snapNext); snapNext = false;
+  updateHud(s);
+  renderer.render(scene, camera);
+}
+let snapNext = true;
+
+/* ---------- controls ---------- */
+const bPlay = $('bPlay'), bSpeed = $('bSpeed');
+const ICON_PAUSE = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.4" height="12" rx="1"/><rect x="9.6" y="2" width="3.4" height="12" rx="1"/></svg>';
+const ICON_PLAY = '<svg viewBox="0 0 16 16"><path d="M4 2.2v11.6a.5.5 0 0 0 .77.42l9-5.8a.5.5 0 0 0 0-.84l-9-5.8A.5.5 0 0 0 4 2.2z"/></svg>';
+function syncPlay() { bPlay.innerHTML = playing ? ICON_PAUSE : ICON_PLAY; bPlay.setAttribute('aria-label', playing ? 'Pause' : 'Play'); bPlay.title = playing ? 'Pause (space)' : 'Play (space)'; }
+function seek(to, snap) { t = clamp(to, 0, END); holdEnd = 0; forceDraw = true; capKey = ''; if (snap) snapNext = true; }
+bPlay.addEventListener('click', () => { playing = !playing; if (playing && t >= END) seek(0); syncPlay(); });
+$('bRestart').addEventListener('click', () => { seek(0); playing = true; syncPlay(); });
+const SPEEDS = [0.5, 1, 1.5, 2];
+bSpeed.addEventListener('click', () => { speed = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]; bSpeed.textContent = speed + 'x'; });
+window.addEventListener('keydown', e => { if (e.code === 'Space' && !/button/i.test((e.target || {}).tagName || '')) { e.preventDefault(); bPlay.click(); } });
+if ('IntersectionObserver' in window) new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }, { threshold: 0.05 }).observe(wrap);
+if (document.fonts && document.fonts.load) {
+  Promise.all([document.fonts.load('600 24px Inter'), document.fonts.load('400 20px Inter'), document.fonts.load('500 30px "Playfair Display"')])
+    .then(() => { forceDraw = true; }).catch(() => {});
+}
+syncPlay();
+
+/* handle for the host page and for testing */
+window.adviceGiverParadigm = {
+  seek: (s, snap) => seek(s, snap !== false), pause: () => { playing = false; syncPlay(); }, play: () => { playing = true; syncPlay(); },
+  duration: END, segments: SEGS.map(s => ({ id: s.id, a: s.a, b: s.b, trial: s.trial })), events: { T1, T2, D0 }
+};
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

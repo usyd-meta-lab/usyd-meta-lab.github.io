@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Will You Remember It?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%23c23a1a'/%3E%3C/svg%3E">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--accent:#e64626;--accent-text:#c23a1a;--ink:#000;--text:#414141;--muted:#6b6354;--rule:#d9d9d9;--panel:#f3f1ee;--tint:#fdf0ed;--green:#2f5d3a;
+--serif:'Times New Roman',Times,serif;--sans:Arial,'Helvetica Neue',Helvetica,sans-serif;--mono:ui-monospace,'SF Mono','JetBrains Mono',Consolas,monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);color:var(--ink);background:#fff;line-height:1.45;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border-radius:0}
+input,textarea{font:inherit;border-radius:0}
+.top{border-bottom:1px solid var(--rule)}
+.top-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--mono);font-size:13px;color:var(--accent-text)}
+.brand b{color:var(--text);font-weight:400}
+.tag{font-family:var(--mono);font-size:12px;color:var(--text);border:1px solid var(--rule);padding:4px 10px}
+.tag.sim{color:var(--accent-text);border-color:var(--accent-text)}
+.wrap{max-width:640px;margin:0 auto;padding:24px 18px 80px}
+.wrap.host{max-width:1280px}
+h1{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1;margin:0 0 10px}
+h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.15;margin:0 0 8px}
+.label{font-family:var(--mono);font-size:12px;color:var(--accent-text);letter-spacing:.04em;text-transform:uppercase}
+.muted{color:var(--text)}
+.tiny{font-size:12.5px;color:var(--muted)}
+.lede{font-size:18px;color:var(--text);margin-bottom:18px}
+.card{border:1px solid var(--rule);padding:20px;margin:0 0 16px;background:#fff}
+.btn{display:block;width:100%;background:var(--accent-text);color:#fff;border:1px solid var(--accent-text);padding:13px 18px;font-size:15px;text-decoration:none;text-align:center}
+.btn:hover{background:#9f2f15;border-color:#9f2f15}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;font-size:13px}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+.prog{font-family:var(--mono);font-size:12px;color:var(--text);margin-bottom:10px;display:flex;justify-content:space-between}
+.bar{height:3px;background:var(--rule);margin-bottom:22px}
+.bar i{display:block;height:3px;background:var(--accent-text)}
+.bar.timer i{transition:width linear}
+.q{font-family:var(--serif);font-size:26px;line-height:1.2;margin:4px 0 20px}
+.pair{font-family:var(--serif);font-size:44px;line-height:1.1;text-align:center;padding:46px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:8px 0 22px}
+.pair .dash{color:var(--muted);padding:0 .35em}
+.pair.small{font-size:30px;padding:22px 0}
+.cue{color:var(--ink)} .tgt{color:var(--accent-text)}
+.chips{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.chip{border:1px solid var(--rule);background:#fff;padding:14px 0;font-family:var(--mono);font-size:15px}
+.chip:hover{border-color:var(--accent-text);color:var(--accent-text)}
+.chip.on{background:var(--accent-text);border-color:var(--accent-text);color:#fff}
+.anch{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px}
+.txt{width:100%;font-size:22px;padding:14px;border:1px solid var(--rule);outline:none;font-family:var(--serif)}
+.txt:focus{border-color:var(--accent)}
+.notice{border-left:3px solid var(--accent);background:var(--tint);padding:12px 16px;margin:0 0 18px;font-size:14px}
+.center{text-align:center}
+.wait{padding:44px 6px;text-align:center}
+.dotpulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent-text);animation:p 1.3s infinite;margin-right:8px;vertical-align:middle}
+@keyframes p{0%{opacity:.25}50%{opacity:1}100%{opacity:.25}}
+.sum{font-family:var(--serif);font-size:30px}
+.word{font-family:var(--serif);text-align:center;padding:50px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:8px 0 22px;min-height:190px;display:flex;align-items:center;justify-content:center}
+/* host */
+.join{display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:1px solid var(--rule);padding:14px 18px;margin-bottom:14px}
+.join #qr{width:116px;height:116px}
+.join #qr img,.join #qr canvas{width:116px!important;height:116px!important}
+.joinurl{font-family:var(--mono);font-size:17px;word-break:break-all}
+.code{font-family:var(--serif);font-size:44px;line-height:1;color:var(--accent-text)}
+.nbig{font-family:var(--serif);font-size:44px;line-height:1}
+.phases{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ph{border:1px solid var(--rule);background:#fff;padding:8px 12px;font-family:var(--mono);font-size:12px}
+.ph.done{color:var(--ink);border-color:var(--ink)}
+.ph.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stage{border:1px solid var(--rule);padding:22px 26px;min-height:420px}
+.stage .prompt{font-family:var(--serif);font-size:26px;color:var(--text);margin-bottom:14px}
+.tabs{display:flex;gap:0;margin:0 0 16px;border-bottom:1px solid var(--rule)}
+.tab{border:0;border-bottom:3px solid transparent;background:none;padding:8px 14px;font-family:var(--mono);font-size:12px;text-transform:uppercase;color:var(--text)}
+.tab.on{color:var(--ink);border-bottom-color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;margin-top:18px}
+.stat{border-top:2px solid var(--ink);padding-top:8px}
+.stat b{display:block;font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.1}
+.stat span{font-size:13px;color:var(--text)}
+.tutor{border-left:3px solid var(--rule);padding:6px 14px;margin-top:16px;font-size:14px;color:var(--text)}
+.tutor .label{display:block;margin-bottom:2px}
+.legend{display:flex;gap:18px;font-family:var(--mono);font-size:12px;margin:6px 0 0;flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:6px}
+.tools{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.present .tutor,.present .tools,.present .ph:not(.on){display:none}
+svg text{font-family:var(--mono)}
+svg .ax{font-size:12px;fill:var(--muted)} svg .lab{font-size:13px;fill:var(--ink);text-transform:uppercase}
+svg .val{font-size:14px;fill:var(--ink)}
+.banner{border:1px solid var(--accent);background:var(--tint);padding:12px 14px;margin-bottom:14px;font-size:14px}
+@media(max-width:600px){h1{font-size:28px}.pair{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in"><div class="brand">PSYC5216 · <b>Will you remember it?</b></div><div id="tagbox" class="row"></div></div></div>
+<main id="app"></main>
+
+<script>
+/* =====================================================================
+   CONFIG
+   Reuses the tutorial demo's Firestore collection so no new security
+   rules are needed. Session codes start with J.
+   ===================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyBaz1nWglmiKv9W_MrbulS__h8aieCPPE8",
+  authDomain: "meetings-b9e5e.firebaseapp.com",
+  projectId: "meetings-b9e5e",
+  storageBucket: "meetings-b9e5e.firebasestorage.app",
+  messagingSenderId: "368747163289",
+  appId: "1:368747163289:web:29719439e3b61126331208"
+};
+const ROOT = 'metacog_tutorial';
+
+/* ---------- materials ---------- */
+// related pairs: the cue strongly suggests the target. Unrelated pairs: no obvious link.
+const PAIRS = [
+  { id:'a1', cue:'ocean',   target:'wave',    type:'rel' },
+  { id:'a2', cue:'doctor',  target:'nurse',   type:'rel' },
+  { id:'a3', cue:'bread',   target:'butter',  type:'rel' },
+  { id:'a4', cue:'tiger',   target:'stripes', type:'rel' },
+  { id:'a5', cue:'candle',  target:'flame',   type:'rel' },
+  { id:'a6', cue:'winter',  target:'snow',    type:'rel' },
+  { id:'a7', cue:'hammer',  target:'nail',    type:'rel' },
+  { id:'a8', cue:'teacher', target:'school',  type:'rel' },
+  { id:'b1', cue:'lantern', target:'ribbon',  type:'unrel' },
+  { id:'b2', cue:'window',  target:'camel',   type:'unrel' },
+  { id:'b3', cue:'pencil',  target:'orbit',   type:'unrel' },
+  { id:'b4', cue:'hammock', target:'thunder', type:'unrel' },
+  { id:'b5', cue:'bucket',  target:'violin',  type:'unrel' },
+  { id:'b6', cue:'carpet',  target:'mango',   type:'unrel' },
+  { id:'b7', cue:'anchor',  target:'pillow',  type:'unrel' },
+  { id:'b8', cue:'button',  target:'glacier', type:'unrel' }
+];
+const WORDS = ['bridge','cloud','helmet','island','jacket','kettle','ladder','magnet','needle','pepper','rabbit','saddle'].map((w,i) => ({ id:'w' + (i+1), w }));
+const JOLS = [0,20,40,60,80,100];
+const STUDY_MS = 4000, WORD_MS = 3500, DISTRACT_S = 45;
+
+/* ---------- helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fin = x => typeof x === 'number' && isFinite(x);
+const mean = a => { a = a.filter(fin); return a.length ? a.reduce((s, x) => s + x, 0) / a.length : NaN; };
+function hash(s){ let h = 2166136261; for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed){ let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, r){ const a = arr.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function deepMerge(a, b){ if (b && typeof b === 'object' && !Array.isArray(b)){ const o = { ...(a && typeof a === 'object' ? a : {}) }; for (const k in b) o[k] = deepMerge(o[k], b[k]); return o; } return b; }
+function norm(s){ return String(s || '').toLowerCase().replace(/[^a-z]/g, ''); }
+function lev(a, b){ const m = a.length, n = b.length; if (!m) return n; if (!n) return m; const d = Array.from({ length:m + 1 }, (_, i) => [i].concat(Array(n).fill(0))); for (let j = 0; j <= n; j++) d[0][j] = j; for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)); return d[m][n]; }
+const matches = (ans, truth) => { const a = norm(ans), t = norm(truth); return !!a && (a === t || (t.length >= 5 && lev(a, t) <= 1)); };
+
+// Condition assignment is deterministic per participant: half of each pair type gets an immediate JOL, half a delayed JOL.
+function pairConds(pid){ const r = rng(hash(pid + 'c')), o = {}; ['rel','unrel'].forEach(t => shuffle(PAIRS.filter(p => p.type === t).map(p => p.id), r).forEach((id, i) => { o[id] = i < 4 ? 'i' : 'd'; })); return o; }
+function wordSizes(pid){ const r = rng(hash(pid + 's')), o = {}; shuffle(WORDS.map(w => w.id), r).forEach((id, i) => { o[id] = i < 6 ? 'L' : 'S'; }); return o; }
+
+/* =====================================================================
+   DATA LAYER
+   ===================================================================== */
+async function makeFirebaseDB(code){
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+  const fs = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+  const app = initializeApp(firebaseConfig);
+  const db = fs.initializeFirestore(app, { experimentalForceLongPolling:true });
+  const sRef = fs.doc(db, ROOT, code), rCol = fs.collection(db, ROOT, code, 'resp');
+  return {
+    setSession: p => fs.setDoc(sRef, p, { merge:true }),
+    onSession: (cb, err) => fs.onSnapshot(sRef, s => cb(s.exists() ? s.data() : null), err),
+    setResp: (id, p) => fs.setDoc(fs.doc(rCol, id), p, { merge:true }),
+    onResps: (cb, err) => fs.onSnapshot(rCol, snap => { const o = {}; snap.forEach(d => { o[d.id] = d.data(); }); cb(o); }, err),
+    getSession: async () => { const d = await fs.getDoc(sRef); return d.exists() ? d.data() : null; },
+    clear: async () => { const snap = await fs.getDocs(rCol); await Promise.all(snap.docs.map(d => fs.deleteDoc(d.ref))); await fs.deleteDoc(sRef); }
+  };
+}
+function makeLocalDB(code){
+  const KEY = 'jol_local_' + code;
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || { session:null, resp:{} }; } catch(e){ return { session:null, resp:{} }; } };
+  const subs = { session:[], resp:[] };
+  const emit = () => { const d = read(); subs.session.forEach(f => f(d.session)); subs.resp.forEach(f => f(d.resp || {})); };
+  window.addEventListener('storage', e => { if (e.key === KEY) emit(); });
+  const write = fn => { const d = read(); fn(d); localStorage.setItem(KEY, JSON.stringify(d)); setTimeout(emit, 0); return Promise.resolve(); };
+  const sub = (k, cb) => { subs[k].push(cb); setTimeout(() => { const d = read(); cb(k === 'session' ? d.session : (d.resp || {})); }, 0); };
+  return {
+    setSession: p => write(d => { d.session = deepMerge(d.session || {}, p); }),
+    onSession: cb => sub('session', cb),
+    setResp: (id, p) => write(d => { d.resp = d.resp || {}; d.resp[id] = deepMerge(d.resp[id] || {}, p); }),
+    onResps: cb => sub('resp', cb),
+    getSession: async () => read().session,
+    clear: () => { localStorage.removeItem(KEY); setTimeout(emit, 0); return Promise.resolve(); }
+  };
+}
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const params = new URLSearchParams(location.search);
+const S = {
+  code: (params.get('s') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8),
+  host: params.get('view') === 'host',
+  local: params.get('local') === '1',
+  fast: params.get('fast') === '1',        // rehearsal only: short timers
+  pid: null, db: null, session: null, resps: {}, sim: null, me: {}, ui: { tab:{}, err:'' }, lastPhase: null, timer: null
+};
+const PHASES = [
+  { id:'lobby', label:'Lobby' },
+  { id:'p1', label:'Part 1 · Word pairs', student:true },
+  { id:'r1', label:'Reveal · Word pairs' },
+  { id:'p2', label:'Part 2 · Font size', student:true },
+  { id:'r2', label:'Reveal · Font size' },
+  { id:'wrap', label:'Wrap-up' }
+];
+const phase = () => (S.session && S.session.phase) || 'lobby';
+const allResps = () => ({ ...S.resps, ...(S.sim || {}) });
+const joined = () => Object.entries(allResps()).filter(([, r]) => r && r.joined).map(([id, r]) => ({ id, ...r }));
+function getPid(){
+  const k = 'jol_pid_' + S.code + (S.local ? '_l' : '');
+  let v = null; try { v = sessionStorage.getItem(k) || (S.local ? null : localStorage.getItem(k)); } catch(e){}
+  if (!v) v = 'p' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  try { sessionStorage.setItem(k, v); if (!S.local) localStorage.setItem(k, v); } catch(e){}
+  return v;
+}
+function joinUrl(){ const u = new URL(location.href); u.search = ''; u.searchParams.set('s', S.code); if (S.local) u.searchParams.set('local', '1'); if (S.fast) u.searchParams.set('fast', '1'); return u.toString(); }
+function showError(err){
+  const denied = /permission|insufficient/i.test((err && err.message) || '');
+  S.ui.err = `<div class="banner"><strong>Can't reach the live database.</strong> ${denied ? 'Firestore rejected the request. The security rules need to allow the collection <code>' + ROOT + '</code>.' : 'Network or configuration error.'}<div class="tiny">${esc((err && err.message) || err)}</div></div>`;
+  S.host ? updateHost() : renderStudent(true);
+}
+const saveMe = patch => { S.me = deepMerge(S.me, patch); return S.db.setResp(S.pid, patch).catch(showError); };
+
+/* =====================================================================
+   STATS
+   ===================================================================== */
+function gammaCounts(trials){ let C = 0, D = 0; for (let i = 0; i < trials.length; i++) for (let j = i + 1; j < trials.length; j++){ const a = trials[i], b = trials[j]; if (a.rec === b.rec || a.jol === b.jol) continue; const hi = a.jol > b.jol ? a : b; hi.rec === 1 ? C++ : D++; } return { C, D }; }
+function p1Trials(r){ const out = []; if (!r.p1 || !r.p1.cond) return out; PAIRS.forEach(p => { const c = r.p1.cond[p.id], j = r.p1.jol && r.p1.jol[p.id], k = r.p1.rec && r.p1.rec[p.id]; if (c && fin(j) && fin(k)) out.push({ id:p.id, type:p.type, cond:c, jol:j, rec:k }); }); return out; }
+function p1Stats(){
+  const subs = joined().filter(r => r.p1 && r.p1.done);
+  const cells = {}; ['i','d'].forEach(c => ['rel','unrel','all'].forEach(t => { cells[c + t] = { jol:[], rec:[] }; }));
+  const disc = { i:[], d:[] }, gam = { i:{ C:0, D:0 }, d:{ C:0, D:0 } }, pairs = [];
+  subs.forEach(r => {
+    const tr = p1Trials(r), own = { i:NaN, d:NaN };
+    ['i','d'].forEach(c => {
+      const t = tr.filter(x => x.cond === c);
+      t.forEach(x => { [x.type, 'all'].forEach(k => { cells[c + k].jol.push(x.jol); cells[c + k].rec.push(x.rec); }); });
+      const a = t.filter(x => x.rec === 1).map(x => x.jol), b = t.filter(x => x.rec === 0).map(x => x.jol);
+      if (a.length && b.length) own[c] = mean(a) - mean(b);
+      const g = gammaCounts(t); gam[c].C += g.C; gam[c].D += g.D;
+    });
+    if (fin(own.i)) disc.i.push(own.i); if (fin(own.d)) disc.d.push(own.d);
+    if (fin(own.i) && fin(own.d)) pairs.push([own.i, own.d]);
+  });
+  const g = c => (gam[c].C + gam[c].D) ? (gam[c].C - gam[c].D) / (gam[c].C + gam[c].D) : NaN;
+  return { n:subs.length, cells, disc, pairs, gamma:{ i:g('i'), d:g('d') } };
+}
+function p2Stats(){
+  const subs = joined().filter(r => r.p2 && r.p2.done), L = { jol:[], rec:[] }, Sm = { jol:[], rec:[] }; let higher = 0, n = 0;
+  subs.forEach(r => {
+    const a = { L:{ jol:[], rec:[] }, S:{ jol:[], rec:[] } };
+    WORDS.forEach(w => { const z = r.p2.size && r.p2.size[w.id], j = r.p2.jol && r.p2.jol[w.id], k = r.p2.rec && r.p2.rec[w.id]; if (z && fin(j) && fin(k)){ a[z].jol.push(j); a[z].rec.push(k); (z === 'L' ? L : Sm).jol.push(j); (z === 'L' ? L : Sm).rec.push(k); } });
+    if (a.L.jol.length && a.S.jol.length){ n++; if (mean(a.L.jol) > mean(a.S.jol)) higher++; }
+  });
+  return { n:subs.length, L, S:Sm, higher, nboth:n };
+}
+const pct = x => fin(x) ? Math.round(x * 100) + '%' : '–';
+const num = x => fin(x) ? String(Math.round(x)) : '–';
+const signed = x => fin(x) ? (x > 0 ? '+' : '') + x.toFixed(2) : '–';
+
+/* =====================================================================
+   CHARTS (plain SVG, hex colours, at most four colours)
+   ===================================================================== */
+function barChart(groups, series, alt){
+  const W = 760, H = 340, L = 50, R = 14, T = 18, B = 56, pw = W - L - R, ph = H - T - B, gw = pw / groups.length, bw = Math.min(74, gw / (series.length + 0.8));
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(alt)}" style="width:100%;height:auto;max-height:420px">`;
+  [0,25,50,75,100].forEach(v => { const y = T + ph - ph * v / 100; s += `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}" stroke="#d9d9d9" stroke-width="1.2"/><text x="${L - 8}" y="${y + 4}" text-anchor="end" class="ax">${v}</text>`; });
+  groups.forEach((g, gi) => {
+    const cx = L + gw * gi + gw / 2, tot = series.length * bw + (series.length - 1) * 8;
+    series.forEach((se, si) => { const v = g.v[si]; if (!fin(v)) return; const x = cx - tot / 2 + si * (bw + 8), h = ph * v / 100; s += `<rect x="${x}" y="${T + ph - h}" width="${bw}" height="${h}" fill="${se.color}"/><text x="${x + bw / 2}" y="${T + ph - h - 6}" text-anchor="middle" class="val">${Math.round(v)}</text>`; });
+    s += `<text x="${cx}" y="${H - B + 24}" text-anchor="middle" class="lab">${esc(g.label)}</text>`;
+  });
+  s += `<line x1="${L}" x2="${W - R}" y1="${T + ph}" y2="${T + ph}" stroke="#1f1b15" stroke-width="2"/></svg>`;
+  return s + `<div class="legend">${series.map(se => `<span><i style="background:${se.color}"></i>${esc(se.name)}</span>`).join('')}</div>`;
+}
+function dotChart(pairs, means, labels, alt){
+  const W = 760, H = 340, L = 60, R = 30, T = 18, B = 50, pw = W - L - R, ph = H - T - B, lo = -40, hi = 80;
+  const y = v => T + ph - ph * (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo), x = [L + pw * 0.28, L + pw * 0.72];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(alt)}" style="width:100%;height:auto;max-height:420px">`;
+  [-40,-20,0,20,40,60,80].forEach(v => { s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? '#1f1b15' : '#d9d9d9'}" stroke-width="${v === 0 ? 2 : 1.2}" ${v === 0 ? 'stroke-dasharray="6 5"' : ''}/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" class="ax">${v}</text>`; });
+  pairs.forEach(p => { s += `<line x1="${x[0]}" y1="${y(p[0])}" x2="${x[1]}" y2="${y(p[1])}" stroke="#6b6354" stroke-width="1.2" opacity=".55"/><circle cx="${x[0]}" cy="${y(p[0])}" r="5" fill="#1f1b15"/><circle cx="${x[1]}" cy="${y(p[1])}" r="5" fill="#e64626"/>`; });
+  means.forEach((m, i) => { if (fin(m)) s += `<line x1="${x[i] - 46}" x2="${x[i] + 46}" y1="${y(m)}" y2="${y(m)}" stroke="${i ? '#c23a1a' : '#000'}" stroke-width="4"/><text x="${x[i] + 54}" y="${y(m) + 5}" class="val">${m.toFixed(0)}</text>`; });
+  labels.forEach((l, i) => { s += `<text x="${x[i]}" y="${H - B + 28}" text-anchor="middle" class="lab">${esc(l)}</text>`; });
+  s += `<text x="${L}" y="12" class="ax">JOL FOR RECALLED MINUS JOL FOR FORGOTTEN (POINTS)</text></svg>`;
+  return s;
+}
+
+/* =====================================================================
+   SIMULATION (host only, labelled Example data, never saved)
+   ===================================================================== */
+function simulate(n = 16){
+  const out = {};
+  for (let k = 0; k < n; k++){
+    const pid = 'sim' + k, r = rng(hash(pid)), cond = pairConds(pid), size = wordSizes(pid), nz = () => (r() + r() + r() - 1.5) * 28;
+    const p1 = { cond, jol:{}, rec:{}, done:true }, p2 = { size, jol:{}, rec:{}, done:true };
+    PAIRS.forEach(p => {
+      const rec = r() < (p.type === 'rel' ? .9 : .32) ? 1 : 0; p1.rec[p.id] = rec;
+      const base = p.type === 'rel' ? 82 : 58;
+      p1.jol[p.id] = Math.round(Math.max(0, Math.min(100, cond[p.id] === 'i' ? base + (rec ? 4 : -2) + nz() * .8 : (rec ? 62 : 24) + (p.type === 'rel' ? 8 : 0) + nz() * .9)) / 20) * 20;
+    });
+    WORDS.forEach(w => { const rec = r() < .42 ? 1 : 0; p2.rec[w.id] = rec; p2.jol[w.id] = Math.round(Math.max(0, Math.min(100, (size[w.id] === 'L' ? 62 : 48) + nz())) / 20) * 20; });
+    out[pid] = { joined:1, p1, p2 };
+  }
+  return out;
+}
+
+/* =====================================================================
+   STUDENT
+   ===================================================================== */
+const app = $('#app');
+function setTags(html){ $('#tagbox').innerHTML = html; }
+function wait(title, sub){ clearTimeout(S.timer); app.innerHTML = `<div class="wrap">${S.ui.err}<div class="wait"><h1><span class="dotpulse"></span>${title}</h1><p class="lede">${sub || ''}</p></div></div>`; }
+function renderStudent(force){
+  const ph = phase();
+  if (!force && ph === S.lastPhase) return;
+  S.lastPhase = ph;
+  if (!S.session) return wait('Waiting for your lecturer', 'This session has not been opened yet.');
+  if (ph === 'lobby') return wait('You are in', 'Answers are anonymous. Keep this page open; it will start when your lecturer is ready.');
+  if (ph === 'p1') return runSteps('p1');
+  if (ph === 'p2') return runSteps('p2');
+  return wait('Look at the projector', 'Your lecturer is showing the class results.');
+}
+function buildSteps(part){
+  const r = rng(hash(S.pid + part + 'o')), st = [];
+  if (part === 'p1'){
+    const cond = pairConds(S.pid), order = shuffle(PAIRS.map(p => p.id), r);
+    order.forEach(id => { st.push({ k:'study', id }); if (cond[id] === 'i') st.push({ k:'ijol', id }); });
+    st.push({ k:'distract' });
+    shuffle(order.filter(id => cond[id] === 'd'), r).forEach(id => st.push({ k:'djol', id }));
+    shuffle(order, r).forEach(id => st.push({ k:'test', id }));
+  } else {
+    const order = shuffle(WORDS.map(w => w.id), r);
+    order.forEach(id => { st.push({ k:'wstudy', id }); st.push({ k:'wjol', id }); });
+    st.push({ k:'wtest' });
+  }
+  return st;
+}
+function runSteps(part){
+  const steps = buildSteps(part), key = 'jol_step_' + S.code + '_' + part + '_' + S.pid;
+  const me = S.me[part];
+  if (me && me.done) return wait(part === 'p1' ? 'Part 1 complete' : 'Part 2 complete', 'Wait for the reveal on the projector.');
+  if (!me || !me.cond && !me.size) saveMe(part === 'p1' ? { p1:{ cond:pairConds(S.pid) } } : { p2:{ size:wordSizes(S.pid) } });
+  let i = 0; try { i = parseInt(sessionStorage.getItem(key) || '0', 10) || 0; } catch(e){}
+  const go = n => { clearTimeout(S.timer); i = n; try { sessionStorage.setItem(key, String(n)); } catch(e){} show(); };
+  const hd = () => `<div class="prog"><span>${part === 'p1' ? 'Part 1 · Word pairs' : 'Part 2 · Words'}</span><span>${Math.min(i + 1, steps.length)} of ${steps.length}</span></div><div class="bar"><i style="width:${Math.round(i / steps.length * 100)}%"></i></div>`;
+  const T = { study: S.fast ? 700 : STUDY_MS, word: S.fast ? 600 : WORD_MS, dist: S.fast ? 4 : DISTRACT_S };
+  function finish(){
+    saveMe({ [part]:{ done:true } }); try { sessionStorage.setItem(key, String(steps.length)); } catch(e){}
+    wait(part === 'p1' ? 'Part 1 complete' : 'Part 2 complete', 'Wait for the reveal on the projector.');
+  }
+  function jolView(label, sub, id, store, body){
+    app.innerHTML = `<div class="wrap">${S.ui.err}${hd()}${body}<div class="q" style="font-size:22px">${label}</div><div class="chips">${JOLS.map(v => `<button class="chip" data-v="${v}">${v}%</button>`).join('')}</div><div class="anch"><span>Certain to forget</span><span>Certain to recall</span></div></div>`;
+    app.querySelectorAll('.chip').forEach(b => b.onclick = () => { b.classList.add('on'); const v = +b.dataset.v; saveMe(store(v)); setTimeout(() => go(i + 1), 160); });
+  }
+  function show(){
+    if (i >= steps.length) return finish();
+    const s = steps[i], pr = PAIRS.find(p => p.id === s.id), wd = WORDS.find(w => w.id === s.id);
+    if (s.k === 'study'){
+      app.innerHTML = `<div class="wrap">${S.ui.err}${hd()}<p class="lede">Try to remember this pair for a later memory test.</p><div class="pair"><span class="cue">${esc(pr.cue)}</span><span class="dash">–</span><span class="tgt">${esc(pr.target)}</span></div><div class="bar timer"><i style="width:0"></i></div></div>`;
+      requestAnimationFrame(() => requestAnimationFrame(() => { const b = $('.timer i'); if (b){ b.style.transitionDuration = T.study + 'ms'; b.style.width = '100%'; } }));
+      S.timer = setTimeout(() => go(i + 1), T.study);
+    } else if (s.k === 'ijol'){
+      jolView('How likely are you to recall <strong>' + esc(pr.target) + '</strong> when you see <strong>' + esc(pr.cue) + '</strong> in a few minutes?', '', s.id, v => ({ p1:{ jol:{ [s.id]:v } } }), `<div class="pair small"><span class="cue">${esc(pr.cue)}</span><span class="dash">–</span><span class="tgt">${esc(pr.target)}</span></div>`);
+    } else if (s.k === 'distract'){
+      const r = rng(hash(S.pid + 'd')); let left = T.dist, n = 0;
+      const draw = () => { const a = 10 + Math.floor(r() * 40), b = 10 + Math.floor(r() * 40); app.innerHTML = `<div class="wrap">${S.ui.err}${hd()}<p class="lede">A short break. Add these up, then press Enter. Type quickly.</p><div class="sum">${a} + ${b} = ?</div><input class="txt" id="sumin" inputmode="numeric" autocomplete="off" style="margin-top:14px"><p class="tiny" style="margin-top:12px">${left} seconds left</p></div>`; const inp = $('#sumin'); inp.focus(); inp.onkeydown = e => { if (e.key === 'Enter'){ n++; draw(); } }; };
+      draw();
+      const tick = () => { left--; const t = $('.tiny'); if (t) t.textContent = left + ' seconds left'; if (left <= 0) go(i + 1); else S.timer = setTimeout(tick, 1000); };
+      S.timer = setTimeout(tick, 1000);
+    } else if (s.k === 'djol'){
+      jolView('How likely are you to recall the word that went with <strong>' + esc(pr.cue) + '</strong> in a few minutes?', '', s.id, v => ({ p1:{ jol:{ [s.id]:v } } }), `<div class="pair small"><span class="cue">${esc(pr.cue)}</span><span class="dash">–</span><span class="tgt">?</span></div>`);
+    } else if (s.k === 'test'){
+      app.innerHTML = `<div class="wrap">${S.ui.err}${hd()}<p class="lede">Memory test. Type the word that went with the cue. If you cannot remember, guess or leave it blank.</p><div class="pair small"><span class="cue">${esc(pr.cue)}</span><span class="dash">–</span><span class="tgt">?</span></div><input class="txt" id="ans" autocomplete="off" autocapitalize="none" spellcheck="false"><button class="btn" id="nx" style="margin-top:14px">Next</button></div>`;
+      const inp = $('#ans'); inp.focus();
+      const sub = () => { const a = inp.value; saveMe({ p1:{ rec:{ [s.id]:matches(a, pr.target) ? 1 : 0 }, ans:{ [s.id]:a.slice(0, 40) } } }); go(i + 1); };
+      $('#nx').onclick = sub; inp.onkeydown = e => { if (e.key === 'Enter') sub(); };
+    } else if (s.k === 'wstudy'){
+      const size = wordSizes(S.pid)[s.id] === 'L' ? 88 : 18;
+      app.innerHTML = `<div class="wrap">${S.ui.err}${hd()}<p class="lede">Try to remember this word. You will be asked to list as many words as you can.</p><div class="word" style="font-size:${size}px">${esc(wd.w)}</div></div>`;
+      S.timer = setTimeout(() => go(i + 1), T.word);
+    } else if (s.k === 'wjol'){
+      jolView('How likely are you to recall <strong>that word</strong> in a few minutes?', '', s.id, v => ({ p2:{ jol:{ [s.id]:v } } }), '');
+    } else if (s.k === 'wtest'){
+      app.innerHTML = `<div class="wrap">${S.ui.err}${hd()}<div class="q">Type every word you can remember, in any order.</div><textarea class="txt" id="wl" rows="6" autocapitalize="none" spellcheck="false" placeholder="One word per line, or separate with spaces"></textarea><button class="btn" id="nx" style="margin-top:14px">Submit</button></div>`;
+      $('#nx').onclick = () => { const toks = $('#wl').value.split(/[^A-Za-z]+/).filter(Boolean), rec = {}; WORDS.forEach(w => { rec[w.id] = toks.some(t => matches(t, w.w)) ? 1 : 0; }); saveMe({ p2:{ rec } }); go(i + 1); };
+    }
+  }
+  show();
+}
+
+/* =====================================================================
+   HOST
+   ===================================================================== */
+const NOTES = {
+  lobby: 'Students scan the code and wait. Say that answers are anonymous. Part 1 takes about 8 minutes. Press the right arrow when most students have joined.',
+  p1: 'Students work at their own pace: study 16 pairs, give a judgement of learning (JOL) for half straight away and for half after a 45 second delay, then a cued recall test. The first screen of each JOL still shows the answer. Do not say why.',
+  r1: 'Ask first: did immediate and delayed JOLs predict recall equally well? Delayed JOLs are made from the cue alone, so they reflect whether you can actually retrieve the answer. Immediate JOLs are made with the answer in view, so everything feels learnable. This is the delayed-JOL effect (Nelson & Dunlosky, 1991). With 15 students the individual dots are noisy; that is itself worth discussing.',
+  p2: 'Students see 12 words, half large and half small, rate each one, then list what they remember. Size is assigned per student, so no one sees a fixed pattern.',
+  r2: 'Rhodes and Castel (2008): large words get higher JOLs, but font size does not change recall. Ask: what cue was your feeling of learning using? Link back to the monitoring and control slide, and to cue-utilisation views of JOLs.',
+  wrap: 'Two ways a monitoring signal can mislead you: it can be made under conditions that hide the very difficulty you need to detect, and it can use cues that are not diagnostic of learning.'
+};
+function buildHost(){
+  app.innerHTML = `<div class="wrap host"><div id="err"></div>
+    <div class="join"><div id="qr"></div><div><div class="label">Join on your phone</div><div class="joinurl" id="joinurl"></div><div class="tiny">Answers are anonymous.</div></div><div class="spacer"></div><div style="text-align:right"><div class="label">Session code</div><div class="code">${esc(S.code)}</div></div><div style="text-align:right;min-width:90px"><div class="label">Joined</div><div class="nbig" id="nj">0</div></div></div>
+    <div class="phases" id="phases"></div><div class="stage" id="stage"></div><div class="tutor"><span class="label">Tutor note</span><span id="note"></span></div>
+    <div class="tools"><button class="btn ghost small" id="simb">Simulate data</button><button class="btn ghost small" id="clr">Clear session data</button><span class="tiny" style="align-self:center">← → change phase · P hides tutor controls</span></div></div>`;
+  $('#joinurl').textContent = joinUrl().replace(/^https?:\/\//, '');
+  try { new QRCode($('#qr'), { text:joinUrl(), width:116, height:116, colorDark:'#000000', colorLight:'#ffffff' }); } catch(e){ $('#qr').textContent = ''; }
+  $('#simb').onclick = () => { S.sim = S.sim ? null : simulate(); $('#simb').textContent = S.sim ? 'Remove simulated data' : 'Simulate data'; updateHost(); };
+  $('#clr').onclick = async () => { if (!confirm('Permanently delete every response in session ' + S.code + '?')) return; await S.db.clear().catch(showError); S.resps = {}; S.session = null; await S.db.setSession({ phase:'lobby', created:Date.now() }); };
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('input,textarea')) return;
+    if (e.key === 'p' || e.key === 'P') document.body.classList.toggle('present');
+    const vis = PHASES, ci = vis.findIndex(p => p.id === phase());
+    if (e.key === 'ArrowRight' && ci < vis.length - 1) setPhase(vis[ci + 1].id);
+    if (e.key === 'ArrowLeft' && ci > 0) setPhase(vis[ci - 1].id);
+    if (/^[1-3]$/.test(e.key)) { S.ui.tab[phase()] = +e.key - 1; updateHost(); }
+  });
+}
+const setPhase = id => S.db.setSession({ phase:id }).catch(showError);
+function statRow(items){ return `<div class="stats">${items.map(([n, l]) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`).join('')}</div>`; }
+function tabs(ph, names){ const t = S.ui.tab[ph] || 0; return { t, html:`<div class="tabs">${names.map((n, i) => `<button class="tab ${i === t ? 'on' : ''}" data-t="${i}">${i + 1} · ${n}</button>`).join('')}</div>` }; }
+function updateHost(){
+  if (!$('#stage')) return;
+  const ph = phase(), all = joined(), ci = PHASES.findIndex(p => p.id === ph);
+  $('#err').innerHTML = S.ui.err; $('#nj').textContent = all.length;
+  $('#phases').innerHTML = PHASES.map((p, i) => `<button class="ph ${i === ci ? 'on' : i < ci ? 'done' : ''}" data-ph="${p.id}">${p.label}</button>`).join('');
+  $('#phases').querySelectorAll('.ph').forEach(b => b.onclick = () => setPhase(b.dataset.ph));
+  $('#note').textContent = ' ' + NOTES[ph];
+  setTags(S.sim ? '<span class="tag sim">Example data</span>' : '<span class="tag">Host</span>');
+  const st = $('#stage'), sim = S.sim ? '<span class="tag sim" style="float:right">Example data</span>' : '';
+  const bind = () => st.querySelectorAll('.tab').forEach(b => b.onclick = () => { S.ui.tab[ph] = +b.dataset.t; updateHost(); });
+  if (ph === 'lobby'){
+    st.innerHTML = `<div class="prompt">Scan the code to join. Part 1 starts when you press the right arrow.</div>` + statRow([[all.length, 'students joined']]);
+  } else if (ph === 'p1' || ph === 'p2'){
+    const k = ph, fin_ = all.filter(r => r[k] && r[k].done).length;
+    st.innerHTML = `${sim}<div class="prompt">${ph === 'p1' ? 'Part 1: studying word pairs, rating them, then a memory test.' : 'Part 2: words in two font sizes.'}</div>` + statRow([[all.length, 'joined'], [fin_, 'finished'], [all.length ? Math.round(fin_ / all.length * 100) + '%' : '–', 'of class done']]);
+  } else if (ph === 'r1'){
+    const d = p1Stats(), c = d.cells, { t, html } = tabs('r1', ['Calibration', 'Resolution', 'By pair type']);
+    let body = '';
+    if (!d.n) body = '<div class="prompt">No finished Part 1 data yet.</div>';
+    else if (t === 0){
+      body = `<div class="prompt">Did judgements of learning match what people recalled?</div>` + barChart([{ label:'Immediate JOL', v:[mean(c.iall.jol), mean(c.iall.rec) * 100] }, { label:'Delayed JOL', v:[mean(c.dall.jol), mean(c.dall.rec) * 100] }], [{ name:'Mean JOL (%)', color:'#e64626' }, { name:'Actually recalled (%)', color:'#000000' }], 'Mean JOL and recall for immediate and delayed JOL conditions') + statRow([[pct(mean(c.iall.rec)), 'recalled, immediate set'], [pct(mean(c.dall.rec)), 'recalled, delayed set'], [d.n, 'students']]);
+    } else if (t === 1){
+      body = `<div class="prompt">Did JOLs separate what you recalled from what you forgot?</div>` + dotChart(d.pairs, [mean(d.pairs.map(p => p[0])), mean(d.pairs.map(p => p[1]))], ['Immediate JOL', 'Delayed JOL'], 'Per student JOL difference for recalled vs forgotten items, immediate and delayed') + statRow([[signed(d.gamma.i), 'pooled gamma, immediate'], [signed(d.gamma.d), 'pooled gamma, delayed'], [d.pairs.length, 'students with both defined']]);
+    } else {
+      body = `<div class="prompt">Related pairs feel easy. Unrelated pairs are where immediate JOLs mislead.</div>` + barChart([
+        { label:'Related · imm.', v:[mean(c.irel.jol), mean(c.irel.rec) * 100] }, { label:'Related · del.', v:[mean(c.drel.jol), mean(c.drel.rec) * 100] },
+        { label:'Unrel. · imm.', v:[mean(c.iunrel.jol), mean(c.iunrel.rec) * 100] }, { label:'Unrel. · del.', v:[mean(c.dunrel.jol), mean(c.dunrel.rec) * 100] }],
+        [{ name:'Mean JOL (%)', color:'#e64626' }, { name:'Actually recalled (%)', color:'#000000' }], 'JOL and recall by pair type and JOL timing');
+    }
+    st.innerHTML = sim + html + body; bind();
+  } else if (ph === 'r2'){
+    const d = p2Stats();
+    st.innerHTML = sim + (!d.n ? '<div class="prompt">No finished Part 2 data yet.</div>' : `<div class="prompt">Same words, different sizes. Did size change what people recalled?</div>` + barChart([{ label:'Large words', v:[mean(d.L.jol), mean(d.L.rec) * 100] }, { label:'Small words', v:[mean(d.S.jol), mean(d.S.rec) * 100] }], [{ name:'Mean JOL (%)', color:'#e64626' }, { name:'Actually recalled (%)', color:'#000000' }], 'Mean JOL and recall for large and small words') + statRow([[d.higher + ' of ' + d.nboth, 'gave larger words higher JOLs'], [pct(mean(d.L.rec)), 'recalled, large'], [pct(mean(d.S.rec)), 'recalled, small']]));
+  } else {
+    st.innerHTML = `<div class="prompt" style="font-size:38px;line-height:1.15;margin-top:30px">A feeling of learning is a cue-based inference, and it is only as good as the cues it uses and the moment it is made.</div>`;
+  }
+}
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+function landing(){
+  const code = 'J' + Math.random().toString(36).replace(/[^a-z0-9]/g, '').slice(0, 3).toUpperCase();
+  app.innerHTML = `<div class="wrap"><div class="label">PSYC5216 workshop</div><h1>Will you remember it?</h1><p class="lede">A live class demo about judgements of learning. Students join on their phones and the results appear on the projector.</p>
+    <div class="card"><h2>Students</h2><input class="txt" id="jc" placeholder="Session code" autocapitalize="characters" autocomplete="off" style="margin-bottom:12px"><button class="btn" id="jb">Join</button></div>
+    <div class="card"><h2>Lecturer</h2><a class="btn" href="?view=host&s=${code}">Start a session</a><a class="btn ghost" style="margin-top:10px" href="?view=host&s=${code}&local=1">Rehearse offline (this browser only)</a><p class="tiny" style="margin-top:10px">Offline rehearsal keeps everything in this browser, so open student tabs from the same browser. Add <code>&amp;fast=1</code> for short timers. Do not use it in class.</p></div></div>`;
+  const go = () => { const c = $('#jc').value.toUpperCase().replace(/[^A-Z0-9]/g, ''); if (c) location.search = '?s=' + c; };
+  $('#jb').onclick = go; $('#jc').onkeydown = e => { if (e.key === 'Enter') go(); };
+}
+(async function boot(){
+  if (!S.code) return landing();
+  try { S.db = S.local ? makeLocalDB(S.code) : await makeFirebaseDB(S.code); } catch(e){ return showError(e); }
+  if (S.host){
+    buildHost(); S.db.getSession().then(s => { if (!s) S.db.setSession({ phase:'lobby', created:Date.now() }); }).catch(showError);
+    S.db.onSession(s => { S.session = s; updateHost(); }, showError);
+    S.db.onResps(r => { S.resps = r || {}; updateHost(); }, showError);
+  } else {
+    S.pid = getPid(); setTags('<span class="tag">' + esc(S.code) + '</span>');
+    wait('Joining', '');
+    S.db.onResps && 0;
+    S.db.setResp(S.pid, { joined:Date.now() }).catch(showError);
+    S.db.onSession(s => { S.session = s; renderStudent(); }, showError);
+  }
+})();
+</script>
+</body>
+</html>
