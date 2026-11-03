@@ -410,10 +410,17 @@ function summaryHTML(seg){
   if (seg === 'rmet'){
     const rows = its.map(it => {
       const { c, n } = tally(it.id);
-      const top = c.indexOf(Math.max(...c));
+      const mx = Math.max(...c);
+      const tops = c.map((v, k) => v === mx ? k : -1).filter(k => k >= 0);
       const share = n ? c[it.key] / n : 0;
-      const flag = !n ? '' : (top !== it.key ? '<span class="pill warn">class favoured another word</span>' : (c[top] / n < .6 ? '<span class="pill warn">split</span>' : ''));
-      return `<tr><td>${it.id}</td><td>${esc(it.opts[it.key])}</td><td>${pct(share)}</td><td>${n ? esc(it.opts[top]) + ' (' + pct(c[top] / n) + ')' : '-'}</td><td>${flag}</td></tr>`;
+      let flag = '';
+      if (n){
+        if (tops.length > 1) flag = '<span class="pill warn">tied</span>';
+        else if (tops[0] !== it.key) flag = '<span class="pill warn">class favoured another word</span>';
+        else if (c[tops[0]] / n < .6) flag = '<span class="pill warn">split</span>';
+      }
+      const most = n ? tops.map(k => esc(it.opts[k])).join(' / ') + ' (' + pct(mx / n) + (tops.length > 1 ? ' each' : '') + ')' : '-';
+      return `<tr><td>${it.id}</td><td>${esc(it.opts[it.key])}</td><td>${pct(share)}</td><td>${most}</td><td>${flag}</td></tr>`;
     }).join('');
     return `<div class="label">Results · ${esc(SEG[seg].name)}</div><h1>How the class did</h1>
       <p class="lede">${all.length} students. Mean ${mean.toFixed(1)} of ${max} matching the key.</p>
