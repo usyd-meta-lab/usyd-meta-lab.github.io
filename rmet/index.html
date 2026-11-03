@@ -88,6 +88,20 @@ table.sum td{padding:10px;border-bottom:1px solid var(--line)}
 .hist{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:10px}
 .hist div{flex:1;background:var(--accent);min-height:2px;position:relative}
 .hist span{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.opt .letter{font-family:var(--mono);font-size:13px;border:1px solid var(--line);background:#fff;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.opts.long .opt{font-size:17px;line-height:1.3;align-items:flex-start;padding:14px 16px}
+.opts.long .opt .pc{padding-top:2px}
+.hgrid .opts.long .opt{font-size:21px;padding:16px 18px}
+.hgrid .opts.long .opt .pc{font-size:20px}
+.opt.modal{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
+.opt.modal .fill{background:#e2e2e2}
+.tags{display:flex;gap:8px;align-items:center;margin-top:6px}
+.modalt{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);font-weight:700;white-space:nowrap}
+.stem{border:1px solid var(--line);background:var(--soft);padding:26px 28px}
+.stem .t{font-family:var(--serif);font-size:30px;line-height:1.25;margin-top:10px}
+.stem.s .t{font-size:21px}
+.spread{display:flex;gap:4px;align-items:flex-end;height:34px}
+.spread i{display:block;width:22px;background:var(--accent);min-height:2px}
 .prompt{border-left:3px solid var(--accent);padding:10px 16px;margin:10px 0;font-family:var(--serif);font-size:22px}
 @media(max-width:900px){.hgrid,.lobby{grid-template-columns:1fr}.lobby h1{font-size:38px}}
 </style>
@@ -111,9 +125,45 @@ const firebaseConfig = {
 };
 const ROOT = 'rmet_demo';
 const IMG_DIR = 'img/';
-const ITEMS = [{"id": 0, "opts": ["jealous", "panicked", "arrogant", "hateful"], "key": 1}, {"id": 1, "opts": ["playful", "comforting", "irritated", "bored"], "key": 0}, {"id": 2, "opts": ["terrified", "upset", "arrogant", "annoyed"], "key": 1}, {"id": 3, "opts": ["joking", "flustered", "desire", "convinced"], "key": 2}, {"id": 4, "opts": ["joking", "insisting", "amused", "relaxed"], "key": 1}, {"id": 5, "opts": ["irritated", "sarcastic", "worried", "friendly"], "key": 2}, {"id": 6, "opts": ["aghast", "fantasizing", "impatient", "alarmed"], "key": 1}, {"id": 7, "opts": ["apologetic", "friendly", "uneasy", "dispirited"], "key": 2}, {"id": 8, "opts": ["despondent", "relieved", "shy", "excited"], "key": 0}];
-const SCORED = ITEMS.filter(it => it.id !== 0);
+const RMET = [{"id": 0, "opts": ["jealous", "panicked", "arrogant", "hateful"], "key": 1}, {"id": 1, "opts": ["playful", "comforting", "irritated", "bored"], "key": 0}, {"id": 2, "opts": ["terrified", "upset", "arrogant", "annoyed"], "key": 1}, {"id": 3, "opts": ["joking", "flustered", "desire", "convinced"], "key": 2}, {"id": 4, "opts": ["joking", "insisting", "amused", "relaxed"], "key": 1}, {"id": 5, "opts": ["irritated", "sarcastic", "worried", "friendly"], "key": 2}, {"id": 6, "opts": ["aghast", "fantasizing", "impatient", "alarmed"], "key": 1}, {"id": 7, "opts": ["apologetic", "friendly", "uneasy", "dispirited"], "key": 2}, {"id": 8, "opts": ["despondent", "relieved", "shy", "excited"], "key": 0}];
+/* Tacit knowledge scenarios: written for this demo in the style of Sternberg's tacit knowledge
+   inventories (they are not items from the published inventories). There is deliberately no key:
+   the point is who decides which response is best. */
+const TACIT = [
+  { id:'T1', title:'Group assignment',
+    stem:'You are in a group of four for an assessment due in a week. One member has contributed nothing and has stopped replying in the group chat. The others are frustrated, and you have ended up coordinating the work. What is the best response?',
+    opts:['Post in the group chat that someone is not pulling their weight and ask them to explain.',
+          'Message them privately, ask if something is going on, and offer a small, specific task with a deadline.',
+          'Quietly split their share among the rest of you, and mention it to the tutor only if the mark is affected.',
+          'Wait until a few days before the deadline, then email the tutor to ask how to handle it.'] },
+  { id:'T2', title:'Two urgent requests',
+    stem:'You work part time in a busy office. Your manager asks you to finish a report by 3 pm. At 1 pm a senior colleague from another team asks you for a different task "as soon as possible". You cannot do both in time. What is the best response?',
+    opts:['Finish the report first, since your manager asked first, and tell the colleague you will be late.',
+          'Do the colleague\'s task first because they are more senior.',
+          'Tell your manager about the clash and ask which should come first, copying the colleague in.',
+          'Start with whichever task is quicker, then do the other, and explain afterwards only if asked.'] },
+  { id:'T3', title:'Vague feedback',
+    stem:'Your supervisor returns a draft with a single comment: "This isn\'t quite working." You have a meeting with them in two days. What is the best response?',
+    opts:['Ask for a short meeting now and ask which parts are not working and why.',
+          'Revise the sections you were least sure about and bring the new version to the meeting.',
+          'Show the draft to a more experienced student or postdoc to get their read before replying.',
+          'Wait for the meeting and ask for details then.'] },
+  { id:'T4', title:'Credit for an idea',
+    stem:'In a team meeting, a senior colleague presents an idea you suggested to them last week as if it were their own. Nobody else knows it was yours. What is the best response?',
+    opts:['Say in the meeting, politely, that this builds on the idea you raised with them last week.',
+          'Speak to the colleague privately afterwards and ask how they plan to acknowledge it.',
+          'Say nothing, and focus on being known for good ideas over time.',
+          'Email the group a summary of the idea and how it developed, noting when you first suggested it.'] }
+];
+const ITEMS = [...RMET.map(x => ({ ...x, type:'rmet', seg:'rmet' })), ...TACIT.map(x => ({ ...x, type:'tacit', seg:'tacit' }))];
 const N = ITEMS.length;
+const SEG = {
+  rmet:  { name:'Reading the Mind in the Eyes', q:'Which word best describes what this person is thinking or feeling?' },
+  tacit: { name:'Tacit knowledge',              q:'Which response would be best?' }
+};
+const segItems = s => ITEMS.filter(it => it.seg === s);
+const scoredIn = s => segItems(s).filter(it => it.type === 'tacit' || it.id !== 0);
+const imgSrc = it => IMG_DIR + String(it.id).padStart(3, '0') + '.jpg';
 
 /* =====================================================================
    UTILITIES
@@ -122,7 +172,9 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pct = x => Number.isFinite(x) ? Math.round(x * 100) + '%' : '0%';
 function deepMerge(t, s){ const out = { ...(t || {}) }; for (const k in s){ const v = s[k]; out[k] = (v && typeof v === 'object' && !Array.isArray(v)) ? deepMerge(out[k], v) : v; } return out; }
-const itemLabel = it => it.id === 0 ? 'Practice' : 'Item ' + it.id;
+const itemLabel = it => it.type === 'tacit' ? 'Scenario ' + (segItems('tacit').indexOf(it) + 1) : (it.id === 0 ? 'Practice' : 'Item ' + it.id);
+const progLabel = it => it.type === 'tacit' ? 'SCENARIO ' + (segItems('tacit').indexOf(it) + 1) + ' OF ' + segItems('tacit').length : (it.id === 0 ? 'PRACTICE (NOT SCORED)' : 'ITEM ' + it.id + ' OF ' + scoredIn('rmet').length);
+const segPos = it => { const a = segItems(it.seg); return (a.indexOf(it) + 1) / a.length; };
 
 /* =====================================================================
    DATA LAYER (Firestore, or localStorage for offline rehearsal)
@@ -192,8 +244,12 @@ function tally(id){
 }
 const joined = () => Object.values(S.resps).filter(r => r && (r.joined || r.v)).length;
 function myVote(id){ const r = S.resps[S.pid]; const v = r && r.v && r.v[id]; return Number.isInteger(v) ? v : (Number.isInteger(S.me[id]) ? S.me[id] : null); }
-function scores(){
-  return Object.values(S.resps).filter(r => r && r.v).map(r => SCORED.reduce((s, it) => s + (r.v[it.id] === it.key ? 1 : 0), 0));
+function modeIdx(it){ const { c, n } = tally(it.id); if (!n) return -1; return c.indexOf(Math.max(...c)); }
+// rmet: matches with the key. tacit: agreements with the class majority ("consensus scoring").
+const target = it => it.type === 'tacit' ? modeIdx(it) : it.key;
+function scores(seg){
+  const its = scoredIn(seg);
+  return Object.values(S.resps).filter(r => r && r.v && its.some(it => Number.isInteger(r.v[it.id]))).map(r => its.reduce((s, it) => s + (r.v[it.id] === target(it) ? 1 : 0), 0));
 }
 function showError(err){
   const denied = /permission|insufficient/i.test((err && err.message) || '');
@@ -207,25 +263,33 @@ function showError(err){
    VIEWS
    ===================================================================== */
 function topbar(){
-  return `<div class="top"><div class="top-in"><div class="brand">meta lab <b>/ reading the mind in the eyes</b></div>
+  return `<div class="top"><div class="top-in"><div class="brand">meta lab <b>/ lecture 8 live demos</b></div>
     <div class="row">${S.code ? `<span class="tag">session ${esc(S.code)}</span>` : ''}${S.local ? '<span class="tag">local rehearsal</span>' : ''}${S.host ? `<span class="tag">${joined()} joined</span>` : ''}</div></div></div>`;
 }
+function plainOpts(it){
+  const tacit = it.type === 'tacit';
+  return `<div class="opts${tacit ? ' long' : ''}">` + it.opts.map((w, k) => `<div class="opt">${tacit ? `<span class="letter">${'ABCD'[k]}</span>` : ''}<span class="w">${esc(w)}</span></div>`).join('') + `</div>`;
+}
 function optsHTML(it, mode){
-  // mode: 'vote' (buttons), 'live' (locked, live split), 'reveal' (key shown)
+  // mode: 'vote' (buttons), 'live' (locked, live split), 'reveal' (key / class favourite shown)
   const { c, n } = tally(it.id);
   const mine = myVote(it.id);
-  return `<div class="opts">` + it.opts.map((w, k) => {
+  const tacit = it.type === 'tacit';
+  const modal = tacit && mode === 'reveal' ? modeIdx(it) : -1;
+  return `<div class="opts${tacit ? ' long' : ''}">` + it.opts.map((w, k) => {
     const share = n ? c[k] / n : 0;
     const showBar = mode !== 'vote';
-    const isKey = mode === 'reveal' && k === it.key;
-    const cls = ['opt', isKey ? 'key' : '', (!S.host && mine === k && mode !== 'vote') ? 'mine' : '', (mode === 'reveal' && !isKey) ? 'dim' : ''].join(' ');
+    const isKey = !tacit && mode === 'reveal' && k === it.key;
+    const isModal = k === modal && n > 0;
+    const isMine = !S.host && mine === k && mode !== 'vote';
+    const cls = ['opt', isKey ? 'key' : '', isModal ? 'modal' : '', isMine ? 'mine' : '', (mode === 'reveal' && !tacit && !isKey) ? 'dim' : ''].join(' ');
     const inner = `${showBar ? `<span class="fill" style="width:${(share * 100).toFixed(1)}%"></span>` : ''}
-      <span class="w">${esc(w)}</span>${isKey ? '<span class="star">&#9733; key</span>' : ''}${(!S.host && mine === k && mode !== 'vote') ? '<span class="you">you</span>' : ''}${showBar ? `<span class="pc">${pct(share)}</span>` : ''}`;
+      ${tacit ? `<span class="letter">${'ABCD'[k]}</span><span class="w">${esc(w)}${(isModal || isMine) ? `<span class="tags">${isModal ? '<span class="modalt">class favourite</span>' : ''}${isMine ? '<span class="you">you</span>' : ''}</span>` : ''}</span>` : `<span class="w">${esc(w)}</span>${isKey ? '<span class="star">&#9733; key</span>' : ''}${isMine ? '<span class="you">you</span>' : ''}`}${showBar ? `<span class="pc">${pct(share)}</span>` : ''}`;
     return mode === 'vote' ? `<button class="${cls}" data-act="vote" data-k="${k}">${inner}</button>` : `<div class="${cls}">${inner}</div>`;
   }).join('') + `</div>`;
 }
 function landing(){
-  return topbar() + `<div class="wrap"><div class="label">Lecture 8 demo</div><h1>Reading the Mind in the Eyes</h1>
+  return topbar() + `<div class="wrap"><div class="label">Lecture 8 live demos</div><h1>Reading the Mind in the Eyes, then tacit knowledge</h1>
     <p class="lede">Join the class poll, or start a session to run it.</p>
     <div class="card"><div class="label" style="margin-bottom:8px">Join a session</div>
       <input class="code" id="joinCode" maxlength="8" placeholder="CODE" autocomplete="off">
@@ -235,38 +299,57 @@ function landing(){
       <p class="tiny" style="margin-top:8px">Rehearse offline runs in this browser only (open the student link in a second tab). It does not touch the live database.</p></div>
     ${S.ui.error}</div>`;
 }
+function stimulus(it, small){
+  return it.type === 'tacit'
+    ? `<div class="stem ${small ? 's' : ''}"><div class="label">${esc(it.title)}</div><div class="t">${esc(it.stem)}</div></div>`
+    : `<img class="eyes" src="${imgSrc(it)}" alt="Photograph of a pair of eyes">`;
+}
 function studentView(){
   const ph = phase(), it = ITEMS[curI()];
   let body = '';
   if (ph === 'wait' && !(S.session && S.session.started)){
-    body = `<div class="card center"><div class="label">You're in</div><h2>Waiting for the presenter</h2><p class="muted">The first item will appear here. Keep this page open.</p></div>`;
-  } else if (ph === 'end'){
-    const mine = SCORED.reduce((s, x) => s + (myVote(x.id) === x.key ? 1 : 0), 0);
-    const all = scores(); const mean = all.length ? all.reduce((a, b) => a + b, 0) / all.length : 0;
-    body = `<div class="card"><div class="label">Finished</div><h2>You matched the key on ${mine} of ${SCORED.length}</h2>
-      <p class="muted">Class average: ${mean.toFixed(1)} of ${SCORED.length}.</p>
-      <div class="verdict"><strong>But who decided which answer was "right"?</strong><br>The key comes from the test authors' consensus procedure. Think about how that connects to consensus scoring of emotional intelligence tests.</div></div>`;
+    body = `<div class="card center"><div class="label">You're in</div><h2>Waiting for the presenter</h2><p class="muted">The first item will appear here. Keep this page open, there is no need to scan again.</p></div>`;
+  } else if (ph === 'summary'){
+    const seg = it.seg, its = scoredIn(seg);
+    const mine = its.reduce((s, x) => s + (myVote(x.id) === target(x) ? 1 : 0), 0);
+    const all = scores(seg); const mean = all.length ? all.reduce((a, b) => a + b, 0) / all.length : 0;
+    const more = !!ITEMS[curI() + 1];
+    const msg = seg === 'rmet'
+      ? `<h2>You matched the key on ${mine} of ${its.length}</h2><p class="muted">Class average: ${mean.toFixed(1)} of ${its.length}.</p>
+         <div class="verdict"><strong>But who decided which answer was "right"?</strong><br>The key comes from the test authors' consensus procedure. Think about how that connects to consensus scoring of emotional intelligence tests.</div>`
+      : `<h2>You agreed with the class majority on ${mine} of ${its.length}</h2><p class="muted">Class average: ${mean.toFixed(1)} of ${its.length}.</p>
+         <div class="verdict"><strong>That is consensus scoring.</strong><br>If the majority were the "experts", your tacit knowledge would be how much you resemble them. Would real experts agree with each other?</div>`;
+    body = `<div class="card"><div class="label">${esc(SEG[seg].name)}: done</div>${msg}${more ? '<p class="tiny" style="margin-top:12px">Next activity coming up. Keep this page open.</p>' : ''}</div>`;
   } else if (ph === 'wait'){
     body = `<div class="card center"><div class="label">Next up</div><h2>Hold on</h2><p class="muted">Waiting for the presenter to open the next item.</p></div>`;
   } else {
-    const idx = curI(), mine = myVote(it.id);
-    const head = `<div class="prog"><span>${itemLabel(it).toUpperCase()}${it.id ? ' OF ' + SCORED.length : ' (NOT SCORED)'}</span><span>${idx + 1}/${N}</span></div><div class="bar"><i style="width:${((idx + 1) / N * 100).toFixed(0)}%"></i></div>`;
-    const img = `<img class="eyes" src="${IMG_DIR}${String(it.id).padStart(3, '0')}.jpg" alt="Photograph of a pair of eyes">`;
+    const idx = curI(), mine = myVote(it.id), tacit = it.type === 'tacit';
+    const head = `<div class="prog"><span>${progLabel(it)}</span><span>${esc(SEG[it.seg].name)}</span></div><div class="bar"><i style="width:${(segPos(it) * 100).toFixed(0)}%"></i></div>`;
+    const stim = stimulus(it, true);
     if (ph === 'vote' && mine === null){
-      body = `<div class="card">${head}${img}<div class="q">Which word best describes what this person is thinking or feeling?</div>${optsHTML(it, 'vote')}</div>`;
+      body = `<div class="card">${head}${stim}<div class="q">${SEG[it.seg].q}</div>${optsHTML(it, 'vote')}</div>`;
     } else if (ph === 'vote'){
       const { n } = tally(it.id);
-      body = `<div class="card">${head}${img}<div class="q">Locked in. Here is how the class is voting (${n} so far).</div>${optsHTML(it, 'live')}<p class="tiny" style="margin-top:10px">The answer will appear when the presenter reveals it.</p></div>`;
+      body = `<div class="card">${head}${stim}<div class="q">Locked in. Here is how the class is voting (${n} so far).</div>${optsHTML(it, 'live')}<p class="tiny" style="margin-top:10px">${tacit ? 'The class favourite' : 'The answer'} will appear when the presenter reveals it.</p></div>`;
     } else {
       const { c, n } = tally(it.id);
-      const hit = mine === it.key;
-      const v = mine === null ? `<div class="verdict">You didn't vote on this one.</div>` :
-        hit ? `<div class="verdict ok"><strong>You matched the key.</strong> ${pct(n ? c[it.key] / n : 0)} of the class did.</div>`
-            : `<div class="verdict no"><strong>Not the keyed answer.</strong> ${pct(n ? c[it.key] / n : 0)} of the class chose <em>${esc(it.opts[it.key])}</em>.</div>`;
-      body = `<div class="card">${head}${img}<div class="q">The keyed answer is <em>${esc(it.opts[it.key])}</em>.</div>${optsHTML(it, 'reveal')}${v}</div>`;
+      let v, q;
+      if (tacit){
+        const m = modeIdx(it);
+        q = `The class favourite is <em>${'ABCD'[m] || '-'}</em>. There is no keyed answer.`;
+        v = mine === null ? `<div class="verdict">You didn't vote on this one.</div>`
+          : `<div class="verdict ${mine === m ? 'ok' : 'no'}"><strong>${mine === m ? 'You were with the majority.' : 'You were not with the majority.'}</strong> ${pct(n ? c[mine] / n : 0)} of the class chose your response (${'ABCD'[mine]}).</div>`;
+      } else {
+        const hit = mine === it.key;
+        q = `The keyed answer is <em>${esc(it.opts[it.key])}</em>.`;
+        v = mine === null ? `<div class="verdict">You didn't vote on this one.</div>` :
+          hit ? `<div class="verdict ok"><strong>You matched the key.</strong> ${pct(n ? c[it.key] / n : 0)} of the class did.</div>`
+              : `<div class="verdict no"><strong>Not the keyed answer.</strong> ${pct(n ? c[it.key] / n : 0)} of the class chose <em>${esc(it.opts[it.key])}</em>.</div>`;
+      }
+      body = `<div class="card">${head}${stim}<div class="q">${q}</div>${optsHTML(it, 'reveal')}${v}</div>`;
     }
   }
-  return topbar() + `<div class="wrap">${S.ui.error}${body}<div class="foot">Items from the Reading the Mind in the Eyes Test (Baron-Cohen, Wheelwright, Hill, Raste &amp; Plumb, 2001), used here for teaching. There are no names or personal data: votes are anonymous.</div></div>`;
+  return topbar() + `<div class="wrap">${S.ui.error}${body}<div class="foot">Eye items from the Reading the Mind in the Eyes Test (Baron-Cohen, Wheelwright, Hill, Raste &amp; Plumb, 2001), used here for teaching. Tacit knowledge scenarios were written for this demo. Votes are anonymous.</div></div>`;
 }
 function hostView(){
   const ph = phase(), idx = curI(), it = ITEMS[idx];
@@ -274,50 +357,87 @@ function hostView(){
   if (!started){
     return topbar() + `<div class="wrap host">${S.ui.error}<div class="lobby"><div class="center"><div class="qrbox" id="qr"></div><div class="tiny" style="margin-top:8px;max-width:300px;word-break:break-all">${esc(joinUrl())}</div></div>
       <div><div class="label">Lecture 8 · social intelligence</div><h1>Reading the Mind in the Eyes</h1>
-      <p class="lede">Scan the code to join. You will see a photograph of a pair of eyes and choose which of four words fits best. Votes are anonymous.</p>
+      <p class="lede">Scan the code to join. Two short activities, one code: first a photograph of a pair of eyes and four words, then tacit knowledge scenarios. Votes are anonymous.</p>
       <div class="row" style="margin-bottom:18px"><span class="codebox">${esc(S.code)}</span><span class="hstat">${joined()} joined</span></div>
       <div class="row"><button class="btn big" data-act="advance">Start practice item &rarr;</button>${S.local ? '<button class="btn ghost" data-act="sim">Add 30 simulated students</button>' : ''}</div></div></div></div>`;
   }
-  if (ph === 'end') return topbar() + `<div class="wrap host">${S.ui.error}${summaryHTML()}</div>`;
-  const { n } = tally(it.id);
+  const resetBtn = `<button class="btn ghost small" data-act="reset">${S.ui.confirm ? 'Really reset? Click again' : 'Reset session'}</button>`;
+  if (ph === 'summary'){
+    const more = !!ITEMS[idx + 1];
+    const nextName = more ? SEG[ITEMS[idx + 1].seg].name : '';
+    return topbar() + `<div class="wrap host">${S.ui.error}${summaryHTML(it.seg)}
+      <div class="hbar"><button class="btn ghost" data-act="back">&larr; Back</button>
+      ${more ? `<button class="btn big" data-act="advance">Continue to ${esc(nextName.toLowerCase())} &rarr;</button>` : ''}
+      <button class="btn ghost" data-act="csv">Download counts (CSV)</button><span class="spacer"></span>${resetBtn}</div>
+      <div class="tiny" style="margin-top:8px">Join: ${esc(joinUrl())}</div></div>`;
+  }
+  const { c, n } = tally(it.id);
+  const tacit = it.type === 'tacit';
   const mode = ph === 'reveal' ? 'reveal' : (S.ui.live ? 'live' : 'blind');
-  const showOpts = mode === 'blind' ? it.opts.map(w => `<div class="opt"><span class="w">${esc(w)}</span></div>`).join('') : null;
-  const optBlock = mode === 'blind' ? `<div class="opts">${showOpts}</div>` : optsHTML(it, mode);
-  const primary = ph === 'vote' ? 'Reveal the answer' : (idx + 1 < N ? 'Next item &rarr;' : 'Finish &rarr;');
-  const { c } = tally(it.id);
-  const note = ph === 'reveal' ? `<div class="verdict ${n && c[it.key] / n >= .5 ? 'ok' : 'no'}"><strong>${pct(n ? c[it.key] / n : 0)}</strong> of the class chose the keyed answer. <strong>Who decided it was correct?</strong></div>` : '';
+  const optBlock = mode === 'blind' ? plainOpts(it) : optsHTML(it, mode);
+  const nx = ITEMS[idx + 1];
+  const primary = ph === 'vote' ? 'Reveal the answer' : (nx && nx.seg === it.seg ? 'Next item &rarr;' : 'See results &rarr;');
+  let note = '';
+  if (ph === 'reveal'){
+    if (tacit){
+      const m = modeIdx(it);
+      note = `<div class="verdict"><strong>${n ? pct(c[m] / n) : '0%'}</strong> chose ${'ABCD'[m] || '-'}. There is no keyed answer here.</div>`;
+    } else {
+      note = `<div class="verdict ${n && c[it.key] / n >= .5 ? 'ok' : 'no'}"><strong>${pct(n ? c[it.key] / n : 0)}</strong> of the class chose the keyed answer.</div>`;
+    }
+  }
+  const left = tacit ? stimulus(it, false) : `<img class="eyes" src="${imgSrc(it)}" alt="Photograph of a pair of eyes">`;
   return topbar() + `<div class="wrap host">${S.ui.error}
-    <div class="prog"><span>${itemLabel(it).toUpperCase()}${it.id ? ' OF ' + SCORED.length : ' (NOT SCORED)'}</span><span>${idx + 1}/${N}</span></div><div class="bar"><i style="width:${((idx + 1) / N * 100).toFixed(0)}%"></i></div>
-    <div class="hgrid"><div><img class="eyes" src="${IMG_DIR}${String(it.id).padStart(3, '0')}.jpg" alt="Photograph of a pair of eyes"></div>
-      <div><div class="q">Which word best describes what this person is thinking or feeling?</div>${optBlock}${note}</div></div>
-    <div class="hbar"><button class="btn ghost" data-act="back" ${idx === 0 && ph === 'vote' ? '' : ''}>&larr; Back</button>
+    <div class="prog"><span>${progLabel(it)}</span><span>${esc(SEG[it.seg].name)}</span></div><div class="bar"><i style="width:${(segPos(it) * 100).toFixed(0)}%"></i></div>
+    <div class="hgrid"><div>${left}</div>
+      <div><div class="q">${SEG[it.seg].q}</div>${optBlock}${note}</div></div>
+    <div class="hbar"><button class="btn ghost" data-act="back">&larr; Back</button>
       <button class="btn big" data-act="advance">${primary}</button>
       <span class="hstat">${n} of ${joined()} voted</span><span class="spacer"></span>
       ${ph === 'vote' ? `<label class="hstat"><input type="checkbox" data-act="live" ${S.ui.live ? 'checked' : ''}> show live votes</label>` : ''}
-      ${S.local ? '<button class="btn ghost small" data-act="sim">+30 simulated</button>' : ''}
-      <button class="btn ghost small" data-act="reset">${S.ui.confirm ? 'Really reset? Click again' : 'Reset session'}</button></div>
+      ${S.local ? '<button class="btn ghost small" data-act="sim">+30 simulated</button>' : ''}${resetBtn}</div>
     <div class="tiny" style="margin-top:8px">Space or &rarr; advances, &larr; goes back. Join: ${esc(joinUrl())}</div></div>`;
 }
-function summaryHTML(){
-  const rows = SCORED.map(it => {
-    const { c, n } = tally(it.id);
-    const top = c.indexOf(Math.max(...c));
-    const share = n ? c[it.key] / n : 0;
-    const flag = !n ? '' : (top !== it.key ? '<span class="pill warn">class favoured another word</span>' : (c[top] / n < .6 ? '<span class="pill warn">split</span>' : ''));
-    return `<tr><td>${it.id}</td><td>${esc(it.opts[it.key])}</td><td>${pct(share)}</td><td>${n ? esc(it.opts[top]) + ' (' + pct(c[top] / n) + ')' : '-'}</td><td>${flag}</td></tr>`;
-  }).join('');
-  const all = scores(); const max = SCORED.length;
+function histHTML(seg){
+  const its = scoredIn(seg), all = scores(seg), max = its.length;
   const dist = Array.from({ length: max + 1 }, (_, k) => all.filter(s => s === k).length);
   const dmax = Math.max(1, ...dist);
-  const mean = all.length ? all.reduce((a, b) => a + b, 0) / all.length : 0;
-  return `<div class="label">Results</div><h1>How the class did</h1>
-    <p class="lede">${all.length} students. Mean ${mean.toFixed(1)} of ${max} matching the key.</p>
-    <div class="hgrid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)"><div><table class="sum"><thead><tr><th>Item</th><th>Keyed word</th><th>Chose key</th><th>Most chosen</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div><div class="label">Score distribution</div><div class="hist" style="margin-bottom:34px">${dist.map((v, k) => `<div style="height:${(v / dmax * 100).toFixed(0)}%"><span>${k}</span></div>`).join('')}</div>
-    <div class="prompt">Who decided which word is correct, and what would we conclude if the key were wrong?</div>
-    <div class="prompt" style="font-size:18px">If this is a social intelligence ability, how would you show it is separable from vocabulary and g?</div></div></div>
-    <div class="hbar"><button class="btn ghost" data-act="back">&larr; Back</button><button class="btn ghost" data-act="csv">Download counts (CSV)</button><span class="spacer"></span><button class="btn ghost small" data-act="reset">${S.ui.confirm ? 'Really reset? Click again' : 'Reset session'}</button></div>`;
+  return `<div class="hist" style="margin-bottom:34px">${dist.map((v, k) => `<div style="height:${(v / dmax * 100).toFixed(0)}%"><span>${k}</span></div>`).join('')}</div>`;
 }
+function summaryHTML(seg){
+  const its = scoredIn(seg), all = scores(seg), max = its.length;
+  const mean = all.length ? all.reduce((a, b) => a + b, 0) / all.length : 0;
+  if (seg === 'rmet'){
+    const rows = its.map(it => {
+      const { c, n } = tally(it.id);
+      const top = c.indexOf(Math.max(...c));
+      const share = n ? c[it.key] / n : 0;
+      const flag = !n ? '' : (top !== it.key ? '<span class="pill warn">class favoured another word</span>' : (c[top] / n < .6 ? '<span class="pill warn">split</span>' : ''));
+      return `<tr><td>${it.id}</td><td>${esc(it.opts[it.key])}</td><td>${pct(share)}</td><td>${n ? esc(it.opts[top]) + ' (' + pct(c[top] / n) + ')' : '-'}</td><td>${flag}</td></tr>`;
+    }).join('');
+    return `<div class="label">Results · ${esc(SEG[seg].name)}</div><h1>How the class did</h1>
+      <p class="lede">${all.length} students. Mean ${mean.toFixed(1)} of ${max} matching the key.</p>
+      <div class="hgrid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)"><div><table class="sum"><thead><tr><th>Item</th><th>Keyed word</th><th>Chose key</th><th>Most chosen</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div><div class="label">Score distribution (matches with the key)</div>${histHTML(seg)}
+      <div class="prompt">Who decided which word is correct, and what would we conclude if the key were wrong?</div>
+      <div class="prompt" style="font-size:18px">If this is a social intelligence ability, how would you show it is separable from vocabulary and g?</div></div></div>`;
+  }
+  const rows = its.map(it => {
+    const { c, n } = tally(it.id);
+    const m = modeIdx(it);
+    const top = n ? c[m] / n : 0;
+    const flag = !n ? '' : (top < .5 ? '<span class="pill warn">no majority</span>' : '');
+    const spread = `<div class="spread">${c.map(v => `<i style="height:${n ? Math.max(2, v / n * 34) : 2}px" title="${v}"></i>`).join('')}</div>`;
+    return `<tr><td>${esc(it.title)}</td><td>${n ? 'ABCD'[m] + ' (' + pct(top) + ')' : '-'}</td><td>${spread}</td><td>${flag}</td></tr>`;
+  }).join('');
+  return `<div class="label">Results · ${esc(SEG[seg].name)}</div><h1>No key, just a room</h1>
+    <p class="lede">${all.length} students. Mean ${mean.toFixed(1)} of ${max} agreeing with the class majority.</p>
+    <div class="hgrid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)"><div><table class="sum"><thead><tr><th>Scenario</th><th>Class favourite</th><th>Spread A to D</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div><div class="label">Agreement with the majority</div>${histHTML(seg)}
+    <div class="prompt">If the majority were the experts, your "tacit knowledge" is just how much you resemble the room.</div>
+    <div class="prompt" style="font-size:18px">Would managers, new graduates and tutors key these differently? Is that expertise, or just experience plus personality plus g?</div></div></div>`;
+}
+
 
 /* =====================================================================
    RENDER + ACTIONS
@@ -332,7 +452,7 @@ function doRender(){
   if (qr && window.QRCode){ qr.innerHTML = ''; new QRCode(qr, { text: joinUrl(), width: 280, height: 280, correctLevel: QRCode.CorrectLevel.M }); }
   else if (qr) qr.innerHTML = '<div class="tiny" style="padding:20px">QR library not loaded. Use the link below.</div>';
   // preload neighbours
-  if (S.session){ const i = curI(); [i + 1].forEach(j => { if (ITEMS[j]){ const im = new Image(); im.src = IMG_DIR + String(ITEMS[j].id).padStart(3, '0') + '.jpg'; } }); }
+  if (S.session){ const i = curI(); [i + 1].forEach(j => { if (ITEMS[j] && ITEMS[j].type === 'rmet'){ const im = new Image(); im.src = imgSrc(ITEMS[j]); } }); }
 }
 const newCode = () => { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; for (let i = 0; i < 4; i++) s += a[Math.floor(Math.random() * a.length)]; return s; };
 function go(code, host, local){ const u = new URL(location.href); u.search = ''; u.searchParams.set('s', code); if (host) u.searchParams.set('view', 'host'); if (local) u.searchParams.set('local', '1'); location.href = u.toString(); }
@@ -341,26 +461,38 @@ function advance(){
   const ph = phase(), i = curI();
   if (ph === 'wait') return S.db.setSession({ phase:'vote', i:0, started:true });
   if (ph === 'vote') return S.db.setSession({ phase:'reveal' });
-  if (ph === 'reveal') return i + 1 < N ? S.db.setSession({ phase:'vote', i:i + 1 }) : S.db.setSession({ phase:'end' });
+  if (ph === 'reveal'){ const nx = ITEMS[i + 1]; return (!nx || nx.seg !== ITEMS[i].seg) ? S.db.setSession({ phase:'summary' }) : S.db.setSession({ phase:'vote', i:i + 1 }); }
+  if (ph === 'summary' && ITEMS[i + 1]) return S.db.setSession({ phase:'vote', i:i + 1 });
 }
 function back(){
   const ph = phase(), i = curI();
-  if (ph === 'end') return S.db.setSession({ phase:'reveal', i:N - 1 });
+  if (ph === 'summary') return S.db.setSession({ phase:'reveal' });
   if (ph === 'reveal') return S.db.setSession({ phase:'vote' });
-  if (ph === 'vote') return i > 0 ? S.db.setSession({ phase:'reveal', i:i - 1 }) : S.db.setSession({ phase:'wait', started:false });
+  if (ph === 'vote'){
+    if (i === 0) return S.db.setSession({ phase:'wait', started:false });
+    return ITEMS[i - 1].seg !== ITEMS[i].seg ? S.db.setSession({ phase:'summary', i:i - 1 }) : S.db.setSession({ phase:'reveal', i:i - 1 });
+  }
 }
 function simulate(){
   const r = () => Math.random();
+  const W = [[.12, .5, .23, .15], [.45, .1, .3, .15], [.5, .2, .1, .2], [.2, .3, .15, .35]];
   for (let s = 0; s < 30; s++){
     const v = {};
-    ITEMS.forEach(it => { const hit = r() < (it.id === 0 ? .8 : .65); v[it.id] = hit ? it.key : ((it.key + 1 + Math.floor(r() * 3)) % 4); });
+    ITEMS.forEach((it, ix) => {
+      if (it.type === 'tacit'){ const w = W[ix % 4]; let x = r(), k = 0; while (k < 3 && x > w[k]){ x -= w[k]; k++; } v[it.id] = k; }
+      else { const hit = r() < (it.id === 0 ? .8 : .65); v[it.id] = hit ? it.key : ((it.key + 1 + Math.floor(r() * 3)) % 4); }
+    });
     S.db.setResp('sim' + s + '_' + Date.now().toString(36), { joined:true, sim:true, v });
   }
 }
 function csv(){
-  let out = 'item,keyed_word,' + [0, 1, 2, 3].map(k => 'option' + (k + 1) + '_word,option' + (k + 1) + '_n').join(',') + ',n_votes,pct_chose_key\n';
-  ITEMS.forEach(it => { const { c, n } = tally(it.id); out += [it.id, it.opts[it.key], ...[0, 1, 2, 3].flatMap(k => [it.opts[k], c[k]]), n, n ? (c[it.key] / n).toFixed(3) : ''].join(',') + '\n'; });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([out], { type:'text/csv' })); a.download = 'rmet_' + S.code + '.csv'; a.click();
+  const q = x => '"' + String(x).replace(/"/g, '""') + '"';
+  let out = 'activity,item,keyed_option,' + [1, 2, 3, 4].map(k => 'option' + k + '_text,option' + k + '_n').join(',') + ',n_votes,pct_chose_key,class_favourite\n';
+  ITEMS.forEach(it => {
+    const { c, n } = tally(it.id); const tac = it.type === 'tacit';
+    out += [SEG[it.seg].name, it.id, tac ? '' : it.opts[it.key], ...[0, 1, 2, 3].flatMap(k => [q(it.opts[k]), c[k]]), n, (!tac && n) ? (c[it.key] / n).toFixed(3) : '', n ? 'ABCD'[modeIdx(it)] : ''].map((x, i) => (i === 2 && x !== '') ? q(x) : x).join(',') + '\n';
+  });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([out], { type:'text/csv' })); a.download = 'lecture8_demo_' + S.code + '.csv'; a.click();
 }
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t) return;
