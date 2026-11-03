@@ -83,7 +83,7 @@ input.code{font-family:var(--mono);font-size:22px;letter-spacing:.2em;text-trans
 table.sum{border-collapse:collapse;width:100%;font-size:17px}
 table.sum th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:2px solid var(--ink)}
 table.sum td{padding:10px;border-bottom:1px solid var(--line)}
-.pill{font-family:var(--mono);font-size:11px;padding:2px 8px;border:1px solid var(--line);color:var(--muted)}
+.pill{white-space:nowrap;font-family:var(--mono);font-size:11px;padding:2px 8px;border:1px solid var(--line);color:var(--muted)}
 .pill.warn{border-color:var(--accent);color:var(--accent)}
 .hist{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:10px}
 .hist div{flex:1;background:var(--accent);min-height:2px;position:relative}
@@ -124,31 +124,32 @@ const firebaseConfig = {
   appId: "1:368747163289:web:29719439e3b61126331208"
 };
 const ROOT = 'rmet_demo';
+const BUILD = '2026-11-03d'; // bump on every change: the presenter publishes it, student pages reload themselves if theirs differs
 const IMG_DIR = 'img/';
 const RMET = [{"id": 0, "opts": ["jealous", "panicked", "arrogant", "hateful"], "key": 1}, {"id": 1, "opts": ["playful", "comforting", "irritated", "bored"], "key": 0}, {"id": 2, "opts": ["terrified", "upset", "arrogant", "annoyed"], "key": 1}, {"id": 3, "opts": ["joking", "flustered", "desire", "convinced"], "key": 2}, {"id": 4, "opts": ["joking", "insisting", "amused", "relaxed"], "key": 1}, {"id": 5, "opts": ["irritated", "sarcastic", "worried", "friendly"], "key": 2}, {"id": 6, "opts": ["aghast", "fantasizing", "impatient", "alarmed"], "key": 1}, {"id": 7, "opts": ["apologetic", "friendly", "uneasy", "dispirited"], "key": 2}, {"id": 8, "opts": ["despondent", "relieved", "shy", "excited"], "key": 0}];
 /* Tacit knowledge scenarios: written for this demo in the style of Sternberg's tacit knowledge
-   inventories (they are not items from the published inventories). There is deliberately no key:
-   the point is who decides which response is best. */
+   inventories (they are not items from the published inventories). `key` is the presenter's expert
+   answer (index 0 to 3). The class favourite is shown beside it, so the two can be compared. */
 const TACIT = [
-  { id:'T1', title:'Group assignment',
+  { id:'T1', key:1, title:'Group assignment',
     stem:'You are in a group of four for an assessment due in a week. One member has contributed nothing and has stopped replying in the group chat. The others are frustrated, and you have ended up coordinating the work. What is the best response?',
     opts:['Post in the group chat that someone is not pulling their weight and ask them to explain.',
           'Message them privately, ask if something is going on, and offer a small, specific task with a deadline.',
           'Quietly split their share among the rest of you, and mention it to the tutor only if the mark is affected.',
           'Wait until a few days before the deadline, then email the tutor to ask how to handle it.'] },
-  { id:'T2', title:'Two urgent requests',
+  { id:'T2', key:2, title:'Two urgent requests',
     stem:'You work part time in a busy office. Your manager asks you to finish a report by 3 pm. At 1 pm a senior colleague from another team asks you for a different task "as soon as possible". You cannot do both in time. What is the best response?',
     opts:['Finish the report first, since your manager asked first, and tell the colleague you will be late.',
           'Do the colleague\'s task first because they are more senior.',
           'Tell your manager about the clash and ask which should come first, copying the colleague in.',
           'Start with whichever task is quicker, then do the other, and explain afterwards only if asked.'] },
-  { id:'T3', title:'Vague feedback',
+  { id:'T3', key:1, title:'Vague feedback',
     stem:'Your supervisor returns a draft with a single comment: "This isn\'t quite working." You have a meeting with them in two days. What is the best response?',
     opts:['Ask for a short meeting now and ask which parts are not working and why.',
           'Revise the sections you were least sure about and bring the new version to the meeting.',
           'Show the draft to a more experienced student or postdoc to get their read before replying.',
           'Wait for the meeting and ask for details then.'] },
-  { id:'T4', title:'Credit for an idea',
+  { id:'T4', key:1, title:'Credit for an idea',
     stem:'In a team meeting, a senior colleague presents an idea you suggested to them last week as if it were their own. Nobody else knows it was yours. What is the best response?',
     opts:['Say in the meeting, politely, that this builds on the idea you raised with them last week.',
           'Speak to the colleague privately afterwards and ask how they plan to acknowledge it.',
@@ -194,7 +195,7 @@ async function makeFirebaseDB(code){
     clear: async () => {
       const snap = await fs.getDocs(rCol);
       await Promise.all(snap.docs.map(d => fs.deleteDoc(d.ref)));
-      await fs.setDoc(sRef, { i:0, phase:'wait', reset:Date.now() });
+      await fs.setDoc(sRef, { i:0, phase:'wait', reset:Date.now(), build:BUILD });
     }
   };
 }
@@ -211,7 +212,7 @@ function makeLocalDB(code){
     onSession: cb => sub('session', cb),
     setResp: (id, p) => write(d => { d.resp = d.resp || {}; d.resp[id] = deepMerge(d.resp[id] || {}, p); }),
     onResps: cb => sub('resp', cb),
-    clear: () => write(d => { d.resp = {}; d.session = { i:0, phase:'wait', reset:Date.now() }; })
+    clear: () => write(d => { d.resp = {}; d.session = { i:0, phase:'wait', reset:Date.now(), build:BUILD }; })
   };
 }
 
@@ -245,8 +246,13 @@ function tally(id){
 const joined = () => Object.values(S.resps).filter(r => r && (r.joined || r.v)).length;
 function myVote(id){ const r = S.resps[S.pid]; const v = r && r.v && r.v[id]; return Number.isInteger(v) ? v : (Number.isInteger(S.me[id]) ? S.me[id] : null); }
 function modeIdx(it){ const { c, n } = tally(it.id); if (!n) return -1; return c.indexOf(Math.max(...c)); }
-// rmet: matches with the key. tacit: agreements with the class majority ("consensus scoring").
-const target = it => it.type === 'tacit' ? modeIdx(it) : it.key;
+function modeSet(it){ const { c, n } = tally(it.id); if (!n) return []; const mx = Math.max(...c); return c.map((v, k) => v === mx ? k : -1).filter(k => k >= 0); }
+// scored against the key (the test key for the eyes, the presenter's expert answer for tacit knowledge)
+const target = it => it.key;
+function scoresMaj(seg){
+  const its = scoredIn(seg);
+  return Object.values(S.resps).filter(r => r && r.v && its.some(it => Number.isInteger(r.v[it.id]))).map(r => its.reduce((s, it) => s + (r.v[it.id] === modeIdx(it) ? 1 : 0), 0));
+}
 function scores(seg){
   const its = scoredIn(seg);
   return Object.values(S.resps).filter(r => r && r.v && its.some(it => Number.isInteger(r.v[it.id]))).map(r => its.reduce((s, it) => s + (r.v[it.id] === target(it) ? 1 : 0), 0));
@@ -275,16 +281,16 @@ function optsHTML(it, mode){
   const { c, n } = tally(it.id);
   const mine = myVote(it.id);
   const tacit = it.type === 'tacit';
-  const modal = tacit && mode === 'reveal' ? modeIdx(it) : -1;
+  const modal = tacit && mode === 'reveal' ? modeSet(it) : [];
   return `<div class="opts${tacit ? ' long' : ''}">` + it.opts.map((w, k) => {
     const share = n ? c[k] / n : 0;
     const showBar = mode !== 'vote';
-    const isKey = !tacit && mode === 'reveal' && k === it.key;
-    const isModal = k === modal && n > 0;
+    const isKey = mode === 'reveal' && k === it.key;
+    const isModal = modal.includes(k) && n > 0;
     const isMine = !S.host && mine === k && mode !== 'vote';
     const cls = ['opt', isKey ? 'key' : '', isModal ? 'modal' : '', isMine ? 'mine' : '', (mode === 'reveal' && !tacit && !isKey) ? 'dim' : ''].join(' ');
     const inner = `${showBar ? `<span class="fill" style="width:${(share * 100).toFixed(1)}%"></span>` : ''}
-      ${tacit ? `<span class="letter">${'ABCD'[k]}</span><span class="w">${esc(w)}${(isModal || isMine) ? `<span class="tags">${isModal ? '<span class="modalt">class favourite</span>' : ''}${isMine ? '<span class="you">you</span>' : ''}</span>` : ''}</span>` : `<span class="w">${esc(w)}</span>${isKey ? '<span class="star">&#9733; key</span>' : ''}${isMine ? '<span class="you">you</span>' : ''}`}${showBar ? `<span class="pc">${pct(share)}</span>` : ''}`;
+      ${tacit ? `<span class="letter">${'ABCD'[k]}</span><span class="w">${esc(w)}${(isKey || isModal || isMine) ? `<span class="tags">${isKey ? '<span class="star">&#9733; expert answer</span>' : ''}${isModal ? '<span class="modalt">class favourite</span>' : ''}${isMine ? '<span class="you">you</span>' : ''}</span>` : ''}</span>` : `<span class="w">${esc(w)}</span>${isKey ? '<span class="star">&#9733; key</span>' : ''}${isMine ? '<span class="you">you</span>' : ''}`}${showBar ? `<span class="pc">${pct(share)}</span>` : ''}`;
     return mode === 'vote' ? `<button class="${cls}" data-act="vote" data-k="${k}">${inner}</button>` : `<div class="${cls}">${inner}</div>`;
   }).join('') + `</div>`;
 }
@@ -307,18 +313,21 @@ function stimulus(it, small){
 function studentView(){
   const ph = phase(), it = ITEMS[curI()];
   let body = '';
-  if (ph === 'wait' && !(S.session && S.session.started)){
+  if (!['wait', 'vote', 'reveal', 'summary'].includes(ph)){
+    body = `<div class="card center"><div class="label">Updating</div><h2>Reload this page</h2><p class="muted">The presenter moved on and this page needs refreshing. Pull down to reload, or reopen the link.</p></div>`;
+  } else if (ph === 'wait' && !(S.session && S.session.started)){
     body = `<div class="card center"><div class="label">You're in</div><h2>Waiting for the presenter</h2><p class="muted">The first item will appear here. Keep this page open, there is no need to scan again.</p></div>`;
   } else if (ph === 'summary'){
     const seg = it.seg, its = scoredIn(seg);
     const mine = its.reduce((s, x) => s + (myVote(x.id) === target(x) ? 1 : 0), 0);
+    const mineMaj = its.reduce((s, x) => s + (myVote(x.id) === modeIdx(x) ? 1 : 0), 0);
     const all = scores(seg); const mean = all.length ? all.reduce((a, b) => a + b, 0) / all.length : 0;
     const more = !!ITEMS[curI() + 1];
     const msg = seg === 'rmet'
       ? `<h2>You matched the key on ${mine} of ${its.length}</h2><p class="muted">Class average: ${mean.toFixed(1)} of ${its.length}.</p>
          <div class="verdict"><strong>But who decided which answer was "right"?</strong><br>The key comes from the test authors' consensus procedure. Think about how that connects to consensus scoring of emotional intelligence tests.</div>`
-      : `<h2>You agreed with the class majority on ${mine} of ${its.length}</h2><p class="muted">Class average: ${mean.toFixed(1)} of ${its.length}.</p>
-         <div class="verdict"><strong>That is consensus scoring.</strong><br>If the majority were the "experts", your tacit knowledge would be how much you resemble them. Would real experts agree with each other?</div>`;
+      : `<h2>You matched the expert answer on ${mine} of ${its.length}</h2><p class="muted">Class average: ${mean.toFixed(1)} of ${its.length}. You agreed with the class majority on ${mineMaj} of ${its.length}.</p>
+         <div class="verdict"><strong>Two ways to score the same answers.</strong><br>An expert key and a majority key can disagree. Which one measures tacit knowledge?</div>`;
     body = `<div class="card"><div class="label">${esc(SEG[seg].name)}: done</div>${msg}${more ? '<p class="tiny" style="margin-top:12px">Next activity coming up. Keep this page open.</p>' : ''}</div>`;
   } else if (ph === 'wait'){
     body = `<div class="card center"><div class="label">Next up</div><h2>Hold on</h2><p class="muted">Waiting for the presenter to open the next item.</p></div>`;
@@ -335,10 +344,11 @@ function studentView(){
       const { c, n } = tally(it.id);
       let v, q;
       if (tacit){
-        const m = modeIdx(it);
-        q = `The class favourite is <em>${'ABCD'[m] || '-'}</em>. There is no keyed answer.`;
+        const mtxt = modeSet(it).map(x => 'ABCD'[x]).join(' / ') || '-';
+        const hit = mine === it.key;
+        q = `The expert answer is <em>${'ABCD'[it.key]}</em>. The class favourite is <em>${mtxt}</em>.`;
         v = mine === null ? `<div class="verdict">You didn't vote on this one.</div>`
-          : `<div class="verdict ${mine === m ? 'ok' : 'no'}"><strong>${mine === m ? 'You were with the majority.' : 'You were not with the majority.'}</strong> ${pct(n ? c[mine] / n : 0)} of the class chose your response (${'ABCD'[mine]}).</div>`;
+          : `<div class="verdict ${hit ? 'ok' : 'no'}"><strong>${hit ? 'You matched the expert answer.' : 'Not the expert answer.'}</strong> ${pct(n ? c[it.key] / n : 0)} of the class chose ${'ABCD'[it.key]}.</div>`;
       } else {
         const hit = mine === it.key;
         q = `The keyed answer is <em>${esc(it.opts[it.key])}</em>.`;
@@ -349,7 +359,7 @@ function studentView(){
       body = `<div class="card">${head}${stim}<div class="q">${q}</div>${optsHTML(it, 'reveal')}${v}</div>`;
     }
   }
-  return topbar() + `<div class="wrap">${S.ui.error}${body}<div class="foot">Eye items from the Reading the Mind in the Eyes Test (Baron-Cohen, Wheelwright, Hill, Raste &amp; Plumb, 2001), used here for teaching. Tacit knowledge scenarios were written for this demo. Votes are anonymous.</div></div>`;
+  return topbar() + `<div class="wrap">${S.ui.error}${body}<div class="foot">Eye items from the Reading the Mind in the Eyes Test (Baron-Cohen, Wheelwright, Hill, Raste &amp; Plumb, 2001), used here for teaching. Tacit knowledge scenarios and expert answers were written for this demo. Votes are anonymous.</div></div>`;
 }
 function hostView(){
   const ph = phase(), idx = curI(), it = ITEMS[idx];
@@ -380,8 +390,9 @@ function hostView(){
   let note = '';
   if (ph === 'reveal'){
     if (tacit){
-      const m = modeIdx(it);
-      note = `<div class="verdict"><strong>${n ? pct(c[m] / n) : '0%'}</strong> chose ${'ABCD'[m] || '-'}. There is no keyed answer here.</div>`;
+      const ms = modeSet(it), mtxt = ms.map(x => 'ABCD'[x]).join(' / ') || '-';
+      const agree = ms.length === 1 && ms[0] === it.key;
+      note = `<div class="verdict ${n && c[it.key] / n >= .5 ? 'ok' : 'no'}"><strong>${pct(n ? c[it.key] / n : 0)}</strong> chose the expert answer (${'ABCD'[it.key]}). Class favourite: ${mtxt}${n ? ' (' + pct(Math.max(...c) / n) + ')' : ''}.${n && !agree ? ' <strong>The class and the expert disagree.</strong>' : ''}</div>`;
     } else {
       note = `<div class="verdict ${n && c[it.key] / n >= .5 ? 'ok' : 'no'}"><strong>${pct(n ? c[it.key] / n : 0)}</strong> of the class chose the keyed answer.</div>`;
     }
@@ -431,18 +442,20 @@ function summaryHTML(seg){
   }
   const rows = its.map(it => {
     const { c, n } = tally(it.id);
-    const m = modeIdx(it);
-    const top = n ? c[m] / n : 0;
-    const flag = !n ? '' : (top < .5 ? '<span class="pill warn">no majority</span>' : '');
-    const spread = `<div class="spread">${c.map(v => `<i style="height:${n ? Math.max(2, v / n * 34) : 2}px" title="${v}"></i>`).join('')}</div>`;
-    return `<tr><td>${esc(it.title)}</td><td>${n ? 'ABCD'[m] + ' (' + pct(top) + ')' : '-'}</td><td>${spread}</td><td>${flag}</td></tr>`;
+    const ms = modeSet(it);
+    const top = n ? Math.max(...c) / n : 0;
+    const agree = ms.length === 1 && ms[0] === it.key;
+    const flag = !n ? '' : (!agree ? '<span class="pill warn">room differs from expert</span>' : '');
+    const spread = `<div class="spread">${c.map((v, k) => `<i style="height:${n ? Math.max(2, v / n * 34) : 2}px;${k === it.key ? 'background:var(--ok)' : ''}" title="${v}"></i>`).join('')}</div>`;
+    return `<tr><td>${esc(it.title)}</td><td>${'ABCD'[it.key]}</td><td>${pct(n ? c[it.key] / n : 0)}</td><td>${n ? ms.map(x => 'ABCD'[x]).join(' / ') + ' (' + pct(top) + ')' : '-'}</td><td>${spread}</td><td>${flag}</td></tr>`;
   }).join('');
-  return `<div class="label">Results · ${esc(SEG[seg].name)}</div><h1>No key, just a room</h1>
-    <p class="lede">${all.length} students. Mean ${mean.toFixed(1)} of ${max} agreeing with the class majority.</p>
-    <div class="hgrid" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)"><div><table class="sum"><thead><tr><th>Scenario</th><th>Class favourite</th><th>Spread A to D</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div><div class="label">Agreement with the majority</div>${histHTML(seg)}
-    <div class="prompt">If the majority were the experts, your "tacit knowledge" is just how much you resemble the room.</div>
-    <div class="prompt" style="font-size:18px">Would managers, new graduates and tutors key these differently? Is that expertise, or just experience plus personality plus g?</div></div></div>`;
+  const maj = scoresMaj(seg); const meanMaj = maj.length ? maj.reduce((a, b) => a + b, 0) / maj.length : 0;
+  return `<div class="label">Results · ${esc(SEG[seg].name)}</div><h1>Expert key versus the room</h1>
+    <p class="lede">${all.length} students. Mean ${mean.toFixed(1)} of ${max} matching the expert answers, and ${meanMaj.toFixed(1)} of ${max} agreeing with the class majority.</p>
+    <div class="hgrid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)"><div><table class="sum"><thead><tr><th>Scenario</th><th>Expert</th><th>Chose expert</th><th>Class favourite</th><th>Spread A to D</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div><div class="label">Score distribution (matches with the expert answers)</div>${histHTML(seg)}
+    <div class="prompt">Where the room and the expert disagree, who is right?</div>
+    <div class="prompt" style="font-size:18px">Would a different panel of experts have keyed these the same way? Is this expertise, or experience plus personality plus g?</div></div></div>`;
 }
 
 
@@ -497,7 +510,7 @@ function csv(){
   let out = 'activity,item,keyed_option,' + [1, 2, 3, 4].map(k => 'option' + k + '_text,option' + k + '_n').join(',') + ',n_votes,pct_chose_key,class_favourite\n';
   ITEMS.forEach(it => {
     const { c, n } = tally(it.id); const tac = it.type === 'tacit';
-    out += [SEG[it.seg].name, it.id, tac ? '' : it.opts[it.key], ...[0, 1, 2, 3].flatMap(k => [q(it.opts[k]), c[k]]), n, (!tac && n) ? (c[it.key] / n).toFixed(3) : '', n ? 'ABCD'[modeIdx(it)] : ''].map((x, i) => (i === 2 && x !== '') ? q(x) : x).join(',') + '\n';
+    out += [SEG[it.seg].name, it.id, it.opts[it.key], ...[0, 1, 2, 3].flatMap(k => [q(it.opts[k]), c[k]]), n, n ? (c[it.key] / n).toFixed(3) : '', n ? 'ABCD'[modeIdx(it)] : ''].map((x, i) => (i === 2 && x !== '') ? q(x) : x).join(',') + '\n';
   });
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([out], { type:'text/csv' })); a.download = 'lecture8_demo_' + S.code + '.csv'; a.click();
 }
@@ -535,10 +548,17 @@ document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target &&
   catch(err){ showError(err); return; }
   S.db.onSession(s => {
     S.session = s;
+    if (S.host && s && s.build !== BUILD) S.db.setSession({ build:BUILD });
+    if (!S.host && s && s.build && s.build !== BUILD){
+      // this page is a stale cached copy: reload once, bypassing the cache with a changed query string
+      let done = false; const fk = 'rmet_reloaded_' + s.build;
+      try { done = !!sessionStorage.getItem(fk); sessionStorage.setItem(fk, '1'); } catch(e){}
+      if (!done){ const u = new URL(location.href); u.searchParams.set('b', s.build); location.replace(u.toString()); return; }
+    }
     const rs = (s && s.reset) || 0;
     if (S.lastReset !== undefined && rs !== S.lastReset){ S.me = {}; if (!S.host) S.db.setResp(S.pid, { joined:true, t:Date.now() }); }
     S.lastReset = rs;
-    if (S.host && !s) S.db.setSession({ i:0, phase:'wait', started:false });
+    if (S.host && !s) S.db.setSession({ i:0, phase:'wait', started:false, build:BUILD });
     render();
   }, showError);
   S.db.onResps(r => { S.resps = r || {}; render(); }, showError);
