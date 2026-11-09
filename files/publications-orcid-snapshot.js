@@ -1,5 +1,5 @@
 window.__ORCID_SNAPSHOT__ = {
-  "fetched": "2026-11-02T10:51:18.777Z",
+  "fetched": "2026-11-09T11:15:23.312Z",
   "records": [
     {
       "title": "Emphasizing other-focused over self-focused goals elicits more high-engagement strategies and less expressive suppression when regulating others’ emotions",
