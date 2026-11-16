@@ -130,6 +130,15 @@ a { color:inherit; text-decoration:none; }
 .readings { list-style:none; margin-top:8px; display:grid; gap:10px; }
 .readings li { font-size:0.82rem; line-height:1.6; color:var(--color-text-muted); padding-left:12px; border-left:2px solid var(--tint); }
 
+/* Research design */
+.steps9 { list-style:none; margin-top:28px; display:grid; gap:12px; counter-reset:s; }
+.steps9 li { display:grid; grid-template-columns:44px 1fr; gap:16px; align-items:start; padding:16px 20px; border:1px solid var(--color-border); border-radius:14px; background:var(--color-bg-warm); }
+.steps9 .n { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:1.2rem; color:var(--color-text); background:var(--color-bg); border:1.5px solid var(--color-accent); }
+.steps9 strong { display:block; font-weight:600; font-size:1rem; }
+.steps9 span.t { display:block; margin-top:2px; font-size:0.93rem; line-height:1.65; color:var(--color-text-muted); }
+.steps9 li:last-child .n { background:var(--color-accent); color:#fff; }
+.dl { display:inline-block; margin-top:20px; }
+
 /* Proposal */
 .budget { margin-top:28px; }
 .budget-bar { display:flex; height:46px; border-radius:12px; overflow:hidden; }
@@ -255,7 +264,7 @@ a { color:inherit; text-decoration:none; }
   <div class="page-header">
     <span class="page-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5Z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/></svg></span>
     <h1 class="page-title">Honours</h1>
-    <p class="page-desc">Project themes, a roadmap for first semester and the proposal, for students doing Honours in the Meta Lab.</p>
+    <p class="page-desc">Project themes, a roadmap for first semester, a research design worksheet and the proposal, for students doing Honours in the Meta Lab.</p>
   </div>
 
   <div class="honours">
@@ -293,6 +302,23 @@ a { color:inherit; text-decoration:none; }
         <div class="sched-rail" role="tablist" aria-label="Roadmap steps" id="schedRail"></div>
         <div class="sched-detail" role="tabpanel" id="schedDetail" aria-live="polite"></div>
       </div>
+    </section>
+
+    <section class="h-section" id="design">
+      <h2>Research design worksheet</h2>
+      <p>Work through these nine steps to go from a broad theme to a concrete, novel study. Write your response to each step in the worksheet and bring it to your meetings. It feeds directly into the research questions, experiment ideas and pitch steps of the roadmap.</p>
+      <ol class="steps9">
+        <li><span class="n">1</span><div><strong>Identify variables</strong><span class="t">What are the two main things you are looking at?</span></div></li>
+        <li><span class="n">2</span><div><strong>The knowns</strong><span class="t">What does current science say about how these two relate?</span></div></li>
+        <li><span class="n">3</span><div><strong>The gap</strong><span class="t">What is a specific question that hasn&rsquo;t been answered yet?</span></div></li>
+        <li><span class="n">4</span><div><strong>The logic</strong><span class="t">Define your variables (how will you measure them?) and your hypothesis.</span></div></li>
+        <li><span class="n">5</span><div><strong>Method options</strong><span class="t">List 2&ndash;3 different ways you could test this (e.g., survey, different lab paradigms, ESM).</span></div></li>
+        <li><span class="n">6</span><div><strong>Trade-offs</strong><span class="t">What are the pros and cons of the methods in step 5?</span></div></li>
+        <li><span class="n">7</span><div><strong>The choice</strong><span class="t">Which method are you committing to?</span></div></li>
+        <li><span class="n">8</span><div><strong>The summary</strong><span class="t">Briefly state your variables, question and rough method.</span></div></li>
+        <li><span class="n">9</span><div><strong>The final spec</strong><span class="t">Confirm novelty (search Google Scholar) and list your materials and steps.</span></div></li>
+      </ol>
+      <a class="dl" href="files/Research_Design.docx" download>Download the worksheet (.docx)</a>
     </section>
 
     <section class="h-section" id="proposal">
