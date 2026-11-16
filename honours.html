@@ -429,7 +429,7 @@ a { color:inherit; text-decoration:none; }
     return text + (bullets ? `<ul>${bullets}</ul>` : '');
   }
 
-  function select(i, focus) {
+  function select(i, focus, initial) {
     current = i;
     const w = weeks[i];
     buttons.forEach((b, j) => {
@@ -437,7 +437,10 @@ a { color:inherit; text-decoration:none; }
       b.tabIndex = j === i ? 0 : -1;
     });
     if (focus) buttons[i].focus();
-    buttons[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    if (!initial) {
+      const r = rail.getBoundingClientRect(), b = buttons[i].getBoundingClientRect();
+      rail.scrollLeft += b.left - r.left - (r.width - b.width) / 2;
+    }
     detail.innerHTML = `
       <div class="sched-top">
         <div>
@@ -456,7 +459,7 @@ a { color:inherit; text-decoration:none; }
     detail.querySelectorAll('[data-step]').forEach(btn =>
       btn.addEventListener('click', () => select(current + Number(btn.dataset.step))));
   }
-  select(0);
+  select(0, false, true);
 })();
 </script>
 
